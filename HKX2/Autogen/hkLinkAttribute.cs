@@ -1,29 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum Link
-    {
-        NONE = 0,
-        DIRECT_LINK = 1,
-        CHILD = 2,
-        MESH = 3,
-        PARENT_NAME = 4,
-        IMGSELECT = 5,
-        NODE_UUID = 6
-    }
+    // hkLinkAttribute Signatire: 0x255d8164 size: 1 flags: FLAGS_NONE
 
+    // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 0 flags:  enum: Link
+    
     public class hkLinkAttribute : IHavokObject
     {
-        public Link m_type;
-        public virtual uint Signature => 0;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public sbyte m_type;
+
+        public uint Signature => 0x255d8164;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_type = (Link) br.ReadSByte();
+
+            m_type = br.ReadSByte();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteSByte((sbyte) m_type);
+
+            s.WriteSByte(bw, m_type);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

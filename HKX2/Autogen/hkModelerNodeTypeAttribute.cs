@@ -1,24 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum ModelerType
-    {
-        DEFAULT = 0,
-        LOCATOR = 1
-    }
+    // hkModelerNodeTypeAttribute Signatire: 0x338c092f size: 1 flags: FLAGS_NONE
 
+    // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 0 flags:  enum: ModelerType
+    
     public class hkModelerNodeTypeAttribute : IHavokObject
     {
-        public ModelerType m_type;
-        public virtual uint Signature => 0;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public sbyte m_type;
+
+        public uint Signature => 0x338c092f;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_type = (ModelerType) br.ReadSByte();
+
+            m_type = br.ReadSByte();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteSByte((sbyte) m_type);
+
+            s.WriteSByte(bw, m_type);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

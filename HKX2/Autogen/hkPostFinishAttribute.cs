@@ -1,18 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkPostFinishAttribute Signatire: 0x903abb2c size: 8 flags: FLAGS_NONE
+
+    // m_postFinishFunction m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 0 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
+    
     public class hkPostFinishAttribute : IHavokObject
     {
-        public virtual uint Signature => 0;
 
+        public dynamic /* POINTER VOID */ m_postFinishFunction;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0x903abb2c;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            br.ReadUInt64();
+
+            des.ReadEmptyPointer(br);/* m_postFinishFunction POINTER VOID */
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteUInt64(0);
+
+            s.WriteVoidPointer(bw);/* m_postFinishFunction POINTER VOID */
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

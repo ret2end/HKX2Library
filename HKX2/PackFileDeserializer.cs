@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics;
 
 namespace HKX2
 {
@@ -24,7 +26,7 @@ namespace HKX2
             var hkClass = Type.GetType($@"HKX2.{hkClassName}");
             if (hkClass is null) throw new Exception($@"Havok class type '{hkClassName}' not found!");
 
-            var ret = (IHavokObject) Activator.CreateInstance(hkClass);
+            var ret = (IHavokObject)Activator.CreateInstance(hkClass);
             if (ret is null) throw new Exception();
 
             br.StepIn(offset);
@@ -44,11 +46,18 @@ namespace HKX2
             _header = new HKXHeader(br);
 
             // Read the 3 sections in the file
-            br.Position = _header.SectionOffset + 0x40;
+            if (_header.SectionOffset == -1)
+            {
+                br.Position = 0x40;
+            }
+            else
+            {
+                br.Position = _header.SectionOffset + 0x40;
+            }
 
-            _classSection = new HKXSection(br) {SectionID = 0};
-            _typeSection = new HKXSection(br) {SectionID = 1};
-            _dataSection = new HKXSection(br) {SectionID = 2};
+            _classSection = new HKXSection(br, _header.ContentsVersionString) { SectionID = 0 };
+            _typeSection = new HKXSection(br, _header.ContentsVersionString) { SectionID = 1 };
+            _dataSection = new HKXSection(br, _header.ContentsVersionString) { SectionID = 2 };
 
             // Process the class names
             _classnames = _classSection.ReadClassnames(br);
@@ -81,22 +90,22 @@ namespace HKX2
         {
             ReadEmptyPointer(br);
             var size = br.ReadUInt32();
-            br.AssertUInt32(size | ((uint) 0x80 << 24));
+            br.AssertUInt32(size | ((uint)0x80 << 24));
         }
 
         private T ReadPointerBase<T, F>(Func<BinaryReaderEx, F, T> func, BinaryReaderEx br) where F : Fixup, new()
         {
             Dictionary<uint, F> map;
             if (typeof(F) == typeof(LocalFixup))
-                map = (Dictionary<uint, F>) (object) _dataSection._localMap;
+                map = (Dictionary<uint, F>)(object)_dataSection._localMap;
             else if (typeof(F) == typeof(GlobalFixup))
-                map = (Dictionary<uint, F>) (object) _dataSection._localMap;
+                map = (Dictionary<uint, F>)(object)_dataSection._localMap;
             else
                 throw new Exception();
 
             PadToPointerSizeIfPaddingOption(br);
 
-            var key = (uint) br.Position;
+            var key = (uint)br.Position;
 
             br.AssertUSize(0);
 
@@ -118,7 +127,7 @@ namespace HKX2
             return ReadPointerBase((BinaryReaderEx _br, LocalFixup f) =>
             {
                 var size = _br.ReadUInt32();
-                _br.AssertUInt32(size | ((uint) 0x80 << 24)); // Capacity and flags
+                _br.AssertUInt32(size | ((uint)0x80 << 24)); // Capacity and flags
 
                 var res = new List<T>();
 
@@ -147,7 +156,7 @@ namespace HKX2
         {
             PadToPointerSizeIfPaddingOption(br);
 
-            var key = (uint) br.Position;
+            var key = (uint)br.Position;
 
             // Consume pointer
             br.AssertUSize(0);
@@ -156,7 +165,7 @@ namespace HKX2
             if (!_dataSection._globalMap.ContainsKey(key)) return default;
 
             var f = _dataSection._globalMap[key];
-            return (T) ConstructVirtualClass(br, f.Dst);
+            return (T)ConstructVirtualClass(br, f.Dst);
         }
 
         public List<T> ReadClassPointerArray<T>(BinaryReaderEx br) where T : IHavokObject
@@ -168,7 +177,7 @@ namespace HKX2
         {
             PadToPointerSizeIfPaddingOption(br);
 
-            var key = (uint) br.Position;
+            var key = (uint)br.Position;
 
             // Consume pointer
             br.AssertUSize(0);
@@ -218,6 +227,7 @@ namespace HKX2
             return ReadArrayBase(ReadUInt16, br);
         }
 
+
         public short ReadInt16(BinaryReaderEx br)
         {
             return br.ReadInt16();
@@ -266,6 +276,16 @@ namespace HKX2
         public List<long> ReadInt64Array(BinaryReaderEx br)
         {
             return ReadArrayBase(ReadInt64, br);
+        }
+
+        public Half ReadHalf(BinaryReaderEx br)
+        {
+            return br.ReadHalf();
+        }
+
+        public List<Half> ReadHalfArray(BinaryReaderEx br)
+        {
+            return ReadArrayBase(ReadHalf, br);
         }
 
         public float ReadSingle(BinaryReaderEx br)
@@ -360,6 +380,132 @@ namespace HKX2
         {
             return ReadArrayBase(ReadQuaternion, br);
         }
+
+
+        #region C Style Array
+        private List<T> ReadCStyleArrayBase<T>(Func<BinaryReaderEx, T> func, BinaryReaderEx br, short length)
+        {
+            var res = new List<T>();
+            for (int i = 0; i < length; i++)
+            {
+                res.Add(func(br));
+            }
+            return res;
+        }
+
+        public List<bool> ReadBooleanCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadBoolean, br, length);
+        }
+
+        public List<byte> ReadByteCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadByte, br, length);
+        }
+
+        public List<sbyte> ReadSByteCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadSByte, br, length);
+        }
+
+        public List<short> ReadInt16CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadInt16, br, length);
+        }
+
+        public List<ushort> ReadUInt16CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadUInt16, br, length);
+        }
+        public List<int> ReadInt32CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadInt32, br, length);
+        }
+        public List<uint> ReadUInt32CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadUInt32, br, length);
+        }
+
+        public List<long> ReadInt64CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadInt64, br, length);
+        }
+
+        public List<ulong> ReadUInt64CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadUInt64, br, length);
+        }
+
+        public List<Half> ReadHalfCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadHalf, br, length);
+        }
+
+        public List<float> ReadSingleCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadSingle, br, length);
+        }
+
+        public List<Vector4> ReadVector4CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadVector4, br, length);
+        }
+
+        public List<Quaternion> ReadQuaternionCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadQuaternion, br, length);
+        }
+        public List<Matrix4x4> ReadMatrix3CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadMatrix3, br, length);
+        }
+
+        public List<Matrix4x4> ReadRotationCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadMatrix3, br, length);
+        }
+
+        public List<Matrix4x4> ReadQSTransformCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadQSTransform, br, length);
+        }
+
+        public List<Matrix4x4> ReadMatrix4CStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadMatrix4, br, length);
+        }
+
+        public List<Matrix4x4> ReadTransformCStyleArray(BinaryReaderEx br, short length)
+        {
+            return ReadCStyleArrayBase(ReadTransform, br, length);
+        }
+
+        public List<T> ReadClassPointerCStyleArray<T>(BinaryReaderEx br, short length) where T : IHavokObject, new()
+        {
+            return ReadCStyleArrayBase(ReadClassPointer<T>, br, length);
+        }
+
+        public void ReadEmptyPointerCStyleArray(BinaryReaderEx br, short length)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                ReadEmptyPointer(br);
+            }
+        }
+
+        public List<T> ReadStructCStyleArray<T>(BinaryReaderEx br, short length) where T : IHavokObject, new()
+        {
+            var res = new List<T>();
+            for (int i = 0; i < length; i++)
+            {
+                var s = new T();
+                s.Read(this, br);
+                res.Add(s);
+            }
+            return res;
+        }
+
+        #endregion
 
         #endregion
     }

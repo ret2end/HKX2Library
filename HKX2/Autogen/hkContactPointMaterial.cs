@@ -1,43 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum FlagEnum
-    {
-        CONTACT_IS_NEW = 1,
-        CONTACT_USES_SOLVER_PATH2 = 2,
-        CONTACT_BREAKOFF_OBJECT_ID_SMALLER = 4,
-        CONTACT_IS_DISABLED = 8
-    }
+    // hkContactPointMaterial Signatire: 0x4e32287c size: 16 flags: FLAGS_NONE
 
+    // m_userData m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
+    // m_friction m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
+    // m_restitution m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 9 flags:  enum: 
+    // m_maxImpulse m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 10 flags:  enum: 
+    // m_flags m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 11 flags:  enum: 
+    
     public class hkContactPointMaterial : IHavokObject
     {
-        public byte m_flags;
-        public hkUFloat8 m_friction;
-        public hkUFloat8 m_maxImpulse;
-        public byte m_restitution;
 
         public ulong m_userData;
-        public virtual uint Signature => 0;
+        public byte m_friction;
+        public byte m_restitution;
+        public byte m_maxImpulse;
+        public byte m_flags;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0x4e32287c;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             m_userData = br.ReadUInt64();
-            m_friction = new hkUFloat8();
-            m_friction.Read(des, br);
+            m_friction = br.ReadByte();
             m_restitution = br.ReadByte();
-            m_maxImpulse = new hkUFloat8();
-            m_maxImpulse.Read(des, br);
+            m_maxImpulse = br.ReadByte();
             m_flags = br.ReadByte();
-            br.ReadUInt32();
+            br.Position += 4;
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             bw.WriteUInt64(m_userData);
-            m_friction.Write(s, bw);
+            bw.WriteByte(m_friction);
             bw.WriteByte(m_restitution);
-            m_maxImpulse.Write(s, bw);
+            bw.WriteByte(m_maxImpulse);
             bw.WriteByte(m_flags);
-            bw.WriteUInt32(0);
+            bw.Position += 4;
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

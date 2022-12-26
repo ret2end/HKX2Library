@@ -1,23 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkpCogWheelConstraintData Signatire: 0x7f0e53fc size: 192 flags: FLAGS_NONE
+
+    // m_atoms m_class: hkpCogWheelConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_8|FLAGS_NONE enum: 
+    
     public class hkpCogWheelConstraintData : hkpConstraintData
     {
-        public hkpCogWheelConstraintDataAtoms m_atoms;
-        public override uint Signature => 0;
+
+        public hkpCogWheelConstraintDataAtoms/*struct void*/ m_atoms;
+
+        public override uint Signature => 0x7f0e53fc;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            br.ReadUInt64();
+            br.Position += 8;
             m_atoms = new hkpCogWheelConstraintDataAtoms();
-            m_atoms.Read(des, br);
+            m_atoms.Read(des,br);
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            bw.WriteUInt64(0);
+            bw.Position += 8;
             m_atoms.Write(s, bw);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

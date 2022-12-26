@@ -1,39 +1,43 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace HKX2
 {
-    public enum VertexFloatDimensions
-    {
-        FLOAT = 0,
-        DISTANCE = 1,
-        ANGLE = 2
-    }
+    // hkxVertexFloatDataChannel Signatire: 0xbeeb397c size: 40 flags: FLAGS_NONE
 
+    // m_perVertexFloats m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 16 flags:  enum: 
+    // m_dimensions m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags:  enum: VertexFloatDimensions
+    
     public class hkxVertexFloatDataChannel : hkReferencedObject
     {
-        public VertexFloatDimensions m_dimensions;
 
         public List<float> m_perVertexFloats;
-        public override uint Signature => 0;
+        public byte m_dimensions;
+
+        public override uint Signature => 0xbeeb397c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
             m_perVertexFloats = des.ReadSingleArray(br);
-            m_dimensions = (VertexFloatDimensions) br.ReadByte();
-            br.ReadUInt32();
-            br.ReadUInt16();
-            br.ReadByte();
+            m_dimensions = br.ReadByte();
+            br.Position += 7;
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
             s.WriteSingleArray(bw, m_perVertexFloats);
-            bw.WriteByte((byte) m_dimensions);
-            bw.WriteUInt32(0);
-            bw.WriteUInt16(0);
-            bw.WriteByte(0);
+            s.WriteByte(bw, m_dimensions);
+            bw.Position += 7;
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

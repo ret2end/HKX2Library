@@ -1,74 +1,67 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace HKX2
 {
-    public enum MeshShapeIndexStridingType
-    {
-        INDICES_INVALID = 0,
-        INDICES_INT16 = 1,
-        INDICES_INT32 = 2,
-        INDICES_MAX_ID = 3
-    }
+    // hkpMeshShape Signatire: 0x3bf12c0f size: 128 flags: FLAGS_NONE
 
-    public enum MeshShapeMaterialIndexStridingType
-    {
-        MATERIAL_INDICES_INVALID = 0,
-        MATERIAL_INDICES_INT8 = 1,
-        MATERIAL_INDICES_INT16 = 2,
-        MATERIAL_INDICES_MAX_ID = 3
-    }
+    // m_scaling m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
+    // m_numBitsForSubpartIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
+    // m_subparts m_class: hkpMeshShapeSubpart Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 72 flags:  enum: 
+    // m_weldingInfo m_class:  Type.TYPE_ARRAY Type.TYPE_UINT16 arrSize: 0 offset: 88 flags:  enum: 
+    // m_weldingType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 104 flags:  enum: WeldingType
+    // m_radius m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags:  enum: 
+    // m_pad m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 3 offset: 112 flags:  enum: 
 
     public class hkpMeshShape : hkpShapeCollection
     {
-        public int m_numBitsForSubpartIndex;
-        public int m_pad_0;
-        public int m_pad_1;
-        public int m_pad_2;
-        public float m_radius;
 
         public Vector4 m_scaling;
+        public int m_numBitsForSubpartIndex;
         public List<hkpMeshShapeSubpart> m_subparts;
         public List<ushort> m_weldingInfo;
-        public WeldingType m_weldingType;
-        public override uint Signature => 0;
+        public byte m_weldingType;
+        public float m_radius;
+        public List<int> m_pad;
+
+        public override uint Signature => 0x3bf12c0f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            br.ReadUInt64();
-            m_scaling = des.ReadVector4(br);
+            m_scaling = br.ReadVector4();
             m_numBitsForSubpartIndex = br.ReadInt32();
-            br.ReadUInt32();
+            br.Position += 4;
             m_subparts = des.ReadClassArray<hkpMeshShapeSubpart>(br);
             m_weldingInfo = des.ReadUInt16Array(br);
-            m_weldingType = (WeldingType) br.ReadByte();
-            br.ReadUInt16();
-            br.ReadByte();
+            m_weldingType = br.ReadByte();
+            br.Position += 3;
             m_radius = br.ReadSingle();
-            m_pad_0 = br.ReadInt32();
-            m_pad_1 = br.ReadInt32();
-            m_pad_2 = br.ReadInt32();
-            br.ReadUInt32();
+            m_pad = des.ReadInt32CStyleArray(br, 3);//m_pad = br.ReadInt32();
+            br.Position += 4;
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            bw.WriteUInt64(0);
-            s.WriteVector4(bw, m_scaling);
+            bw.WriteVector4(m_scaling);
             bw.WriteInt32(m_numBitsForSubpartIndex);
-            bw.WriteUInt32(0);
-            s.WriteClassArray(bw, m_subparts);
+            bw.Position += 4;
+            s.WriteClassArray<hkpMeshShapeSubpart>(bw, m_subparts);
             s.WriteUInt16Array(bw, m_weldingInfo);
-            bw.WriteByte((byte) m_weldingType);
-            bw.WriteUInt16(0);
-            bw.WriteByte(0);
+            s.WriteByte(bw, m_weldingType);
+            bw.Position += 3;
             bw.WriteSingle(m_radius);
-            bw.WriteInt32(m_pad_0);
-            bw.WriteInt32(m_pad_1);
-            bw.WriteInt32(m_pad_2);
-            bw.WriteUInt32(0);
+            s.WriteInt32CStyleArray(bw, m_pad);//bw.WriteInt32(m_pad);
+            bw.Position += 4;
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

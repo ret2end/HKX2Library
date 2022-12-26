@@ -1,25 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum ArrayType
-    {
-        NONE = 0,
-        POINTSOUP = 1,
-        ENTITIES = 2
-    }
+    // hkArrayTypeAttribute Signatire: 0xd404a39a size: 1 flags: FLAGS_NONE
 
+    // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 0 flags:  enum: ArrayType
+    
     public class hkArrayTypeAttribute : IHavokObject
     {
-        public ArrayType m_type;
-        public virtual uint Signature => 0;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public sbyte m_type;
+
+        public uint Signature => 0xd404a39a;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_type = (ArrayType) br.ReadSByte();
+
+            m_type = br.ReadSByte();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteSByte((sbyte) m_type);
+
+            s.WriteSByte(bw, m_type);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

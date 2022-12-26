@@ -1,32 +1,43 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace HKX2
 {
+    // hkxAnimatedVector Signatire: 0x34b1a197 size: 40 flags: FLAGS_NONE
+
+    // m_vectors m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 16 flags:  enum: 
+    // m_hint m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags:  enum: Hint
+    
     public class hkxAnimatedVector : hkReferencedObject
     {
-        public Hint m_hint;
 
-        public List<float> m_vectors;
-        public override uint Signature => 0;
+        public List<Vector4> m_vectors;
+        public byte m_hint;
+
+        public override uint Signature => 0x34b1a197;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            m_vectors = des.ReadSingleArray(br);
-            m_hint = (Hint) br.ReadByte();
-            br.ReadUInt32();
-            br.ReadUInt16();
-            br.ReadByte();
+            m_vectors = des.ReadVector4Array(br);
+            m_hint = br.ReadByte();
+            br.Position += 7;
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            s.WriteSingleArray(bw, m_vectors);
-            bw.WriteByte((byte) m_hint);
-            bw.WriteUInt32(0);
-            bw.WriteUInt16(0);
-            bw.WriteByte(0);
+            s.WriteVector4Array(bw, m_vectors);
+            s.WriteByte(bw, m_hint);
+            bw.Position += 7;
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

@@ -1,24 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkResourceBase Signatire: 0x660d7cac size: 16 flags: FLAGS_NONE
+
+
+    
     public class hkResourceBase : hkReferencedObject
     {
-        public enum Type
-        {
-            TYPE_RESOURCE = 0,
-            TYPE_CONTAINER = 1
-        }
 
-        public override uint Signature => 0;
 
+
+        public override uint Signature => 0x660d7cac;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

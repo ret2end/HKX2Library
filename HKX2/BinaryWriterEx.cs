@@ -8,7 +8,7 @@ namespace HKX2
 {
     public class BinaryWriterEx
     {
-        private readonly BinaryWriter bw;
+        public readonly BinaryWriter bw;
         private readonly Dictionary<string, long> reservations;
         private readonly Stack<long> steps;
 
@@ -38,7 +38,7 @@ namespace HKX2
 
         private bool USizeLong { get; }
 
-        private Stream Stream { get; }
+        public Stream Stream { get; }
 
         public long Position
         {
@@ -48,15 +48,15 @@ namespace HKX2
 
         public long Length => Stream.Length;
 
-        public void WriteBytes(byte[] bytes)
+        public void WriteBytes(byte[] value)
         {
-            bw.Write(bytes);
+            bw.Write(value);
         }
 
-        private void WriteReversedBytes(byte[] bytes)
+        private void WriteReversedBytes(byte[] value)
         {
-            Array.Reverse(bytes);
-            bw.Write(bytes);
+            Array.Reverse(value);
+            bw.Write(value);
         }
 
         private void Reserve(string name, string typeName, int length)
@@ -105,7 +105,7 @@ namespace HKX2
             if (USizeLong)
                 WriteUInt64(value);
             else
-                WriteUInt32((uint) value);
+                WriteUInt32((uint)value);
         }
 
         #region Other
@@ -327,6 +327,30 @@ namespace HKX2
 
         #endregion
 
+        #region Half
+
+        public void WriteHalf(Half value)
+        {
+            if (BigEndian)
+                WriteReversedBytes(BitConverter.GetBytes(value));
+            else
+                bw.Write(value);
+        }
+
+        public void ReserveHalf(string name)
+        {
+            Reserve(name, "Half", 2);
+        }
+
+        public void FillHalf(string name, Half value)
+        {
+            StepIn(Fill(name, "Half"));
+            WriteHalf(value);
+            StepOut();
+        }
+
+        #endregion
+
         #region Single
 
         public void WriteSingle(float value)
@@ -359,6 +383,7 @@ namespace HKX2
                 WriteReversedBytes(BitConverter.GetBytes(value));
             else
                 bw.Write(value);
+
         }
 
         public void ReserveDouble(string name)
@@ -381,8 +406,8 @@ namespace HKX2
         {
             if (terminate)
                 text += '\0';
-            var bytes = encoding.GetBytes(text);
-            bw.Write(bytes);
+            var value = encoding.GetBytes(text);
+            bw.Write(value);
         }
 
         public void WriteASCII(string text, bool terminate = false)
@@ -392,13 +417,13 @@ namespace HKX2
 
         public void WriteFixStr(string text, int size, byte padding = 0)
         {
-            var fixstr = new byte[size];
+            var value = new byte[size];
             for (var i = 0; i < size; i++)
-                fixstr[i] = padding;
+                value[i] = padding;
 
             var bytes = Encoding.ASCII.GetBytes(text + '\0');
-            Array.Copy(bytes, fixstr, Math.Min(size, bytes.Length));
-            bw.Write(fixstr);
+            Array.Copy(bytes, value, Math.Min(size, bytes.Length));
+            bw.Write(value);
         }
 
         #endregion

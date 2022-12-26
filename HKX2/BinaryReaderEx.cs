@@ -266,6 +266,22 @@ namespace HKX2
 
         #endregion
 
+        #region Half
+
+        public Half ReadHalf()
+        {
+            if (BigEndian)
+                return BitConverter.ToHalf(ReadReversedBytes(2), 0);
+            return br.ReadHalf();
+        }
+
+        public Half AssertHalf(params Half[] options)
+        {
+            return AssertValue(ReadHalf(), "Half", "{0}", options);
+        }
+
+        #endregion
+
         #region Single
 
         public float ReadSingle()

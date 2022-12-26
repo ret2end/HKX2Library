@@ -1,18 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkDocumentationAttribute Signatire: 0x630edd9e size: 8 flags: FLAGS_NONE
+
+    // m_docsSectionTag m_class:  Type.TYPE_CSTRING Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
+    
     public class hkDocumentationAttribute : IHavokObject
     {
-        public virtual uint Signature => 0;
 
+        public string m_docsSectionTag;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0x630edd9e;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            br.ReadUInt64();
+
+            m_docsSectionTag = des.ReadStringPointer(br);//m_docsSectionTag = br.ReadASCII();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteUInt64(0);
+
+            s.WriteStringPointer(bw, m_docsSectionTag);//bw.WriteASCII(m_docsSectionTag, true);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

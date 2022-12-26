@@ -1,55 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum hkpFilterType
-    {
-        HK_FILTER_UNKNOWN = 0,
-        HK_FILTER_NULL = 1,
-        HK_FILTER_GROUP = 2,
-        HK_FILTER_LIST = 3,
-        HK_FILTER_CUSTOM = 4,
-        HK_FILTER_PAIR = 5,
-        HK_FILTER_CONSTRAINT = 6
-    }
+    // hkpCollisionFilter Signatire: 0x60960336 size: 72 flags: FLAGS_NONE
 
+    // m_prepad m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 2 offset: 48 flags:  enum: 
+    // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT32 arrSize: 0 offset: 56 flags:  enum: hkpFilterType
+    // m_postpad m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 3 offset: 60 flags:  enum: 
+    
     public class hkpCollisionFilter : hkReferencedObject
     {
-        public uint m_postpad_0;
-        public uint m_postpad_1;
-        public uint m_postpad_2;
 
-        public uint m_prepad_0;
-        public uint m_prepad_1;
-        public hkpFilterType m_type;
-        public override uint Signature => 0;
+        public List<uint> m_prepad;
+        public uint m_type;
+        public List<uint> m_postpad;
+
+        public override uint Signature => 0x60960336;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            br.ReadUInt64();
-            br.ReadUInt64();
-            br.ReadUInt64();
-            br.ReadUInt64();
-            m_prepad_0 = br.ReadUInt32();
-            m_prepad_1 = br.ReadUInt32();
-            m_type = (hkpFilterType) br.ReadUInt32();
-            m_postpad_0 = br.ReadUInt32();
-            m_postpad_1 = br.ReadUInt32();
-            m_postpad_2 = br.ReadUInt32();
+            br.Position += 32;
+            m_prepad = des.ReadUInt32CStyleArray(br, 2);//m_prepad = br.ReadUInt32();
+            m_type = br.ReadUInt32();
+            m_postpad = des.ReadUInt32CStyleArray(br, 3);//m_postpad = br.ReadUInt32();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            bw.WriteUInt64(0);
-            bw.WriteUInt64(0);
-            bw.WriteUInt64(0);
-            bw.WriteUInt64(0);
-            bw.WriteUInt32(m_prepad_0);
-            bw.WriteUInt32(m_prepad_1);
-            bw.WriteUInt32((uint) m_type);
-            bw.WriteUInt32(m_postpad_0);
-            bw.WriteUInt32(m_postpad_1);
-            bw.WriteUInt32(m_postpad_2);
+            bw.Position += 32;
+            s.WriteUInt32CStyleArray(bw, m_prepad);//bw.WriteUInt32(m_prepad);
+            s.WriteUInt32(bw, m_type);
+            s.WriteUInt32CStyleArray(bw, m_postpad);//bw.WriteUInt32(m_postpad);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

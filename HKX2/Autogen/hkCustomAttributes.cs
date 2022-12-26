@@ -1,20 +1,35 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace HKX2
 {
+    // hkCustomAttributes Signatire: 0xbff19005 size: 16 flags: FLAGS_NONE
+
+    // m_attributes m_class: hkCustomAttributesAttribute Type.TYPE_SIMPLEARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags:  enum: 
+    
     public class hkCustomAttributes : IHavokObject
     {
-        public List<hkCustomAttributesAttribute> m_attributes;
-        public virtual uint Signature => 0;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public dynamic /*simpleArray struct*/ m_attributes;
+
+        public uint Signature => 0xbff19005;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            // Read TYPE_SIMPLEARRAY
+
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");/*simple array*/
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            // Read TYPE_SIMPLEARRAY
+
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");/*simple array*/
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

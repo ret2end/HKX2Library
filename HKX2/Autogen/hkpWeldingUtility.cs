@@ -1,40 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum WeldingType
-    {
-        WELDING_TYPE_ANTICLOCKWISE = 0,
-        WELDING_TYPE_CLOCKWISE = 4,
-        WELDING_TYPE_TWO_SIDED = 5,
-        WELDING_TYPE_NONE = 6
-    }
+    // hkpWeldingUtility Signatire: 0xb2b41feb size: 1 flags: FLAGS_NONE
 
-    public enum SectorType
-    {
-        ACCEPT_0 = 1,
-        SNAP_0 = 0,
-        REJECT = 2,
-        SNAP_1 = 4,
-        ACCEPT_1 = 3
-    }
 
-    public enum NumAngles
-    {
-        NUM_ANGLES = 31
-    }
-
+    
     public class hkpWeldingUtility : IHavokObject
     {
-        public virtual uint Signature => 0;
 
+        public byte[] unk0;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0xb2b41feb;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            br.ReadByte();
+
+            unk0 = br.ReadBytes(1);
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteByte(0);
+
+            bw.WriteBytes(unk0);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

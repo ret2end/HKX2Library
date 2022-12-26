@@ -1,74 +1,71 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace HKX2
 {
-    public enum HeightFieldType
-    {
-        HEIGHTFIELD_STORAGE = 0,
-        HEIGHTFIELD_COMPRESSED = 1,
-        HEIGHTFIELD_USER = 2,
-        HEIGHTFIELD_MAX_ID = 3
-    }
+    // hkpSampledHeightFieldShape Signatire: 0x11213421 size: 112 flags: FLAGS_NONE
 
+    // m_xRes m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
+    // m_zRes m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
+    // m_heightCenter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
+    // m_useProjectionBasedHeight m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 44 flags:  enum: 
+    // m_heightfieldType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 45 flags:  enum: HeightFieldType
+    // m_intToFloatScale m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
+    // m_floatToIntScale m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
+    // m_floatToIntOffsetFloorCorrected m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
+    // m_extents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
+    
     public class hkpSampledHeightFieldShape : hkpHeightFieldShape
     {
-        public int m_coarseness;
 
-        public List<hkpSampledHeightFieldShapeCoarseMinMaxLevel> m_coarseTreeData;
-        public Vector4 m_extents;
-        public Vector4 m_floatToIntOffsetFloorCorrected;
-        public Vector4 m_floatToIntScale;
-        public float m_heightCenter;
-        public HeightFieldType m_heightfieldType;
-        public Vector4 m_intToFloatScale;
-        public float m_raycastMaxY;
-        public float m_raycastMinY;
-        public bool m_useProjectionBasedHeight;
         public int m_xRes;
         public int m_zRes;
-        public override uint Signature => 0;
+        public float m_heightCenter;
+        public bool m_useProjectionBasedHeight;
+        public byte m_heightfieldType;
+        public Vector4 m_intToFloatScale;
+        public Vector4 m_floatToIntScale;
+        public Vector4 m_floatToIntOffsetFloorCorrected;
+        public Vector4 m_extents;
+
+        public override uint Signature => 0x11213421;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            m_coarseTreeData = des.ReadClassArray<hkpSampledHeightFieldShapeCoarseMinMaxLevel>(br);
-            m_coarseness = br.ReadInt32();
-            m_raycastMinY = br.ReadSingle();
-            m_raycastMaxY = br.ReadSingle();
             m_xRes = br.ReadInt32();
             m_zRes = br.ReadInt32();
             m_heightCenter = br.ReadSingle();
             m_useProjectionBasedHeight = br.ReadBoolean();
-            m_heightfieldType = (HeightFieldType) br.ReadByte();
-            br.ReadUInt64();
-            br.ReadUInt32();
-            br.ReadUInt16();
-            m_intToFloatScale = des.ReadVector4(br);
-            m_floatToIntScale = des.ReadVector4(br);
-            m_floatToIntOffsetFloorCorrected = des.ReadVector4(br);
-            m_extents = des.ReadVector4(br);
+            m_heightfieldType = br.ReadByte();
+            br.Position += 2;
+            m_intToFloatScale = br.ReadVector4();
+            m_floatToIntScale = br.ReadVector4();
+            m_floatToIntOffsetFloorCorrected = br.ReadVector4();
+            m_extents = br.ReadVector4();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            s.WriteClassArray(bw, m_coarseTreeData);
-            bw.WriteInt32(m_coarseness);
-            bw.WriteSingle(m_raycastMinY);
-            bw.WriteSingle(m_raycastMaxY);
             bw.WriteInt32(m_xRes);
             bw.WriteInt32(m_zRes);
             bw.WriteSingle(m_heightCenter);
             bw.WriteBoolean(m_useProjectionBasedHeight);
-            bw.WriteByte((byte) m_heightfieldType);
-            bw.WriteUInt64(0);
-            bw.WriteUInt32(0);
-            bw.WriteUInt16(0);
-            s.WriteVector4(bw, m_intToFloatScale);
-            s.WriteVector4(bw, m_floatToIntScale);
-            s.WriteVector4(bw, m_floatToIntOffsetFloorCorrected);
-            s.WriteVector4(bw, m_extents);
+            s.WriteByte(bw, m_heightfieldType);
+            bw.Position += 2;
+            bw.WriteVector4(m_intToFloatScale);
+            bw.WriteVector4(m_floatToIntScale);
+            bw.WriteVector4(m_floatToIntOffsetFloorCorrected);
+            bw.WriteVector4(m_extents);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

@@ -1,103 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
-    public enum DeprecatedFlagValues
-    {
-        DEPRECATED_SIZE_8 = 8,
-        DEPRECATED_ENUM_8 = 8,
-        DEPRECATED_SIZE_16 = 16,
-        DEPRECATED_ENUM_16 = 16,
-        DEPRECATED_SIZE_32 = 32,
-        DEPRECATED_ENUM_32 = 32
-    }
+    // hkClassMember Signatire: 0x5c7ea4c2 size: 40 flags: FLAGS_NONE
 
+    // m_name m_class:  Type.TYPE_CSTRING Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
+    // m_class m_class: hkClass Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags:  enum: 
+    // m_enum m_class: hkClassEnum Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags:  enum: 
+    // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 24 flags:  enum: Type
+    // m_subtype m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 25 flags:  enum: Type
+    // m_cArraySize m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 26 flags:  enum: 
+    // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_UINT16 arrSize: 0 offset: 28 flags:  enum: FlagValues
+    // m_offset m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 30 flags:  enum: 
+    // m_attributes m_class: hkCustomAttributes Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
+    
     public class hkClassMember : IHavokObject
     {
-        public enum FlagValues
-        {
-            FLAGS_NONE = 0,
-            ALIGN_8 = 128,
-            ALIGN_16 = 256,
-            NOT_OWNED = 512,
-            SERIALIZE_IGNORED = 1024,
-            ALIGN_32 = 2048,
-            ALIGN_REAL = 256
-        }
-
-        public enum Type
-        {
-            TYPE_VOID = 0,
-            TYPE_BOOL = 1,
-            TYPE_CHAR = 2,
-            TYPE_INT8 = 3,
-            TYPE_UINT8 = 4,
-            TYPE_INT16 = 5,
-            TYPE_UINT16 = 6,
-            TYPE_INT32 = 7,
-            TYPE_UINT32 = 8,
-            TYPE_INT64 = 9,
-            TYPE_UINT64 = 10,
-            TYPE_REAL = 11,
-            TYPE_VECTOR4 = 12,
-            TYPE_QUATERNION = 13,
-            TYPE_MATRIX3 = 14,
-            TYPE_ROTATION = 15,
-            TYPE_QSTRANSFORM = 16,
-            TYPE_MATRIX4 = 17,
-            TYPE_TRANSFORM = 18,
-            TYPE_ZERO = 19,
-            TYPE_POINTER = 20,
-            TYPE_FUNCTIONPOINTER = 21,
-            TYPE_ARRAY = 22,
-            TYPE_INPLACEARRAY = 23,
-            TYPE_ENUM = 24,
-            TYPE_STRUCT = 25,
-            TYPE_SIMPLEARRAY = 26,
-            TYPE_HOMOGENEOUSARRAY = 27,
-            TYPE_VARIANT = 28,
-            TYPE_CSTRING = 29,
-            TYPE_ULONG = 30,
-            TYPE_FLAGS = 31,
-            TYPE_HALF = 32,
-            TYPE_STRINGPTR = 33,
-            TYPE_RELARRAY = 34,
-            TYPE_MAX = 35
-        }
-
-        public short m_cArraySize;
-        public hkClass m_class;
-        public hkClassEnum m_enum;
-        public ushort m_flags;
 
         public string m_name;
+        public hkClass /*pointer struct*/ m_class;
+        public hkClassEnum /*pointer struct*/ m_enum;
+        public byte m_type;
+        public byte m_subtype;
+        public short m_cArraySize;
+        public ushort m_flags;
         public ushort m_offset;
-        public Type m_subtype;
-        public Type m_type;
-        public virtual uint Signature => 2968495897;
+        public hkCustomAttributes /*pointer struct*/ m_attributes;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0x5c7ea4c2;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_name = des.ReadStringPointer(br);
+
+            m_name = des.ReadStringPointer(br);//m_name = br.ReadASCII();
             m_class = des.ReadClassPointer<hkClass>(br);
             m_enum = des.ReadClassPointer<hkClassEnum>(br);
-            m_type = (Type) br.ReadByte();
-            m_subtype = (Type) br.ReadByte();
+            m_type = br.ReadByte();
+            m_subtype = br.ReadByte();
             m_cArraySize = br.ReadInt16();
             m_flags = br.ReadUInt16();
             m_offset = br.ReadUInt16();
-            br.ReadUInt64();
+            m_attributes = des.ReadClassPointer<hkCustomAttributes>(br);
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteStringPointer(bw, m_name);
+
+            s.WriteStringPointer(bw, m_name);//bw.WriteASCII(m_name, true);
             s.WriteClassPointer(bw, m_class);
             s.WriteClassPointer(bw, m_enum);
-            bw.WriteByte((byte) m_type);
-            bw.WriteByte((byte) m_subtype);
+            s.WriteByte(bw, m_type);
+            s.WriteByte(bw, m_subtype);
             bw.WriteInt16(m_cArraySize);
             bw.WriteUInt16(m_flags);
             bw.WriteUInt16(m_offset);
-            bw.WriteUInt64(0);
+            s.WriteClassPointer(bw, m_attributes);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

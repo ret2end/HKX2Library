@@ -1,46 +1,47 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace HKX2
 {
-    public enum EffectType
-    {
-        EFFECT_TYPE_INVALID = 0,
-        EFFECT_TYPE_UNKNOWN = 1,
-        EFFECT_TYPE_HLSL_FX_INLINE = 2,
-        EFFECT_TYPE_CG_FX_INLINE = 3,
-        EFFECT_TYPE_HLSL_FX_FILENAME = 4,
-        EFFECT_TYPE_CG_FX_FILENAME = 5,
-        EFFECT_TYPE_MAX_ID = 6
-    }
+    // hkxMaterialEffect Signatire: 0x1d39f925 size: 48 flags: FLAGS_NONE
 
+    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
+    // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 24 flags:  enum: EffectType
+    // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 32 flags:  enum: 
+    
     public class hkxMaterialEffect : hkReferencedObject
     {
-        public List<byte> m_data;
 
         public string m_name;
-        public EffectType m_type;
-        public override uint Signature => 0;
+        public byte m_type;
+        public List<byte> m_data;
+
+        public override uint Signature => 0x1d39f925;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
             m_name = des.ReadStringPointer(br);
-            m_type = (EffectType) br.ReadByte();
-            br.ReadUInt32();
-            br.ReadUInt16();
-            br.ReadByte();
+            m_type = br.ReadByte();
+            br.Position += 7;
             m_data = des.ReadByteArray(br);
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
-            bw.WriteByte((byte) m_type);
-            bw.WriteUInt32(0);
-            bw.WriteUInt16(0);
-            bw.WriteByte(0);
+            s.WriteByte(bw, m_type);
+            bw.Position += 7;
             s.WriteByteArray(bw, m_data);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

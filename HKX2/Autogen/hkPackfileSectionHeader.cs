@@ -1,63 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkPackfileSectionHeader Signatire: 0xf2a92154 size: 48 flags: FLAGS_NONE
+
+    // m_sectionTag m_class:  Type.TYPE_CHAR Type.TYPE_VOID arrSize: 19 offset: 0 flags:  enum: 
+    // m_nullByte m_class:  Type.TYPE_CHAR Type.TYPE_VOID arrSize: 0 offset: 19 flags:  enum: 
+    // m_absoluteDataStart m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 20 flags:  enum: 
+    // m_localFixupsOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
+    // m_globalFixupsOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags:  enum: 
+    // m_virtualFixupsOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
+    // m_exportsOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
+    // m_importsOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
+    // m_endOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 44 flags:  enum: 
+    
     public class hkPackfileSectionHeader : IHavokObject
     {
+
+        public string m_sectionTag;
+        public string/*char*/ m_nullByte;
         public int m_absoluteDataStart;
-        public int m_endOffset;
-        public int m_exportsOffset;
-        public int m_globalFixupsOffset;
-        public int m_importsOffset;
         public int m_localFixupsOffset;
-        public sbyte m_nullByte;
-        public int m_pad_0;
-        public int m_pad_1;
-        public int m_pad_2;
-        public int m_pad_3;
-
-        public sbyte m_sectionTag_0;
-        public sbyte m_sectionTag_1;
-        public sbyte m_sectionTag_10;
-        public sbyte m_sectionTag_11;
-        public sbyte m_sectionTag_12;
-        public sbyte m_sectionTag_13;
-        public sbyte m_sectionTag_14;
-        public sbyte m_sectionTag_15;
-        public sbyte m_sectionTag_16;
-        public sbyte m_sectionTag_17;
-        public sbyte m_sectionTag_18;
-        public sbyte m_sectionTag_2;
-        public sbyte m_sectionTag_3;
-        public sbyte m_sectionTag_4;
-        public sbyte m_sectionTag_5;
-        public sbyte m_sectionTag_6;
-        public sbyte m_sectionTag_7;
-        public sbyte m_sectionTag_8;
-        public sbyte m_sectionTag_9;
+        public int m_globalFixupsOffset;
         public int m_virtualFixupsOffset;
-        public virtual uint Signature => 0;
+        public int m_exportsOffset;
+        public int m_importsOffset;
+        public int m_endOffset;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0xf2a92154;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_sectionTag_0 = br.ReadSByte();
-            m_sectionTag_1 = br.ReadSByte();
-            m_sectionTag_2 = br.ReadSByte();
-            m_sectionTag_3 = br.ReadSByte();
-            m_sectionTag_4 = br.ReadSByte();
-            m_sectionTag_5 = br.ReadSByte();
-            m_sectionTag_6 = br.ReadSByte();
-            m_sectionTag_7 = br.ReadSByte();
-            m_sectionTag_8 = br.ReadSByte();
-            m_sectionTag_9 = br.ReadSByte();
-            m_sectionTag_10 = br.ReadSByte();
-            m_sectionTag_11 = br.ReadSByte();
-            m_sectionTag_12 = br.ReadSByte();
-            m_sectionTag_13 = br.ReadSByte();
-            m_sectionTag_14 = br.ReadSByte();
-            m_sectionTag_15 = br.ReadSByte();
-            m_sectionTag_16 = br.ReadSByte();
-            m_sectionTag_17 = br.ReadSByte();
-            m_sectionTag_18 = br.ReadSByte();
-            m_nullByte = br.ReadSByte();
+
+            m_sectionTag = br.ReadASCII(19);
+            m_nullByte = br.ReadASCII();
             m_absoluteDataStart = br.ReadInt32();
             m_localFixupsOffset = br.ReadInt32();
             m_globalFixupsOffset = br.ReadInt32();
@@ -65,34 +43,15 @@ namespace HKX2
             m_exportsOffset = br.ReadInt32();
             m_importsOffset = br.ReadInt32();
             m_endOffset = br.ReadInt32();
-            m_pad_0 = br.ReadInt32();
-            m_pad_1 = br.ReadInt32();
-            m_pad_2 = br.ReadInt32();
-            m_pad_3 = br.ReadInt32();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteSByte(m_sectionTag_0);
-            bw.WriteSByte(m_sectionTag_1);
-            bw.WriteSByte(m_sectionTag_2);
-            bw.WriteSByte(m_sectionTag_3);
-            bw.WriteSByte(m_sectionTag_4);
-            bw.WriteSByte(m_sectionTag_5);
-            bw.WriteSByte(m_sectionTag_6);
-            bw.WriteSByte(m_sectionTag_7);
-            bw.WriteSByte(m_sectionTag_8);
-            bw.WriteSByte(m_sectionTag_9);
-            bw.WriteSByte(m_sectionTag_10);
-            bw.WriteSByte(m_sectionTag_11);
-            bw.WriteSByte(m_sectionTag_12);
-            bw.WriteSByte(m_sectionTag_13);
-            bw.WriteSByte(m_sectionTag_14);
-            bw.WriteSByte(m_sectionTag_15);
-            bw.WriteSByte(m_sectionTag_16);
-            bw.WriteSByte(m_sectionTag_17);
-            bw.WriteSByte(m_sectionTag_18);
-            bw.WriteSByte(m_nullByte);
+
+            bw.WriteASCII(m_sectionTag);
+            bw.WriteASCII(m_nullByte);
             bw.WriteInt32(m_absoluteDataStart);
             bw.WriteInt32(m_localFixupsOffset);
             bw.WriteInt32(m_globalFixupsOffset);
@@ -100,10 +59,9 @@ namespace HKX2
             bw.WriteInt32(m_exportsOffset);
             bw.WriteInt32(m_importsOffset);
             bw.WriteInt32(m_endOffset);
-            bw.WriteInt32(m_pad_0);
-            bw.WriteInt32(m_pad_1);
-            bw.WriteInt32(m_pad_2);
-            bw.WriteInt32(m_pad_3);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

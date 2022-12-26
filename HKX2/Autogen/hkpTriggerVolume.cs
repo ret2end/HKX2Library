@@ -1,60 +1,53 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace HKX2
 {
-    public enum EventType
-    {
-        ENTERED_EVENT = 1,
-        LEFT_EVENT = 2,
-        ENTERED_AND_LEFT_EVENT = 3,
-        TRIGGER_BODY_LEFT_EVENT = 6
-    }
+    // hkpTriggerVolume Signatire: 0xa29a8d1a size: 88 flags: FLAGS_NONE
 
-    public enum Operation
-    {
-        ADDED_OP = 0,
-        REMOVED_OP = 1,
-        CONTACT_OP = 2,
-        TOI_OP = 3
-    }
-
+    // m_overlappingBodies m_class: hkpRigidBody Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 40 flags:  enum: 
+    // m_eventQueue m_class: hkpTriggerVolumeEventInfo Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 56 flags:  enum: 
+    // m_triggerBody m_class: hkpRigidBody Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 72 flags:  enum: 
+    // m_sequenceNumber m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
+    
     public class hkpTriggerVolume : hkReferencedObject
     {
-        public List<hkpTriggerVolumeEventInfo> m_eventQueue;
 
         public List<hkpRigidBody> m_overlappingBodies;
+        public List<hkpTriggerVolumeEventInfo> m_eventQueue;
+        public hkpRigidBody /*pointer struct*/ m_triggerBody;
         public uint m_sequenceNumber;
-        public hkpRigidBody m_triggerBody;
-        public override uint Signature => 0;
+
+        public override uint Signature => 0xa29a8d1a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            br.ReadUInt64();
-            br.ReadUInt64();
-            br.ReadUInt64();
+            br.Position += 24;
             m_overlappingBodies = des.ReadClassPointerArray<hkpRigidBody>(br);
             m_eventQueue = des.ReadClassArray<hkpTriggerVolumeEventInfo>(br);
             m_triggerBody = des.ReadClassPointer<hkpRigidBody>(br);
             m_sequenceNumber = br.ReadUInt32();
-            br.ReadUInt64();
-            br.ReadUInt64();
-            br.ReadUInt32();
+            br.Position += 4;
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            bw.WriteUInt64(0);
-            bw.WriteUInt64(0);
-            bw.WriteUInt64(0);
-            s.WriteClassPointerArray(bw, m_overlappingBodies);
-            s.WriteClassArray(bw, m_eventQueue);
+            bw.Position += 24;
+            s.WriteClassPointerArray<hkpRigidBody>(bw, m_overlappingBodies);
+            s.WriteClassArray<hkpTriggerVolumeEventInfo>(bw, m_eventQueue);
             s.WriteClassPointer(bw, m_triggerBody);
             bw.WriteUInt32(m_sequenceNumber);
-            bw.WriteUInt64(0);
-            bw.WriteUInt64(0);
-            bw.WriteUInt32(0);
+            bw.Position += 4;
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

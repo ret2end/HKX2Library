@@ -1,27 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkPackedVector3 Signatire: 0x9c16df5b size: 8 flags: FLAGS_NONE
+
+    // m_values m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 4 offset: 0 flags:  enum: 
+    
     public class hkPackedVector3 : IHavokObject
     {
-        public short m_values_0;
-        public short m_values_1;
-        public short m_values_2;
-        public short m_values_3;
-        public virtual uint Signature => 0;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public List<short> m_values;
+
+        public uint Signature => 0x9c16df5b;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_values_0 = br.ReadInt16();
-            m_values_1 = br.ReadInt16();
-            m_values_2 = br.ReadInt16();
-            m_values_3 = br.ReadInt16();
+
+            m_values = des.ReadInt16CStyleArray(br, 4);//m_values = br.ReadInt16();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteInt16(m_values_0);
-            bw.WriteInt16(m_values_1);
-            bw.WriteInt16(m_values_2);
-            bw.WriteInt16(m_values_3);
+
+            s.WriteInt16CStyleArray(bw, m_values);//bw.WriteInt16(m_values);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

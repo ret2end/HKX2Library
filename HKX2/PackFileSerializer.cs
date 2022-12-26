@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks.Dataflow;
 
 namespace HKX2
 {
@@ -57,7 +58,6 @@ namespace HKX2
             bw.BigEndian = _header.Endian == 0;
 
             _header.Write(bw);
-
             // Initialize bookkeeping structures
             _localFixups = new List<LocalFixup>();
             _globalFixups = new List<GlobalFixup>();
@@ -79,15 +79,17 @@ namespace HKX2
                 _header.Endian == 0, _header.PointerSize == 8, classms);
 
             // Data memory stream for havok objects
+            // debugging
+            //var datams = new FileStream(".\\dump.hex", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite | FileShare.Delete, 1, FileOptions.WriteThrough);
             var datams = new MemoryStream();
             var databw = new BinaryWriterEx(
                 _header.Endian == 0, _header.PointerSize == 8, datams);
 
             // Populate class names with some stuff havok always has
-            var hkClass = new HKXClassName {ClassName = "hkClass", Signature = 0x33D42383};
-            var hkClassMember = new HKXClassName {ClassName = "hkClassMember", Signature = 0xB0EFA719};
-            var hkClassEnum = new HKXClassName {ClassName = "hkClassEnum", Signature = 0x8A3609CF};
-            var hkClassEnumItem = new HKXClassName {ClassName = "hkClassEnumItem", Signature = 0xCE6F8A6C};
+            var hkClass = new HKXClassName { ClassName = "hkClass", Signature = 0x75585EF6 };
+            var hkClassMember = new HKXClassName { ClassName = "hkClassMember", Signature = 0x5C7EA4C2 };
+            var hkClassEnum = new HKXClassName { ClassName = "hkClassEnum", Signature = 0x8A3609CF };
+            var hkClassEnumItem = new HKXClassName { ClassName = "hkClassEnumItem", Signature = 0xCE6F8A6C };
 
             hkClass.Write(classbw);
             hkClassMember.Write(classbw);
@@ -127,14 +129,14 @@ namespace HKX2
                         var cname = new HKXClassName();
                         cname.ClassName = classname;
                         cname.Signature = obj.Signature;
-                        var offset = (uint) classbw.Position;
+                        var offset = (uint)classbw.Position;
                         cname.Write(classbw);
                         _virtualLookup.Add(classname, offset + 5);
                     }
 
                     // Create a new Virtual fixup for this object
                     var vfu = new VirtualFixup();
-                    vfu.Src = (uint) databw.Position;
+                    vfu.Src = (uint)databw.Position;
                     vfu.DstSectionIndex = 0;
                     vfu.Dst = _virtualLookup[classname];
                     _virtualFixups.Add(vfu);
@@ -148,7 +150,7 @@ namespace HKX2
                             var gfu = new GlobalFixup();
                             gfu.Src = src;
                             gfu.DstSectionIndex = 2;
-                            gfu.Dst = (uint) databw.Position;
+                            gfu.Dst = (uint)databw.Position;
                             _globalFixups.Add(gfu);
                         }
 
@@ -156,7 +158,7 @@ namespace HKX2
                     }
 
                     // Add global lookup
-                    _globalLookup.Add(obj, (uint) databw.Position);
+                    _globalLookup.Add(obj, (uint)databw.Position);
                 }
 
                 obj.Write(this, databw);
@@ -177,7 +179,11 @@ namespace HKX2
                         databw.Pad(16);
                     }
 
-                    if (q.Count == 0) continue;
+                    if (q.Count == 0)
+                    {
+                        _currentLocalWriteQueue = _localWriteQueues.Count - 1;
+                        continue;
+                    }
 
                     var act = q.Dequeue();
                     _currentLocalWriteQueue = _localWriteQueues.Count - 1;
@@ -187,11 +193,21 @@ namespace HKX2
                 databw.Pad(16);
             }
 
-            var classNames = new HKXSection
+            var classNames = new HKXSection()
             {
-                SectionID = 0, SectionTag = "__classnames__", SectionData = classms.ToArray()
+                SectionID = 0,
+                SectionTag = "__classnames__",
+                SectionData = classms.ToArray(),
+                ContentsVersionString = _header.ContentsVersionString
             };
-            var types = new HKXSection {SectionID = 1, SectionTag = "__types__", SectionData = new byte[0]};
+            var types = new HKXSection { SectionID = 1, SectionTag = "__types__", SectionData = new byte[0], ContentsVersionString = _header.ContentsVersionString };
+            // debugging
+            //var ms = new MemoryStream();
+            //var tempPosition = datams.Position;
+            //datams.Position = 0;
+            //datams.CopyTo(ms);
+            //datams.Position = tempPosition;
+
             var data = new HKXSection
             {
                 SectionID = 2,
@@ -199,7 +215,8 @@ namespace HKX2
                 SectionData = datams.ToArray(),
                 LocalFixups = _localFixups.OrderBy(x => x.Dst).ToList(),
                 GlobalFixups = _globalFixups.OrderBy(x => x.Src).ToList(),
-                VirtualFixups = _virtualFixups
+                VirtualFixups = _virtualFixups,
+                ContentsVersionString = _header.ContentsVersionString
             };
 
             classNames.WriteHeader(bw);
@@ -228,28 +245,28 @@ namespace HKX2
         {
             WriteVoidPointer(bw);
             bw.WriteUInt32(0);
-            bw.WriteUInt32(0 | ((uint) 0x80 << 24));
+            bw.WriteUInt32(0 | ((uint)0x80 << 24));
         }
 
         private void WriteArrayBase<T>(BinaryWriterEx bw, IList<T> l, Action<T> perElement, bool pad = false)
         {
             PadToPointerSizeIfPaddingOption(bw);
 
-            var src = (uint) bw.Position;
-            var size = (uint) l.Count;
+            var src = (uint)bw.Position;
+            var size = (uint)l.Count;
 
             bw.WriteUSize(0);
             bw.WriteUInt32(size);
-            bw.WriteUInt32(size | ((uint) 0x80 << 24));
+            bw.WriteUInt32(size | ((uint)0x80 << 24));
 
             if (size <= 0) return;
 
-            var lfu = new LocalFixup {Src = src};
+            var lfu = new LocalFixup { Src = src };
             _localFixups.Add(lfu);
             _localWriteQueues[_currentLocalWriteQueue].Enqueue(() =>
             {
                 bw.Pad(16);
-                lfu.Dst = (uint) bw.Position;
+                lfu.Dst = (uint)bw.Position;
                 // This ensures any writes the array elements may have are top priority
                 PushLocalWriteQueue();
                 foreach (var item in l) perElement.Invoke(item);
@@ -267,7 +284,7 @@ namespace HKX2
         public void WriteClassPointer<T>(BinaryWriterEx bw, T d) where T : IHavokObject
         {
             PadToPointerSizeIfPaddingOption(bw);
-            var pos = (uint) bw.Position;
+            var pos = (uint)bw.Position;
             bw.WriteUSize(0);
 
             if (d == null) return;
@@ -275,7 +292,7 @@ namespace HKX2
             // If we're referencing an already serialized object, add a global ref
             if (_globalLookup.ContainsKey(d))
             {
-                var gfu = new GlobalFixup {Src = pos, DstSectionIndex = 2, Dst = _globalLookup[d]};
+                var gfu = new GlobalFixup { Src = pos, DstSectionIndex = 2, Dst = _globalLookup[d] };
                 _globalFixups.Add(gfu);
                 return;
             }
@@ -301,16 +318,16 @@ namespace HKX2
         public void WriteStringPointer(BinaryWriterEx bw, string d, int padding = 16)
         {
             PadToPointerSizeIfPaddingOption(bw);
-            var src = (uint) bw.Position;
+            var src = (uint)bw.Position;
             bw.WriteUSize(0);
 
             if (d == null) return;
 
-            var lfu = new LocalFixup {Src = src};
+            var lfu = new LocalFixup { Src = src };
             _localFixups.Add(lfu);
             _localWriteQueues[_currentLocalWriteQueue].Enqueue(() =>
             {
-                lfu.Dst = (uint) bw.Position;
+                lfu.Dst = (uint)bw.Position;
                 bw.WriteASCII(d, true);
                 bw.Pad(padding);
             });
@@ -399,6 +416,16 @@ namespace HKX2
         public void WriteInt64Array(BinaryWriterEx bw, List<long> d)
         {
             WriteArrayBase(bw, d, e => WriteInt64(bw, e));
+        }
+
+        public void WriteHalf(BinaryWriterEx bw, Half d)
+        {
+            bw.WriteHalf(d);
+        }
+
+        public void WriteHalfArray(BinaryWriterEx bw, List<Half> d)
+        {
+            WriteArrayBase(bw, d, e => WriteHalf(bw, e));
         }
 
         public void WriteSingle(BinaryWriterEx bw, float d)
@@ -524,6 +551,129 @@ namespace HKX2
         {
             WriteArrayBase(bw, d, e => WriteQuaternion(bw, e));
         }
+
+        #region C Style Array
+
+        private void WriteCStyleArrayBase<T>(BinaryWriterEx bw, IList<T> content, Action<T> perElement)
+        {
+            foreach (var item in content)
+            {
+                perElement.Invoke(item);
+            }
+        }
+
+        public void WriteBooleanCStyleArray(BinaryWriterEx bw, List<bool> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteBoolean(bw, e));
+        }
+
+        public void WriteByteCStyleArray(BinaryWriterEx bw, List<byte> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteByte(bw, e));
+        }
+
+        public void WriteSByteCStyleArray(BinaryWriterEx bw, List<sbyte> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteSByte(bw, e));
+        }
+
+        public void WriteInt16CStyleArray(BinaryWriterEx bw, List<short> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteInt16(bw, e));
+        }
+
+        public void WriteUInt16CStyleArray(BinaryWriterEx bw, List<ushort> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteUInt16(bw, e));
+        }
+
+        public void WriteInt32CStyleArray(BinaryWriterEx bw, List<int> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteInt32(bw, e));
+        }
+
+        public void WriteUInt32CStyleArray(BinaryWriterEx bw, List<uint> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteUInt32(bw, e));
+        }
+
+        public void WriteInt64CStyleArray(BinaryWriterEx bw, List<long> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteInt64(bw, e));
+        }
+
+        public void WriteUInt64CStyleArray(BinaryWriterEx bw, List<ulong> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteUInt64(bw, e));
+        }
+
+        public void WriteHalfCStyleArray(BinaryWriterEx bw, List<Half> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteHalf(bw, e));
+        }
+
+        public void WriteSingleCStyleArray(BinaryWriterEx bw, List<float> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteSingle(bw, e));
+        }
+
+        public void WriteVector4CStyleArray(BinaryWriterEx bw, List<Vector4> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteVector4(bw, e));
+        }
+
+        public void WriteQuaternionCStyleArray(BinaryWriterEx bw, List<Quaternion> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteQuaternion(bw, e));
+        }
+
+        public void WriteMatrix3CStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteMatrix3(bw, e));
+        }
+
+        public void WriteRotationCStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteMatrix3(bw, e));
+        }
+
+        public void WriteQSTransformCStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteQSTransform(bw, e));
+        }
+
+        public void WriteMatrix4CStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteMatrix4(bw, e));
+        }
+
+        public void WriteTransformCStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteTransform(bw, e));
+        }
+
+        public void WriteClassPointerCStyleArray<T>(BinaryWriterEx bw, IList<T> d) where T : IHavokObject, new()
+        {
+            WriteCStyleArrayBase(bw, d, e => WriteClassPointer(bw, e));
+        }
+
+        public void WriteEmptyPointerCStyleArray(BinaryWriterEx bw, short length)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                WriteVoidPointer(bw);
+            }
+        }
+
+        public void WriteStructCStyleArray<T>(BinaryWriterEx bw, List<T> d) where T : IHavokObject
+        {
+            foreach (var item in d)
+            {
+                item.Write(this, bw);
+            }
+        }
+
+        #endregion
 
         #endregion
     }

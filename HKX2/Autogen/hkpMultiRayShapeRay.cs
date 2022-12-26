@@ -1,24 +1,39 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace HKX2
 {
+    // hkpMultiRayShapeRay Signatire: 0xffdc0b65 size: 32 flags: FLAGS_NONE
+
+    // m_start m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
+    // m_end m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
+    
     public class hkpMultiRayShapeRay : IHavokObject
     {
-        public Vector4 m_end;
 
         public Vector4 m_start;
-        public virtual uint Signature => 0;
+        public Vector4 m_end;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0xffdc0b65;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_start = des.ReadVector4(br);
-            m_end = des.ReadVector4(br);
+
+            m_start = br.ReadVector4();
+            m_end = br.ReadVector4();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteVector4(bw, m_start);
-            s.WriteVector4(bw, m_end);
+
+            bw.WriteVector4(m_start);
+            bw.WriteVector4(m_end);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

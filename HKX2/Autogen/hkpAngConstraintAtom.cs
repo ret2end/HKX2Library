@@ -1,33 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkpAngConstraintAtom Signatire: 0x35bb3cd0 size: 4 flags: FLAGS_NONE
+
+    // m_firstConstrainedAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags:  enum: 
+    // m_numConstrainedAxes m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags:  enum: 
+    
     public class hkpAngConstraintAtom : hkpConstraintAtom
     {
-        public byte m_constrainedAxes_0;
-        public byte m_constrainedAxes_1;
-        public byte m_constrainedAxes_2;
+
+        public byte m_firstConstrainedAxis;
         public byte m_numConstrainedAxes;
-        public override uint Signature => 0;
+
+        public override uint Signature => 0x35bb3cd0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            m_constrainedAxes_0 = br.ReadByte();
-            m_constrainedAxes_1 = br.ReadByte();
-            m_constrainedAxes_2 = br.ReadByte();
+            m_firstConstrainedAxis = br.ReadByte();
             m_numConstrainedAxes = br.ReadByte();
-            br.ReadUInt64();
-            br.ReadUInt16();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            bw.WriteByte(m_constrainedAxes_0);
-            bw.WriteByte(m_constrainedAxes_1);
-            bw.WriteByte(m_constrainedAxes_2);
+            bw.WriteByte(m_firstConstrainedAxis);
             bw.WriteByte(m_numConstrainedAxes);
-            bw.WriteUInt64(0);
-            bw.WriteUInt16(0);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

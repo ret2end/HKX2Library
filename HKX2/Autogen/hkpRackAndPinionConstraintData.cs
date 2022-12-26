@@ -1,29 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkpRackAndPinionConstraintData Signatire: 0xd180ebe0 size: 192 flags: FLAGS_NONE
+
+    // m_atoms m_class: hkpRackAndPinionConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_8|FLAGS_NONE enum: 
+    
     public class hkpRackAndPinionConstraintData : hkpConstraintData
     {
-        public enum Type
-        {
-            TYPE_RACK_AND_PINION = 0,
-            TYPE_SCREW = 1
-        }
 
-        public hkpRackAndPinionConstraintDataAtoms m_atoms;
-        public override uint Signature => 0;
+        public hkpRackAndPinionConstraintDataAtoms/*struct void*/ m_atoms;
+
+        public override uint Signature => 0xd180ebe0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             base.Read(des, br);
-            br.ReadUInt64();
+            br.Position += 8;
             m_atoms = new hkpRackAndPinionConstraintDataAtoms();
-            m_atoms.Read(des, br);
+            m_atoms.Read(des,br);
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             base.Write(s, bw);
-            bw.WriteUInt64(0);
+            bw.Position += 8;
             m_atoms.Write(s, bw);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

@@ -1,112 +1,79 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkPackfileHeader Signatire: 0x79f9ffda size: 64 flags: FLAGS_NONE
+
+    // m_magic m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 2 offset: 0 flags:  enum: 
+    // m_userTag m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
+    // m_fileVersion m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags:  enum: 
+    // m_layoutRules m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 4 offset: 16 flags:  enum: 
+    // m_numSections m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 20 flags:  enum: 
+    // m_contentsSectionIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
+    // m_contentsSectionOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags:  enum: 
+    // m_contentsClassNameSectionIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
+    // m_contentsClassNameSectionOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
+    // m_contentsVersion m_class:  Type.TYPE_CHAR Type.TYPE_VOID arrSize: 16 offset: 40 flags:  enum: 
+    // m_flags m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags:  enum: 
+    // m_pad m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 1 offset: 60 flags:  enum: 
+
     public class hkPackfileHeader : IHavokObject
     {
-        public int m_contentsClassNameSectionIndex;
-        public int m_contentsClassNameSectionOffset;
+
+        public List<int> m_magic;
+        public int m_userTag;
+        public int m_fileVersion;
+        public List<byte> m_layoutRules;
+        public int m_numSections;
         public int m_contentsSectionIndex;
         public int m_contentsSectionOffset;
-        public sbyte m_contentsVersion_0;
-        public sbyte m_contentsVersion_1;
-        public sbyte m_contentsVersion_10;
-        public sbyte m_contentsVersion_11;
-        public sbyte m_contentsVersion_12;
-        public sbyte m_contentsVersion_13;
-        public sbyte m_contentsVersion_14;
-        public sbyte m_contentsVersion_15;
-        public sbyte m_contentsVersion_2;
-        public sbyte m_contentsVersion_3;
-        public sbyte m_contentsVersion_4;
-        public sbyte m_contentsVersion_5;
-        public sbyte m_contentsVersion_6;
-        public sbyte m_contentsVersion_7;
-        public sbyte m_contentsVersion_8;
-        public sbyte m_contentsVersion_9;
-        public int m_fileVersion;
+        public int m_contentsClassNameSectionIndex;
+        public int m_contentsClassNameSectionOffset;
+        public string m_contentsVersion;
         public int m_flags;
-        public byte m_layoutRules_0;
-        public byte m_layoutRules_1;
-        public byte m_layoutRules_2;
-        public byte m_layoutRules_3;
+        public List<int> m_pad;
 
-        public int m_magic_0;
-        public int m_magic_1;
-        public ushort m_maxpredicate;
-        public int m_numSections;
-        public ushort m_predicateArraySizePlusPadding;
-        public int m_userTag;
-        public virtual uint Signature => 0;
+        public uint Signature => 0x79f9ffda;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_magic_0 = br.ReadInt32();
-            m_magic_1 = br.ReadInt32();
+
+            m_magic = des.ReadInt32CStyleArray(br, 2);//m_magic = br.ReadInt32();
             m_userTag = br.ReadInt32();
             m_fileVersion = br.ReadInt32();
-            m_layoutRules_0 = br.ReadByte();
-            m_layoutRules_1 = br.ReadByte();
-            m_layoutRules_2 = br.ReadByte();
-            m_layoutRules_3 = br.ReadByte();
+            m_layoutRules = des.ReadByteCStyleArray(br, 4);//m_layoutRules = br.ReadByte();
             m_numSections = br.ReadInt32();
             m_contentsSectionIndex = br.ReadInt32();
             m_contentsSectionOffset = br.ReadInt32();
             m_contentsClassNameSectionIndex = br.ReadInt32();
             m_contentsClassNameSectionOffset = br.ReadInt32();
-            m_contentsVersion_0 = br.ReadSByte();
-            m_contentsVersion_1 = br.ReadSByte();
-            m_contentsVersion_2 = br.ReadSByte();
-            m_contentsVersion_3 = br.ReadSByte();
-            m_contentsVersion_4 = br.ReadSByte();
-            m_contentsVersion_5 = br.ReadSByte();
-            m_contentsVersion_6 = br.ReadSByte();
-            m_contentsVersion_7 = br.ReadSByte();
-            m_contentsVersion_8 = br.ReadSByte();
-            m_contentsVersion_9 = br.ReadSByte();
-            m_contentsVersion_10 = br.ReadSByte();
-            m_contentsVersion_11 = br.ReadSByte();
-            m_contentsVersion_12 = br.ReadSByte();
-            m_contentsVersion_13 = br.ReadSByte();
-            m_contentsVersion_14 = br.ReadSByte();
-            m_contentsVersion_15 = br.ReadSByte();
+            m_contentsVersion = br.ReadASCII(16);
             m_flags = br.ReadInt32();
-            m_maxpredicate = br.ReadUInt16();
-            m_predicateArraySizePlusPadding = br.ReadUInt16();
+            m_pad = des.ReadInt32CStyleArray(br, 1);//m_pad = br.ReadInt32();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            bw.WriteInt32(m_magic_0);
-            bw.WriteInt32(m_magic_1);
+
+            s.WriteInt32CStyleArray(bw, m_magic);//bw.WriteInt32(m_magic);
             bw.WriteInt32(m_userTag);
             bw.WriteInt32(m_fileVersion);
-            bw.WriteByte(m_layoutRules_0);
-            bw.WriteByte(m_layoutRules_1);
-            bw.WriteByte(m_layoutRules_2);
-            bw.WriteByte(m_layoutRules_3);
+            s.WriteByteCStyleArray(bw, m_layoutRules);//bw.WriteByte(m_layoutRules);
             bw.WriteInt32(m_numSections);
             bw.WriteInt32(m_contentsSectionIndex);
             bw.WriteInt32(m_contentsSectionOffset);
             bw.WriteInt32(m_contentsClassNameSectionIndex);
             bw.WriteInt32(m_contentsClassNameSectionOffset);
-            bw.WriteSByte(m_contentsVersion_0);
-            bw.WriteSByte(m_contentsVersion_1);
-            bw.WriteSByte(m_contentsVersion_2);
-            bw.WriteSByte(m_contentsVersion_3);
-            bw.WriteSByte(m_contentsVersion_4);
-            bw.WriteSByte(m_contentsVersion_5);
-            bw.WriteSByte(m_contentsVersion_6);
-            bw.WriteSByte(m_contentsVersion_7);
-            bw.WriteSByte(m_contentsVersion_8);
-            bw.WriteSByte(m_contentsVersion_9);
-            bw.WriteSByte(m_contentsVersion_10);
-            bw.WriteSByte(m_contentsVersion_11);
-            bw.WriteSByte(m_contentsVersion_12);
-            bw.WriteSByte(m_contentsVersion_13);
-            bw.WriteSByte(m_contentsVersion_14);
-            bw.WriteSByte(m_contentsVersion_15);
+            bw.WriteASCII(m_contentsVersion);
             bw.WriteInt32(m_flags);
-            bw.WriteUInt16(m_maxpredicate);
-            bw.WriteUInt16(m_predicateArraySizePlusPadding);
+            s.WriteInt32CStyleArray(bw, m_pad);//bw.WriteInt32(m_pad);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+

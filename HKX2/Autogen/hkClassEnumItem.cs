@@ -1,24 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+
 namespace HKX2
 {
+    // hkClassEnumItem Signatire: 0xce6f8a6c size: 16 flags: FLAGS_NONE
+
+    // m_value m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
+    // m_name m_class:  Type.TYPE_CSTRING Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
+
     public class hkClassEnumItem : IHavokObject
     {
-        public string m_name;
 
         public int m_value;
-        public virtual uint Signature => 3463416428;
+        public string m_name;
 
-        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public uint Signature => 0xce6f8a6c;
+
+        public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
+
             m_value = br.ReadInt32();
-            br.ReadUInt32();
-            m_name = des.ReadStringPointer(br);
+            br.Position += 4;
+            m_name = des.ReadStringPointer(br);//m_name = br.ReadASCII();
+
+            // throw new NotImplementedException("code generated. check first");
         }
 
-        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
+
             bw.WriteInt32(m_value);
-            bw.WriteUInt32(0);
-            s.WriteStringPointer(bw, m_name);
+            bw.Position += 4;
+            s.WriteStringPointer(bw, m_name);//bw.WriteASCII(m_name, true);
+
+            // throw new NotImplementedException("code generated. check first");
         }
     }
 }
+
