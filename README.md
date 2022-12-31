@@ -11,7 +11,6 @@ This fork modified classes for Skyrim SE hkx file.
 - ~XML to HKX~ use [figment/hkxcmd](https://github.com/figment/hkxcmd), [nexus](https://www.nexusmods.com/skyrim/mods/1797)
 - ~Supports Breath of the Wild packfiles used on Wii U and Switch (might support other games that use the same classes).~ (Skyrim SE only)
 - ~Supports conversion of packfiles between those two platforms.~ (SE only)
-- ~Padding improvements which allow for perfectly matching Navmesh (.hknm2) files.~ (hkx only)
 
 ### Known issues
 
