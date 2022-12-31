@@ -70,6 +70,12 @@ namespace PlatformConverter
 - `./HKX2/Manual/` also contains generated classes with small adjustment.
 - ~Differences in class structure between games and platforms is dependent on Havok version used and platform's header information (pointer size, endian, padding option).~ no
 
+### TODO
+
+- Unit test
+- xml to 64bit hkx?
+- export animation?
+
 ### Credits
 
 - [katalash](https://github.com/katalash) - The original HKX2 library included in [DSMapStudio](https://github.com/katalash/DSMapStudio)
