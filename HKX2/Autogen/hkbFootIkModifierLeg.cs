@@ -1,39 +1,36 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbFootIkModifierLeg Signatire: 0x9f3e3a04 size: 160 flags: FLAGS_NONE
 
-    // m_originalAnkleTransformMS m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_prevAnkleRotLS m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 48 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_kneeAxisLS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_footEndLS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_ungroundedEvent m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_footPlantedAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    // m_footRaisedAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags:  enum: 
-    // m_maxAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 120 flags:  enum: 
-    // m_minAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 124 flags:  enum: 
-    // m_maxKneeAngleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 128 flags:  enum: 
-    // m_minKneeAngleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 132 flags:  enum: 
-    // m_verticalError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 136 flags:  enum: 
-    // m_maxAnkleAngleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 140 flags:  enum: 
-    // m_hipIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 144 flags:  enum: 
-    // m_kneeIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 146 flags:  enum: 
-    // m_ankleIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 148 flags:  enum: 
-    // m_hitSomething m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 150 flags:  enum: 
-    // m_isPlantedMS m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 151 flags:  enum: 
-    // m_isOriginalAnkleTransformMSSet m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 152 flags:  enum: 
-    
-    public class hkbFootIkModifierLeg : IHavokObject
+    // m_originalAnkleTransformMS m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_prevAnkleRotLS m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 48 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_kneeAxisLS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_footEndLS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_ungroundedEvent m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_footPlantedAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_footRaisedAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: FLAGS_NONE enum: 
+    // m_maxAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
+    // m_minAnkleHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 124 flags: FLAGS_NONE enum: 
+    // m_maxKneeAngleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
+    // m_minKneeAngleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 132 flags: FLAGS_NONE enum: 
+    // m_verticalError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 136 flags: FLAGS_NONE enum: 
+    // m_maxAnkleAngleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 140 flags: FLAGS_NONE enum: 
+    // m_hipIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
+    // m_kneeIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 146 flags: FLAGS_NONE enum: 
+    // m_ankleIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 148 flags: FLAGS_NONE enum: 
+    // m_hitSomething m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 150 flags: FLAGS_NONE enum: 
+    // m_isPlantedMS m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 151 flags: FLAGS_NONE enum: 
+    // m_isOriginalAnkleTransformMSSet m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
+    public partial class hkbFootIkModifierLeg : IHavokObject
     {
-
         public Matrix4x4 m_originalAnkleTransformMS;
         public Quaternion m_prevAnkleRotLS;
         public Vector4 m_kneeAxisLS;
         public Vector4 m_footEndLS;
-        public hkbEventProperty/*struct void*/ m_ungroundedEvent;
+        public hkbEventProperty m_ungroundedEvent;
         public float m_footPlantedAnkleHeightMS;
         public float m_footRaisedAnkleHeightMS;
         public float m_maxAnkleHeightMS;
@@ -49,17 +46,16 @@ namespace HKX2
         public bool m_isPlantedMS;
         public bool m_isOriginalAnkleTransformMSSet;
 
-        public uint Signature => 0x9f3e3a04;
+        public virtual uint Signature => 0x9f3e3a04;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_originalAnkleTransformMS = des.ReadQSTransform(br);
             m_prevAnkleRotLS = des.ReadQuaternion(br);
             m_kneeAxisLS = br.ReadVector4();
             m_footEndLS = br.ReadVector4();
             m_ungroundedEvent = new hkbEventProperty();
-            m_ungroundedEvent.Read(des,br);
+            m_ungroundedEvent.Read(des, br);
             m_footPlantedAnkleHeightMS = br.ReadSingle();
             m_footRaisedAnkleHeightMS = br.ReadSingle();
             m_maxAnkleHeightMS = br.ReadSingle();
@@ -75,13 +71,10 @@ namespace HKX2
             m_isPlantedMS = br.ReadBoolean();
             m_isOriginalAnkleTransformMSSet = br.ReadBoolean();
             br.Position += 7;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             s.WriteQSTransform(bw, m_originalAnkleTransformMS);
             s.WriteQuaternion(bw, m_prevAnkleRotLS);
             bw.WriteVector4(m_kneeAxisLS);
@@ -102,8 +95,34 @@ namespace HKX2
             bw.WriteBoolean(m_isPlantedMS);
             bw.WriteBoolean(m_isOriginalAnkleTransformMSSet);
             bw.Position += 7;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteQSTransform(xe, nameof(m_originalAnkleTransformMS), m_originalAnkleTransformMS);
+            xs.WriteSerializeIgnored(xe, nameof(m_prevAnkleRotLS));
+            xs.WriteVector4(xe, nameof(m_kneeAxisLS), m_kneeAxisLS);
+            xs.WriteVector4(xe, nameof(m_footEndLS), m_footEndLS);
+            xs.WriteClass<hkbEventProperty>(xe, nameof(m_ungroundedEvent), m_ungroundedEvent);
+            xs.WriteFloat(xe, nameof(m_footPlantedAnkleHeightMS), m_footPlantedAnkleHeightMS);
+            xs.WriteFloat(xe, nameof(m_footRaisedAnkleHeightMS), m_footRaisedAnkleHeightMS);
+            xs.WriteFloat(xe, nameof(m_maxAnkleHeightMS), m_maxAnkleHeightMS);
+            xs.WriteFloat(xe, nameof(m_minAnkleHeightMS), m_minAnkleHeightMS);
+            xs.WriteFloat(xe, nameof(m_maxKneeAngleDegrees), m_maxKneeAngleDegrees);
+            xs.WriteFloat(xe, nameof(m_minKneeAngleDegrees), m_minKneeAngleDegrees);
+            xs.WriteFloat(xe, nameof(m_verticalError), m_verticalError);
+            xs.WriteFloat(xe, nameof(m_maxAnkleAngleDegrees), m_maxAnkleAngleDegrees);
+            xs.WriteNumber(xe, nameof(m_hipIndex), m_hipIndex);
+            xs.WriteNumber(xe, nameof(m_kneeIndex), m_kneeIndex);
+            xs.WriteNumber(xe, nameof(m_ankleIndex), m_ankleIndex);
+            xs.WriteBoolean(xe, nameof(m_hitSomething), m_hitSomething);
+            xs.WriteBoolean(xe, nameof(m_isPlantedMS), m_isPlantedMS);
+            xs.WriteBoolean(xe, nameof(m_isOriginalAnkleTransformMSSet), m_isOriginalAnkleTransformMSSet);
         }
     }
 }

@@ -1,23 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbAttachmentSetup Signatire: 0x774632b size: 48 flags: FLAGS_NONE
 
-    // m_blendInTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_moveAttacherFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 20 flags:  enum: 
-    // m_gain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
-    // m_extrapolationTimeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 28 flags:  enum: 
-    // m_fixUpGain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_maxLinearDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
-    // m_maxAngularDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
-    // m_attachmentType m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 44 flags:  enum: AttachmentType
-    
-    public class hkbAttachmentSetup : hkReferencedObject
+    // m_blendInTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_moveAttacherFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
+    // m_gain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_extrapolationTimeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
+    // m_fixUpGain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_maxLinearDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
+    // m_maxAngularDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_attachmentType m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 44 flags: FLAGS_NONE enum: AttachmentType
+    public partial class hkbAttachmentSetup : hkReferencedObject
     {
-
         public float m_blendInTime;
         public float m_moveAttacherFraction;
         public float m_gain;
@@ -31,7 +27,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_blendInTime = br.ReadSingle();
             m_moveAttacherFraction = br.ReadSingle();
@@ -42,13 +37,10 @@ namespace HKX2
             m_maxAngularDistance = br.ReadSingle();
             m_attachmentType = br.ReadSByte();
             br.Position += 3;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteSingle(m_blendInTime);
             bw.WriteSingle(m_moveAttacherFraction);
@@ -59,8 +51,24 @@ namespace HKX2
             bw.WriteSingle(m_maxAngularDistance);
             s.WriteSByte(bw, m_attachmentType);
             bw.Position += 3;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteFloat(xe, nameof(m_blendInTime), m_blendInTime);
+            xs.WriteFloat(xe, nameof(m_moveAttacherFraction), m_moveAttacherFraction);
+            xs.WriteFloat(xe, nameof(m_gain), m_gain);
+            xs.WriteFloat(xe, nameof(m_extrapolationTimeStep), m_extrapolationTimeStep);
+            xs.WriteFloat(xe, nameof(m_fixUpGain), m_fixUpGain);
+            xs.WriteFloat(xe, nameof(m_maxLinearDistance), m_maxLinearDistance);
+            xs.WriteFloat(xe, nameof(m_maxAngularDistance), m_maxAngularDistance);
+            xs.WriteEnum<AttachmentType, sbyte>(xe, nameof(m_attachmentType), m_attachmentType);
         }
     }
 }

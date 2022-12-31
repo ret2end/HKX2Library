@@ -1,22 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpTriangleShape Signatire: 0x95ad1a25 size: 112 flags: FLAGS_NONE
 
-    // m_weldingInfo m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
-    // m_weldingType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 42 flags:  enum: WeldingType
-    // m_isExtruded m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 43 flags:  enum: 
-    // m_vertexA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
-    // m_vertexB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_vertexC m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_extrusion m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    
-    public class hkpTriangleShape : hkpConvexShape
+    // m_weldingInfo m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_weldingType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 42 flags: FLAGS_NONE enum: WeldingType
+    // m_isExtruded m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 43 flags: FLAGS_NONE enum: 
+    // m_vertexA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_vertexB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_vertexC m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_extrusion m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    public partial class hkpTriangleShape : hkpConvexShape
     {
-
         public ushort m_weldingInfo;
         public byte m_weldingType;
         public byte m_isExtruded;
@@ -29,7 +26,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_weldingInfo = br.ReadUInt16();
             m_weldingType = br.ReadByte();
@@ -39,13 +35,10 @@ namespace HKX2
             m_vertexB = br.ReadVector4();
             m_vertexC = br.ReadVector4();
             m_extrusion = br.ReadVector4();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteUInt16(m_weldingInfo);
             s.WriteByte(bw, m_weldingType);
@@ -55,8 +48,23 @@ namespace HKX2
             bw.WriteVector4(m_vertexB);
             bw.WriteVector4(m_vertexC);
             bw.WriteVector4(m_extrusion);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteNumber(xe, nameof(m_weldingInfo), m_weldingInfo);
+            xs.WriteEnum<WeldingType, byte>(xe, nameof(m_weldingType), m_weldingType);
+            xs.WriteNumber(xe, nameof(m_isExtruded), m_isExtruded);
+            xs.WriteVector4(xe, nameof(m_vertexA), m_vertexA);
+            xs.WriteVector4(xe, nameof(m_vertexB), m_vertexB);
+            xs.WriteVector4(xe, nameof(m_vertexC), m_vertexC);
+            xs.WriteVector4(xe, nameof(m_extrusion), m_extrusion);
         }
     }
 }

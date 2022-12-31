@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpPositionConstraintMotor Signatire: 0x748fb303 size: 48 flags: FLAGS_NONE
 
-    // m_tau m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
-    // m_proportionalRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
-    // m_constantRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags:  enum: 
-    
-    public class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor
+    // m_tau m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
+    // m_proportionalRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_constantRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
+    public partial class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor
     {
-
         public float m_tau;
         public float m_damping;
         public float m_proportionalRecoveryVelocity;
@@ -23,26 +19,34 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_tau = br.ReadSingle();
             m_damping = br.ReadSingle();
             m_proportionalRecoveryVelocity = br.ReadSingle();
             m_constantRecoveryVelocity = br.ReadSingle();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteSingle(m_tau);
             bw.WriteSingle(m_damping);
             bw.WriteSingle(m_proportionalRecoveryVelocity);
             bw.WriteSingle(m_constantRecoveryVelocity);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteFloat(xe, nameof(m_tau), m_tau);
+            xs.WriteFloat(xe, nameof(m_damping), m_damping);
+            xs.WriteFloat(xe, nameof(m_proportionalRecoveryVelocity), m_proportionalRecoveryVelocity);
+            xs.WriteFloat(xe, nameof(m_constantRecoveryVelocity), m_constantRecoveryVelocity);
         }
     }
 }

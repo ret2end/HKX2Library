@@ -1,24 +1,22 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbTwistModifier Signatire: 0xb6b76b32 size: 144 flags: FLAGS_NONE
 
-    // m_axisOfRotation m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_twistAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_startBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 100 flags:  enum: 
-    // m_endBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 102 flags:  enum: 
-    // m_setAngleMethod m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 104 flags:  enum: SetAngleMethod
-    // m_rotationAxisCoordinates m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 105 flags:  enum: RotationAxisCoordinates
-    // m_isAdditive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 106 flags:  enum: 
-    // m_boneChainIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_parentBoneIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 128 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbTwistModifier : hkbModifier
+    // m_axisOfRotation m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_twistAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_startBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
+    // m_endBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 102 flags: FLAGS_NONE enum: 
+    // m_setAngleMethod m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 104 flags: FLAGS_NONE enum: SetAngleMethod
+    // m_rotationAxisCoordinates m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 105 flags: FLAGS_NONE enum: RotationAxisCoordinates
+    // m_isAdditive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 106 flags: FLAGS_NONE enum: 
+    // m_boneChainIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_parentBoneIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 128 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbTwistModifier : hkbModifier
     {
-
         public Vector4 m_axisOfRotation;
         public float m_twistAngle;
         public short m_startBoneIndex;
@@ -26,14 +24,13 @@ namespace HKX2
         public sbyte m_setAngleMethod;
         public sbyte m_rotationAxisCoordinates;
         public bool m_isAdditive;
-        public List<ulong> m_boneChainIndices;
-        public List<ulong> m_parentBoneIndices;
+        public List<dynamic> m_boneChainIndices;
+        public List<dynamic> m_parentBoneIndices;
 
         public override uint Signature => 0xb6b76b32;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_axisOfRotation = br.ReadVector4();
             m_twistAngle = br.ReadSingle();
@@ -43,15 +40,12 @@ namespace HKX2
             m_rotationAxisCoordinates = br.ReadSByte();
             m_isAdditive = br.ReadBoolean();
             br.Position += 5;
-            des.ReadEmptyArray(br); //m_boneChainIndices
-            des.ReadEmptyArray(br); //m_parentBoneIndices
-
-            // throw new NotImplementedException("code generated. check first");
+            des.ReadEmptyArray(br);
+            des.ReadEmptyArray(br);
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteVector4(m_axisOfRotation);
             bw.WriteSingle(m_twistAngle);
@@ -61,10 +55,27 @@ namespace HKX2
             s.WriteSByte(bw, m_rotationAxisCoordinates);
             bw.WriteBoolean(m_isAdditive);
             bw.Position += 5;
-            s.WriteVoidArray(bw); // m_boneChainIndices
-            s.WriteVoidArray(bw); // m_parentBoneIndices
+            s.WriteVoidArray(bw);
+            s.WriteVoidArray(bw);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteVector4(xe, nameof(m_axisOfRotation), m_axisOfRotation);
+            xs.WriteFloat(xe, nameof(m_twistAngle), m_twistAngle);
+            xs.WriteNumber(xe, nameof(m_startBoneIndex), m_startBoneIndex);
+            xs.WriteNumber(xe, nameof(m_endBoneIndex), m_endBoneIndex);
+            xs.WriteEnum<SetAngleMethod, sbyte>(xe, nameof(m_setAngleMethod), m_setAngleMethod);
+            xs.WriteEnum<RotationAxisCoordinates, sbyte>(xe, nameof(m_rotationAxisCoordinates), m_rotationAxisCoordinates);
+            xs.WriteBoolean(xe, nameof(m_isAdditive), m_isAdditive);
+            xs.WriteSerializeIgnored(xe, nameof(m_boneChainIndices));
+            xs.WriteSerializeIgnored(xe, nameof(m_parentBoneIndices));
         }
     }
 }

@@ -1,39 +1,37 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbSenseHandleModifier Signatire: 0x2a064d99 size: 224 flags: FLAGS_NONE
 
-    // m_handle m_class: hkbHandle Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_sensorLocalOffset m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 128 flags:  enum: 
-    // m_ranges m_class: hkbSenseHandleModifierRange Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 144 flags:  enum: 
-    // m_handleOut m_class: hkbHandle Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 160 flags:  enum: 
-    // m_handleIn m_class: hkbHandle Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 168 flags:  enum: 
-    // m_localFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 176 flags:  enum: 
-    // m_sensorLocalFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 184 flags:  enum: 
-    // m_minDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 192 flags:  enum: 
-    // m_maxDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 196 flags:  enum: 
-    // m_distanceOut m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 200 flags:  enum: 
-    // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 204 flags:  enum: 
-    // m_sensorRagdollBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 208 flags:  enum: 
-    // m_sensorAnimationBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 210 flags:  enum: 
-    // m_sensingMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 212 flags:  enum: SensingMode
-    // m_extrapolateSensorPosition m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 213 flags:  enum: 
-    // m_keepFirstSensedHandle m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 214 flags:  enum: 
-    // m_foundHandleOut m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 215 flags:  enum: 
-    // m_timeSinceLastModify m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 216 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_rangeIndexForEventToSendNextUpdate m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 220 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbSenseHandleModifier : hkbModifier
+    // m_handle m_class: hkbHandle Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_sensorLocalOffset m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
+    // m_ranges m_class: hkbSenseHandleModifierRange Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
+    // m_handleOut m_class: hkbHandle Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 160 flags: FLAGS_NONE enum: 
+    // m_handleIn m_class: hkbHandle Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 168 flags: FLAGS_NONE enum: 
+    // m_localFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
+    // m_sensorLocalFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 184 flags: FLAGS_NONE enum: 
+    // m_minDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 192 flags: FLAGS_NONE enum: 
+    // m_maxDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 196 flags: FLAGS_NONE enum: 
+    // m_distanceOut m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 200 flags: FLAGS_NONE enum: 
+    // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 204 flags: FLAGS_NONE enum: 
+    // m_sensorRagdollBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 208 flags: FLAGS_NONE enum: 
+    // m_sensorAnimationBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 210 flags: FLAGS_NONE enum: 
+    // m_sensingMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 212 flags: FLAGS_NONE enum: SensingMode
+    // m_extrapolateSensorPosition m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 213 flags: FLAGS_NONE enum: 
+    // m_keepFirstSensedHandle m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 214 flags: FLAGS_NONE enum: 
+    // m_foundHandleOut m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 215 flags: FLAGS_NONE enum: 
+    // m_timeSinceLastModify m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 216 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_rangeIndexForEventToSendNextUpdate m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 220 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbSenseHandleModifier : hkbModifier
     {
-
-        public hkbHandle/*struct void*/ m_handle;
+        public hkbHandle m_handle;
         public Vector4 m_sensorLocalOffset;
         public List<hkbSenseHandleModifierRange> m_ranges;
-        public hkbHandle /*pointer struct*/ m_handleOut;
-        public hkbHandle /*pointer struct*/ m_handleIn;
+        public hkbHandle m_handleOut;
+        public hkbHandle m_handleIn;
         public string m_localFrameName;
         public string m_sensorLocalFrameName;
         public float m_minDistance;
@@ -53,10 +51,9 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_handle = new hkbHandle();
-            m_handle.Read(des,br);
+            m_handle.Read(des, br);
             m_sensorLocalOffset = br.ReadVector4();
             m_ranges = des.ReadClassArray<hkbSenseHandleModifierRange>(br);
             m_handleOut = des.ReadClassPointer<hkbHandle>(br);
@@ -75,13 +72,10 @@ namespace HKX2
             m_foundHandleOut = br.ReadBoolean();
             m_timeSinceLastModify = br.ReadSingle();
             m_rangeIndexForEventToSendNextUpdate = br.ReadInt32();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             m_handle.Write(s, bw);
             bw.WriteVector4(m_sensorLocalOffset);
@@ -102,8 +96,35 @@ namespace HKX2
             bw.WriteBoolean(m_foundHandleOut);
             bw.WriteSingle(m_timeSinceLastModify);
             bw.WriteInt32(m_rangeIndexForEventToSendNextUpdate);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteSerializeIgnored(xe, nameof(m_handle));
+            xs.WriteVector4(xe, nameof(m_sensorLocalOffset), m_sensorLocalOffset);
+            xs.WriteClassArray<hkbSenseHandleModifierRange>(xe, nameof(m_ranges), m_ranges);
+            xs.WriteClassPointer(xe, nameof(m_handleOut), m_handleOut);
+            xs.WriteClassPointer(xe, nameof(m_handleIn), m_handleIn);
+            xs.WriteString(xe, nameof(m_localFrameName), m_localFrameName);
+            xs.WriteString(xe, nameof(m_sensorLocalFrameName), m_sensorLocalFrameName);
+            xs.WriteFloat(xe, nameof(m_minDistance), m_minDistance);
+            xs.WriteFloat(xe, nameof(m_maxDistance), m_maxDistance);
+            xs.WriteFloat(xe, nameof(m_distanceOut), m_distanceOut);
+            xs.WriteNumber(xe, nameof(m_collisionFilterInfo), m_collisionFilterInfo);
+            xs.WriteNumber(xe, nameof(m_sensorRagdollBoneIndex), m_sensorRagdollBoneIndex);
+            xs.WriteNumber(xe, nameof(m_sensorAnimationBoneIndex), m_sensorAnimationBoneIndex);
+            xs.WriteEnum<SensingMode, sbyte>(xe, nameof(m_sensingMode), m_sensingMode);
+            xs.WriteBoolean(xe, nameof(m_extrapolateSensorPosition), m_extrapolateSensorPosition);
+            xs.WriteBoolean(xe, nameof(m_keepFirstSensedHandle), m_keepFirstSensedHandle);
+            xs.WriteBoolean(xe, nameof(m_foundHandleOut), m_foundHandleOut);
+            xs.WriteSerializeIgnored(xe, nameof(m_timeSinceLastModify));
+            xs.WriteSerializeIgnored(xe, nameof(m_rangeIndexForEventToSendNextUpdate));
         }
     }
 }

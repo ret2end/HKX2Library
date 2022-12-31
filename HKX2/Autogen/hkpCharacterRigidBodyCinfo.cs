@@ -1,33 +1,30 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpCharacterRigidBodyCinfo Signatire: 0x892f441 size: 128 flags: FLAGS_NONE
 
-    // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_shape m_class: hkpShape Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 24 flags:  enum: 
-    // m_position m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_rotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
-    // m_mass m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_friction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags:  enum: 
-    // m_maxLinearVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags:  enum: 
-    // m_allowedPenetrationDepth m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags:  enum: 
-    // m_up m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_maxSlope m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_maxForce m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags:  enum: 
-    // m_unweldingHeightOffsetFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags:  enum: 
-    // m_maxSpeedForSimplexSolver m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags:  enum: 
-    // m_supportDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    // m_hardSupportDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags:  enum: 
-    // m_vdbColor m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 120 flags:  enum: 
-    
-    public class hkpCharacterRigidBodyCinfo : hkpCharacterControllerCinfo
+    // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_shape m_class: hkpShape Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_position m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_rotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_mass m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_friction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
+    // m_maxLinearVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
+    // m_allowedPenetrationDepth m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
+    // m_up m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_maxSlope m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_maxForce m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
+    // m_unweldingHeightOffsetFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
+    // m_maxSpeedForSimplexSolver m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
+    // m_supportDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_hardSupportDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: FLAGS_NONE enum: 
+    // m_vdbColor m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
+    public partial class hkpCharacterRigidBodyCinfo : hkpCharacterControllerCinfo
     {
-
         public uint m_collisionFilterInfo;
-        public hkpShape /*pointer struct*/ m_shape;
+        public hkpShape m_shape;
         public Vector4 m_position;
         public Quaternion m_rotation;
         public float m_mass;
@@ -47,7 +44,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_collisionFilterInfo = br.ReadUInt32();
             br.Position += 4;
@@ -67,13 +63,10 @@ namespace HKX2
             m_hardSupportDistance = br.ReadSingle();
             m_vdbColor = br.ReadInt32();
             br.Position += 4;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteUInt32(m_collisionFilterInfo);
             bw.Position += 4;
@@ -93,8 +86,32 @@ namespace HKX2
             bw.WriteSingle(m_hardSupportDistance);
             bw.WriteInt32(m_vdbColor);
             bw.Position += 4;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteNumber(xe, nameof(m_collisionFilterInfo), m_collisionFilterInfo);
+            xs.WriteClassPointer(xe, nameof(m_shape), m_shape);
+            xs.WriteVector4(xe, nameof(m_position), m_position);
+            xs.WriteQuaternion(xe, nameof(m_rotation), m_rotation);
+            xs.WriteFloat(xe, nameof(m_mass), m_mass);
+            xs.WriteFloat(xe, nameof(m_friction), m_friction);
+            xs.WriteFloat(xe, nameof(m_maxLinearVelocity), m_maxLinearVelocity);
+            xs.WriteFloat(xe, nameof(m_allowedPenetrationDepth), m_allowedPenetrationDepth);
+            xs.WriteVector4(xe, nameof(m_up), m_up);
+            xs.WriteFloat(xe, nameof(m_maxSlope), m_maxSlope);
+            xs.WriteFloat(xe, nameof(m_maxForce), m_maxForce);
+            xs.WriteFloat(xe, nameof(m_unweldingHeightOffsetFactor), m_unweldingHeightOffsetFactor);
+            xs.WriteFloat(xe, nameof(m_maxSpeedForSimplexSolver), m_maxSpeedForSimplexSolver);
+            xs.WriteFloat(xe, nameof(m_supportDistance), m_supportDistance);
+            xs.WriteFloat(xe, nameof(m_hardSupportDistance), m_hardSupportDistance);
+            xs.WriteNumber(xe, nameof(m_vdbColor), m_vdbColor);
         }
     }
 }

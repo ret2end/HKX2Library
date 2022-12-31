@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbGetUpModifier Signatire: 0x61cb7ac0 size: 128 flags: FLAGS_NONE
 
-    // m_groundNormal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_alignWithGroundDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags:  enum: 
-    // m_rootBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 104 flags:  enum: 
-    // m_otherBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 106 flags:  enum: 
-    // m_anotherBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 108 flags:  enum: 
-    // m_timeSinceBegin m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_initNextModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 120 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbGetUpModifier : hkbModifier
+    // m_groundNormal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_alignWithGroundDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
+    // m_rootBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
+    // m_otherBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 106 flags: FLAGS_NONE enum: 
+    // m_anotherBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
+    // m_timeSinceBegin m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_initNextModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbGetUpModifier : hkbModifier
     {
-
         public Vector4 m_groundNormal;
         public float m_duration;
         public float m_alignWithGroundDuration;
@@ -33,7 +30,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_groundNormal = br.ReadVector4();
             m_duration = br.ReadSingle();
@@ -46,13 +42,10 @@ namespace HKX2
             m_timeStep = br.ReadSingle();
             m_initNextModify = br.ReadBoolean();
             br.Position += 7;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteVector4(m_groundNormal);
             bw.WriteSingle(m_duration);
@@ -65,8 +58,25 @@ namespace HKX2
             bw.WriteSingle(m_timeStep);
             bw.WriteBoolean(m_initNextModify);
             bw.Position += 7;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteVector4(xe, nameof(m_groundNormal), m_groundNormal);
+            xs.WriteFloat(xe, nameof(m_duration), m_duration);
+            xs.WriteFloat(xe, nameof(m_alignWithGroundDuration), m_alignWithGroundDuration);
+            xs.WriteNumber(xe, nameof(m_rootBoneIndex), m_rootBoneIndex);
+            xs.WriteNumber(xe, nameof(m_otherBoneIndex), m_otherBoneIndex);
+            xs.WriteNumber(xe, nameof(m_anotherBoneIndex), m_anotherBoneIndex);
+            xs.WriteSerializeIgnored(xe, nameof(m_timeSinceBegin));
+            xs.WriteSerializeIgnored(xe, nameof(m_timeStep));
+            xs.WriteSerializeIgnored(xe, nameof(m_initNextModify));
         }
     }
 }

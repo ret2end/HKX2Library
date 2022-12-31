@@ -1,23 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpSpringAction Signatire: 0x88fc09fa size: 128 flags: FLAGS_NONE
 
-    // m_lastForce m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_positionAinA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_positionBinB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_restLength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    // m_strength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags:  enum: 
-    // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 120 flags:  enum: 
-    // m_onCompression m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 124 flags:  enum: 
-    // m_onExtension m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 125 flags:  enum: 
-    
-    public class hkpSpringAction : hkpBinaryAction
+    // m_lastForce m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_positionAinA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_positionBinB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_restLength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_strength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: FLAGS_NONE enum: 
+    // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
+    // m_onCompression m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 124 flags: FLAGS_NONE enum: 
+    // m_onExtension m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 125 flags: FLAGS_NONE enum: 
+    public partial class hkpSpringAction : hkpBinaryAction
     {
-
         public Vector4 m_lastForce;
         public Vector4 m_positionAinA;
         public Vector4 m_positionBinB;
@@ -31,7 +28,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_lastForce = br.ReadVector4();
             m_positionAinA = br.ReadVector4();
@@ -42,13 +38,10 @@ namespace HKX2
             m_onCompression = br.ReadBoolean();
             m_onExtension = br.ReadBoolean();
             br.Position += 2;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteVector4(m_lastForce);
             bw.WriteVector4(m_positionAinA);
@@ -59,8 +52,24 @@ namespace HKX2
             bw.WriteBoolean(m_onCompression);
             bw.WriteBoolean(m_onExtension);
             bw.Position += 2;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteVector4(xe, nameof(m_lastForce), m_lastForce);
+            xs.WriteVector4(xe, nameof(m_positionAinA), m_positionAinA);
+            xs.WriteVector4(xe, nameof(m_positionBinB), m_positionBinB);
+            xs.WriteFloat(xe, nameof(m_restLength), m_restLength);
+            xs.WriteFloat(xe, nameof(m_strength), m_strength);
+            xs.WriteFloat(xe, nameof(m_damping), m_damping);
+            xs.WriteBoolean(xe, nameof(m_onCompression), m_onCompression);
+            xs.WriteBoolean(xe, nameof(m_onExtension), m_onExtension);
         }
     }
 }

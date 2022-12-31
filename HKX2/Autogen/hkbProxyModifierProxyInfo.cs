@@ -1,29 +1,26 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbProxyModifierProxyInfo Signatire: 0x39de637e size: 80 flags: FLAGS_NONE
 
-    // m_dynamicFriction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_staticFriction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags:  enum: 
-    // m_keepContactTolerance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
-    // m_up m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_keepDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_contactAngleSensitivity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
-    // m_userPlanes m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
-    // m_maxCharacterSpeedForSolver m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags:  enum: 
-    // m_characterStrength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
-    // m_characterMass m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags:  enum: 
-    // m_maxSlope m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags:  enum: 
-    // m_penetrationRecoverySpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags:  enum: 
-    // m_maxCastIterations m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_refreshManifoldInCheckSupport m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 68 flags:  enum: 
-    
-    public class hkbProxyModifierProxyInfo : IHavokObject
+    // m_dynamicFriction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_staticFriction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
+    // m_keepContactTolerance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
+    // m_up m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_keepDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_contactAngleSensitivity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
+    // m_userPlanes m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_maxCharacterSpeedForSolver m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
+    // m_characterStrength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_characterMass m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
+    // m_maxSlope m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
+    // m_penetrationRecoverySpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
+    // m_maxCastIterations m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_refreshManifoldInCheckSupport m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
+    public partial class hkbProxyModifierProxyInfo : IHavokObject
     {
-
         public float m_dynamicFriction;
         public float m_staticFriction;
         public float m_keepContactTolerance;
@@ -39,11 +36,10 @@ namespace HKX2
         public int m_maxCastIterations;
         public bool m_refreshManifoldInCheckSupport;
 
-        public uint Signature => 0x39de637e;
+        public virtual uint Signature => 0x39de637e;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_dynamicFriction = br.ReadSingle();
             m_staticFriction = br.ReadSingle();
             m_keepContactTolerance = br.ReadSingle();
@@ -60,13 +56,10 @@ namespace HKX2
             m_maxCastIterations = br.ReadInt32();
             m_refreshManifoldInCheckSupport = br.ReadBoolean();
             br.Position += 11;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             bw.WriteSingle(m_dynamicFriction);
             bw.WriteSingle(m_staticFriction);
             bw.WriteSingle(m_keepContactTolerance);
@@ -83,8 +76,29 @@ namespace HKX2
             bw.WriteInt32(m_maxCastIterations);
             bw.WriteBoolean(m_refreshManifoldInCheckSupport);
             bw.Position += 11;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteFloat(xe, nameof(m_dynamicFriction), m_dynamicFriction);
+            xs.WriteFloat(xe, nameof(m_staticFriction), m_staticFriction);
+            xs.WriteFloat(xe, nameof(m_keepContactTolerance), m_keepContactTolerance);
+            xs.WriteVector4(xe, nameof(m_up), m_up);
+            xs.WriteFloat(xe, nameof(m_keepDistance), m_keepDistance);
+            xs.WriteFloat(xe, nameof(m_contactAngleSensitivity), m_contactAngleSensitivity);
+            xs.WriteNumber(xe, nameof(m_userPlanes), m_userPlanes);
+            xs.WriteFloat(xe, nameof(m_maxCharacterSpeedForSolver), m_maxCharacterSpeedForSolver);
+            xs.WriteFloat(xe, nameof(m_characterStrength), m_characterStrength);
+            xs.WriteFloat(xe, nameof(m_characterMass), m_characterMass);
+            xs.WriteFloat(xe, nameof(m_maxSlope), m_maxSlope);
+            xs.WriteFloat(xe, nameof(m_penetrationRecoverySpeed), m_penetrationRecoverySpeed);
+            xs.WriteNumber(xe, nameof(m_maxCastIterations), m_maxCastIterations);
+            xs.WriteBoolean(xe, nameof(m_refreshManifoldInCheckSupport), m_refreshManifoldInCheckSupport);
         }
     }
 }

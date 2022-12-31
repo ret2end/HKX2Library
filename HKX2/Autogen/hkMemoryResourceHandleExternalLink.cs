@@ -1,38 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkMemoryResourceHandleExternalLink Signatire: 0x3144d17c size: 16 flags: FLAGS_NONE
 
-    // m_memberName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_externalId m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
-    
-    public class hkMemoryResourceHandleExternalLink : IHavokObject
+    // m_memberName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_externalId m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
+    public partial class hkMemoryResourceHandleExternalLink : IHavokObject
     {
-
         public string m_memberName;
         public string m_externalId;
 
-        public uint Signature => 0x3144d17c;
+        public virtual uint Signature => 0x3144d17c;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_memberName = des.ReadStringPointer(br);
             m_externalId = des.ReadStringPointer(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             s.WriteStringPointer(bw, m_memberName);
             s.WriteStringPointer(bw, m_externalId);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteString(xe, nameof(m_memberName), m_memberName);
+            xs.WriteString(xe, nameof(m_externalId), m_externalId);
         }
     }
 }

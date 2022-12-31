@@ -1,28 +1,25 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbCharacterStringData Signatire: 0x655b42bc size: 192 flags: FLAGS_NONE
 
-    // m_deformableSkinNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 16 flags:  enum: 
-    // m_rigidSkinNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags:  enum: 
-    // m_animationNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 48 flags:  enum: 
-    // m_animationFilenames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 64 flags:  enum: 
-    // m_characterPropertyNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 80 flags:  enum: 
-    // m_retargetingSkeletonMapperFilenames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 96 flags:  enum: 
-    // m_lodNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 112 flags:  enum: 
-    // m_mirroredSyncPointSubstringsA m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 128 flags:  enum: 
-    // m_mirroredSyncPointSubstringsB m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 144 flags:  enum: 
-    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 160 flags:  enum: 
-    // m_rigName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 168 flags:  enum: 
-    // m_ragdollName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 176 flags:  enum: 
-    // m_behaviorFilename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 184 flags:  enum: 
-    
-    public class hkbCharacterStringData : hkReferencedObject
+    // m_deformableSkinNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_rigidSkinNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_animationNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_animationFilenames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_characterPropertyNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_retargetingSkeletonMapperFilenames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_lodNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_mirroredSyncPointSubstringsA m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
+    // m_mirroredSyncPointSubstringsB m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
+    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 160 flags: FLAGS_NONE enum: 
+    // m_rigName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 168 flags: FLAGS_NONE enum: 
+    // m_ragdollName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
+    // m_behaviorFilename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 184 flags: FLAGS_NONE enum: 
+    public partial class hkbCharacterStringData : hkReferencedObject
     {
-
         public List<string> m_deformableSkinNames;
         public List<string> m_rigidSkinNames;
         public List<string> m_animationNames;
@@ -41,7 +38,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_deformableSkinNames = des.ReadStringPointerArray(br);
             m_rigidSkinNames = des.ReadStringPointerArray(br);
@@ -56,13 +52,10 @@ namespace HKX2
             m_rigName = des.ReadStringPointer(br);
             m_ragdollName = des.ReadStringPointer(br);
             m_behaviorFilename = des.ReadStringPointer(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteStringPointerArray(bw, m_deformableSkinNames);
             s.WriteStringPointerArray(bw, m_rigidSkinNames);
@@ -77,8 +70,29 @@ namespace HKX2
             s.WriteStringPointer(bw, m_rigName);
             s.WriteStringPointer(bw, m_ragdollName);
             s.WriteStringPointer(bw, m_behaviorFilename);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteStringArray(xe, nameof(m_deformableSkinNames), m_deformableSkinNames);
+            xs.WriteStringArray(xe, nameof(m_rigidSkinNames), m_rigidSkinNames);
+            xs.WriteStringArray(xe, nameof(m_animationNames), m_animationNames);
+            xs.WriteStringArray(xe, nameof(m_animationFilenames), m_animationFilenames);
+            xs.WriteStringArray(xe, nameof(m_characterPropertyNames), m_characterPropertyNames);
+            xs.WriteStringArray(xe, nameof(m_retargetingSkeletonMapperFilenames), m_retargetingSkeletonMapperFilenames);
+            xs.WriteStringArray(xe, nameof(m_lodNames), m_lodNames);
+            xs.WriteStringArray(xe, nameof(m_mirroredSyncPointSubstringsA), m_mirroredSyncPointSubstringsA);
+            xs.WriteStringArray(xe, nameof(m_mirroredSyncPointSubstringsB), m_mirroredSyncPointSubstringsB);
+            xs.WriteString(xe, nameof(m_name), m_name);
+            xs.WriteString(xe, nameof(m_rigName), m_rigName);
+            xs.WriteString(xe, nameof(m_ragdollName), m_ragdollName);
+            xs.WriteString(xe, nameof(m_behaviorFilename), m_behaviorFilename);
         }
     }
 }

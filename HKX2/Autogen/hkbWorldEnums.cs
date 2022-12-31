@@ -1,34 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbWorldEnums Signatire: 0x25640b46 size: 1 flags: FLAGS_NONE
 
 
-    
-    public class hkbWorldEnums : IHavokObject
+    public partial class hkbWorldEnums : IHavokObject
     {
-
         public byte[] unk0;
 
-        public uint Signature => 0x25640b46;
+        public virtual uint Signature => 0x25640b46;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             unk0 = br.ReadBytes(1);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        {
+            bw.WriteBytes(unk0);
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
 
-            bw.WriteBytes(unk0);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+
         }
     }
 }

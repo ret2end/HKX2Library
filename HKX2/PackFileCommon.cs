@@ -342,14 +342,14 @@ namespace HKX2
             OffsetClassNamesMap = new Dictionary<uint, HKXClassName>();
             while (true)
             {
-                if (br.Position >= br.Length || br.Position+5 >= br.Length)
+                if (br.Position >= br.Length || br.Position + 5 >= br.Length)
                 {
                     break;
                 }
 
                 br.ReadUInt32(); // signature
                 var separator = br.ReadByte();
-                if(separator != 0x09)
+                if (separator != 0x09)
                 {
                     break;
                 }

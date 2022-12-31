@@ -1,34 +1,35 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkCustomAttributes Signatire: 0xbff19005 size: 16 flags: FLAGS_NONE
 
-    // m_attributes m_class: hkCustomAttributesAttribute Type.TYPE_SIMPLEARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags:  enum: 
-    
-    public class hkCustomAttributes : IHavokObject
+    // m_attributes m_class: hkCustomAttributesAttribute Type.TYPE_SIMPLEARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    public partial class hkCustomAttributes : IHavokObject
     {
+        public dynamic m_attributes;
 
-        public dynamic /*simpleArray struct*/ m_attributes;
+        public virtual uint Signature => 0xbff19005;
 
-        public uint Signature => 0xbff19005;
-
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
-            throw new NotImplementedException("TPYE_SIMPLEARRAY");/*simple array*/
-
-            // throw new NotImplementedException("code generated. check first");
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        {
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
 
-            throw new NotImplementedException("TPYE_SIMPLEARRAY");/*simple array*/
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
         }
     }
 }

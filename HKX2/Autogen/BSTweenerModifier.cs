@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // BSTweenerModifier Signatire: 0xd2d9a04 size: 208 flags: FLAGS_NONE
 
-    // m_tweenPosition m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_tweenRotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 81 flags:  enum: 
-    // m_useTweenDuration m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 82 flags:  enum: 
-    // m_tweenDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags:  enum: 
-    // m_targetPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_targetRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 128 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_startTransform m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 144 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 192 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class BSTweenerModifier : hkbModifier
+    // m_tweenPosition m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_tweenRotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 81 flags: FLAGS_NONE enum: 
+    // m_useTweenDuration m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 82 flags: FLAGS_NONE enum: 
+    // m_tweenDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
+    // m_targetPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_targetRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 128 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_startTransform m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 192 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class BSTweenerModifier : hkbModifier
     {
-
         public bool m_tweenPosition;
         public bool m_tweenRotation;
         public bool m_useTweenDuration;
@@ -33,7 +30,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_tweenPosition = br.ReadBoolean();
             m_tweenRotation = br.ReadBoolean();
@@ -48,13 +44,10 @@ namespace HKX2
             m_startTransform = des.ReadQSTransform(br);
             m_time = br.ReadSingle();
             br.Position += 12;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteBoolean(m_tweenPosition);
             bw.WriteBoolean(m_tweenRotation);
@@ -69,8 +62,25 @@ namespace HKX2
             s.WriteQSTransform(bw, m_startTransform);
             bw.WriteSingle(m_time);
             bw.Position += 12;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteBoolean(xe, nameof(m_tweenPosition), m_tweenPosition);
+            xs.WriteBoolean(xe, nameof(m_tweenRotation), m_tweenRotation);
+            xs.WriteBoolean(xe, nameof(m_useTweenDuration), m_useTweenDuration);
+            xs.WriteFloat(xe, nameof(m_tweenDuration), m_tweenDuration);
+            xs.WriteVector4(xe, nameof(m_targetPosition), m_targetPosition);
+            xs.WriteQuaternion(xe, nameof(m_targetRotation), m_targetRotation);
+            xs.WriteSerializeIgnored(xe, nameof(m_duration));
+            xs.WriteSerializeIgnored(xe, nameof(m_startTransform));
+            xs.WriteSerializeIgnored(xe, nameof(m_time));
         }
     }
 }

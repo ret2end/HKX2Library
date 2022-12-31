@@ -1,40 +1,42 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbFootIkModifierInternalLegData Signatire: 0xe5ca3677 size: 32 flags: FLAGS_NONE
 
-    // m_groundPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_footIkSolver m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 16 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbFootIkModifierInternalLegData : IHavokObject
+    // m_groundPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_footIkSolver m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbFootIkModifierInternalLegData : IHavokObject
     {
-
         public Vector4 m_groundPosition;
-        public dynamic /* POINTER VOID */ m_footIkSolver;
+        public dynamic m_footIkSolver;
 
-        public uint Signature => 0xe5ca3677;
+        public virtual uint Signature => 0xe5ca3677;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_groundPosition = br.ReadVector4();
-            des.ReadEmptyPointer(br);/* m_footIkSolver POINTER VOID */
+            des.ReadEmptyPointer(br);
             br.Position += 8;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        {
+            bw.WriteVector4(m_groundPosition);
+            s.WriteVoidPointer(bw);
+            bw.Position += 8;
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
 
-            bw.WriteVector4(m_groundPosition);
-            s.WriteVoidPointer(bw);/* m_footIkSolver POINTER VOID */
-            bw.Position += 8;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteVector4(xe, nameof(m_groundPosition), m_groundPosition);
+            xs.WriteSerializeIgnored(xe, nameof(m_footIkSolver));
         }
     }
 }

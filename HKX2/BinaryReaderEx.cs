@@ -137,7 +137,7 @@ namespace HKX2
 
         public bool AssertBoolean(bool option)
         {
-            return AssertValue(ReadBoolean(), "Boolean", "{0}", new[] {option});
+            return AssertValue(ReadBoolean(), "Boolean", "{0}", new[] { option });
         }
 
         #endregion
@@ -146,7 +146,7 @@ namespace HKX2
 
         public sbyte ReadSByte()
         {
-            return (sbyte) ReadByte();
+            return (sbyte)ReadByte();
         }
 
         public sbyte AssertSByte(params sbyte[] options)

@@ -1,42 +1,44 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbStateMachineTransitionInfoReference Signatire: 0x9810c2d0 size: 6 flags: FLAGS_NONE
 
-    // m_fromStateIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_transitionIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 2 flags:  enum: 
-    // m_stateMachineId m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 4 flags:  enum: 
-    
-    public class hkbStateMachineTransitionInfoReference : IHavokObject
+    // m_fromStateIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_transitionIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
+    // m_stateMachineId m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
+    public partial class hkbStateMachineTransitionInfoReference : IHavokObject
     {
-
         public short m_fromStateIndex;
         public short m_transitionIndex;
         public short m_stateMachineId;
 
-        public uint Signature => 0x9810c2d0;
+        public virtual uint Signature => 0x9810c2d0;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_fromStateIndex = br.ReadInt16();
             m_transitionIndex = br.ReadInt16();
             m_stateMachineId = br.ReadInt16();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             bw.WriteInt16(m_fromStateIndex);
             bw.WriteInt16(m_transitionIndex);
             bw.WriteInt16(m_stateMachineId);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteNumber(xe, nameof(m_fromStateIndex), m_fromStateIndex);
+            xs.WriteNumber(xe, nameof(m_transitionIndex), m_transitionIndex);
+            xs.WriteNumber(xe, nameof(m_stateMachineId), m_stateMachineId);
         }
     }
 }

@@ -1,33 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpLinMotorConstraintAtom Signatire: 0x10312464 size: 24 flags: FLAGS_NONE
 
-    // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 2 flags:  enum: 
-    // m_motorAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags:  enum: 
-    // m_initializedOffset m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 4 flags:  enum: 
-    // m_previousTargetPositionOffset m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 6 flags:  enum: 
-    // m_targetPosition m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
-    // m_motor m_class: hkpConstraintMotor Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags:  enum: 
-    
-    public class hkpLinMotorConstraintAtom : hkpConstraintAtom
+    // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
+    // m_motorAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags: FLAGS_NONE enum: 
+    // m_initializedOffset m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
+    // m_previousTargetPositionOffset m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 6 flags: FLAGS_NONE enum: 
+    // m_targetPosition m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
+    // m_motor m_class: hkpConstraintMotor Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    public partial class hkpLinMotorConstraintAtom : hkpConstraintAtom
     {
-
         public bool m_isEnabled;
         public byte m_motorAxis;
         public short m_initializedOffset;
         public short m_previousTargetPositionOffset;
         public float m_targetPosition;
-        public hkpConstraintMotor /*pointer struct*/ m_motor;
+        public hkpConstraintMotor m_motor;
 
         public override uint Signature => 0x10312464;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_isEnabled = br.ReadBoolean();
             m_motorAxis = br.ReadByte();
@@ -36,13 +31,10 @@ namespace HKX2
             m_targetPosition = br.ReadSingle();
             br.Position += 4;
             m_motor = des.ReadClassPointer<hkpConstraintMotor>(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteBoolean(m_isEnabled);
             bw.WriteByte(m_motorAxis);
@@ -51,8 +43,22 @@ namespace HKX2
             bw.WriteSingle(m_targetPosition);
             bw.Position += 4;
             s.WriteClassPointer(bw, m_motor);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteBoolean(xe, nameof(m_isEnabled), m_isEnabled);
+            xs.WriteNumber(xe, nameof(m_motorAxis), m_motorAxis);
+            xs.WriteNumber(xe, nameof(m_initializedOffset), m_initializedOffset);
+            xs.WriteNumber(xe, nameof(m_previousTargetPositionOffset), m_previousTargetPositionOffset);
+            xs.WriteFloat(xe, nameof(m_targetPosition), m_targetPosition);
+            xs.WriteClassPointer(xe, nameof(m_motor), m_motor);
         }
     }
 }

@@ -1,27 +1,24 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbCharacterControllerModifier Signatire: 0xf675d6fb size: 176 flags: FLAGS_NONE
 
-    // m_controlData m_class: hkbCharacterControllerControlData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_initialVelocity m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    // m_initialVelocityCoordinates m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 128 flags:  enum: InitialVelocityCoordinates
-    // m_motionMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 129 flags:  enum: MotionMode
-    // m_forceDownwardMomentum m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 130 flags:  enum: 
-    // m_applyGravity m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 131 flags:  enum: 
-    // m_setInitialVelocity m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 132 flags:  enum: 
-    // m_isTouchingGround m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 133 flags:  enum: 
-    // m_gravity m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 144 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_timestep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 160 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_isInitialVelocityAdded m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 164 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbCharacterControllerModifier : hkbModifier
+    // m_controlData m_class: hkbCharacterControllerControlData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_initialVelocity m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_initialVelocityCoordinates m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 128 flags: FLAGS_NONE enum: InitialVelocityCoordinates
+    // m_motionMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 129 flags: FLAGS_NONE enum: MotionMode
+    // m_forceDownwardMomentum m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 130 flags: FLAGS_NONE enum: 
+    // m_applyGravity m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 131 flags: FLAGS_NONE enum: 
+    // m_setInitialVelocity m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 132 flags: FLAGS_NONE enum: 
+    // m_isTouchingGround m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 133 flags: FLAGS_NONE enum: 
+    // m_gravity m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_timestep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 160 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_isInitialVelocityAdded m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 164 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbCharacterControllerModifier : hkbModifier
     {
-
-        public hkbCharacterControllerControlData/*struct void*/ m_controlData;
+        public hkbCharacterControllerControlData m_controlData;
         public Vector4 m_initialVelocity;
         public sbyte m_initialVelocityCoordinates;
         public sbyte m_motionMode;
@@ -37,10 +34,9 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_controlData = new hkbCharacterControllerControlData();
-            m_controlData.Read(des,br);
+            m_controlData.Read(des, br);
             m_initialVelocity = br.ReadVector4();
             m_initialVelocityCoordinates = br.ReadSByte();
             m_motionMode = br.ReadSByte();
@@ -53,13 +49,10 @@ namespace HKX2
             m_timestep = br.ReadSingle();
             m_isInitialVelocityAdded = br.ReadBoolean();
             br.Position += 11;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             m_controlData.Write(s, bw);
             bw.WriteVector4(m_initialVelocity);
@@ -74,8 +67,27 @@ namespace HKX2
             bw.WriteSingle(m_timestep);
             bw.WriteBoolean(m_isInitialVelocityAdded);
             bw.Position += 11;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteClass<hkbCharacterControllerControlData>(xe, nameof(m_controlData), m_controlData);
+            xs.WriteVector4(xe, nameof(m_initialVelocity), m_initialVelocity);
+            xs.WriteEnum<InitialVelocityCoordinates, sbyte>(xe, nameof(m_initialVelocityCoordinates), m_initialVelocityCoordinates);
+            xs.WriteEnum<MotionMode, sbyte>(xe, nameof(m_motionMode), m_motionMode);
+            xs.WriteBoolean(xe, nameof(m_forceDownwardMomentum), m_forceDownwardMomentum);
+            xs.WriteBoolean(xe, nameof(m_applyGravity), m_applyGravity);
+            xs.WriteBoolean(xe, nameof(m_setInitialVelocity), m_setInitialVelocity);
+            xs.WriteBoolean(xe, nameof(m_isTouchingGround), m_isTouchingGround);
+            xs.WriteSerializeIgnored(xe, nameof(m_gravity));
+            xs.WriteSerializeIgnored(xe, nameof(m_timestep));
+            xs.WriteSerializeIgnored(xe, nameof(m_isInitialVelocityAdded));
         }
     }
 }

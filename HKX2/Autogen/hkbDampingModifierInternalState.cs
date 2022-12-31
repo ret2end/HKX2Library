@@ -1,21 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbDampingModifierInternalState Signatire: 0x508d3b36 size: 80 flags: FLAGS_NONE
 
-    // m_dampedVector m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_vecErrorSum m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_vecPreviousError m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
-    // m_dampedValue m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_errorSum m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags:  enum: 
-    // m_previousError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags:  enum: 
-    
-    public class hkbDampingModifierInternalState : hkReferencedObject
+    // m_dampedVector m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_vecErrorSum m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_vecPreviousError m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_dampedValue m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_errorSum m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
+    // m_previousError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
+    public partial class hkbDampingModifierInternalState : hkReferencedObject
     {
-
         public Vector4 m_dampedVector;
         public Vector4 m_vecErrorSum;
         public Vector4 m_vecPreviousError;
@@ -27,7 +24,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_dampedVector = br.ReadVector4();
             m_vecErrorSum = br.ReadVector4();
@@ -36,13 +32,10 @@ namespace HKX2
             m_errorSum = br.ReadSingle();
             m_previousError = br.ReadSingle();
             br.Position += 4;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteVector4(m_dampedVector);
             bw.WriteVector4(m_vecErrorSum);
@@ -51,8 +44,22 @@ namespace HKX2
             bw.WriteSingle(m_errorSum);
             bw.WriteSingle(m_previousError);
             bw.Position += 4;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteVector4(xe, nameof(m_dampedVector), m_dampedVector);
+            xs.WriteVector4(xe, nameof(m_vecErrorSum), m_vecErrorSum);
+            xs.WriteVector4(xe, nameof(m_vecPreviousError), m_vecPreviousError);
+            xs.WriteFloat(xe, nameof(m_dampedValue), m_dampedValue);
+            xs.WriteFloat(xe, nameof(m_errorSum), m_errorSum);
+            xs.WriteFloat(xe, nameof(m_previousError), m_previousError);
         }
     }
 }

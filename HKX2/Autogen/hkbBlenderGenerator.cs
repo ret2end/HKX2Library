@@ -1,31 +1,28 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbBlenderGenerator Signatire: 0x22df7147 size: 160 flags: FLAGS_NONE
 
-    // m_referencePoseWeightThreshold m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags:  enum: 
-    // m_blendParameter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags:  enum: 
-    // m_minCyclicBlendParameter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_maxCyclicBlendParameter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags:  enum: 
-    // m_indexOfSyncMasterChild m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 88 flags:  enum: 
-    // m_flags m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 90 flags:  enum: 
-    // m_subtractLastChild m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 92 flags:  enum: 
-    // m_children m_class: hkbBlenderGeneratorChild Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 96 flags:  enum: 
-    // m_childrenInternalStates m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_sortedChildren m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 128 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_endIntervalWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 144 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_numActiveChildren m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 148 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_beginIntervalIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 152 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_endIntervalIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 154 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_initSync m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 156 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_doSubtractiveBlend m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbBlenderGenerator : hkbGenerator
+    // m_referencePoseWeightThreshold m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
+    // m_blendParameter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
+    // m_minCyclicBlendParameter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_maxCyclicBlendParameter m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
+    // m_indexOfSyncMasterChild m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
+    // m_flags m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 90 flags: FLAGS_NONE enum: 
+    // m_subtractLastChild m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
+    // m_children m_class: hkbBlenderGeneratorChild Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_childrenInternalStates m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_sortedChildren m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 128 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_endIntervalWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_numActiveChildren m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 148 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_beginIntervalIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 152 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_endIntervalIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 154 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_initSync m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 156 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    // m_doSubtractiveBlend m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbBlenderGenerator : hkbGenerator
     {
-
         public float m_referencePoseWeightThreshold;
         public float m_blendParameter;
         public float m_minCyclicBlendParameter;
@@ -34,8 +31,8 @@ namespace HKX2
         public short m_flags;
         public bool m_subtractLastChild;
         public List<hkbBlenderGeneratorChild> m_children;
-        public List<ulong> m_childrenInternalStates;
-        public List<ulong> m_sortedChildren;
+        public List<dynamic> m_childrenInternalStates;
+        public List<dynamic> m_sortedChildren;
         public float m_endIntervalWeight;
         public int m_numActiveChildren;
         public short m_beginIntervalIndex;
@@ -47,7 +44,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_referencePoseWeightThreshold = br.ReadSingle();
             m_blendParameter = br.ReadSingle();
@@ -58,8 +54,8 @@ namespace HKX2
             m_subtractLastChild = br.ReadBoolean();
             br.Position += 3;
             m_children = des.ReadClassPointerArray<hkbBlenderGeneratorChild>(br);
-            des.ReadEmptyArray(br); //m_childrenInternalStates
-            des.ReadEmptyArray(br); //m_sortedChildren
+            des.ReadEmptyArray(br);
+            des.ReadEmptyArray(br);
             m_endIntervalWeight = br.ReadSingle();
             m_numActiveChildren = br.ReadInt32();
             m_beginIntervalIndex = br.ReadInt16();
@@ -67,13 +63,10 @@ namespace HKX2
             m_initSync = br.ReadBoolean();
             m_doSubtractiveBlend = br.ReadBoolean();
             br.Position += 2;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteSingle(m_referencePoseWeightThreshold);
             bw.WriteSingle(m_blendParameter);
@@ -84,8 +77,8 @@ namespace HKX2
             bw.WriteBoolean(m_subtractLastChild);
             bw.Position += 3;
             s.WriteClassPointerArray<hkbBlenderGeneratorChild>(bw, m_children);
-            s.WriteVoidArray(bw); // m_childrenInternalStates
-            s.WriteVoidArray(bw); // m_sortedChildren
+            s.WriteVoidArray(bw);
+            s.WriteVoidArray(bw);
             bw.WriteSingle(m_endIntervalWeight);
             bw.WriteInt32(m_numActiveChildren);
             bw.WriteInt16(m_beginIntervalIndex);
@@ -93,8 +86,32 @@ namespace HKX2
             bw.WriteBoolean(m_initSync);
             bw.WriteBoolean(m_doSubtractiveBlend);
             bw.Position += 2;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteFloat(xe, nameof(m_referencePoseWeightThreshold), m_referencePoseWeightThreshold);
+            xs.WriteFloat(xe, nameof(m_blendParameter), m_blendParameter);
+            xs.WriteFloat(xe, nameof(m_minCyclicBlendParameter), m_minCyclicBlendParameter);
+            xs.WriteFloat(xe, nameof(m_maxCyclicBlendParameter), m_maxCyclicBlendParameter);
+            xs.WriteNumber(xe, nameof(m_indexOfSyncMasterChild), m_indexOfSyncMasterChild);
+            xs.WriteNumber(xe, nameof(m_flags), m_flags);
+            xs.WriteBoolean(xe, nameof(m_subtractLastChild), m_subtractLastChild);
+            xs.WriteClassPointerArray<hkbBlenderGeneratorChild>(xe, nameof(m_children), m_children);
+            xs.WriteSerializeIgnored(xe, nameof(m_childrenInternalStates));
+            xs.WriteSerializeIgnored(xe, nameof(m_sortedChildren));
+            xs.WriteSerializeIgnored(xe, nameof(m_endIntervalWeight));
+            xs.WriteSerializeIgnored(xe, nameof(m_numActiveChildren));
+            xs.WriteSerializeIgnored(xe, nameof(m_beginIntervalIndex));
+            xs.WriteSerializeIgnored(xe, nameof(m_endIntervalIndex));
+            xs.WriteSerializeIgnored(xe, nameof(m_initSync));
+            xs.WriteSerializeIgnored(xe, nameof(m_doSubtractiveBlend));
         }
     }
 }

@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
@@ -8,7 +6,7 @@ namespace HKX2
 
 
 
-    public class hkBaseObject : IHavokObject
+    public partial class hkBaseObject : IHavokObject
     {
         public virtual uint Signature => 0xe0708a00;
 
@@ -20,6 +18,16 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             bw.WriteUSize(0);
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+
         }
     }
 }

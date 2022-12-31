@@ -1,27 +1,25 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbCharacterAddedInfo Signatire: 0x3544e182 size: 128 flags: FLAGS_NONE
 
-    // m_characterId m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_instanceName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
-    // m_templateName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_fullPathToProject m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
-    // m_skeleton m_class: hkaSkeleton Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags:  enum: 
-    // m_worldFromModel m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_poseModelSpace m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 112 flags:  enum: 
-    
-    public class hkbCharacterAddedInfo : hkReferencedObject
+    // m_characterId m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_instanceName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_templateName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_fullPathToProject m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_skeleton m_class: hkaSkeleton Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_worldFromModel m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_poseModelSpace m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    public partial class hkbCharacterAddedInfo : hkReferencedObject
     {
-
         public ulong m_characterId;
         public string m_instanceName;
         public string m_templateName;
         public string m_fullPathToProject;
-        public hkaSkeleton /*pointer struct*/ m_skeleton;
+        public hkaSkeleton m_skeleton;
         public Matrix4x4 m_worldFromModel;
         public List<Matrix4x4> m_poseModelSpace;
 
@@ -29,7 +27,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_characterId = br.ReadUInt64();
             m_instanceName = des.ReadStringPointer(br);
@@ -39,13 +36,10 @@ namespace HKX2
             br.Position += 8;
             m_worldFromModel = des.ReadQSTransform(br);
             m_poseModelSpace = des.ReadQSTransformArray(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteUInt64(m_characterId);
             s.WriteStringPointer(bw, m_instanceName);
@@ -55,8 +49,23 @@ namespace HKX2
             bw.Position += 8;
             s.WriteQSTransform(bw, m_worldFromModel);
             s.WriteQSTransformArray(bw, m_poseModelSpace);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
+            xs.WriteString(xe, nameof(m_instanceName), m_instanceName);
+            xs.WriteString(xe, nameof(m_templateName), m_templateName);
+            xs.WriteString(xe, nameof(m_fullPathToProject), m_fullPathToProject);
+            xs.WriteClassPointer(xe, nameof(m_skeleton), m_skeleton);
+            xs.WriteQSTransform(xe, nameof(m_worldFromModel), m_worldFromModel);
+            xs.WriteQSTransformArray(xe, nameof(m_poseModelSpace), m_poseModelSpace);
         }
     }
 }

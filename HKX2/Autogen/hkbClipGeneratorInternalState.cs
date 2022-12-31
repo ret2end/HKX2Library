@@ -1,25 +1,23 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbClipGeneratorInternalState Signatire: 0x26ce5bf3 size: 112 flags: FLAGS_NONE
 
-    // m_extractedMotion m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_echos m_class: hkbClipGeneratorEcho Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 64 flags:  enum: 
-    // m_localTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags:  enum: 
-    // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags:  enum: 
-    // m_previousUserControlledTimeFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags:  enum: 
-    // m_bufferSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 92 flags:  enum: 
-    // m_echoBufferSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags:  enum: 
-    // m_atEnd m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags:  enum: 
-    // m_ignoreStartTime m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 101 flags:  enum: 
-    // m_pingPongBackward m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 102 flags:  enum: 
-    
-    public class hkbClipGeneratorInternalState : hkReferencedObject
+    // m_extractedMotion m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_echos m_class: hkbClipGeneratorEcho Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_localTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
+    // m_previousUserControlledTimeFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
+    // m_bufferSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
+    // m_echoBufferSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
+    // m_atEnd m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
+    // m_ignoreStartTime m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 101 flags: FLAGS_NONE enum: 
+    // m_pingPongBackward m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 102 flags: FLAGS_NONE enum: 
+    public partial class hkbClipGeneratorInternalState : hkReferencedObject
     {
-
         public Matrix4x4 m_extractedMotion;
         public List<hkbClipGeneratorEcho> m_echos;
         public float m_localTime;
@@ -35,7 +33,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_extractedMotion = des.ReadQSTransform(br);
             m_echos = des.ReadClassArray<hkbClipGeneratorEcho>(br);
@@ -48,13 +45,10 @@ namespace HKX2
             m_ignoreStartTime = br.ReadBoolean();
             m_pingPongBackward = br.ReadBoolean();
             br.Position += 9;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteQSTransform(bw, m_extractedMotion);
             s.WriteClassArray<hkbClipGeneratorEcho>(bw, m_echos);
@@ -67,8 +61,26 @@ namespace HKX2
             bw.WriteBoolean(m_ignoreStartTime);
             bw.WriteBoolean(m_pingPongBackward);
             bw.Position += 9;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteQSTransform(xe, nameof(m_extractedMotion), m_extractedMotion);
+            xs.WriteClassArray<hkbClipGeneratorEcho>(xe, nameof(m_echos), m_echos);
+            xs.WriteFloat(xe, nameof(m_localTime), m_localTime);
+            xs.WriteFloat(xe, nameof(m_time), m_time);
+            xs.WriteFloat(xe, nameof(m_previousUserControlledTimeFraction), m_previousUserControlledTimeFraction);
+            xs.WriteNumber(xe, nameof(m_bufferSize), m_bufferSize);
+            xs.WriteNumber(xe, nameof(m_echoBufferSize), m_echoBufferSize);
+            xs.WriteBoolean(xe, nameof(m_atEnd), m_atEnd);
+            xs.WriteBoolean(xe, nameof(m_ignoreStartTime), m_ignoreStartTime);
+            xs.WriteBoolean(xe, nameof(m_pingPongBackward), m_pingPongBackward);
         }
     }
 }

@@ -1,17 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbModifier Signatire: 0x96ec5ced size: 80 flags: FLAGS_NONE
 
-    // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 72 flags:  enum: 
-    // m_padModifier m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 3 offset: 73 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-
-    public class hkbModifier : hkbNode
+    // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
+    // m_padModifier m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 3 offset: 73 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbModifier : hkbNode
     {
-
         public bool m_enable;
         public List<bool> m_padModifier;
 
@@ -19,24 +16,30 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_enable = br.ReadBoolean();
-            m_padModifier = des.ReadBooleanCStyleArray(br, 3);//m_padModifier = br.ReadBoolean();
+            m_padModifier = des.ReadBooleanCStyleArray(br, 3);
             br.Position += 4;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteBoolean(m_enable);
-            s.WriteBooleanCStyleArray(bw, m_padModifier);//bw.WriteBoolean(m_padModifier);
+            s.WriteBooleanCStyleArray(bw, m_padModifier);
             bw.Position += 4;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteBoolean(xe, nameof(m_enable), m_enable);
+            xs.WriteSerializeIgnored(xe, nameof(m_padModifier));
         }
     }
 }

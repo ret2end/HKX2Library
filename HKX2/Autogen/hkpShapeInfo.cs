@@ -1,22 +1,20 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpShapeInfo Signatire: 0xea7f1d08 size: 128 flags: FLAGS_NONE
 
-    // m_shape m_class: hkpShape Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags:  enum: 
-    // m_isHierarchicalCompound m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
-    // m_hkdShapesCollected m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 25 flags:  enum: 
-    // m_childShapeNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags:  enum: 
-    // m_childTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_TRANSFORM arrSize: 0 offset: 48 flags:  enum: 
-    // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    
-    public class hkpShapeInfo : hkReferencedObject
+    // m_shape m_class: hkpShape Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_isHierarchicalCompound m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_hkdShapesCollected m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 25 flags: FLAGS_NONE enum: 
+    // m_childShapeNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_childTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_TRANSFORM arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    public partial class hkpShapeInfo : hkReferencedObject
     {
-
-        public hkpShape /*pointer struct*/ m_shape;
+        public hkpShape m_shape;
         public bool m_isHierarchicalCompound;
         public bool m_hkdShapesCollected;
         public List<string> m_childShapeNames;
@@ -27,7 +25,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_shape = des.ReadClassPointer<hkpShape>(br);
             m_isHierarchicalCompound = br.ReadBoolean();
@@ -36,13 +33,10 @@ namespace HKX2
             m_childShapeNames = des.ReadStringPointerArray(br);
             m_childTransforms = des.ReadTransformArray(br);
             m_transform = des.ReadTransform(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteClassPointer(bw, m_shape);
             bw.WriteBoolean(m_isHierarchicalCompound);
@@ -51,8 +45,22 @@ namespace HKX2
             s.WriteStringPointerArray(bw, m_childShapeNames);
             s.WriteTransformArray(bw, m_childTransforms);
             s.WriteTransform(bw, m_transform);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteClassPointer(xe, nameof(m_shape), m_shape);
+            xs.WriteBoolean(xe, nameof(m_isHierarchicalCompound), m_isHierarchicalCompound);
+            xs.WriteBoolean(xe, nameof(m_hkdShapesCollected), m_hkdShapesCollected);
+            xs.WriteStringArray(xe, nameof(m_childShapeNames), m_childShapeNames);
+            xs.WriteTransformArray(xe, nameof(m_childTransforms), m_childTransforms);
+            xs.WriteTransform(xe, nameof(m_transform), m_transform);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
@@ -9,7 +8,7 @@ namespace HKX2
     // m_memSizeAndFlags m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED enum: 
     // m_referenceCount m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 10 flags: SERIALIZE_IGNORED enum: 
 
-    public class hkReferencedObject : hkBaseObject
+    public partial class hkReferencedObject : hkBaseObject
     {
 
         public ushort m_memSizeAndFlags;
@@ -37,6 +36,18 @@ namespace HKX2
 
             //bw.Position += 4;
             if (s._header.PointerSize == 8) bw.Pad(8);
+        }
+
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteSerializeIgnored(xe, nameof(m_memSizeAndFlags));
+            xs.WriteSerializeIgnored(xe, nameof(m_referenceCount));
         }
     }
 }

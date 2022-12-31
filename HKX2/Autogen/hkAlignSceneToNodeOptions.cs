@@ -1,24 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkAlignSceneToNodeOptions Signatire: 0x207cb01 size: 40 flags: FLAGS_NONE
 
-    // m_invert m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_transformPositionX m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 17 flags:  enum: 
-    // m_transformPositionY m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 18 flags:  enum: 
-    // m_transformPositionZ m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 19 flags:  enum: 
-    // m_transformRotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 20 flags:  enum: 
-    // m_transformScale m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 21 flags:  enum: 
-    // m_transformSkew m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 22 flags:  enum: 
-    // m_keyframe m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
-    // m_nodeName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    
-    public class hkAlignSceneToNodeOptions : hkReferencedObject
+    // m_invert m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_transformPositionX m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 17 flags: FLAGS_NONE enum: 
+    // m_transformPositionY m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 18 flags: FLAGS_NONE enum: 
+    // m_transformPositionZ m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 19 flags: FLAGS_NONE enum: 
+    // m_transformRotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
+    // m_transformScale m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 21 flags: FLAGS_NONE enum: 
+    // m_transformSkew m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 22 flags: FLAGS_NONE enum: 
+    // m_keyframe m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_nodeName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    public partial class hkAlignSceneToNodeOptions : hkReferencedObject
     {
-
         public bool m_invert;
         public bool m_transformPositionX;
         public bool m_transformPositionY;
@@ -33,7 +29,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_invert = br.ReadBoolean();
             m_transformPositionX = br.ReadBoolean();
@@ -46,13 +41,10 @@ namespace HKX2
             m_keyframe = br.ReadInt32();
             br.Position += 4;
             m_nodeName = des.ReadStringPointer(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteBoolean(m_invert);
             bw.WriteBoolean(m_transformPositionX);
@@ -65,8 +57,25 @@ namespace HKX2
             bw.WriteInt32(m_keyframe);
             bw.Position += 4;
             s.WriteStringPointer(bw, m_nodeName);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteBoolean(xe, nameof(m_invert), m_invert);
+            xs.WriteBoolean(xe, nameof(m_transformPositionX), m_transformPositionX);
+            xs.WriteBoolean(xe, nameof(m_transformPositionY), m_transformPositionY);
+            xs.WriteBoolean(xe, nameof(m_transformPositionZ), m_transformPositionZ);
+            xs.WriteBoolean(xe, nameof(m_transformRotation), m_transformRotation);
+            xs.WriteBoolean(xe, nameof(m_transformScale), m_transformScale);
+            xs.WriteBoolean(xe, nameof(m_transformSkew), m_transformSkew);
+            xs.WriteNumber(xe, nameof(m_keyframe), m_keyframe);
+            xs.WriteString(xe, nameof(m_nodeName), m_nodeName);
         }
     }
 }

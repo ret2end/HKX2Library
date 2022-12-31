@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace HKX2
 {
@@ -6,7 +8,7 @@ namespace HKX2
 
     // m_namedVariants m_class: hkRootLevelContainerNamedVariant Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
 
-    public class hkRootLevelContainer : IHavokObject
+    public partial class hkRootLevelContainer : IHavokObject
     {
 
         public List<hkRootLevelContainerNamedVariant> m_namedVariants;
@@ -15,16 +17,22 @@ namespace HKX2
 
         public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_namedVariants = des.ReadClassArray<hkRootLevelContainerNamedVariant>(br);
-
         }
 
         public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             s.WriteClassArray<hkRootLevelContainerNamedVariant>(bw, m_namedVariants);
+        }
 
+        public void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteClassArray(xe, nameof(m_namedVariants), m_namedVariants);
         }
     }
 }

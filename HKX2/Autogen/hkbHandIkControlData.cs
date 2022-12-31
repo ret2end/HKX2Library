@@ -1,31 +1,28 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbHandIkControlData Signatire: 0xd72b8d17 size: 96 flags: FLAGS_NONE
 
-    // m_targetPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_targetRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_targetNormal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_targetHandle m_class: hkbHandle Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags:  enum: 
-    // m_transformOnFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags:  enum: 
-    // m_normalOnFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags:  enum: 
-    // m_fadeInDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_fadeOutDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags:  enum: 
-    // m_extrapolationTimeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags:  enum: 
-    // m_handleChangeSpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags:  enum: 
-    // m_handleChangeMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 80 flags:  enum: HandleChangeMode
-    // m_fixUp m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 81 flags:  enum: 
-    
-    public class hkbHandIkControlData : IHavokObject
+    // m_targetPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_targetRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_targetNormal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_targetHandle m_class: hkbHandle Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_transformOnFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
+    // m_normalOnFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
+    // m_fadeInDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_fadeOutDuration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
+    // m_extrapolationTimeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
+    // m_handleChangeSpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
+    // m_handleChangeMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 80 flags: FLAGS_NONE enum: HandleChangeMode
+    // m_fixUp m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 81 flags: FLAGS_NONE enum: 
+    public partial class hkbHandIkControlData : IHavokObject
     {
-
         public Vector4 m_targetPosition;
         public Quaternion m_targetRotation;
         public Vector4 m_targetNormal;
-        public hkbHandle /*pointer struct*/ m_targetHandle;
+        public hkbHandle m_targetHandle;
         public float m_transformOnFraction;
         public float m_normalOnFraction;
         public float m_fadeInDuration;
@@ -35,11 +32,10 @@ namespace HKX2
         public sbyte m_handleChangeMode;
         public bool m_fixUp;
 
-        public uint Signature => 0xd72b8d17;
+        public virtual uint Signature => 0xd72b8d17;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_targetPosition = br.ReadVector4();
             m_targetRotation = des.ReadQuaternion(br);
             m_targetNormal = br.ReadVector4();
@@ -53,13 +49,10 @@ namespace HKX2
             m_handleChangeMode = br.ReadSByte();
             m_fixUp = br.ReadBoolean();
             br.Position += 14;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             bw.WriteVector4(m_targetPosition);
             s.WriteQuaternion(bw, m_targetRotation);
             bw.WriteVector4(m_targetNormal);
@@ -73,8 +66,27 @@ namespace HKX2
             s.WriteSByte(bw, m_handleChangeMode);
             bw.WriteBoolean(m_fixUp);
             bw.Position += 14;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteVector4(xe, nameof(m_targetPosition), m_targetPosition);
+            xs.WriteQuaternion(xe, nameof(m_targetRotation), m_targetRotation);
+            xs.WriteVector4(xe, nameof(m_targetNormal), m_targetNormal);
+            xs.WriteClassPointer(xe, nameof(m_targetHandle), m_targetHandle);
+            xs.WriteFloat(xe, nameof(m_transformOnFraction), m_transformOnFraction);
+            xs.WriteFloat(xe, nameof(m_normalOnFraction), m_normalOnFraction);
+            xs.WriteFloat(xe, nameof(m_fadeInDuration), m_fadeInDuration);
+            xs.WriteFloat(xe, nameof(m_fadeOutDuration), m_fadeOutDuration);
+            xs.WriteFloat(xe, nameof(m_extrapolationTimeStep), m_extrapolationTimeStep);
+            xs.WriteFloat(xe, nameof(m_handleChangeSpeed), m_handleChangeSpeed);
+            xs.WriteEnum<HandleChangeMode, sbyte>(xe, nameof(m_handleChangeMode), m_handleChangeMode);
+            xs.WriteBoolean(xe, nameof(m_fixUp), m_fixUp);
         }
     }
 }

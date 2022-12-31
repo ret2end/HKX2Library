@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Runtime.Intrinsics;
 
 namespace HKX2
 {
@@ -16,18 +14,26 @@ namespace HKX2
         public HKXHeader _header;
         private HKXSection _typeSection;
 
-        private IHavokObject ConstructVirtualClass(BinaryReaderEx br, uint offset)
+        private bool _ignoreNonFatalError;
+
+        private IHavokObject ConstructVirtualClass(BinaryReaderEx br, uint offset, System.Type sourceType = null)
         {
             if (_deserializedObjects.ContainsKey(offset)) return _deserializedObjects[offset];
 
             var fixup = _dataSection._virtualMap[offset];
             var hkClassName = _classnames.OffsetClassNamesMap[fixup.Dst].ClassName;
 
-            var hkClass = Type.GetType($@"HKX2.{hkClassName}");
+            var hkClass = System.Type.GetType($@"HKX2.{hkClassName}");
             if (hkClass is null) throw new Exception($@"Havok class type '{hkClassName}' not found!");
 
+            if (sourceType is not null && !sourceType.IsAssignableFrom(hkClass))
+            {
+                if (!_ignoreNonFatalError)
+                    throw new Exception($@"Could not convert '{hkClassName}' to '{sourceType}'. Is source malformed?");
+            }
+
             var ret = (IHavokObject)Activator.CreateInstance(hkClass);
-            if (ret is null) throw new Exception();
+            if (ret is null) throw new Exception($@"Failed to Activator.CreateInstance({hkClass})");
 
             br.StepIn(offset);
             ret.Read(this, br);
@@ -63,8 +69,10 @@ namespace HKX2
             _classnames = _classSection.ReadClassnames(br);
         }
 
-        public IHavokObject Deserialize(BinaryReaderEx br)
+        public IHavokObject Deserialize(BinaryReaderEx br, bool ignoreNonFatalError = false)
         {
+            _ignoreNonFatalError = ignoreNonFatalError;
+
             DeserializePartially(br);
 
             // Deserialize the objects
@@ -165,7 +173,7 @@ namespace HKX2
             if (!_dataSection._globalMap.ContainsKey(key)) return default;
 
             var f = _dataSection._globalMap[key];
-            return (T)ConstructVirtualClass(br, f.Dst);
+            return (T)ConstructVirtualClass(br, f.Dst, typeof(T));
         }
 
         public List<T> ReadClassPointerArray<T>(BinaryReaderEx br) where T : IHavokObject

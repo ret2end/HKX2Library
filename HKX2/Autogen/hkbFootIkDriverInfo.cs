@@ -1,27 +1,24 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbFootIkDriverInfo Signatire: 0xc6a09dbf size: 72 flags: FLAGS_NONE
 
-    // m_legs m_class: hkbFootIkDriverInfoLeg Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags:  enum: 
-    // m_raycastDistanceUp m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_raycastDistanceDown m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
-    // m_originalGroundHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags:  enum: 
-    // m_verticalOffset m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags:  enum: 
-    // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 48 flags:  enum: 
-    // m_forwardAlignFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags:  enum: 
-    // m_sidewaysAlignFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags:  enum: 
-    // m_sidewaysSampleWidth m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags:  enum: 
-    // m_lockFeetWhenPlanted m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 64 flags:  enum: 
-    // m_useCharacterUpVector m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 65 flags:  enum: 
-    // m_isQuadrupedNarrow m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 66 flags:  enum: 
-    
-    public class hkbFootIkDriverInfo : hkReferencedObject
+    // m_legs m_class: hkbFootIkDriverInfoLeg Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_raycastDistanceUp m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_raycastDistanceDown m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
+    // m_originalGroundHeightMS m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_verticalOffset m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
+    // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
+    // m_forwardAlignFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
+    // m_sidewaysAlignFraction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
+    // m_sidewaysSampleWidth m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
+    // m_lockFeetWhenPlanted m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
+    // m_useCharacterUpVector m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 65 flags: FLAGS_NONE enum: 
+    // m_isQuadrupedNarrow m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 66 flags: FLAGS_NONE enum: 
+    public partial class hkbFootIkDriverInfo : hkReferencedObject
     {
-
         public List<hkbFootIkDriverInfoLeg> m_legs;
         public float m_raycastDistanceUp;
         public float m_raycastDistanceDown;
@@ -39,7 +36,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_legs = des.ReadClassArray<hkbFootIkDriverInfoLeg>(br);
             m_raycastDistanceUp = br.ReadSingle();
@@ -54,13 +50,10 @@ namespace HKX2
             m_useCharacterUpVector = br.ReadBoolean();
             m_isQuadrupedNarrow = br.ReadBoolean();
             br.Position += 5;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteClassArray<hkbFootIkDriverInfoLeg>(bw, m_legs);
             bw.WriteSingle(m_raycastDistanceUp);
@@ -75,8 +68,28 @@ namespace HKX2
             bw.WriteBoolean(m_useCharacterUpVector);
             bw.WriteBoolean(m_isQuadrupedNarrow);
             bw.Position += 5;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteClassArray<hkbFootIkDriverInfoLeg>(xe, nameof(m_legs), m_legs);
+            xs.WriteFloat(xe, nameof(m_raycastDistanceUp), m_raycastDistanceUp);
+            xs.WriteFloat(xe, nameof(m_raycastDistanceDown), m_raycastDistanceDown);
+            xs.WriteFloat(xe, nameof(m_originalGroundHeightMS), m_originalGroundHeightMS);
+            xs.WriteFloat(xe, nameof(m_verticalOffset), m_verticalOffset);
+            xs.WriteNumber(xe, nameof(m_collisionFilterInfo), m_collisionFilterInfo);
+            xs.WriteFloat(xe, nameof(m_forwardAlignFraction), m_forwardAlignFraction);
+            xs.WriteFloat(xe, nameof(m_sidewaysAlignFraction), m_sidewaysAlignFraction);
+            xs.WriteFloat(xe, nameof(m_sidewaysSampleWidth), m_sidewaysSampleWidth);
+            xs.WriteBoolean(xe, nameof(m_lockFeetWhenPlanted), m_lockFeetWhenPlanted);
+            xs.WriteBoolean(xe, nameof(m_useCharacterUpVector), m_useCharacterUpVector);
+            xs.WriteBoolean(xe, nameof(m_isQuadrupedNarrow), m_isQuadrupedNarrow);
         }
     }
 }

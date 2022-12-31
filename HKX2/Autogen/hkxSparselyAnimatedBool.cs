@@ -1,17 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkxSparselyAnimatedBool Signatire: 0x7a894596 size: 48 flags: FLAGS_NONE
 
-    // m_bools m_class:  Type.TYPE_ARRAY Type.TYPE_BOOL arrSize: 0 offset: 16 flags:  enum: 
-    // m_times m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 32 flags:  enum: 
-    
-    public class hkxSparselyAnimatedBool : hkReferencedObject
+    // m_bools m_class:  Type.TYPE_ARRAY Type.TYPE_BOOL arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_times m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    public partial class hkxSparselyAnimatedBool : hkReferencedObject
     {
-
         public List<bool> m_bools;
         public List<float> m_times;
 
@@ -19,22 +16,28 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_bools = des.ReadBooleanArray(br);
             m_times = des.ReadSingleArray(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteBooleanArray(bw, m_bools);
             s.WriteSingleArray(bw, m_times);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteBooleanArray(xe, nameof(m_bools), m_bools);
+            xs.WriteFloatArray(xe, nameof(m_times), m_times);
         }
     }
 }

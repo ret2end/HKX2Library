@@ -1,21 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpTwistLimitConstraintAtom Signatire: 0x7c9b1052 size: 20 flags: FLAGS_NONE
 
-    // m_isEnabled m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags:  enum: 
-    // m_twistAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags:  enum: 
-    // m_refAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 4 flags:  enum: 
-    // m_minAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
-    // m_maxAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags:  enum: 
-    // m_angularLimitsTauFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    
-    public class hkpTwistLimitConstraintAtom : hkpConstraintAtom
+    // m_isEnabled m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
+    // m_twistAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags: FLAGS_NONE enum: 
+    // m_refAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
+    // m_minAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
+    // m_maxAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
+    // m_angularLimitsTauFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    public partial class hkpTwistLimitConstraintAtom : hkpConstraintAtom
     {
-
         public byte m_isEnabled;
         public byte m_twistAxis;
         public byte m_refAxis;
@@ -27,7 +23,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_isEnabled = br.ReadByte();
             m_twistAxis = br.ReadByte();
@@ -36,13 +31,10 @@ namespace HKX2
             m_minAngle = br.ReadSingle();
             m_maxAngle = br.ReadSingle();
             m_angularLimitsTauFactor = br.ReadSingle();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteByte(m_isEnabled);
             bw.WriteByte(m_twistAxis);
@@ -51,8 +43,22 @@ namespace HKX2
             bw.WriteSingle(m_minAngle);
             bw.WriteSingle(m_maxAngle);
             bw.WriteSingle(m_angularLimitsTauFactor);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteNumber(xe, nameof(m_isEnabled), m_isEnabled);
+            xs.WriteNumber(xe, nameof(m_twistAxis), m_twistAxis);
+            xs.WriteNumber(xe, nameof(m_refAxis), m_refAxis);
+            xs.WriteFloat(xe, nameof(m_minAngle), m_minAngle);
+            xs.WriteFloat(xe, nameof(m_maxAngle), m_maxAngle);
+            xs.WriteFloat(xe, nameof(m_angularLimitsTauFactor), m_angularLimitsTauFactor);
         }
     }
 }

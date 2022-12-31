@@ -1,19 +1,16 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkMemoryResourceHandle Signatire: 0xbffac086 size: 48 flags: FLAGS_NONE
 
-    // m_variant m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags:  enum: 
-    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags:  enum: 
-    // m_references m_class: hkMemoryResourceHandleExternalLink Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 32 flags:  enum: 
-    
-    public class hkMemoryResourceHandle : hkResourceHandle
+    // m_variant m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_references m_class: hkMemoryResourceHandleExternalLink Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    public partial class hkMemoryResourceHandle : hkResourceHandle
     {
-
-        public hkReferencedObject /*pointer struct*/ m_variant;
+        public hkReferencedObject m_variant;
         public string m_name;
         public List<hkMemoryResourceHandleExternalLink> m_references;
 
@@ -21,24 +18,31 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_variant = des.ReadClassPointer<hkReferencedObject>(br);
             m_name = des.ReadStringPointer(br);
             m_references = des.ReadClassArray<hkMemoryResourceHandleExternalLink>(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteClassPointer(bw, m_variant);
             s.WriteStringPointer(bw, m_name);
             s.WriteClassArray<hkMemoryResourceHandleExternalLink>(bw, m_references);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteClassPointer(xe, nameof(m_variant), m_variant);
+            xs.WriteString(xe, nameof(m_name), m_name);
+            xs.WriteClassArray<hkMemoryResourceHandleExternalLink>(xe, nameof(m_references), m_references);
         }
     }
 }

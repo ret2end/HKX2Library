@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpSpringDamperConstraintMotor Signatire: 0x7ead26f6 size: 40 flags: FLAGS_NONE
 
-    // m_springConstant m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags:  enum: 
-    // m_springDamping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags:  enum: 
-    
-    public class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor
+    // m_springConstant m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
+    // m_springDamping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
+    public partial class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor
     {
-
         public float m_springConstant;
         public float m_springDamping;
 
@@ -19,22 +15,28 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_springConstant = br.ReadSingle();
             m_springDamping = br.ReadSingle();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             bw.WriteSingle(m_springConstant);
             bw.WriteSingle(m_springDamping);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteFloat(xe, nameof(m_springConstant), m_springConstant);
+            xs.WriteFloat(xe, nameof(m_springDamping), m_springDamping);
         }
     }
 }

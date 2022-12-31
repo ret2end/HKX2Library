@@ -1,31 +1,28 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkSimpleLocalFrame Signatire: 0xe758f63c size: 128 flags: FLAGS_NONE
 
-    // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_children m_class: hkLocalFrame Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags:  enum: 
-    // m_parentFrame m_class: hkLocalFrame Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 96 flags: ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    // m_group m_class: hkLocalFrameGroup Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 104 flags:  enum: 
-    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    
-    public class hkSimpleLocalFrame : hkLocalFrame
+    // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_children m_class: hkLocalFrame Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
+    // m_parentFrame m_class: hkLocalFrame Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 96 flags: NOT_OWNED|FLAGS_NONE enum: 
+    // m_group m_class: hkLocalFrameGroup Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
+    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    public partial class hkSimpleLocalFrame : hkLocalFrame
     {
-
         public Matrix4x4 m_transform;
         public List<hkLocalFrame> m_children;
-        public hkLocalFrame /*pointer struct*/ m_parentFrame;
-        public hkLocalFrameGroup /*pointer struct*/ m_group;
+        public hkLocalFrame m_parentFrame;
+        public hkLocalFrameGroup m_group;
         public string m_name;
 
         public override uint Signature => 0xe758f63c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_transform = des.ReadTransform(br);
             m_children = des.ReadClassPointerArray<hkLocalFrame>(br);
@@ -33,13 +30,10 @@ namespace HKX2
             m_group = des.ReadClassPointer<hkLocalFrameGroup>(br);
             m_name = des.ReadStringPointer(br);
             br.Position += 8;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteTransform(bw, m_transform);
             s.WriteClassPointerArray<hkLocalFrame>(bw, m_children);
@@ -47,8 +41,21 @@ namespace HKX2
             s.WriteClassPointer(bw, m_group);
             s.WriteStringPointer(bw, m_name);
             bw.Position += 8;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteTransform(xe, nameof(m_transform), m_transform);
+            xs.WriteClassPointerArray<hkLocalFrame>(xe, nameof(m_children), m_children);
+            xs.WriteClassPointer(xe, nameof(m_parentFrame), m_parentFrame);
+            xs.WriteClassPointer(xe, nameof(m_group), m_group);
+            xs.WriteString(xe, nameof(m_name), m_name);
         }
     }
 }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 
 namespace HKX2
 {
@@ -41,6 +43,48 @@ namespace HKX2
             var ms = new MemoryStream();
             WriteHKX(root, header, ms);
             return ms.ToArray();
+        }
+
+        public static T ToNumber<T, TEnum>(this TEnum enumType) where TEnum : Enum where T : IBinaryInteger<T>
+        {
+            return (T)(IConvertible)enumType;
+        }
+
+        public static T ToEnum<T, V>(this V value) where T : Enum where V : IBinaryInteger<V>
+        {
+            return (T)(IConvertible)value;
+        }
+        public static string ToSerlializedEnum<TEnum, V>(this V value) where TEnum : Enum where V : IBinaryInteger<V>
+        {
+            return Enum.GetName(typeof(TEnum), value);
+        }
+
+        public static string ToSerlializedFlag<TEnum, V>(this V value) where TEnum : Enum where V : IBinaryInteger<V>
+        {
+            var result = new List<string>();
+            var enums = (TEnum[])Enum.GetValues(typeof(TEnum));
+            for (int i = enums.Length - 1; i >= 0; i--)
+            {
+                if ((enums[i].ToNumber<V, TEnum>() & value) == enums[i].ToNumber<V, TEnum>())
+                {
+                    result.Add(enums[i].ToString());
+                    value &= ~enums[i].ToNumber<V, TEnum>();
+                    if (value == V.Zero)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (value > V.Zero)
+            {
+                result.Add(value.ToString());
+                //throw new Exception("Invaild enum value.");
+            }
+            if (result.Count == 0)
+            {
+                result.Add(value.ToString());
+            }
+            return string.Join("|", result);
         }
 
         //public static List<IHavokObject> ReadBotwHKX(Stream stream, string extension)
@@ -111,4 +155,6 @@ namespace HKX2
         //    return ms.ToArray();
         //}
     }
+
+
 }

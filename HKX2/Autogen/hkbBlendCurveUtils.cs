@@ -1,34 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbBlendCurveUtils Signatire: 0x23041af0 size: 1 flags: FLAGS_NONE
 
 
-    
-    public class hkbBlendCurveUtils : IHavokObject
+    public partial class hkbBlendCurveUtils : IHavokObject
     {
-
         public byte[] unk0;
 
-        public uint Signature => 0x23041af0;
+        public virtual uint Signature => 0x23041af0;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             unk0 = br.ReadBytes(1);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        {
+            bw.WriteBytes(unk0);
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
 
-            bw.WriteBytes(unk0);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+
         }
     }
 }

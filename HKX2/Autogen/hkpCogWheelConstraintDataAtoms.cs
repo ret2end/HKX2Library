@@ -1,40 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpCogWheelConstraintDataAtoms Signatire: 0xf855ba44 size: 160 flags: FLAGS_NONE
 
-    // m_transforms m_class: hkpSetLocalTransformsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_cogWheels m_class: hkpCogWheelConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags:  enum: 
-    
-    public class hkpCogWheelConstraintDataAtoms : IHavokObject
+    // m_transforms m_class: hkpSetLocalTransformsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_cogWheels m_class: hkpCogWheelConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
+    public partial class hkpCogWheelConstraintDataAtoms : IHavokObject
     {
+        public hkpSetLocalTransformsConstraintAtom m_transforms;
+        public hkpCogWheelConstraintAtom m_cogWheels;
 
-        public hkpSetLocalTransformsConstraintAtom/*struct void*/ m_transforms;
-        public hkpCogWheelConstraintAtom/*struct void*/ m_cogWheels;
+        public virtual uint Signature => 0xf855ba44;
 
-        public uint Signature => 0xf855ba44;
-
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_transforms = new hkpSetLocalTransformsConstraintAtom();
-            m_transforms.Read(des,br);
+            m_transforms.Read(des, br);
             m_cogWheels = new hkpCogWheelConstraintAtom();
-            m_cogWheels.Read(des,br);
-
-            // throw new NotImplementedException("code generated. check first");
+            m_cogWheels.Read(des, br);
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             m_transforms.Write(s, bw);
             m_cogWheels.Write(s, bw);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms), m_transforms);
+            xs.WriteClass<hkpCogWheelConstraintAtom>(xe, nameof(m_cogWheels), m_cogWheels);
         }
     }
 }

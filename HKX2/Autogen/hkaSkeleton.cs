@@ -1,22 +1,20 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkaSkeleton Signatire: 0x366e8220 size: 120 flags: FLAGS_NONE
 
-    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags:  enum: 
-    // m_parentIndices m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 24 flags:  enum: 
-    // m_bones m_class: hkaBone Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 40 flags:  enum: 
-    // m_referencePose m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 56 flags:  enum: 
-    // m_referenceFloats m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 72 flags:  enum: 
-    // m_floatSlots m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 88 flags:  enum: 
-    // m_localFrames m_class: hkaSkeletonLocalFrameOnBone Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 104 flags:  enum: 
-    
-    public class hkaSkeleton : hkReferencedObject
+    // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
+    // m_parentIndices m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
+    // m_bones m_class: hkaBone Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
+    // m_referencePose m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
+    // m_referenceFloats m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
+    // m_floatSlots m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
+    // m_localFrames m_class: hkaSkeletonLocalFrameOnBone Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
+    public partial class hkaSkeleton : hkReferencedObject
     {
-
         public string m_name;
         public List<short> m_parentIndices;
         public List<hkaBone> m_bones;
@@ -29,7 +27,6 @@ namespace HKX2
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
             m_name = des.ReadStringPointer(br);
             m_parentIndices = des.ReadInt16Array(br);
@@ -38,13 +35,10 @@ namespace HKX2
             m_referenceFloats = des.ReadSingleArray(br);
             m_floatSlots = des.ReadStringPointerArray(br);
             m_localFrames = des.ReadClassArray<hkaSkeletonLocalFrameOnBone>(br);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
             s.WriteInt16Array(bw, m_parentIndices);
@@ -53,8 +47,23 @@ namespace HKX2
             s.WriteSingleArray(bw, m_referenceFloats);
             s.WriteStringPointerArray(bw, m_floatSlots);
             s.WriteClassArray<hkaSkeletonLocalFrameOnBone>(bw, m_localFrames);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteString(xe, nameof(m_name), m_name);
+            xs.WriteNumberArray(xe, nameof(m_parentIndices), m_parentIndices);
+            xs.WriteClassArray<hkaBone>(xe, nameof(m_bones), m_bones);
+            xs.WriteQSTransformArray(xe, nameof(m_referencePose), m_referencePose);
+            xs.WriteFloatArray(xe, nameof(m_referenceFloats), m_referenceFloats);
+            xs.WriteStringArray(xe, nameof(m_floatSlots), m_floatSlots);
+            xs.WriteClassArray<hkaSkeletonLocalFrameOnBone>(xe, nameof(m_localFrames), m_localFrames);
         }
     }
 }

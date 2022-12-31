@@ -1,47 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpHingeLimitsDataAtoms Signatire: 0x555876ff size: 144 flags: FLAGS_NONE
 
-    // m_rotations m_class: hkpSetLocalRotationsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_angLimit m_class: hkpAngLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 112 flags:  enum: 
-    // m_2dAng m_class: hkp2dAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 128 flags:  enum: 
-    
-    public class hkpHingeLimitsDataAtoms : IHavokObject
+    // m_rotations m_class: hkpSetLocalRotationsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_angLimit m_class: hkpAngLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
+    // m_2dAng m_class: hkp2dAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
+    public partial class hkpHingeLimitsDataAtoms : IHavokObject
     {
+        public hkpSetLocalRotationsConstraintAtom m_rotations;
+        public hkpAngLimitConstraintAtom m_angLimit;
+        public hkp2dAngConstraintAtom m_2dAng;
 
-        public hkpSetLocalRotationsConstraintAtom/*struct void*/ m_rotations;
-        public hkpAngLimitConstraintAtom/*struct void*/ m_angLimit;
-        public hkp2dAngConstraintAtom/*struct void*/ m_2dAng;
+        public virtual uint Signature => 0x555876ff;
 
-        public uint Signature => 0x555876ff;
-
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_rotations = new hkpSetLocalRotationsConstraintAtom();
-            m_rotations.Read(des,br);
+            m_rotations.Read(des, br);
             m_angLimit = new hkpAngLimitConstraintAtom();
-            m_angLimit.Read(des,br);
+            m_angLimit.Read(des, br);
             m_2dAng = new hkp2dAngConstraintAtom();
-            m_2dAng.Read(des,br);
+            m_2dAng.Read(des, br);
             br.Position += 12;
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             m_rotations.Write(s, bw);
             m_angLimit.Write(s, bw);
             m_2dAng.Write(s, bw);
             bw.Position += 12;
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteClass<hkpSetLocalRotationsConstraintAtom>(xe, nameof(m_rotations), m_rotations);
+            xs.WriteClass<hkpAngLimitConstraintAtom>(xe, nameof(m_angLimit), m_angLimit);
+            xs.WriteClass<hkp2dAngConstraintAtom>(xe, nameof(m_2dAng), m_2dAng);
         }
     }
 }

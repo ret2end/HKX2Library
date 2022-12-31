@@ -1,34 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpWeldingUtility Signatire: 0xb2b41feb size: 1 flags: FLAGS_NONE
 
 
-    
-    public class hkpWeldingUtility : IHavokObject
+    public partial class hkpWeldingUtility : IHavokObject
     {
-
         public byte[] unk0;
 
-        public uint Signature => 0xb2b41feb;
+        public virtual uint Signature => 0xb2b41feb;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             unk0 = br.ReadBytes(1);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        {
+            bw.WriteBytes(unk0);
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
 
-            bw.WriteBytes(unk0);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+
         }
     }
 }

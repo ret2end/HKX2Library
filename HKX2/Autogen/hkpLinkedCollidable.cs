@@ -1,36 +1,38 @@
-using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkpLinkedCollidable Signatire: 0xe1a81497 size: 128 flags: FLAGS_NONE
 
-    // m_collisionEntries m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkpLinkedCollidable : hkpCollidable
+    // m_collisionEntries m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkpLinkedCollidable : hkpCollidable
     {
-
-        public List<ulong> m_collisionEntries;
+        public List<dynamic> m_collisionEntries;
 
         public override uint Signature => 0xe1a81497;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
-            des.ReadEmptyArray(br); //m_collisionEntries
-
-            // throw new NotImplementedException("code generated. check first");
+            des.ReadEmptyArray(br);
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
-            s.WriteVoidArray(bw); // m_collisionEntries
+            s.WriteVoidArray(bw);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteSerializeIgnored(xe, nameof(m_collisionEntries));
         }
     }
 }

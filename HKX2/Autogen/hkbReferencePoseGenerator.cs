@@ -1,36 +1,37 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkbReferencePoseGenerator Signatire: 0x26a5675a size: 80 flags: FLAGS_NONE
 
-    // m_skeleton m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 72 flags: NOT_OWNED|ALIGN_16|ALIGN_8|FLAGS_NONE enum: 
-    
-    public class hkbReferencePoseGenerator : hkbGenerator
+    // m_skeleton m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 72 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
+    public partial class hkbReferencePoseGenerator : hkbGenerator
     {
-
-        public dynamic /* POINTER VOID */ m_skeleton;
+        public dynamic m_skeleton;
 
         public override uint Signature => 0x26a5675a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             base.Read(des, br);
-            des.ReadEmptyPointer(br);/* m_skeleton POINTER VOID */
-
-            // throw new NotImplementedException("code generated. check first");
+            des.ReadEmptyPointer(br);
         }
 
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             base.Write(s, bw);
-            s.WriteVoidPointer(bw);/* m_skeleton POINTER VOID */
+            s.WriteVoidPointer(bw);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public override void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public override void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            base.WriteXml(xs, xe);
+            xs.WriteSerializeIgnored(xe, nameof(m_skeleton));
         }
     }
 }

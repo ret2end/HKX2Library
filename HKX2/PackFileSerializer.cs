@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks.Dataflow;
 
 namespace HKX2
 {
@@ -126,19 +125,23 @@ namespace HKX2
                     if (!_virtualLookup.ContainsKey(classname))
                     {
                         // Need to create a new class name entry and record the position
-                        var cname = new HKXClassName();
-                        cname.ClassName = classname;
-                        cname.Signature = obj.Signature;
+                        var cname = new HKXClassName
+                        {
+                            ClassName = classname,
+                            Signature = obj.Signature
+                        };
                         var offset = (uint)classbw.Position;
                         cname.Write(classbw);
                         _virtualLookup.Add(classname, offset + 5);
                     }
 
                     // Create a new Virtual fixup for this object
-                    var vfu = new VirtualFixup();
-                    vfu.Src = (uint)databw.Position;
-                    vfu.DstSectionIndex = 0;
-                    vfu.Dst = _virtualLookup[classname];
+                    var vfu = new VirtualFixup
+                    {
+                        Src = (uint)databw.Position,
+                        DstSectionIndex = 0,
+                        Dst = _virtualLookup[classname]
+                    };
                     _virtualFixups.Add(vfu);
 
                     // See if we have any pending global references to this object
@@ -147,10 +150,12 @@ namespace HKX2
                         // If so, create all the needed global fixups
                         foreach (var src in _pendingGlobals[obj])
                         {
-                            var gfu = new GlobalFixup();
-                            gfu.Src = src;
-                            gfu.DstSectionIndex = 2;
-                            gfu.Dst = (uint)databw.Position;
+                            var gfu = new GlobalFixup
+                            {
+                                Src = src,
+                                DstSectionIndex = 2,
+                                Dst = (uint)databw.Position
+                            };
                             _globalFixups.Add(gfu);
                         }
 
@@ -169,7 +174,7 @@ namespace HKX2
                 while (_localWriteQueues.Count > 1 || _localWriteQueues[0].Count > 0)
                 {
                     var q = _localWriteQueues.Last();
-                    while (q != null && q.Count() == 0 && _localWriteQueues.Count > 1)
+                    while (q != null && q.Count == 0 && _localWriteQueues.Count > 1)
                     {
                         if (_localWriteQueues.Count > 1) _localWriteQueues.RemoveAt(_localWriteQueues.Count - 1);
 
@@ -200,7 +205,7 @@ namespace HKX2
                 SectionData = classms.ToArray(),
                 ContentsVersionString = _header.ContentsVersionString
             };
-            var types = new HKXSection { SectionID = 1, SectionTag = "__types__", SectionData = new byte[0], ContentsVersionString = _header.ContentsVersionString };
+            var types = new HKXSection { SectionID = 1, SectionTag = "__types__", SectionData = Array.Empty<byte>(), ContentsVersionString = _header.ContentsVersionString };
             // debugging
             //var ms = new MemoryStream();
             //var tempPosition = datams.Position;

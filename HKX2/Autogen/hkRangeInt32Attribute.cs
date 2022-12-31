@@ -1,46 +1,49 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkRangeInt32Attribute Signatire: 0x4846be29 size: 16 flags: FLAGS_NONE
 
-    // m_absmin m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags:  enum: 
-    // m_absmax m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags:  enum: 
-    // m_softmin m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags:  enum: 
-    // m_softmax m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags:  enum: 
-    
-    public class hkRangeInt32Attribute : IHavokObject
+    // m_absmin m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
+    // m_absmax m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
+    // m_softmin m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
+    // m_softmax m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
+    public partial class hkRangeInt32Attribute : IHavokObject
     {
-
         public int m_absmin;
         public int m_absmax;
         public int m_softmin;
         public int m_softmax;
 
-        public uint Signature => 0x4846be29;
+        public virtual uint Signature => 0x4846be29;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_absmin = br.ReadInt32();
             m_absmax = br.ReadInt32();
             m_softmin = br.ReadInt32();
             m_softmax = br.ReadInt32();
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             bw.WriteInt32(m_absmin);
             bw.WriteInt32(m_absmax);
             bw.WriteInt32(m_softmin);
             bw.WriteInt32(m_softmax);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
+        {
+
+        }
+
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+            xs.WriteNumber(xe, nameof(m_absmin), m_absmin);
+            xs.WriteNumber(xe, nameof(m_absmax), m_absmax);
+            xs.WriteNumber(xe, nameof(m_softmin), m_softmin);
+            xs.WriteNumber(xe, nameof(m_softmax), m_softmax);
         }
     }
 }

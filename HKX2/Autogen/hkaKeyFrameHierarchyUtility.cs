@@ -1,34 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Xml.Linq;
 
 namespace HKX2
 {
     // hkaKeyFrameHierarchyUtility Signatire: 0x7bd5c66f size: 1 flags: FLAGS_NONE
 
 
-    
-    public class hkaKeyFrameHierarchyUtility : IHavokObject
+    public partial class hkaKeyFrameHierarchyUtility : IHavokObject
     {
-
         public byte[] unk0;
 
-        public uint Signature => 0x7bd5c66f;
+        public virtual uint Signature => 0x7bd5c66f;
 
-        public void Read(PackFileDeserializer des, BinaryReaderEx br)
+        public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             unk0 = br.ReadBytes(1);
-
-            // throw new NotImplementedException("code generated. check first");
         }
 
-        public void Write(PackFileSerializer s, BinaryWriterEx bw)
+        public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
+        {
+            bw.WriteBytes(unk0);
+        }
+
+        public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
 
-            bw.WriteBytes(unk0);
+        }
 
-            // throw new NotImplementedException("code generated. check first");
+        public virtual void WriteXml(XmlSerializer xs, XElement xe)
+        {
+
         }
     }
 }
