@@ -286,9 +286,14 @@ namespace HKX2
 
         public float ReadSingle()
         {
+            // XXX: NaN(0xFFC0000) to 0.
             if (BigEndian)
-                return BitConverter.ToSingle(ReadReversedBytes(4), 0);
-            return br.ReadSingle();
+            {
+                var revVal = BitConverter.ToSingle(ReadReversedBytes(4), 0);
+                return float.IsNaN(revVal) ? 0 : revVal;
+            }
+            var val = br.ReadSingle();
+            return float.IsNaN(val) ? 0 : val;
         }
 
         public float AssertSingle(params float[] options)

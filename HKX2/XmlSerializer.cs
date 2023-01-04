@@ -212,7 +212,7 @@ namespace HKX2
         public XElement WriteVector4Array(XElement xe, string paramName, IList<Vector4> value)
         {
             var formated = value.Select(x => $"({x.X:F6} {x.Y:F6} {x.Z:F6} {x.W:F6})")
-                                .Select(x => string.Join(" ", x));
+                                .Select(x => string.Join(" ", x)); 
             return _WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
         }
 
@@ -230,12 +230,12 @@ namespace HKX2
 
         public XElement WriteMatrix3(XElement xe, string paramName, Matrix4x4 value)
         {
-            return _WriteParam(xe, paramName, $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M14:F6} {value.M21:F6} {value.M22:F6})({value.M23:F6} {value.M24:F6} {value.M31:F6})");
+            return _WriteParam(xe, paramName, $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})");
         }
 
         public XElement WriteMatrix3Array(XElement xe, string paramName, IList<Matrix4x4> value)
         {
-            var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M14:F6} {value.M21:F6} {value.M22:F6})({value.M23:F6} {value.M24:F6} {value.M31:F6})")
+            var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
                                 .Select(x => string.Join(" ", x));
             return _WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
         }
@@ -247,30 +247,32 @@ namespace HKX2
 
         public XElement WriteRotationArray(XElement xe, string paramName, IList<Matrix4x4> value)
         {
-            var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M14:F6} {value.M21:F6} {value.M22:F6})({value.M23:F6} {value.M24:F6} {value.M31:F6})")
+            var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
                                 .Select(x => string.Join(" ", x));
             return _WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
         }
 
         public XElement WriteQSTransform(XElement xe, string paramName, Matrix4x4 value)
         {
-            return _WriteParam(xe, paramName, $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M14:F6} {value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M24:F6} {value.M31:F6} {value.M32:F6})");
+            return _WriteParam(xe, paramName, $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})");
         }
 
         public XElement WriteQSTransformArray(XElement xe, string paramName, IList<Matrix4x4> value)
         {
-            var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M14:F6} {value.M21:F6} {value.M22:F6} {value.M23:F6})({value.M24:F6} {value.M31:F6} {value.M32:F6})")
+            var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6})")
                                 .Select(x => string.Join(" ", x));
             return _WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
         }
 
         public XElement WriteMatrix4(XElement xe, string paramName, Matrix4x4 value)
         {
+            // TODO: verify
             return _WriteParam(xe, paramName, $"({value.M11:F6} {value.M12:F6} {value.M13:F6} {value.M14:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6} {value.M34:F6})({value.M41:F6} {value.M42:F6} {value.M43:F6} {value.M44:F6})");
         }
 
         public XElement WriteMatrix4Array(XElement xe, string paramName, IList<Matrix4x4> value)
         {
+            // TODO: verify
             var formated = value.Select(value => $"({value.M11:F6} {value.M12:F6} {value.M13:F6} {value.M14:F6})({value.M21:F6} {value.M22:F6} {value.M23:F6} {value.M24:F6})({value.M31:F6} {value.M32:F6} {value.M33:F6} {value.M34:F6})({value.M41:F6} {value.M42:F6} {value.M43:F6} {value.M44:F6})")
                                 .Select(x => string.Join(" ", x));
             return _WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
