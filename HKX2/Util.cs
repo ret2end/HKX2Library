@@ -51,7 +51,11 @@ namespace HKX2
         }
         public static V ToNumber<T, V>(this string value) where T : Enum where V : IBinaryInteger<V>
         {
-            return (V)Enum.Parse(typeof(T), value);
+            if (!Enum.TryParse(typeof(T), value, out object val))
+            {
+                return V.Parse(value, null);
+            }
+            return (V)val;
         }
 
         public static T ToEnum<T, V>(this V value) where T : Enum where V : IBinaryInteger<V>
@@ -91,7 +95,8 @@ namespace HKX2
             }
             if (result.Count == 0)
             {
-                result.Add(enums[0].ToString());
+                // i think is empty
+                result.Add(value.ToString());
             }
             return string.Join("|", result);
         }

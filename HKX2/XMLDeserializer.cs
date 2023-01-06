@@ -392,7 +392,7 @@ namespace HKX2
                 return new Matrix4x4();
 
             var qs = normalize(ele.Value).Select(float.Parse).ToArray();
-            return new Matrix4x4(qs[0], qs[1], qs[2], 0,
+            return new Matrix4x4(qs[0], qs[1], qs[2], 1,
                                  qs[3], qs[4], qs[5], qs[6],
                                  qs[7], qs[8], qs[9], 0,
                                  0, 0, 0, 0);
