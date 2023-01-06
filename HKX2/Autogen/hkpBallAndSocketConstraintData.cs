@@ -7,7 +7,7 @@ namespace HKX2
     // m_atoms m_class: hkpBallAndSocketConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpBallAndSocketConstraintData : hkpConstraintData
     {
-        public hkpBallAndSocketConstraintDataAtoms m_atoms;
+        public hkpBallAndSocketConstraintDataAtoms m_atoms = new hkpBallAndSocketConstraintDataAtoms();
 
         public override uint Signature => 0x5a6954d9;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpBallAndSocketConstraintDataAtoms>(xe, nameof(m_atoms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

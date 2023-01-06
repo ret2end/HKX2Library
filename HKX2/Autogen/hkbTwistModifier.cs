@@ -61,7 +61,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_axisOfRotation = xd.ReadVector4(xe, nameof(m_axisOfRotation));
+            m_twistAngle = xd.ReadSingle(xe, nameof(m_twistAngle));
+            m_startBoneIndex = xd.ReadInt16(xe, nameof(m_startBoneIndex));
+            m_endBoneIndex = xd.ReadInt16(xe, nameof(m_endBoneIndex));
+            m_setAngleMethod = xd.ReadFlag<SetAngleMethod, sbyte>(xe, nameof(m_setAngleMethod));
+            m_rotationAxisCoordinates = xd.ReadFlag<RotationAxisCoordinates, sbyte>(xe, nameof(m_rotationAxisCoordinates));
+            m_isAdditive = xd.ReadBoolean(xe, nameof(m_isAdditive));
+            m_boneChainIndices = default;
+            m_parentBoneIndices = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

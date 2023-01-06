@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_lockTranslation = xd.ReadBoolean(xe, nameof(m_lockTranslation));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

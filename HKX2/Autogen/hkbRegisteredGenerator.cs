@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_generator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_generator));
+            m_relativePosition = xd.ReadVector4(xe, nameof(m_relativePosition));
+            m_relativeDirection = xd.ReadVector4(xe, nameof(m_relativeDirection));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -13,8 +13,8 @@ namespace HKX2
     // m_calculatedNumberOfEventsBeforeSend m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSEventEveryNEventsModifier : hkbModifier
     {
-        public hkbEventProperty m_eventToCheckFor;
-        public hkbEventProperty m_eventToSend;
+        public hkbEventProperty m_eventToCheckFor = new hkbEventProperty();
+        public hkbEventProperty m_eventToSend = new hkbEventProperty();
         public sbyte m_numberOfEventsBeforeSend;
         public sbyte m_minimumNumberOfEventsBeforeSend;
         public bool m_randomizeNumberOfEvents;
@@ -55,7 +55,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_eventToCheckFor = xd.ReadClass<hkbEventProperty>(xe, nameof(m_eventToCheckFor));
+            m_eventToSend = xd.ReadClass<hkbEventProperty>(xe, nameof(m_eventToSend));
+            m_numberOfEventsBeforeSend = xd.ReadSByte(xe, nameof(m_numberOfEventsBeforeSend));
+            m_minimumNumberOfEventsBeforeSend = xd.ReadSByte(xe, nameof(m_minimumNumberOfEventsBeforeSend));
+            m_randomizeNumberOfEvents = xd.ReadBoolean(xe, nameof(m_randomizeNumberOfEvents));
+            m_numberOfEventsSeen = default;
+            m_calculatedNumberOfEventsBeforeSend = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

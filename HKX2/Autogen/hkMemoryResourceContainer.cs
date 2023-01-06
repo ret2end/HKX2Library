@@ -13,8 +13,8 @@ namespace HKX2
     {
         public string m_name;
         public hkMemoryResourceContainer m_parent;
-        public List<hkMemoryResourceHandle> m_resourceHandles;
-        public List<hkMemoryResourceContainer> m_children;
+        public List<hkMemoryResourceHandle> m_resourceHandles = new List<hkMemoryResourceHandle>();
+        public List<hkMemoryResourceContainer> m_children = new List<hkMemoryResourceContainer>();
 
         public override uint Signature => 0x4762f92a;
 
@@ -38,7 +38,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_parent = default;
+            m_resourceHandles = xd.ReadClassPointerArray<hkMemoryResourceHandle>(xe, nameof(m_resourceHandles));
+            m_children = xd.ReadClassPointerArray<hkMemoryResourceContainer>(xe, nameof(m_children));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

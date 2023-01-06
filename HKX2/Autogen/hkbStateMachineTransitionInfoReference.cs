@@ -31,7 +31,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_fromStateIndex = xd.ReadInt16(xe, nameof(m_fromStateIndex));
+            m_transitionIndex = xd.ReadInt16(xe, nameof(m_transitionIndex));
+            m_stateMachineId = xd.ReadInt16(xe, nameof(m_stateMachineId));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

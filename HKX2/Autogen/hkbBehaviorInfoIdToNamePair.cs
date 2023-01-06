@@ -39,7 +39,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_behaviorName = xd.ReadString(xe, nameof(m_behaviorName));
+            m_nodeName = xd.ReadString(xe, nameof(m_nodeName));
+            m_toolType = xd.ReadFlag<ToolNodeType, byte>(xe, nameof(m_toolType));
+            m_id = xd.ReadInt16(xe, nameof(m_id));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

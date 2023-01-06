@@ -78,7 +78,20 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_numFrames = xd.ReadInt32(xe, nameof(m_numFrames));
+            m_numBlocks = xd.ReadInt32(xe, nameof(m_numBlocks));
+            m_maxFramesPerBlock = xd.ReadInt32(xe, nameof(m_maxFramesPerBlock));
+            m_maskAndQuantizationSize = xd.ReadInt32(xe, nameof(m_maskAndQuantizationSize));
+            m_blockDuration = xd.ReadSingle(xe, nameof(m_blockDuration));
+            m_blockInverseDuration = xd.ReadSingle(xe, nameof(m_blockInverseDuration));
+            m_frameDuration = xd.ReadSingle(xe, nameof(m_frameDuration));
+            m_blockOffsets = xd.ReadUInt32Array(xe, nameof(m_blockOffsets));
+            m_floatBlockOffsets = xd.ReadUInt32Array(xe, nameof(m_floatBlockOffsets));
+            m_transformOffsets = xd.ReadUInt32Array(xe, nameof(m_transformOffsets));
+            m_floatOffsets = xd.ReadUInt32Array(xe, nameof(m_floatOffsets));
+            m_data = xd.ReadByteArray(xe, nameof(m_data));
+            m_endian = xd.ReadInt32(xe, nameof(m_endian));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

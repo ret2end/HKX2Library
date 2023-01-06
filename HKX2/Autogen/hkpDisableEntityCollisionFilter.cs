@@ -8,7 +8,7 @@ namespace HKX2
     // m_disabledEntities m_class: hkpEntity Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpDisableEntityCollisionFilter : hkpCollisionFilter
     {
-        public List<hkpEntity> m_disabledEntities;
+        public List<hkpEntity> m_disabledEntities = new List<hkpEntity>();
 
         public override uint Signature => 0xfac3351c;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_disabledEntities = xd.ReadClassPointerArray<hkpEntity>(xe, nameof(m_disabledEntities));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

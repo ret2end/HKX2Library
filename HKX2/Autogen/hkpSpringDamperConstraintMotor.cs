@@ -29,7 +29,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_springConstant = xd.ReadSingle(xe, nameof(m_springConstant));
+            m_springDamping = xd.ReadSingle(xe, nameof(m_springDamping));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -41,7 +41,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_byteOffset = xd.ReadUInt32(xe, nameof(m_byteOffset));
+            m_type = xd.ReadFlag<DataType, ushort>(xe, nameof(m_type));
+            m_usage = xd.ReadFlag<DataUsage, ushort>(xe, nameof(m_usage));
+            m_byteStride = xd.ReadUInt32(xe, nameof(m_byteStride));
+            m_numElements = xd.ReadByte(xe, nameof(m_numElements));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

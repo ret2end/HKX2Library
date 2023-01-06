@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -23,13 +22,13 @@ namespace HKX2
     {
         public byte m_type;
         public byte m_deactivationIntegrateCounter;
-        public List<ushort> m_deactivationNumInactiveFrames;
-        public hkMotionState m_motionState;
+        public ushort[] m_deactivationNumInactiveFrames = new ushort[2];
+        public hkMotionState m_motionState = new hkMotionState();
         public Vector4 m_inertiaAndMassInv;
         public Vector4 m_linearVelocity;
         public Vector4 m_angularVelocity;
-        public List<Vector4> m_deactivationRefPosition;
-        public List<uint> m_deactivationRefOrientation;
+        public Vector4[] m_deactivationRefPosition = new Vector4[2];
+        public uint[] m_deactivationRefOrientation = new uint[2];
         public hkpMaxSizeMotion m_savedMotion;
         public ushort m_savedQualityTypeIndex;
         public Half m_gravityFactor;
@@ -77,7 +76,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = xd.ReadFlag<MotionType, byte>(xe, nameof(m_type));
+            m_deactivationIntegrateCounter = xd.ReadByte(xe, nameof(m_deactivationIntegrateCounter));
+            m_deactivationNumInactiveFrames = xd.ReadUInt16CStyleArray(xe, nameof(m_deactivationNumInactiveFrames), 2);
+            m_motionState = xd.ReadClass<hkMotionState>(xe, nameof(m_motionState));
+            m_inertiaAndMassInv = xd.ReadVector4(xe, nameof(m_inertiaAndMassInv));
+            m_linearVelocity = xd.ReadVector4(xe, nameof(m_linearVelocity));
+            m_angularVelocity = xd.ReadVector4(xe, nameof(m_angularVelocity));
+            m_deactivationRefPosition = xd.ReadVector4CStyleArray(xe, nameof(m_deactivationRefPosition), 2);
+            m_deactivationRefOrientation = xd.ReadUInt32CStyleArray(xe, nameof(m_deactivationRefOrientation), 2);
+            m_savedMotion = xd.ReadClassPointer<hkpMaxSizeMotion>(xe, nameof(m_savedMotion));
+            m_savedQualityTypeIndex = xd.ReadUInt16(xe, nameof(m_savedQualityTypeIndex));
+            m_gravityFactor = xd.ReadHalf(xe, nameof(m_gravityFactor));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

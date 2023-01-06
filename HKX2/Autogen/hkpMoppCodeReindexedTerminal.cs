@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_origShapeKey = xd.ReadUInt32(xe, nameof(m_origShapeKey));
+            m_reindexedShapeKey = xd.ReadUInt32(xe, nameof(m_reindexedShapeKey));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

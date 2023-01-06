@@ -22,10 +22,10 @@ namespace HKX2
     // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 244 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbSequence : hkbModifier
     {
-        public List<hkbEventSequencedData> m_eventSequencedData;
-        public List<hkbRealVariableSequencedData> m_realVariableSequencedData;
-        public List<hkbBoolVariableSequencedData> m_boolVariableSequencedData;
-        public List<hkbIntVariableSequencedData> m_intVariableSequencedData;
+        public List<hkbEventSequencedData> m_eventSequencedData = new List<hkbEventSequencedData>();
+        public List<hkbRealVariableSequencedData> m_realVariableSequencedData = new List<hkbRealVariableSequencedData>();
+        public List<hkbBoolVariableSequencedData> m_boolVariableSequencedData = new List<hkbBoolVariableSequencedData>();
+        public List<hkbIntVariableSequencedData> m_intVariableSequencedData = new List<hkbIntVariableSequencedData>();
         public int m_enableEventId;
         public int m_disableEventId;
         public hkbSequenceStringData m_stringData;
@@ -84,7 +84,22 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_eventSequencedData = xd.ReadClassPointerArray<hkbEventSequencedData>(xe, nameof(m_eventSequencedData));
+            m_realVariableSequencedData = xd.ReadClassPointerArray<hkbRealVariableSequencedData>(xe, nameof(m_realVariableSequencedData));
+            m_boolVariableSequencedData = xd.ReadClassPointerArray<hkbBoolVariableSequencedData>(xe, nameof(m_boolVariableSequencedData));
+            m_intVariableSequencedData = xd.ReadClassPointerArray<hkbIntVariableSequencedData>(xe, nameof(m_intVariableSequencedData));
+            m_enableEventId = xd.ReadInt32(xe, nameof(m_enableEventId));
+            m_disableEventId = xd.ReadInt32(xe, nameof(m_disableEventId));
+            m_stringData = xd.ReadClassPointer<hkbSequenceStringData>(xe, nameof(m_stringData));
+            m_variableIdMap = default;
+            m_eventIdMap = default;
+            m_nextSampleEvents = default;
+            m_nextSampleReals = default;
+            m_nextSampleBools = default;
+            m_nextSampleInts = default;
+            m_time = default;
+            m_isEnabled = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

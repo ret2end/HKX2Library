@@ -8,8 +8,8 @@ namespace HKX2
     // m_spring m_class: hkpStiffSpringConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpStiffSpringConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTranslationsConstraintAtom m_pivots;
-        public hkpStiffSpringConstraintAtom m_spring;
+        public hkpSetLocalTranslationsConstraintAtom m_pivots = new hkpSetLocalTranslationsConstraintAtom();
+        public hkpStiffSpringConstraintAtom m_spring = new hkpStiffSpringConstraintAtom();
 
         public virtual uint Signature => 0x207eb376;
 
@@ -31,7 +31,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_pivots = xd.ReadClass<hkpSetLocalTranslationsConstraintAtom>(xe, nameof(m_pivots));
+            m_spring = xd.ReadClass<hkpStiffSpringConstraintAtom>(xe, nameof(m_spring));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -33,7 +33,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_data = xd.ReadSingle(xe, nameof(m_data));
+            m_type = xd.ReadFlag<TokenType, sbyte>(xe, nameof(m_type));
+            m_operator = xd.ReadFlag<Operator, sbyte>(xe, nameof(m_operator));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

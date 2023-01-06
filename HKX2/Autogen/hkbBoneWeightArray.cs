@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_boneWeights = xd.ReadSingleArray(xe, nameof(m_boneWeights));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

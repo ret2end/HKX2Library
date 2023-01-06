@@ -42,7 +42,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_fixedPivotAinWorld = xd.ReadVector4(xe, nameof(m_fixedPivotAinWorld));
+            m_fixedPivotBinWorld = xd.ReadVector4(xe, nameof(m_fixedPivotBinWorld));
+            m_ropeLength = xd.ReadSingle(xe, nameof(m_ropeLength));
+            m_leverageOnBodyB = xd.ReadSingle(xe, nameof(m_leverageOnBodyB));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -338,6 +338,26 @@ namespace HKX2
             });
         }
 
+        public void WriteCStringPointer(BinaryWriterEx bw, string d, int padding = 16)
+        {
+            // difference with StirngPointer
+            // when empty string it didn't create localFixup
+            PadToPointerSizeIfPaddingOption(bw);
+            var src = (uint)bw.Position;
+            bw.WriteUSize(0);
+
+            if (d == null || d == "") return;
+
+            var lfu = new LocalFixup { Src = src };
+            _localFixups.Add(lfu);
+            _localWriteQueues[_currentLocalWriteQueue].Enqueue(() =>
+            {
+                lfu.Dst = (uint)bw.Position;
+                bw.WriteASCII(d, true);
+                bw.Pad(padding);
+            });
+        }
+
         public void WriteStringPointerArray(BinaryWriterEx bw, List<string> d)
         {
             WriteArrayBase(bw, d, e => { WriteStringPointer(bw, e, 2); });
@@ -567,97 +587,97 @@ namespace HKX2
             }
         }
 
-        public void WriteBooleanCStyleArray(BinaryWriterEx bw, List<bool> d)
+        public void WriteBooleanCStyleArray(BinaryWriterEx bw, bool[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteBoolean(bw, e));
         }
 
-        public void WriteByteCStyleArray(BinaryWriterEx bw, List<byte> d)
+        public void WriteByteCStyleArray(BinaryWriterEx bw, byte[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteByte(bw, e));
         }
 
-        public void WriteSByteCStyleArray(BinaryWriterEx bw, List<sbyte> d)
+        public void WriteSByteCStyleArray(BinaryWriterEx bw, sbyte[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteSByte(bw, e));
         }
 
-        public void WriteInt16CStyleArray(BinaryWriterEx bw, List<short> d)
+        public void WriteInt16CStyleArray(BinaryWriterEx bw, short[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteInt16(bw, e));
         }
 
-        public void WriteUInt16CStyleArray(BinaryWriterEx bw, List<ushort> d)
+        public void WriteUInt16CStyleArray(BinaryWriterEx bw, ushort[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteUInt16(bw, e));
         }
 
-        public void WriteInt32CStyleArray(BinaryWriterEx bw, List<int> d)
+        public void WriteInt32CStyleArray(BinaryWriterEx bw, int[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteInt32(bw, e));
         }
 
-        public void WriteUInt32CStyleArray(BinaryWriterEx bw, List<uint> d)
+        public void WriteUInt32CStyleArray(BinaryWriterEx bw, uint[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteUInt32(bw, e));
         }
 
-        public void WriteInt64CStyleArray(BinaryWriterEx bw, List<long> d)
+        public void WriteInt64CStyleArray(BinaryWriterEx bw, long[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteInt64(bw, e));
         }
 
-        public void WriteUInt64CStyleArray(BinaryWriterEx bw, List<ulong> d)
+        public void WriteUInt64CStyleArray(BinaryWriterEx bw, ulong[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteUInt64(bw, e));
         }
 
-        public void WriteHalfCStyleArray(BinaryWriterEx bw, List<Half> d)
+        public void WriteHalfCStyleArray(BinaryWriterEx bw, Half[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteHalf(bw, e));
         }
 
-        public void WriteSingleCStyleArray(BinaryWriterEx bw, List<float> d)
+        public void WriteSingleCStyleArray(BinaryWriterEx bw, float[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteSingle(bw, e));
         }
 
-        public void WriteVector4CStyleArray(BinaryWriterEx bw, List<Vector4> d)
+        public void WriteVector4CStyleArray(BinaryWriterEx bw, Vector4[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteVector4(bw, e));
         }
 
-        public void WriteQuaternionCStyleArray(BinaryWriterEx bw, List<Quaternion> d)
+        public void WriteQuaternionCStyleArray(BinaryWriterEx bw, Quaternion[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteQuaternion(bw, e));
         }
 
-        public void WriteMatrix3CStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteMatrix3CStyleArray(BinaryWriterEx bw, Matrix4x4[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteMatrix3(bw, e));
         }
 
-        public void WriteRotationCStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteRotationCStyleArray(BinaryWriterEx bw, Matrix4x4[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteMatrix3(bw, e));
         }
 
-        public void WriteQSTransformCStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteQSTransformCStyleArray(BinaryWriterEx bw, Matrix4x4[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteQSTransform(bw, e));
         }
 
-        public void WriteMatrix4CStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteMatrix4CStyleArray(BinaryWriterEx bw, Matrix4x4[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteMatrix4(bw, e));
         }
 
-        public void WriteTransformCStyleArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteTransformCStyleArray(BinaryWriterEx bw, Matrix4x4[] d)
         {
             WriteCStyleArrayBase(bw, d, e => WriteTransform(bw, e));
         }
 
-        public void WriteClassPointerCStyleArray<T>(BinaryWriterEx bw, IList<T> d) where T : IHavokObject, new()
+        public void WriteClassPointerCStyleArray<T>(BinaryWriterEx bw, T[] d) where T : IHavokObject, new()
         {
             WriteCStyleArrayBase(bw, d, e => WriteClassPointer(bw, e));
         }
@@ -670,7 +690,7 @@ namespace HKX2
             }
         }
 
-        public void WriteStructCStyleArray<T>(BinaryWriterEx bw, List<T> d) where T : IHavokObject
+        public void WriteStructCStyleArray<T>(BinaryWriterEx bw, T[] d) where T : IHavokObject
         {
             foreach (var item in d)
             {

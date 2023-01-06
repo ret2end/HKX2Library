@@ -35,7 +35,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rotationTolerance = xd.ReadSingle(xe, nameof(m_rotationTolerance));
+            m_translationTolerance = xd.ReadSingle(xe, nameof(m_translationTolerance));
+            m_scaleTolerance = xd.ReadSingle(xe, nameof(m_scaleTolerance));
+            m_floatingTolerance = xd.ReadSingle(xe, nameof(m_floatingTolerance));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

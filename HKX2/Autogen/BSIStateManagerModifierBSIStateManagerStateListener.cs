@@ -25,7 +25,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pStateManager = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

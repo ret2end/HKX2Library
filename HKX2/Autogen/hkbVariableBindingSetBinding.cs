@@ -65,7 +65,17 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_memberPath = xd.ReadString(xe, nameof(m_memberPath));
+            m_memberClass = default;
+            m_offsetInObjectPlusOne = default;
+            m_offsetInArrayPlusOne = default;
+            m_rootVariableIndex = default;
+            m_variableIndex = xd.ReadInt32(xe, nameof(m_variableIndex));
+            m_bitIndex = xd.ReadSByte(xe, nameof(m_bitIndex));
+            m_bindingType = xd.ReadFlag<BindingType, sbyte>(xe, nameof(m_bindingType));
+            m_memberType = default;
+            m_variableType = default;
+            m_flags = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

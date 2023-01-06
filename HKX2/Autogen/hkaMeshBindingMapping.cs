@@ -24,7 +24,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_mapping = xd.ReadInt16Array(xe, nameof(m_mapping));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

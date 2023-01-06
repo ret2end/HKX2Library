@@ -9,7 +9,7 @@ namespace HKX2
     // m_orderDirty m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 432 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpSimpleShapePhantom : hkpShapePhantom
     {
-        public List<hkpSimpleShapePhantomCollisionDetail> m_collisionDetails;
+        public List<hkpSimpleShapePhantomCollisionDetail> m_collisionDetails = new List<hkpSimpleShapePhantomCollisionDetail>();
         public bool m_orderDirty;
 
         public override uint Signature => 0x32a2a8a8;
@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_collisionDetails = new List<hkpSimpleShapePhantomCollisionDetail>();
+            m_orderDirty = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

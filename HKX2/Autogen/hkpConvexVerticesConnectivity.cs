@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_vertexIndices = xd.ReadUInt16Array(xe, nameof(m_vertexIndices));
+            m_numVerticesPerFace = xd.ReadByteArray(xe, nameof(m_numVerticesPerFace));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

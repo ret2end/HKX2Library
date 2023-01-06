@@ -44,9 +44,9 @@ namespace HKX2
             bw.WriteBoolean(m_visible);
             s.WriteSByte(bw, m_hideInModeler);
             bw.Position += 6;
-            s.WriteStringPointer(bw, m_label);
-            s.WriteStringPointer(bw, m_group);
-            s.WriteStringPointer(bw, m_hideBaseClassMembers);
+            s.WriteCStringPointer(bw, m_label);
+            s.WriteCStringPointer(bw, m_group);
+            s.WriteCStringPointer(bw, m_hideBaseClassMembers);
             bw.WriteBoolean(m_endGroup);
             bw.WriteBoolean(m_endGroup2);
             bw.WriteBoolean(m_advanced);
@@ -55,7 +55,14 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_visible = xd.ReadBoolean(xe, nameof(m_visible));
+            m_hideInModeler = xd.ReadFlag<HideInModeler, sbyte>(xe, nameof(m_hideInModeler));
+            m_label = xd.ReadString(xe, nameof(m_label));
+            m_group = xd.ReadString(xe, nameof(m_group));
+            m_hideBaseClassMembers = xd.ReadString(xe, nameof(m_hideBaseClassMembers));
+            m_endGroup = xd.ReadBoolean(xe, nameof(m_endGroup));
+            m_endGroup2 = xd.ReadBoolean(xe, nameof(m_endGroup2));
+            m_advanced = xd.ReadBoolean(xe, nameof(m_advanced));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

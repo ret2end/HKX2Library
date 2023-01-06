@@ -7,7 +7,7 @@ namespace HKX2
     // m_bridgeAtom m_class: hkpBridgeConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkpBridgeAtoms : IHavokObject
     {
-        public hkpBridgeConstraintAtom m_bridgeAtom;
+        public hkpBridgeConstraintAtom m_bridgeAtom = new hkpBridgeConstraintAtom();
 
         public virtual uint Signature => 0xde152a4d;
 
@@ -24,7 +24,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_bridgeAtom = xd.ReadClass<hkpBridgeConstraintAtom>(xe, nameof(m_bridgeAtom));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

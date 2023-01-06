@@ -31,7 +31,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_elem = default;
+            m_numElems = xd.ReadInt32(xe, nameof(m_numElems));
+            m_hashMod = xd.ReadInt32(xe, nameof(m_hashMod));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

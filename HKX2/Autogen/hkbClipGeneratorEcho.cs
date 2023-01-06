@@ -33,7 +33,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_offsetLocalTime = xd.ReadSingle(xe, nameof(m_offsetLocalTime));
+            m_weight = xd.ReadSingle(xe, nameof(m_weight));
+            m_dwdt = xd.ReadSingle(xe, nameof(m_dwdt));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

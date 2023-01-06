@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,10 +18,10 @@ namespace HKX2
     // m_pad m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 1 offset: 60 flags: FLAGS_NONE enum: 
     public partial class hkPackfileHeader : IHavokObject
     {
-        public List<int> m_magic;
+        public int[] m_magic = new int[2];
         public int m_userTag;
         public int m_fileVersion;
-        public List<byte> m_layoutRules;
+        public byte[] m_layoutRules = new byte[4];
         public int m_numSections;
         public int m_contentsSectionIndex;
         public int m_contentsSectionOffset;
@@ -30,7 +29,7 @@ namespace HKX2
         public int m_contentsClassNameSectionOffset;
         public string m_contentsVersion;
         public int m_flags;
-        public List<int> m_pad;
+        public int[] m_pad = new int[1];
 
         public virtual uint Signature => 0x79f9ffda;
 
@@ -68,7 +67,18 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_magic = xd.ReadInt32CStyleArray(xe, nameof(m_magic), 2);
+            m_userTag = xd.ReadInt32(xe, nameof(m_userTag));
+            m_fileVersion = xd.ReadInt32(xe, nameof(m_fileVersion));
+            m_layoutRules = xd.ReadByteCStyleArray(xe, nameof(m_layoutRules), 4);
+            m_numSections = xd.ReadInt32(xe, nameof(m_numSections));
+            m_contentsSectionIndex = xd.ReadInt32(xe, nameof(m_contentsSectionIndex));
+            m_contentsSectionOffset = xd.ReadInt32(xe, nameof(m_contentsSectionOffset));
+            m_contentsClassNameSectionIndex = xd.ReadInt32(xe, nameof(m_contentsClassNameSectionIndex));
+            m_contentsClassNameSectionOffset = xd.ReadInt32(xe, nameof(m_contentsClassNameSectionOffset));
+            m_contentsVersion = xd.ReadString(xe, nameof(m_contentsVersion));
+            m_flags = xd.ReadInt32(xe, nameof(m_flags));
+            m_pad = xd.ReadInt32CStyleArray(xe, nameof(m_pad), 1);
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

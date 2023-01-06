@@ -27,7 +27,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_command = xd.ReadFlag<SimulationControlCommand, byte>(xe, nameof(m_command));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

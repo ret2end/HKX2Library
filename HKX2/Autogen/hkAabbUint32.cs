@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,11 +12,11 @@ namespace HKX2
     // m_shapeKeyByte m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 31 flags: FLAGS_NONE enum: 
     public partial class hkAabbUint32 : IHavokObject
     {
-        public List<uint> m_min;
-        public List<byte> m_expansionMin;
+        public uint[] m_min = new uint[3];
+        public byte[] m_expansionMin = new byte[3];
         public byte m_expansionShift;
-        public List<uint> m_max;
-        public List<byte> m_expansionMax;
+        public uint[] m_max = new uint[3];
+        public byte[] m_expansionMax = new byte[3];
         public byte m_shapeKeyByte;
 
         public virtual uint Signature => 0x11e7c11;
@@ -44,7 +43,12 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_min = xd.ReadUInt32CStyleArray(xe, nameof(m_min), 3);
+            m_expansionMin = xd.ReadByteCStyleArray(xe, nameof(m_expansionMin), 3);
+            m_expansionShift = xd.ReadByte(xe, nameof(m_expansionShift));
+            m_max = xd.ReadUInt32CStyleArray(xe, nameof(m_max), 3);
+            m_expansionMax = xd.ReadByteCStyleArray(xe, nameof(m_expansionMax), 3);
+            m_shapeKeyByte = xd.ReadByte(xe, nameof(m_shapeKeyByte));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

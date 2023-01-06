@@ -25,7 +25,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_constraintInstance = xd.ReadClassPointer<hkpConstraintChainInstance>(xe, nameof(m_constraintInstance));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

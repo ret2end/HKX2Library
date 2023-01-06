@@ -19,7 +19,7 @@ namespace HKX2
     public partial class hkMotionState : IHavokObject
     {
         public Matrix4x4 m_transform;
-        public hkSweptTransform m_sweptTransform;
+        public hkSweptTransform m_sweptTransform = new hkSweptTransform();
         public Vector4 m_deltaAngle;
         public float m_objectRadius;
         public Half m_linearDamping;
@@ -64,7 +64,16 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transform = xd.ReadTransform(xe, nameof(m_transform));
+            m_sweptTransform = xd.ReadClass<hkSweptTransform>(xe, nameof(m_sweptTransform));
+            m_deltaAngle = xd.ReadVector4(xe, nameof(m_deltaAngle));
+            m_objectRadius = xd.ReadSingle(xe, nameof(m_objectRadius));
+            m_linearDamping = xd.ReadHalf(xe, nameof(m_linearDamping));
+            m_angularDamping = xd.ReadHalf(xe, nameof(m_angularDamping));
+            m_timeFactor = xd.ReadHalf(xe, nameof(m_timeFactor));
+            m_maxLinearVelocity = xd.ReadByte(xe, nameof(m_maxLinearVelocity));
+            m_maxAngularVelocity = xd.ReadByte(xe, nameof(m_maxAngularVelocity));
+            m_deactivationClass = xd.ReadByte(xe, nameof(m_deactivationClass));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -8,7 +8,7 @@ namespace HKX2
     // m_entities m_class: hkpEntity Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpArrayAction : hkpAction
     {
-        public List<hkpEntity> m_entities;
+        public List<hkpEntity> m_entities = new List<hkpEntity>();
 
         public override uint Signature => 0x674bcd2d;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_entities = xd.ReadClassPointerArray<hkpEntity>(xe, nameof(m_entities));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

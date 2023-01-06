@@ -10,7 +10,7 @@ namespace HKX2
     // m_hasOutputBinding m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbVariableBindingSet : hkReferencedObject
     {
-        public List<hkbVariableBindingSetBinding> m_bindings;
+        public List<hkbVariableBindingSetBinding> m_bindings = new List<hkbVariableBindingSetBinding>();
         public int m_indexOfBindingToEnable;
         public bool m_hasOutputBinding;
 
@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bindings = xd.ReadClassArray<hkbVariableBindingSetBinding>(xe, nameof(m_bindings));
+            m_indexOfBindingToEnable = xd.ReadInt32(xe, nameof(m_indexOfBindingToEnable));
+            m_hasOutputBinding = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

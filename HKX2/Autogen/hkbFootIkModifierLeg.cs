@@ -30,7 +30,7 @@ namespace HKX2
         public Quaternion m_prevAnkleRotLS;
         public Vector4 m_kneeAxisLS;
         public Vector4 m_footEndLS;
-        public hkbEventProperty m_ungroundedEvent;
+        public hkbEventProperty m_ungroundedEvent = new hkbEventProperty();
         public float m_footPlantedAnkleHeightMS;
         public float m_footRaisedAnkleHeightMS;
         public float m_maxAnkleHeightMS;
@@ -99,7 +99,25 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_originalAnkleTransformMS = xd.ReadQSTransform(xe, nameof(m_originalAnkleTransformMS));
+            m_prevAnkleRotLS = default;
+            m_kneeAxisLS = xd.ReadVector4(xe, nameof(m_kneeAxisLS));
+            m_footEndLS = xd.ReadVector4(xe, nameof(m_footEndLS));
+            m_ungroundedEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_ungroundedEvent));
+            m_footPlantedAnkleHeightMS = xd.ReadSingle(xe, nameof(m_footPlantedAnkleHeightMS));
+            m_footRaisedAnkleHeightMS = xd.ReadSingle(xe, nameof(m_footRaisedAnkleHeightMS));
+            m_maxAnkleHeightMS = xd.ReadSingle(xe, nameof(m_maxAnkleHeightMS));
+            m_minAnkleHeightMS = xd.ReadSingle(xe, nameof(m_minAnkleHeightMS));
+            m_maxKneeAngleDegrees = xd.ReadSingle(xe, nameof(m_maxKneeAngleDegrees));
+            m_minKneeAngleDegrees = xd.ReadSingle(xe, nameof(m_minKneeAngleDegrees));
+            m_verticalError = xd.ReadSingle(xe, nameof(m_verticalError));
+            m_maxAnkleAngleDegrees = xd.ReadSingle(xe, nameof(m_maxAnkleAngleDegrees));
+            m_hipIndex = xd.ReadInt16(xe, nameof(m_hipIndex));
+            m_kneeIndex = xd.ReadInt16(xe, nameof(m_kneeIndex));
+            m_ankleIndex = xd.ReadInt16(xe, nameof(m_ankleIndex));
+            m_hitSomething = xd.ReadBoolean(xe, nameof(m_hitSomething));
+            m_isPlantedMS = xd.ReadBoolean(xe, nameof(m_isPlantedMS));
+            m_isOriginalAnkleTransformMSSet = xd.ReadBoolean(xe, nameof(m_isOriginalAnkleTransformMSSet));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

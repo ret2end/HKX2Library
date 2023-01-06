@@ -30,7 +30,7 @@ namespace HKX2
         public short m_indexOfSyncMasterChild;
         public short m_flags;
         public bool m_subtractLastChild;
-        public List<hkbBlenderGeneratorChild> m_children;
+        public List<hkbBlenderGeneratorChild> m_children = new List<hkbBlenderGeneratorChild>();
         public List<dynamic> m_childrenInternalStates;
         public List<dynamic> m_sortedChildren;
         public float m_endIntervalWeight;
@@ -90,7 +90,23 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_referencePoseWeightThreshold = xd.ReadSingle(xe, nameof(m_referencePoseWeightThreshold));
+            m_blendParameter = xd.ReadSingle(xe, nameof(m_blendParameter));
+            m_minCyclicBlendParameter = xd.ReadSingle(xe, nameof(m_minCyclicBlendParameter));
+            m_maxCyclicBlendParameter = xd.ReadSingle(xe, nameof(m_maxCyclicBlendParameter));
+            m_indexOfSyncMasterChild = xd.ReadInt16(xe, nameof(m_indexOfSyncMasterChild));
+            m_flags = xd.ReadInt16(xe, nameof(m_flags));
+            m_subtractLastChild = xd.ReadBoolean(xe, nameof(m_subtractLastChild));
+            m_children = xd.ReadClassPointerArray<hkbBlenderGeneratorChild>(xe, nameof(m_children));
+            m_childrenInternalStates = default;
+            m_sortedChildren = default;
+            m_endIntervalWeight = default;
+            m_numActiveChildren = default;
+            m_beginIntervalIndex = default;
+            m_endIntervalIndex = default;
+            m_initSync = default;
+            m_doSubtractiveBlend = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

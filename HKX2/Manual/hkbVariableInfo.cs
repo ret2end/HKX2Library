@@ -30,7 +30,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_role = xd.ReadClass<hkbRoleAttribute>(xe, nameof(m_role));
+            // XXX: inconsistent type, it just work.
+            m_type = (sbyte)xd.ReadFlag<VariableType, uint>(xe, nameof(m_type));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

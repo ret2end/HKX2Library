@@ -7,7 +7,7 @@ namespace HKX2
 
     public partial class hkbBlendCurveUtils : IHavokObject
     {
-        public byte[] unk0;
+        public byte[] unk0 = new byte[1];
 
         public virtual uint Signature => 0x23041af0;
 

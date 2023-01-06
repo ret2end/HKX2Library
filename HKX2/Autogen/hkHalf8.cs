@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +8,7 @@ namespace HKX2
     // m_quad m_class:  Type.TYPE_HALF Type.TYPE_VOID arrSize: 8 offset: 0 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkHalf8 : IHavokObject
     {
-        public List<Half> m_quad;
+        public Half[] m_quad = new Half[8];
 
         public virtual uint Signature => 0x7684dc80;
 
@@ -25,7 +24,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_quad = xd.ReadHalfCStyleArray(xe, nameof(m_quad), 8);
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

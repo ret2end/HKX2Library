@@ -30,8 +30,8 @@ namespace HKX2
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 240 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbFootIkModifier : hkbModifier
     {
-        public hkbFootIkGains m_gains;
-        public List<hkbFootIkModifierLeg> m_legs;
+        public hkbFootIkGains m_gains = new hkbFootIkGains();
+        public List<hkbFootIkModifierLeg> m_legs = new List<hkbFootIkModifierLeg>();
         public float m_raycastDistanceUp;
         public float m_raycastDistanceDown;
         public float m_originalGroundHeightMS;
@@ -47,7 +47,7 @@ namespace HKX2
         public bool m_lockFeetWhenPlanted;
         public bool m_useCharacterUpVector;
         public sbyte m_alignMode;
-        public List<hkbFootIkModifierInternalLegData> m_internalLegData;
+        public List<hkbFootIkModifierInternalLegData> m_internalLegData = new List<hkbFootIkModifierInternalLegData>();
         public float m_prevIsFootIkEnabled;
         public bool m_isSetUp;
         public bool m_isGroundPositionValid;
@@ -116,7 +116,29 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_gains = xd.ReadClass<hkbFootIkGains>(xe, nameof(m_gains));
+            m_legs = xd.ReadClassArray<hkbFootIkModifierLeg>(xe, nameof(m_legs));
+            m_raycastDistanceUp = xd.ReadSingle(xe, nameof(m_raycastDistanceUp));
+            m_raycastDistanceDown = xd.ReadSingle(xe, nameof(m_raycastDistanceDown));
+            m_originalGroundHeightMS = xd.ReadSingle(xe, nameof(m_originalGroundHeightMS));
+            m_errorOut = xd.ReadSingle(xe, nameof(m_errorOut));
+            m_errorOutTranslation = xd.ReadVector4(xe, nameof(m_errorOutTranslation));
+            m_alignWithGroundRotation = xd.ReadQuaternion(xe, nameof(m_alignWithGroundRotation));
+            m_verticalOffset = xd.ReadSingle(xe, nameof(m_verticalOffset));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_forwardAlignFraction = xd.ReadSingle(xe, nameof(m_forwardAlignFraction));
+            m_sidewaysAlignFraction = xd.ReadSingle(xe, nameof(m_sidewaysAlignFraction));
+            m_sidewaysSampleWidth = xd.ReadSingle(xe, nameof(m_sidewaysSampleWidth));
+            m_useTrackData = xd.ReadBoolean(xe, nameof(m_useTrackData));
+            m_lockFeetWhenPlanted = xd.ReadBoolean(xe, nameof(m_lockFeetWhenPlanted));
+            m_useCharacterUpVector = xd.ReadBoolean(xe, nameof(m_useCharacterUpVector));
+            m_alignMode = xd.ReadFlag<AlignMode, sbyte>(xe, nameof(m_alignMode));
+            m_internalLegData = new List<hkbFootIkModifierInternalLegData>();
+            m_prevIsFootIkEnabled = default;
+            m_isSetUp = default;
+            m_isGroundPositionValid = default;
+            m_timeStep = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

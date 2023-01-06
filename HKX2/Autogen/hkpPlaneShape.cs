@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_plane = xd.ReadVector4(xe, nameof(m_plane));
+            m_aabbCenter = xd.ReadVector4(xe, nameof(m_aabbCenter));
+            m_aabbHalfExtents = xd.ReadVector4(xe, nameof(m_aabbHalfExtents));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

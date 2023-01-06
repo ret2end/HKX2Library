@@ -74,7 +74,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_duration = xd.ReadSingle(xe, nameof(m_duration));
+            m_toGeneratorStartTimeFraction = xd.ReadSingle(xe, nameof(m_toGeneratorStartTimeFraction));
+            m_flags = xd.ReadFlag<FlagBits, ushort>(xe, nameof(m_flags));
+            m_endMode = xd.ReadFlag<EndMode, sbyte>(xe, nameof(m_endMode));
+            m_blendCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_blendCurve));
+            m_fromGenerator = default;
+            m_toGenerator = default;
+            m_characterPoseAtBeginningOfTransition = default;
+            m_timeRemaining = default;
+            m_timeInTransition = default;
+            m_applySelfTransition = default;
+            m_initializeCharacterPose = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

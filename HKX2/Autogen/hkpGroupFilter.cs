@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,8 +11,8 @@ namespace HKX2
     public partial class hkpGroupFilter : hkpCollisionFilter
     {
         public int m_nextFreeSystemGroup;
-        public List<uint> m_collisionLookupTable;
-        public List<Vector4> m_pad256;
+        public uint[] m_collisionLookupTable = new uint[32];
+        public Vector4[] m_pad256 = new Vector4[4];
 
         public override uint Signature => 0x65ee88e4;
 
@@ -37,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_nextFreeSystemGroup = xd.ReadInt32(xe, nameof(m_nextFreeSystemGroup));
+            m_collisionLookupTable = xd.ReadUInt32CStyleArray(xe, nameof(m_collisionLookupTable), 32);
+            m_pad256 = xd.ReadVector4CStyleArray(xe, nameof(m_pad256), 4);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

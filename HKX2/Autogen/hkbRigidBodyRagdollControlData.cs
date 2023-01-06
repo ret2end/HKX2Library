@@ -8,7 +8,7 @@ namespace HKX2
     // m_durationToBlend m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbRigidBodyRagdollControlData : IHavokObject
     {
-        public hkaKeyFrameHierarchyUtilityControlData m_keyFrameHierarchyControlData;
+        public hkaKeyFrameHierarchyUtilityControlData m_keyFrameHierarchyControlData = new hkaKeyFrameHierarchyUtilityControlData();
         public float m_durationToBlend;
 
         public virtual uint Signature => 0x1e0bc068;
@@ -30,7 +30,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_keyFrameHierarchyControlData = xd.ReadClass<hkaKeyFrameHierarchyUtilityControlData>(xe, nameof(m_keyFrameHierarchyControlData));
+            m_durationToBlend = xd.ReadSingle(xe, nameof(m_durationToBlend));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

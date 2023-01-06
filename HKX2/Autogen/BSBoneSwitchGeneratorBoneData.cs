@@ -29,7 +29,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pGenerator));
+            m_spBoneWeight = xd.ReadClassPointer<hkbBoneWeightArray>(xe, nameof(m_spBoneWeight));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

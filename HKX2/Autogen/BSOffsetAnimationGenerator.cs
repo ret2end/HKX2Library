@@ -74,7 +74,18 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pDefaultGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pDefaultGenerator));
+            m_pOffsetClipGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pOffsetClipGenerator));
+            m_fOffsetVariable = xd.ReadSingle(xe, nameof(m_fOffsetVariable));
+            m_fOffsetRangeStart = xd.ReadSingle(xe, nameof(m_fOffsetRangeStart));
+            m_fOffsetRangeEnd = xd.ReadSingle(xe, nameof(m_fOffsetRangeEnd));
+            m_BoneOffsetA = default;
+            m_BoneIndexA = default;
+            m_fCurrentPercentage = default;
+            m_iCurrentFrame = default;
+            m_bZeroOffset = default;
+            m_bOffsetValid = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

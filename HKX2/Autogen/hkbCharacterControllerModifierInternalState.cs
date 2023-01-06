@@ -40,7 +40,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_gravity = xd.ReadVector4(xe, nameof(m_gravity));
+            m_timestep = xd.ReadSingle(xe, nameof(m_timestep));
+            m_isInitialVelocityAdded = xd.ReadBoolean(xe, nameof(m_isInitialVelocityAdded));
+            m_isTouchingGround = xd.ReadBoolean(xe, nameof(m_isTouchingGround));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

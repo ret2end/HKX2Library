@@ -47,7 +47,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_isEnabled = xd.ReadByte(xe, nameof(m_isEnabled));
+            m_twistAxis = xd.ReadByte(xe, nameof(m_twistAxis));
+            m_refAxis = xd.ReadByte(xe, nameof(m_refAxis));
+            m_minAngle = xd.ReadSingle(xe, nameof(m_minAngle));
+            m_maxAngle = xd.ReadSingle(xe, nameof(m_maxAngle));
+            m_angularLimitsTauFactor = xd.ReadSingle(xe, nameof(m_angularLimitsTauFactor));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

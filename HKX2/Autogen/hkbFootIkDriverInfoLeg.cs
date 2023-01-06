@@ -74,7 +74,19 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_prevAnkleRotLS = default;
+            m_kneeAxisLS = xd.ReadVector4(xe, nameof(m_kneeAxisLS));
+            m_footEndLS = xd.ReadVector4(xe, nameof(m_footEndLS));
+            m_footPlantedAnkleHeightMS = xd.ReadSingle(xe, nameof(m_footPlantedAnkleHeightMS));
+            m_footRaisedAnkleHeightMS = xd.ReadSingle(xe, nameof(m_footRaisedAnkleHeightMS));
+            m_maxAnkleHeightMS = xd.ReadSingle(xe, nameof(m_maxAnkleHeightMS));
+            m_minAnkleHeightMS = xd.ReadSingle(xe, nameof(m_minAnkleHeightMS));
+            m_maxKneeAngleDegrees = xd.ReadSingle(xe, nameof(m_maxKneeAngleDegrees));
+            m_minKneeAngleDegrees = xd.ReadSingle(xe, nameof(m_minKneeAngleDegrees));
+            m_maxAnkleAngleDegrees = xd.ReadSingle(xe, nameof(m_maxAnkleAngleDegrees));
+            m_hipIndex = xd.ReadInt16(xe, nameof(m_hipIndex));
+            m_kneeIndex = xd.ReadInt16(xe, nameof(m_kneeIndex));
+            m_ankleIndex = xd.ReadInt16(xe, nameof(m_ankleIndex));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

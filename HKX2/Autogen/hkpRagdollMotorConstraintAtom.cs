@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -17,7 +16,7 @@ namespace HKX2
         public short m_initializedOffset;
         public short m_previousTargetAnglesOffset;
         public Matrix4x4 m_target_bRca;
-        public List<hkpConstraintMotor> m_motors;
+        public hkpConstraintMotor[] m_motors = new hkpConstraintMotor[3];
 
         public override uint Signature => 0x71013826;
 
@@ -49,7 +48,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_isEnabled = xd.ReadBoolean(xe, nameof(m_isEnabled));
+            m_initializedOffset = xd.ReadInt16(xe, nameof(m_initializedOffset));
+            m_previousTargetAnglesOffset = xd.ReadInt16(xe, nameof(m_previousTargetAnglesOffset));
+            m_target_bRca = xd.ReadMatrix3(xe, nameof(m_target_bRca));
+            m_motors = xd.ReadClassPointerCStyleArray<hkpConstraintMotor>(xe, nameof(m_motors), 3);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

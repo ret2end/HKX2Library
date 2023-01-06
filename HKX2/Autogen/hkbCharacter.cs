@@ -27,7 +27,7 @@ namespace HKX2
     // m_deletePoseLocal m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacter : hkReferencedObject
     {
-        public List<hkbCharacter> m_nearbyCharacters;
+        public List<hkbCharacter> m_nearbyCharacters = new List<hkbCharacter>();
         public short m_currentLod;
         public short m_numTracksInLod;
         public string m_name;
@@ -101,7 +101,26 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_nearbyCharacters = xd.ReadClassPointerArray<hkbCharacter>(xe, nameof(m_nearbyCharacters));
+            m_currentLod = xd.ReadInt16(xe, nameof(m_currentLod));
+            m_numTracksInLod = default;
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_ragdollDriver = default;
+            m_characterControllerDriver = default;
+            m_footIkDriver = default;
+            m_handIkDriver = default;
+            m_setup = xd.ReadClassPointer<hkbCharacterSetup>(xe, nameof(m_setup));
+            m_behaviorGraph = xd.ReadClassPointer<hkbBehaviorGraph>(xe, nameof(m_behaviorGraph));
+            m_projectData = xd.ReadClassPointer<hkbProjectData>(xe, nameof(m_projectData));
+            m_animationBindingSet = default;
+            m_raycastInterface = default;
+            m_world = default;
+            m_eventQueue = default;
+            m_worldFromModel = default;
+            m_poseLocal = default;
+            m_deleteWorldFromModel = default;
+            m_deletePoseLocal = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

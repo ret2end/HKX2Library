@@ -80,7 +80,20 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_kP = xd.ReadSingle(xe, nameof(m_kP));
+            m_kI = xd.ReadSingle(xe, nameof(m_kI));
+            m_kD = xd.ReadSingle(xe, nameof(m_kD));
+            m_enableScalarDamping = xd.ReadBoolean(xe, nameof(m_enableScalarDamping));
+            m_enableVectorDamping = xd.ReadBoolean(xe, nameof(m_enableVectorDamping));
+            m_rawValue = xd.ReadSingle(xe, nameof(m_rawValue));
+            m_dampedValue = xd.ReadSingle(xe, nameof(m_dampedValue));
+            m_rawVector = xd.ReadVector4(xe, nameof(m_rawVector));
+            m_dampedVector = xd.ReadVector4(xe, nameof(m_dampedVector));
+            m_vecErrorSum = xd.ReadVector4(xe, nameof(m_vecErrorSum));
+            m_vecPreviousError = xd.ReadVector4(xe, nameof(m_vecPreviousError));
+            m_errorSum = xd.ReadSingle(xe, nameof(m_errorSum));
+            m_previousError = xd.ReadSingle(xe, nameof(m_previousError));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

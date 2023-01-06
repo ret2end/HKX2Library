@@ -30,7 +30,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_groundPosition = xd.ReadVector4(xe, nameof(m_groundPosition));
+            m_footIkSolver = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

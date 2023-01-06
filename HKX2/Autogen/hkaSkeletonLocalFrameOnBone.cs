@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_localFrame = xd.ReadClassPointer<hkLocalFrame>(xe, nameof(m_localFrame));
+            m_boneIndex = xd.ReadInt32(xe, nameof(m_boneIndex));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

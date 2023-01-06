@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +8,8 @@ namespace HKX2
     // m_extras m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 2 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkAabbHalf : IHavokObject
     {
-        public List<ushort> m_data;
-        public List<ushort> m_extras;
+        public ushort[] m_data = new ushort[6];
+        public ushort[] m_extras = new ushort[2];
 
         public virtual uint Signature => 0x1d716a17;
 
@@ -28,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_data = xd.ReadUInt16CStyleArray(xe, nameof(m_data), 6);
+            m_extras = xd.ReadUInt16CStyleArray(xe, nameof(m_extras), 2);
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

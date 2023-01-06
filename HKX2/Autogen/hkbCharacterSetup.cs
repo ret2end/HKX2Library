@@ -15,7 +15,7 @@ namespace HKX2
     // m_characterPropertyIdMap m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacterSetup : hkReferencedObject
     {
-        public List<hkaSkeletonMapper> m_retargetingSkeletonMappers;
+        public List<hkaSkeletonMapper> m_retargetingSkeletonMappers = new List<hkaSkeletonMapper>();
         public hkaSkeleton m_animationSkeleton;
         public hkaSkeletonMapper m_ragdollToAnimationSkeletonMapper;
         public hkaSkeletonMapper m_animationToRagdollSkeletonMapper;
@@ -54,7 +54,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_retargetingSkeletonMappers = xd.ReadClassPointerArray<hkaSkeletonMapper>(xe, nameof(m_retargetingSkeletonMappers));
+            m_animationSkeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_animationSkeleton));
+            m_ragdollToAnimationSkeletonMapper = xd.ReadClassPointer<hkaSkeletonMapper>(xe, nameof(m_ragdollToAnimationSkeletonMapper));
+            m_animationToRagdollSkeletonMapper = xd.ReadClassPointer<hkaSkeletonMapper>(xe, nameof(m_animationToRagdollSkeletonMapper));
+            m_animationBindingSet = default;
+            m_data = xd.ReadClassPointer<hkbCharacterData>(xe, nameof(m_data));
+            m_mirroredSkeleton = default;
+            m_characterPropertyIdMap = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

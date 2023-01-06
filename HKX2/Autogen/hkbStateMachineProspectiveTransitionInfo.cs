@@ -9,8 +9,8 @@ namespace HKX2
     // m_toStateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineProspectiveTransitionInfo : IHavokObject
     {
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReference;
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE;
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReference = new hkbStateMachineTransitionInfoReference();
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE = new hkbStateMachineTransitionInfoReference();
         public int m_toStateId;
 
         public virtual uint Signature => 0x3ab09a2e;
@@ -33,7 +33,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transitionInfoReference = xd.ReadClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReference));
+            m_transitionInfoReferenceForTE = xd.ReadClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReferenceForTE));
+            m_toStateId = xd.ReadInt32(xe, nameof(m_toStateId));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

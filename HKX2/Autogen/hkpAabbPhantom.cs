@@ -10,8 +10,8 @@ namespace HKX2
     // m_orderDirty m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 288 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpAabbPhantom : hkpPhantom
     {
-        public hkAabb m_aabb;
-        public List<dynamic> m_overlappingCollidables;
+        public hkAabb m_aabb = new hkAabb();
+        public List<dynamic> m_overlappingCollidables = new List<dynamic>();
         public bool m_orderDirty;
 
         public override uint Signature => 0x2c5189dd;
@@ -37,7 +37,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_aabb = xd.ReadClass<hkAabb>(xe, nameof(m_aabb));
+            m_overlappingCollidables = default;
+            m_orderDirty = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

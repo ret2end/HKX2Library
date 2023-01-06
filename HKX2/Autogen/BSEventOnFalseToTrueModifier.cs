@@ -20,13 +20,13 @@ namespace HKX2
     {
         public bool m_bEnableEvent1;
         public bool m_bVariableToTest1;
-        public hkbEventProperty m_EventToSend1;
+        public hkbEventProperty m_EventToSend1 = new hkbEventProperty();
         public bool m_bEnableEvent2;
         public bool m_bVariableToTest2;
-        public hkbEventProperty m_EventToSend2;
+        public hkbEventProperty m_EventToSend2 = new hkbEventProperty();
         public bool m_bEnableEvent3;
         public bool m_bVariableToTest3;
-        public hkbEventProperty m_EventToSend3;
+        public hkbEventProperty m_EventToSend3 = new hkbEventProperty();
         public bool m_bSlot1ActivatedLastFrame;
         public bool m_bSlot2ActivatedLastFrame;
         public bool m_bSlot3ActivatedLastFrame;
@@ -80,7 +80,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bEnableEvent1 = xd.ReadBoolean(xe, nameof(m_bEnableEvent1));
+            m_bVariableToTest1 = xd.ReadBoolean(xe, nameof(m_bVariableToTest1));
+            m_EventToSend1 = xd.ReadClass<hkbEventProperty>(xe, nameof(m_EventToSend1));
+            m_bEnableEvent2 = xd.ReadBoolean(xe, nameof(m_bEnableEvent2));
+            m_bVariableToTest2 = xd.ReadBoolean(xe, nameof(m_bVariableToTest2));
+            m_EventToSend2 = xd.ReadClass<hkbEventProperty>(xe, nameof(m_EventToSend2));
+            m_bEnableEvent3 = xd.ReadBoolean(xe, nameof(m_bEnableEvent3));
+            m_bVariableToTest3 = xd.ReadBoolean(xe, nameof(m_bVariableToTest3));
+            m_EventToSend3 = xd.ReadClass<hkbEventProperty>(xe, nameof(m_EventToSend3));
+            m_bSlot1ActivatedLastFrame = default;
+            m_bSlot2ActivatedLastFrame = default;
+            m_bSlot3ActivatedLastFrame = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -8,7 +8,7 @@ namespace HKX2
     // m_childFilter m_class: hkpCollisionFilter Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     public partial class hkpPairCollisionFilter : hkpCollisionFilter
     {
-        public hkpPairCollisionFilterMapPairFilterKeyOverrideType m_disabledPairs;
+        public hkpPairCollisionFilterMapPairFilterKeyOverrideType m_disabledPairs = new hkpPairCollisionFilterMapPairFilterKeyOverrideType();
         public hkpCollisionFilter m_childFilter;
 
         public override uint Signature => 0x4abc140e;
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_disabledPairs = new hkpPairCollisionFilterMapPairFilterKeyOverrideType();
+            m_childFilter = xd.ReadClassPointer<hkpCollisionFilter>(xe, nameof(m_childFilter));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

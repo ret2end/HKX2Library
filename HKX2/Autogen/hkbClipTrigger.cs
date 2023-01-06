@@ -12,7 +12,7 @@ namespace HKX2
     public partial class hkbClipTrigger : IHavokObject
     {
         public float m_localTime;
-        public hkbEventProperty m_event;
+        public hkbEventProperty m_event = new hkbEventProperty();
         public bool m_relativeToEndOfClip;
         public bool m_acyclic;
         public bool m_isAnnotation;
@@ -44,7 +44,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_localTime = xd.ReadSingle(xe, nameof(m_localTime));
+            m_event = xd.ReadClass<hkbEventProperty>(xe, nameof(m_event));
+            m_relativeToEndOfClip = xd.ReadBoolean(xe, nameof(m_relativeToEndOfClip));
+            m_acyclic = xd.ReadBoolean(xe, nameof(m_acyclic));
+            m_isAnnotation = xd.ReadBoolean(xe, nameof(m_isAnnotation));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

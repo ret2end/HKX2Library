@@ -33,7 +33,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_disableWelding = xd.ReadBoolean(xe, nameof(m_disableWelding));
+            m_collectionType = xd.ReadFlag<CollectionType, byte>(xe, nameof(m_collectionType));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

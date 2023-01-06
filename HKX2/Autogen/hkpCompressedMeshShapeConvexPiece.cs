@@ -47,7 +47,12 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_offset = xd.ReadVector4(xe, nameof(m_offset));
+            m_vertices = xd.ReadUInt16Array(xe, nameof(m_vertices));
+            m_faceVertices = xd.ReadByteArray(xe, nameof(m_faceVertices));
+            m_faceOffsets = xd.ReadUInt16Array(xe, nameof(m_faceOffsets));
+            m_reference = xd.ReadUInt16(xe, nameof(m_reference));
+            m_transformIndex = xd.ReadUInt16(xe, nameof(m_transformIndex));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

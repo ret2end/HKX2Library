@@ -9,7 +9,7 @@ namespace HKX2
     // m_keyframedBonesList m_class: hkbBoneIndexArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkbKeyframeBonesModifier : hkbModifier
     {
-        public List<hkbKeyframeBonesModifierKeyframeInfo> m_keyframeInfo;
+        public List<hkbKeyframeBonesModifierKeyframeInfo> m_keyframeInfo = new List<hkbKeyframeBonesModifierKeyframeInfo>();
         public hkbBoneIndexArray m_keyframedBonesList;
 
         public override uint Signature => 0x95f66629;
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_keyframeInfo = xd.ReadClassArray<hkbKeyframeBonesModifierKeyframeInfo>(xe, nameof(m_keyframeInfo));
+            m_keyframedBonesList = xd.ReadClassPointer<hkbBoneIndexArray>(xe, nameof(m_keyframedBonesList));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

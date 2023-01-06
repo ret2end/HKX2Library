@@ -37,7 +37,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_capsuleHeight = xd.ReadSingle(xe, nameof(m_capsuleHeight));
+            m_capsuleRadius = xd.ReadSingle(xe, nameof(m_capsuleRadius));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_characterControllerCinfo = xd.ReadClassPointer<hkpCharacterControllerCinfo>(xe, nameof(m_characterControllerCinfo));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

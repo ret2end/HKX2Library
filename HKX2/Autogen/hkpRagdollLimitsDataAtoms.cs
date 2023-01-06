@@ -10,10 +10,10 @@ namespace HKX2
     // m_planesLimit m_class: hkpConeLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
     public partial class hkpRagdollLimitsDataAtoms : IHavokObject
     {
-        public hkpSetLocalRotationsConstraintAtom m_rotations;
-        public hkpTwistLimitConstraintAtom m_twistLimit;
-        public hkpConeLimitConstraintAtom m_coneLimit;
-        public hkpConeLimitConstraintAtom m_planesLimit;
+        public hkpSetLocalRotationsConstraintAtom m_rotations = new hkpSetLocalRotationsConstraintAtom();
+        public hkpTwistLimitConstraintAtom m_twistLimit = new hkpTwistLimitConstraintAtom();
+        public hkpConeLimitConstraintAtom m_coneLimit = new hkpConeLimitConstraintAtom();
+        public hkpConeLimitConstraintAtom m_planesLimit = new hkpConeLimitConstraintAtom();
 
         public virtual uint Signature => 0x82b894c3;
 
@@ -41,7 +41,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rotations = xd.ReadClass<hkpSetLocalRotationsConstraintAtom>(xe, nameof(m_rotations));
+            m_twistLimit = xd.ReadClass<hkpTwistLimitConstraintAtom>(xe, nameof(m_twistLimit));
+            m_coneLimit = xd.ReadClass<hkpConeLimitConstraintAtom>(xe, nameof(m_coneLimit));
+            m_planesLimit = xd.ReadClass<hkpConeLimitConstraintAtom>(xe, nameof(m_planesLimit));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

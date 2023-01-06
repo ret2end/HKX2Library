@@ -23,7 +23,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_filterInfo = xd.ReadUInt32(xe, nameof(m_filterInfo));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

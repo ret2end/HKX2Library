@@ -74,7 +74,20 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_deformableSkinNames = xd.ReadStringArray(xe, nameof(m_deformableSkinNames));
+            m_rigidSkinNames = xd.ReadStringArray(xe, nameof(m_rigidSkinNames));
+            m_animationNames = xd.ReadStringArray(xe, nameof(m_animationNames));
+            m_animationFilenames = xd.ReadStringArray(xe, nameof(m_animationFilenames));
+            m_characterPropertyNames = xd.ReadStringArray(xe, nameof(m_characterPropertyNames));
+            m_retargetingSkeletonMapperFilenames = xd.ReadStringArray(xe, nameof(m_retargetingSkeletonMapperFilenames));
+            m_lodNames = xd.ReadStringArray(xe, nameof(m_lodNames));
+            m_mirroredSyncPointSubstringsA = xd.ReadStringArray(xe, nameof(m_mirroredSyncPointSubstringsA));
+            m_mirroredSyncPointSubstringsB = xd.ReadStringArray(xe, nameof(m_mirroredSyncPointSubstringsB));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_rigName = xd.ReadString(xe, nameof(m_rigName));
+            m_ragdollName = xd.ReadString(xe, nameof(m_ragdollName));
+            m_behaviorFilename = xd.ReadString(xe, nameof(m_behaviorFilename));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

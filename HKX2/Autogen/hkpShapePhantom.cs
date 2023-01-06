@@ -7,7 +7,7 @@ namespace HKX2
     // m_motionState m_class: hkMotionState Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 240 flags: FLAGS_NONE enum: 
     public partial class hkpShapePhantom : hkpPhantom
     {
-        public hkMotionState m_motionState;
+        public hkMotionState m_motionState = new hkMotionState();
 
         public override uint Signature => 0xcb22fbcd;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_motionState = xd.ReadClass<hkMotionState>(xe, nameof(m_motionState));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -46,7 +46,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_boneIndex = xd.ReadInt16(xe, nameof(m_boneIndex));
+            m_translationLSOut = xd.ReadVector4(xe, nameof(m_translationLSOut));
+            m_rotationLSOut = xd.ReadQuaternion(xe, nameof(m_rotationLSOut));
+            m_scaleLSOut = xd.ReadVector4(xe, nameof(m_scaleLSOut));
+            m_pSkeletonMemory = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

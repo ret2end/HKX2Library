@@ -8,7 +8,7 @@ namespace HKX2
     // m_decls m_class: hkxVertexDescriptionElementDecl Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkxVertexDescription : IHavokObject
     {
-        public List<hkxVertexDescriptionElementDecl> m_decls;
+        public List<hkxVertexDescriptionElementDecl> m_decls = new List<hkxVertexDescriptionElementDecl>();
 
         public virtual uint Signature => 0x2df6313d;
 
@@ -24,7 +24,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_decls = xd.ReadClassArray<hkxVertexDescriptionElementDecl>(xe, nameof(m_decls));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

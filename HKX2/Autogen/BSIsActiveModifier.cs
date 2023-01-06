@@ -63,7 +63,17 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bIsActive0 = xd.ReadBoolean(xe, nameof(m_bIsActive0));
+            m_bInvertActive0 = xd.ReadBoolean(xe, nameof(m_bInvertActive0));
+            m_bIsActive1 = xd.ReadBoolean(xe, nameof(m_bIsActive1));
+            m_bInvertActive1 = xd.ReadBoolean(xe, nameof(m_bInvertActive1));
+            m_bIsActive2 = xd.ReadBoolean(xe, nameof(m_bIsActive2));
+            m_bInvertActive2 = xd.ReadBoolean(xe, nameof(m_bInvertActive2));
+            m_bIsActive3 = xd.ReadBoolean(xe, nameof(m_bIsActive3));
+            m_bInvertActive3 = xd.ReadBoolean(xe, nameof(m_bInvertActive3));
+            m_bIsActive4 = xd.ReadBoolean(xe, nameof(m_bIsActive4));
+            m_bInvertActive4 = xd.ReadBoolean(xe, nameof(m_bInvertActive4));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

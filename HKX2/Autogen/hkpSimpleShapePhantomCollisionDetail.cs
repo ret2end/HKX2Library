@@ -23,7 +23,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_collidable = xd.ReadClassPointer<hkpCollidable>(xe, nameof(m_collidable));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

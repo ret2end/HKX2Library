@@ -8,8 +8,8 @@ namespace HKX2
     // m_desc m_class: hkxVertexDescription Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
     public partial class hkxVertexBuffer : hkReferencedObject
     {
-        public hkxVertexBufferVertexData m_data;
-        public hkxVertexDescription m_desc;
+        public hkxVertexBufferVertexData m_data = new hkxVertexBufferVertexData();
+        public hkxVertexDescription m_desc = new hkxVertexDescription();
 
         public override uint Signature => 0x4ab10615;
 
@@ -31,7 +31,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_data = xd.ReadClass<hkxVertexBufferVertexData>(xe, nameof(m_data));
+            m_desc = xd.ReadClass<hkxVertexDescription>(xe, nameof(m_desc));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

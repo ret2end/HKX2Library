@@ -38,7 +38,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_keyframedPosition = xd.ReadVector4(xe, nameof(m_keyframedPosition));
+            m_keyframedRotation = xd.ReadQuaternion(xe, nameof(m_keyframedRotation));
+            m_boneIndex = xd.ReadInt16(xe, nameof(m_boneIndex));
+            m_isValid = xd.ReadBoolean(xe, nameof(m_isValid));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

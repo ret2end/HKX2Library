@@ -43,16 +43,16 @@ namespace HKX2
         public List<byte> m_materials8;
         public List<Matrix4x4> m_transforms;
         public List<Vector4> m_bigVertices;
-        public List<hkpCompressedMeshShapeBigTriangle> m_bigTriangles;
-        public List<hkpCompressedMeshShapeChunk> m_chunks;
-        public List<hkpCompressedMeshShapeConvexPiece> m_convexPieces;
+        public List<hkpCompressedMeshShapeBigTriangle> m_bigTriangles = new List<hkpCompressedMeshShapeBigTriangle>();
+        public List<hkpCompressedMeshShapeChunk> m_chunks = new List<hkpCompressedMeshShapeChunk>();
+        public List<hkpCompressedMeshShapeConvexPiece> m_convexPieces = new List<hkpCompressedMeshShapeConvexPiece>();
         public float m_error;
-        public hkAabb m_bounds;
+        public hkAabb m_bounds = new hkAabb();
         public uint m_defaultCollisionFilterInfo;
         public dynamic m_meshMaterials;
         public ushort m_materialStriding;
         public ushort m_numMaterials;
-        public List<hkpNamedMeshMaterial> m_namedMaterials;
+        public List<hkpNamedMeshMaterial> m_namedMaterials = new List<hkpNamedMeshMaterial>();
         public Vector4 m_scaling;
 
         public override uint Signature => 0xe3d1dba;
@@ -126,7 +126,30 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bitsPerIndex = xd.ReadInt32(xe, nameof(m_bitsPerIndex));
+            m_bitsPerWIndex = xd.ReadInt32(xe, nameof(m_bitsPerWIndex));
+            m_wIndexMask = xd.ReadInt32(xe, nameof(m_wIndexMask));
+            m_indexMask = xd.ReadInt32(xe, nameof(m_indexMask));
+            m_radius = xd.ReadSingle(xe, nameof(m_radius));
+            m_weldingType = xd.ReadFlag<WeldingType, byte>(xe, nameof(m_weldingType));
+            m_materialType = xd.ReadFlag<MaterialType, byte>(xe, nameof(m_materialType));
+            m_materials = xd.ReadUInt32Array(xe, nameof(m_materials));
+            m_materials16 = xd.ReadUInt16Array(xe, nameof(m_materials16));
+            m_materials8 = xd.ReadByteArray(xe, nameof(m_materials8));
+            m_transforms = xd.ReadQSTransformArray(xe, nameof(m_transforms));
+            m_bigVertices = xd.ReadVector4Array(xe, nameof(m_bigVertices));
+            m_bigTriangles = xd.ReadClassArray<hkpCompressedMeshShapeBigTriangle>(xe, nameof(m_bigTriangles));
+            m_chunks = xd.ReadClassArray<hkpCompressedMeshShapeChunk>(xe, nameof(m_chunks));
+            m_convexPieces = xd.ReadClassArray<hkpCompressedMeshShapeConvexPiece>(xe, nameof(m_convexPieces));
+            m_error = xd.ReadSingle(xe, nameof(m_error));
+            m_bounds = xd.ReadClass<hkAabb>(xe, nameof(m_bounds));
+            m_defaultCollisionFilterInfo = xd.ReadUInt32(xe, nameof(m_defaultCollisionFilterInfo));
+            m_meshMaterials = default;
+            m_materialStriding = xd.ReadUInt16(xe, nameof(m_materialStriding));
+            m_numMaterials = xd.ReadUInt16(xe, nameof(m_numMaterials));
+            m_namedMaterials = xd.ReadClassArray<hkpNamedMeshMaterial>(xe, nameof(m_namedMaterials));
+            m_scaling = xd.ReadVector4(xe, nameof(m_scaling));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

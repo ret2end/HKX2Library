@@ -67,7 +67,18 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rotationTolerance = xd.ReadSingle(xe, nameof(m_rotationTolerance));
+            m_translationTolerance = xd.ReadSingle(xe, nameof(m_translationTolerance));
+            m_scaleTolerance = xd.ReadSingle(xe, nameof(m_scaleTolerance));
+            m_floatingTolerance = xd.ReadSingle(xe, nameof(m_floatingTolerance));
+            m_rotationDegree = xd.ReadUInt16(xe, nameof(m_rotationDegree));
+            m_translationDegree = xd.ReadUInt16(xe, nameof(m_translationDegree));
+            m_scaleDegree = xd.ReadUInt16(xe, nameof(m_scaleDegree));
+            m_floatingDegree = xd.ReadUInt16(xe, nameof(m_floatingDegree));
+            m_rotationQuantizationType = xd.ReadFlag<RotationQuantization, byte>(xe, nameof(m_rotationQuantizationType));
+            m_translationQuantizationType = xd.ReadFlag<ScalarQuantization, byte>(xe, nameof(m_translationQuantizationType));
+            m_scaleQuantizationType = xd.ReadFlag<ScalarQuantization, byte>(xe, nameof(m_scaleQuantizationType));
+            m_floatQuantizationType = xd.ReadFlag<ScalarQuantization, byte>(xe, nameof(m_floatQuantizationType));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

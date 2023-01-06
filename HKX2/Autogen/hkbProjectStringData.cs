@@ -58,7 +58,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_animationFilenames = xd.ReadStringArray(xe, nameof(m_animationFilenames));
+            m_behaviorFilenames = xd.ReadStringArray(xe, nameof(m_behaviorFilenames));
+            m_characterFilenames = xd.ReadStringArray(xe, nameof(m_characterFilenames));
+            m_eventNames = xd.ReadStringArray(xe, nameof(m_eventNames));
+            m_animationPath = xd.ReadString(xe, nameof(m_animationPath));
+            m_behaviorPath = xd.ReadString(xe, nameof(m_behaviorPath));
+            m_characterPath = xd.ReadString(xe, nameof(m_characterPath));
+            m_fullPathToSource = xd.ReadString(xe, nameof(m_fullPathToSource));
+            m_rootPath = null;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -15,8 +15,8 @@ namespace HKX2
         public sbyte m_ownerOffset;
         public byte m_forceCollideOntoPpu;
         public ushort m_shapeSizeOnSpu;
-        public hkpTypedBroadPhaseHandle m_broadPhaseHandle;
-        public hkpCollidableBoundingVolumeData m_boundingVolumeData;
+        public hkpTypedBroadPhaseHandle m_broadPhaseHandle = new hkpTypedBroadPhaseHandle();
+        public hkpCollidableBoundingVolumeData m_boundingVolumeData = new hkpCollidableBoundingVolumeData();
         public float m_allowedPenetrationDepth;
 
         public override uint Signature => 0x9a0e42a5;
@@ -49,7 +49,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_ownerOffset = default;
+            m_forceCollideOntoPpu = xd.ReadByte(xe, nameof(m_forceCollideOntoPpu));
+            m_shapeSizeOnSpu = default;
+            m_broadPhaseHandle = xd.ReadClass<hkpTypedBroadPhaseHandle>(xe, nameof(m_broadPhaseHandle));
+            m_boundingVolumeData = new hkpCollidableBoundingVolumeData();
+            m_allowedPenetrationDepth = xd.ReadSingle(xe, nameof(m_allowedPenetrationDepth));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

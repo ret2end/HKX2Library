@@ -14,7 +14,7 @@ namespace HKX2
         public Vector4 m_targetPosition;
         public float m_distance;
         public float m_distanceTrigger;
-        public hkbEventProperty m_triggerEvent;
+        public hkbEventProperty m_triggerEvent = new hkbEventProperty();
 
         public override uint Signature => 0xb34d2bbd;
 
@@ -41,7 +41,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_targetPosition = xd.ReadVector4(xe, nameof(m_targetPosition));
+            m_distance = xd.ReadSingle(xe, nameof(m_distance));
+            m_distanceTrigger = xd.ReadSingle(xe, nameof(m_distanceTrigger));
+            m_triggerEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_triggerEvent));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

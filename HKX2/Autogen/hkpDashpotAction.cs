@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,7 +11,7 @@ namespace HKX2
     // m_impulse m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpDashpotAction : hkpBinaryAction
     {
-        public List<Vector4> m_point;
+        public Vector4[] m_point = new Vector4[2];
         public float m_strength;
         public float m_damping;
         public Vector4 m_impulse;
@@ -41,7 +40,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_point = xd.ReadVector4CStyleArray(xe, nameof(m_point), 2);
+            m_strength = xd.ReadSingle(xe, nameof(m_strength));
+            m_damping = xd.ReadSingle(xe, nameof(m_damping));
+            m_impulse = xd.ReadVector4(xe, nameof(m_impulse));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

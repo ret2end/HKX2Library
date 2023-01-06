@@ -63,7 +63,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_determinismCheckFrameCounter = xd.ReadUInt32(xe, nameof(m_determinismCheckFrameCounter));
+            m_world = xd.ReadClassPointer<hkpWorld>(xe, nameof(m_world));
+            m_lastProcessingStep = xd.ReadFlag<LastProcessingStep, byte>(xe, nameof(m_lastProcessingStep));
+            m_currentTime = xd.ReadSingle(xe, nameof(m_currentTime));
+            m_currentPsiTime = xd.ReadSingle(xe, nameof(m_currentPsiTime));
+            m_physicsDeltaTime = xd.ReadSingle(xe, nameof(m_physicsDeltaTime));
+            m_simulateUntilTime = xd.ReadSingle(xe, nameof(m_simulateUntilTime));
+            m_frameMarkerPsiSnap = xd.ReadSingle(xe, nameof(m_frameMarkerPsiSnap));
+            m_previousStepResult = xd.ReadUInt32(xe, nameof(m_previousStepResult));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

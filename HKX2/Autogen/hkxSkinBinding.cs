@@ -41,7 +41,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_mesh = xd.ReadClassPointer<hkxMesh>(xe, nameof(m_mesh));
+            m_nodeNames = xd.ReadStringArray(xe, nameof(m_nodeNames));
+            m_bindPose = xd.ReadMatrix4Array(xe, nameof(m_bindPose));
+            m_initSkinTransform = xd.ReadMatrix4(xe, nameof(m_initSkinTransform));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

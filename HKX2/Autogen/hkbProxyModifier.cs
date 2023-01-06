@@ -36,7 +36,7 @@ namespace HKX2
     // m_previousFrameFollowWorldFromModel m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 280 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbProxyModifier : hkbModifier
     {
-        public hkbProxyModifierProxyInfo m_proxyInfo;
+        public hkbProxyModifierProxyInfo m_proxyInfo = new hkbProxyModifierProxyInfo();
         public Vector4 m_linearVelocity;
         public float m_horizontalGain;
         public float m_verticalGain;
@@ -141,7 +141,36 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_proxyInfo = xd.ReadClass<hkbProxyModifierProxyInfo>(xe, nameof(m_proxyInfo));
+            m_linearVelocity = xd.ReadVector4(xe, nameof(m_linearVelocity));
+            m_horizontalGain = xd.ReadSingle(xe, nameof(m_horizontalGain));
+            m_verticalGain = xd.ReadSingle(xe, nameof(m_verticalGain));
+            m_maxHorizontalSeparation = xd.ReadSingle(xe, nameof(m_maxHorizontalSeparation));
+            m_maxVerticalSeparation = xd.ReadSingle(xe, nameof(m_maxVerticalSeparation));
+            m_verticalDisplacementError = xd.ReadSingle(xe, nameof(m_verticalDisplacementError));
+            m_verticalDisplacementErrorGain = xd.ReadSingle(xe, nameof(m_verticalDisplacementErrorGain));
+            m_maxVerticalDisplacement = xd.ReadSingle(xe, nameof(m_maxVerticalDisplacement));
+            m_minVerticalDisplacement = xd.ReadSingle(xe, nameof(m_minVerticalDisplacement));
+            m_capsuleHeight = xd.ReadSingle(xe, nameof(m_capsuleHeight));
+            m_capsuleRadius = xd.ReadSingle(xe, nameof(m_capsuleRadius));
+            m_maxSlopeForRotation = xd.ReadSingle(xe, nameof(m_maxSlopeForRotation));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_phantomType = xd.ReadFlag<PhantomType, sbyte>(xe, nameof(m_phantomType));
+            m_linearVelocityMode = xd.ReadFlag<LinearVelocityMode, sbyte>(xe, nameof(m_linearVelocityMode));
+            m_ignoreIncomingRotation = xd.ReadBoolean(xe, nameof(m_ignoreIncomingRotation));
+            m_ignoreCollisionDuringRotation = xd.ReadBoolean(xe, nameof(m_ignoreCollisionDuringRotation));
+            m_ignoreIncomingTranslation = xd.ReadBoolean(xe, nameof(m_ignoreIncomingTranslation));
+            m_includeDownwardMomentum = xd.ReadBoolean(xe, nameof(m_includeDownwardMomentum));
+            m_followWorldFromModel = xd.ReadBoolean(xe, nameof(m_followWorldFromModel));
+            m_isTouchingGround = xd.ReadBoolean(xe, nameof(m_isTouchingGround));
+            m_characterProxy = default;
+            m_phantom = default;
+            m_phantomShape = default;
+            m_horizontalDisplacement = default;
+            m_verticalDisplacement = default;
+            m_timestep = default;
+            m_previousFrameFollowWorldFromModel = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

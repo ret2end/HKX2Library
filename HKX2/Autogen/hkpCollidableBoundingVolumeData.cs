@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,11 +16,11 @@ namespace HKX2
     // m_childShapeKeys m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 48 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpCollidableBoundingVolumeData : IHavokObject
     {
-        public List<uint> m_min;
-        public List<byte> m_expansionMin;
+        public uint[] m_min = new uint[3];
+        public byte[] m_expansionMin = new byte[3];
         public byte m_expansionShift;
-        public List<uint> m_max;
-        public List<byte> m_expansionMax;
+        public uint[] m_max = new uint[3];
+        public byte[] m_expansionMax = new byte[3];
         public byte m_padding;
         public ushort m_numChildShapeAabbs;
         public ushort m_capacityChildShapeAabbs;
@@ -62,7 +61,16 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_min = xd.ReadUInt32CStyleArray(xe, nameof(m_min), 3);
+            m_expansionMin = xd.ReadByteCStyleArray(xe, nameof(m_expansionMin), 3);
+            m_expansionShift = xd.ReadByte(xe, nameof(m_expansionShift));
+            m_max = xd.ReadUInt32CStyleArray(xe, nameof(m_max), 3);
+            m_expansionMax = xd.ReadByteCStyleArray(xe, nameof(m_expansionMax), 3);
+            m_padding = xd.ReadByte(xe, nameof(m_padding));
+            m_numChildShapeAabbs = default;
+            m_capacityChildShapeAabbs = default;
+            m_childShapeAabbs = default;
+            m_childShapeKeys = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

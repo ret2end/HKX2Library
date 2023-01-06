@@ -7,7 +7,7 @@ namespace HKX2
 
     public partial class hkbWorldEnums : IHavokObject
     {
-        public byte[] unk0;
+        public byte[] unk0 = new byte[1];
 
         public virtual uint Signature => 0x25640b46;
 

@@ -83,7 +83,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.Position += 8;
             s.WriteClassPointer(bw, m_pClipGenerator);
-            s.WriteStringPointer(bw, m_SyncAnimPrefix);
+            s.WriteCStringPointer(bw, m_SyncAnimPrefix);
             bw.WriteBoolean(m_bSyncClipIgnoreMarkPlacement);
             bw.Position += 3;
             bw.WriteSingle(m_fGetToMarkTime);
@@ -110,7 +110,26 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pClipGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pClipGenerator));
+            m_SyncAnimPrefix = xd.ReadString(xe, nameof(m_SyncAnimPrefix));
+            m_bSyncClipIgnoreMarkPlacement = xd.ReadBoolean(xe, nameof(m_bSyncClipIgnoreMarkPlacement));
+            m_fGetToMarkTime = xd.ReadSingle(xe, nameof(m_fGetToMarkTime));
+            m_fMarkErrorThreshold = xd.ReadSingle(xe, nameof(m_fMarkErrorThreshold));
+            m_bLeadCharacter = xd.ReadBoolean(xe, nameof(m_bLeadCharacter));
+            m_bReorientSupportChar = xd.ReadBoolean(xe, nameof(m_bReorientSupportChar));
+            m_bApplyMotionFromRoot = xd.ReadBoolean(xe, nameof(m_bApplyMotionFromRoot));
+            m_pSyncScene = default;
+            m_StartMarkWS = default;
+            m_EndMarkWS = default;
+            m_StartMarkMS = default;
+            m_fCurrentLerp = default;
+            m_pLocalSyncBinding = default;
+            m_pEventMap = default;
+            m_sAnimationBindingIndex = xd.ReadInt16(xe, nameof(m_sAnimationBindingIndex));
+            m_bAtMark = default;
+            m_bAllCharactersInScene = default;
+            m_bAllCharactersAtMarks = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

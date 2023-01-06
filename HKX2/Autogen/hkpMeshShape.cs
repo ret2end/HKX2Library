@@ -17,11 +17,11 @@ namespace HKX2
     {
         public Vector4 m_scaling;
         public int m_numBitsForSubpartIndex;
-        public List<hkpMeshShapeSubpart> m_subparts;
+        public List<hkpMeshShapeSubpart> m_subparts = new List<hkpMeshShapeSubpart>();
         public List<ushort> m_weldingInfo;
         public byte m_weldingType;
         public float m_radius;
-        public List<int> m_pad;
+        public int[] m_pad = new int[3];
 
         public override uint Signature => 0x3bf12c0f;
 
@@ -57,7 +57,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_scaling = xd.ReadVector4(xe, nameof(m_scaling));
+            m_numBitsForSubpartIndex = xd.ReadInt32(xe, nameof(m_numBitsForSubpartIndex));
+            m_subparts = xd.ReadClassArray<hkpMeshShapeSubpart>(xe, nameof(m_subparts));
+            m_weldingInfo = xd.ReadUInt16Array(xe, nameof(m_weldingInfo));
+            m_weldingType = xd.ReadFlag<WeldingType, byte>(xe, nameof(m_weldingType));
+            m_radius = xd.ReadSingle(xe, nameof(m_radius));
+            m_pad = xd.ReadInt32CStyleArray(xe, nameof(m_pad), 3);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

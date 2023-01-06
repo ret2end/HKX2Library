@@ -34,7 +34,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_boneA = xd.ReadInt16(xe, nameof(m_boneA));
+            m_boneB = xd.ReadInt16(xe, nameof(m_boneB));
+            m_aFromBTransform = xd.ReadQSTransform(xe, nameof(m_aFromBTransform));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

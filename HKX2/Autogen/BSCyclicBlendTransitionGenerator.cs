@@ -16,8 +16,8 @@ namespace HKX2
     public partial class BSCyclicBlendTransitionGenerator : hkbGenerator
     {
         public hkbGenerator m_pBlenderGenerator;
-        public hkbEventProperty m_EventToFreezeBlendValue;
-        public hkbEventProperty m_EventToCrossBlend;
+        public hkbEventProperty m_EventToFreezeBlendValue = new hkbEventProperty();
+        public hkbEventProperty m_EventToCrossBlend = new hkbEventProperty();
         public float m_fBlendParameter;
         public float m_fTransitionDuration;
         public sbyte m_eBlendCurve;
@@ -67,7 +67,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pBlenderGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pBlenderGenerator));
+            m_EventToFreezeBlendValue = xd.ReadClass<hkbEventProperty>(xe, nameof(m_EventToFreezeBlendValue));
+            m_EventToCrossBlend = xd.ReadClass<hkbEventProperty>(xe, nameof(m_EventToCrossBlend));
+            m_fBlendParameter = xd.ReadSingle(xe, nameof(m_fBlendParameter));
+            m_fTransitionDuration = xd.ReadSingle(xe, nameof(m_fTransitionDuration));
+            m_eBlendCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_eBlendCurve));
+            m_pTransitionBlenderGenerator = default;
+            m_pTransitionEffect = default;
+            m_currentMode = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

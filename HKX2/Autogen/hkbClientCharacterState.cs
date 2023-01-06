@@ -30,7 +30,7 @@ namespace HKX2
         public List<ulong> m_deformableSkinIds;
         public List<ulong> m_rigidSkinIds;
         public List<short> m_externalEventIds;
-        public List<hkbAuxiliaryNodeInfo> m_auxiliaryInfo;
+        public List<hkbAuxiliaryNodeInfo> m_auxiliaryInfo = new List<hkbAuxiliaryNodeInfo>();
         public List<short> m_activeEventIds;
         public List<short> m_activeVariableIds;
         public ulong m_characterId;
@@ -103,7 +103,26 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_deformableSkinIds = xd.ReadUInt64Array(xe, nameof(m_deformableSkinIds));
+            m_rigidSkinIds = xd.ReadUInt64Array(xe, nameof(m_rigidSkinIds));
+            m_externalEventIds = xd.ReadInt16Array(xe, nameof(m_externalEventIds));
+            m_auxiliaryInfo = xd.ReadClassPointerArray<hkbAuxiliaryNodeInfo>(xe, nameof(m_auxiliaryInfo));
+            m_activeEventIds = xd.ReadInt16Array(xe, nameof(m_activeEventIds));
+            m_activeVariableIds = xd.ReadInt16Array(xe, nameof(m_activeVariableIds));
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_instanceName = xd.ReadString(xe, nameof(m_instanceName));
+            m_templateName = xd.ReadString(xe, nameof(m_templateName));
+            m_fullPathToProject = xd.ReadString(xe, nameof(m_fullPathToProject));
+            m_behaviorData = xd.ReadClassPointer<hkbBehaviorGraphData>(xe, nameof(m_behaviorData));
+            m_behaviorInternalState = xd.ReadClassPointer<hkbBehaviorGraphInternalState>(xe, nameof(m_behaviorInternalState));
+            m_nodeIdToInternalStateMap = default;
+            m_visible = xd.ReadBoolean(xe, nameof(m_visible));
+            m_elapsedSimulationTime = xd.ReadSingle(xe, nameof(m_elapsedSimulationTime));
+            m_skeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeleton));
+            m_worldFromModel = xd.ReadQSTransform(xe, nameof(m_worldFromModel));
+            m_poseModelSpace = xd.ReadQSTransformArray(xe, nameof(m_poseModelSpace));
+            m_rigidAttachmentTransforms = xd.ReadQSTransformArray(xe, nameof(m_rigidAttachmentTransforms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

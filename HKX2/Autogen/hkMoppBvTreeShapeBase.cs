@@ -40,7 +40,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_code = xd.ReadClassPointer<hkpMoppCode>(xe, nameof(m_code));
+            m_moppData = default;
+            m_moppDataSize = default;
+            m_codeInfoCopy = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

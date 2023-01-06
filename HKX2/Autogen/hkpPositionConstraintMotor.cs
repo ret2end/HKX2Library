@@ -37,7 +37,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_tau = xd.ReadSingle(xe, nameof(m_tau));
+            m_damping = xd.ReadSingle(xe, nameof(m_damping));
+            m_proportionalRecoveryVelocity = xd.ReadSingle(xe, nameof(m_proportionalRecoveryVelocity));
+            m_constantRecoveryVelocity = xd.ReadSingle(xe, nameof(m_constantRecoveryVelocity));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +7,7 @@ namespace HKX2
     // m_values m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 4 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkPackedVector3 : IHavokObject
     {
-        public List<short> m_values;
+        public short[] m_values = new short[4];
 
         public virtual uint Signature => 0x9c16df5b;
 
@@ -24,7 +23,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_values = xd.ReadInt16CStyleArray(xe, nameof(m_values), 4);
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

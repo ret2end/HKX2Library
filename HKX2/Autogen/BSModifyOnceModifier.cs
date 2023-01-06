@@ -33,7 +33,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pOnActivateModifier = xd.ReadClassPointer<hkbModifier>(xe, nameof(m_pOnActivateModifier));
+            m_pOnDeactivateModifier = xd.ReadClassPointer<hkbModifier>(xe, nameof(m_pOnDeactivateModifier));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -11,8 +11,8 @@ namespace HKX2
     // m_skeleton m_class: hkaSkeleton Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkaRagdollInstance : hkReferencedObject
     {
-        public List<hkpRigidBody> m_rigidBodies;
-        public List<hkpConstraintInstance> m_constraints;
+        public List<hkpRigidBody> m_rigidBodies = new List<hkpRigidBody>();
+        public List<hkpConstraintInstance> m_constraints = new List<hkpConstraintInstance>();
         public List<int> m_boneToRigidBodyMap;
         public hkaSkeleton m_skeleton;
 
@@ -38,7 +38,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rigidBodies = xd.ReadClassPointerArray<hkpRigidBody>(xe, nameof(m_rigidBodies));
+            m_constraints = xd.ReadClassPointerArray<hkpConstraintInstance>(xe, nameof(m_constraints));
+            m_boneToRigidBodyMap = xd.ReadInt32Array(xe, nameof(m_boneToRigidBodyMap));
+            m_skeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeleton));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -18,12 +18,12 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteStringPointer(bw, m_value);
+            s.WriteCStringPointer(bw, m_value);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_value = xd.ReadString(xe, nameof(m_value));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

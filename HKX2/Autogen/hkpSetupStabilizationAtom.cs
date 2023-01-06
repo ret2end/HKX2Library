@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,7 +11,7 @@ namespace HKX2
     {
         public bool m_enabled;
         public float m_maxAngle;
-        public List<byte> m_padding;
+        public byte[] m_padding = new byte[8];
 
         public override uint Signature => 0xf05d137e;
 
@@ -36,7 +35,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_enabled = xd.ReadBoolean(xe, nameof(m_enabled));
+            m_maxAngle = xd.ReadSingle(xe, nameof(m_maxAngle));
+            m_padding = xd.ReadByteCStyleArray(xe, nameof(m_padding), 8);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

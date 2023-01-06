@@ -80,7 +80,20 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_dynamicFriction = xd.ReadSingle(xe, nameof(m_dynamicFriction));
+            m_staticFriction = xd.ReadSingle(xe, nameof(m_staticFriction));
+            m_keepContactTolerance = xd.ReadSingle(xe, nameof(m_keepContactTolerance));
+            m_up = xd.ReadVector4(xe, nameof(m_up));
+            m_keepDistance = xd.ReadSingle(xe, nameof(m_keepDistance));
+            m_contactAngleSensitivity = xd.ReadSingle(xe, nameof(m_contactAngleSensitivity));
+            m_userPlanes = xd.ReadUInt32(xe, nameof(m_userPlanes));
+            m_maxCharacterSpeedForSolver = xd.ReadSingle(xe, nameof(m_maxCharacterSpeedForSolver));
+            m_characterStrength = xd.ReadSingle(xe, nameof(m_characterStrength));
+            m_characterMass = xd.ReadSingle(xe, nameof(m_characterMass));
+            m_maxSlope = xd.ReadSingle(xe, nameof(m_maxSlope));
+            m_penetrationRecoverySpeed = xd.ReadSingle(xe, nameof(m_penetrationRecoverySpeed));
+            m_maxCastIterations = xd.ReadInt32(xe, nameof(m_maxCastIterations));
+            m_refreshManifoldInCheckSupport = xd.ReadBoolean(xe, nameof(m_refreshManifoldInCheckSupport));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

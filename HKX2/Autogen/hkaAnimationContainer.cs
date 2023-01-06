@@ -12,11 +12,11 @@ namespace HKX2
     // m_skins m_class: hkaMeshBinding Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkaAnimationContainer : hkReferencedObject
     {
-        public List<hkaSkeleton> m_skeletons;
-        public List<hkaAnimation> m_animations;
-        public List<hkaAnimationBinding> m_bindings;
-        public List<hkaBoneAttachment> m_attachments;
-        public List<hkaMeshBinding> m_skins;
+        public List<hkaSkeleton> m_skeletons = new List<hkaSkeleton>();
+        public List<hkaAnimation> m_animations = new List<hkaAnimation>();
+        public List<hkaAnimationBinding> m_bindings = new List<hkaAnimationBinding>();
+        public List<hkaBoneAttachment> m_attachments = new List<hkaBoneAttachment>();
+        public List<hkaMeshBinding> m_skins = new List<hkaMeshBinding>();
 
         public override uint Signature => 0x8dc20333;
 
@@ -42,7 +42,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_skeletons = xd.ReadClassPointerArray<hkaSkeleton>(xe, nameof(m_skeletons));
+            m_animations = xd.ReadClassPointerArray<hkaAnimation>(xe, nameof(m_animations));
+            m_bindings = xd.ReadClassPointerArray<hkaAnimationBinding>(xe, nameof(m_bindings));
+            m_attachments = xd.ReadClassPointerArray<hkaBoneAttachment>(xe, nameof(m_attachments));
+            m_skins = xd.ReadClassPointerArray<hkaMeshBinding>(xe, nameof(m_skins));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -49,7 +49,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_shape = xd.ReadClassPointer<hkpShape>(xe, nameof(m_shape));
+            m_isHierarchicalCompound = xd.ReadBoolean(xe, nameof(m_isHierarchicalCompound));
+            m_hkdShapesCollected = xd.ReadBoolean(xe, nameof(m_hkdShapesCollected));
+            m_childShapeNames = xd.ReadStringArray(xe, nameof(m_childShapeNames));
+            m_childTransforms = xd.ReadTransformArray(xe, nameof(m_childTransforms));
+            m_transform = xd.ReadTransform(xe, nameof(m_transform));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

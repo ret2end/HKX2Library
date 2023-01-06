@@ -8,7 +8,7 @@ namespace HKX2
     // m_previewInfo m_class: hkaFootstepAnalysisInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkaFootstepAnalysisInfoContainer : hkReferencedObject
     {
-        public List<hkaFootstepAnalysisInfo> m_previewInfo;
+        public List<hkaFootstepAnalysisInfo> m_previewInfo = new List<hkaFootstepAnalysisInfo>();
 
         public override uint Signature => 0x1d81207c;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_previewInfo = xd.ReadClassPointerArray<hkaFootstepAnalysisInfo>(xe, nameof(m_previewInfo));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

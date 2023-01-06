@@ -35,7 +35,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_enterEventId = xd.ReadInt32(xe, nameof(m_enterEventId));
+            m_exitEventId = xd.ReadInt32(xe, nameof(m_exitEventId));
+            m_enterTime = xd.ReadSingle(xe, nameof(m_enterTime));
+            m_exitTime = xd.ReadSingle(xe, nameof(m_exitTime));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

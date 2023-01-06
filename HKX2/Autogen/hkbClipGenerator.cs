@@ -135,7 +135,34 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_animationName = xd.ReadString(xe, nameof(m_animationName));
+            m_triggers = xd.ReadClassPointer<hkbClipTriggerArray>(xe, nameof(m_triggers));
+            m_cropStartAmountLocalTime = xd.ReadSingle(xe, nameof(m_cropStartAmountLocalTime));
+            m_cropEndAmountLocalTime = xd.ReadSingle(xe, nameof(m_cropEndAmountLocalTime));
+            m_startTime = xd.ReadSingle(xe, nameof(m_startTime));
+            m_playbackSpeed = xd.ReadSingle(xe, nameof(m_playbackSpeed));
+            m_enforcedDuration = xd.ReadSingle(xe, nameof(m_enforcedDuration));
+            m_userControlledTimeFraction = xd.ReadSingle(xe, nameof(m_userControlledTimeFraction));
+            m_animationBindingIndex = xd.ReadInt16(xe, nameof(m_animationBindingIndex));
+            m_mode = xd.ReadFlag<PlaybackMode, sbyte>(xe, nameof(m_mode));
+            m_flags = xd.ReadSByte(xe, nameof(m_flags));
+            m_animDatas = default;
+            m_animationControl = default;
+            m_originalTriggers = default;
+            m_mapperData = default;
+            m_binding = default;
+            m_mirroredAnimation = default;
+            m_extractedMotion = default;
+            m_echos = default;
+            m_localTime = default;
+            m_time = default;
+            m_previousUserControlledTimeFraction = default;
+            m_bufferSize = default;
+            m_echoBufferSize = default;
+            m_atEnd = default;
+            m_ignoreStartTime = default;
+            m_pingPongBackward = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

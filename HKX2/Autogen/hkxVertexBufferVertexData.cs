@@ -65,7 +65,17 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_vectorData = xd.ReadVector4Array(xe, nameof(m_vectorData));
+            m_floatData = xd.ReadSingleArray(xe, nameof(m_floatData));
+            m_uint32Data = xd.ReadUInt32Array(xe, nameof(m_uint32Data));
+            m_uint16Data = xd.ReadUInt16Array(xe, nameof(m_uint16Data));
+            m_uint8Data = xd.ReadByteArray(xe, nameof(m_uint8Data));
+            m_numVerts = xd.ReadUInt32(xe, nameof(m_numVerts));
+            m_vectorStride = xd.ReadUInt32(xe, nameof(m_vectorStride));
+            m_floatStride = xd.ReadUInt32(xe, nameof(m_floatStride));
+            m_uint32Stride = xd.ReadUInt32(xe, nameof(m_uint32Stride));
+            m_uint16Stride = xd.ReadUInt32(xe, nameof(m_uint16Stride));
+            m_uint8Stride = xd.ReadUInt32(xe, nameof(m_uint8Stride));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

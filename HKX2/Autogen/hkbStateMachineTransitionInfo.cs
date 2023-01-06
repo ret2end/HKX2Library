@@ -16,8 +16,8 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_INT16 arrSize: 0 offset: 66 flags: FLAGS_NONE enum: TransitionFlags
     public partial class hkbStateMachineTransitionInfo : IHavokObject
     {
-        public hkbStateMachineTimeInterval m_triggerInterval;
-        public hkbStateMachineTimeInterval m_initiateInterval;
+        public hkbStateMachineTimeInterval m_triggerInterval = new hkbStateMachineTimeInterval();
+        public hkbStateMachineTimeInterval m_initiateInterval = new hkbStateMachineTimeInterval();
         public hkbTransitionEffect m_transition;
         public hkbCondition m_condition;
         public int m_eventId;
@@ -63,7 +63,16 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_triggerInterval = xd.ReadClass<hkbStateMachineTimeInterval>(xe, nameof(m_triggerInterval));
+            m_initiateInterval = xd.ReadClass<hkbStateMachineTimeInterval>(xe, nameof(m_initiateInterval));
+            m_transition = xd.ReadClassPointer<hkbTransitionEffect>(xe, nameof(m_transition));
+            m_condition = xd.ReadClassPointer<hkbCondition>(xe, nameof(m_condition));
+            m_eventId = xd.ReadInt32(xe, nameof(m_eventId));
+            m_toStateId = xd.ReadInt32(xe, nameof(m_toStateId));
+            m_fromNestedStateId = xd.ReadInt32(xe, nameof(m_fromNestedStateId));
+            m_toNestedStateId = xd.ReadInt32(xe, nameof(m_toNestedStateId));
+            m_priority = xd.ReadInt16(xe, nameof(m_priority));
+            m_flags = xd.ReadFlag<TransitionFlags, short>(xe, nameof(m_flags));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

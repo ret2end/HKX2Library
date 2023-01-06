@@ -14,7 +14,7 @@ namespace HKX2
     {
         public ulong m_characterId;
         public hkbBehaviorGraphInternalState m_internalState;
-        public List<hkbAuxiliaryNodeInfo> m_auxiliaryNodeInfo;
+        public List<hkbAuxiliaryNodeInfo> m_auxiliaryNodeInfo = new List<hkbAuxiliaryNodeInfo>();
         public List<short> m_activeEventIds;
         public List<short> m_activeVariableIds;
 
@@ -42,7 +42,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_internalState = xd.ReadClassPointer<hkbBehaviorGraphInternalState>(xe, nameof(m_internalState));
+            m_auxiliaryNodeInfo = xd.ReadClassPointerArray<hkbAuxiliaryNodeInfo>(xe, nameof(m_auxiliaryNodeInfo));
+            m_activeEventIds = xd.ReadInt16Array(xe, nameof(m_activeEventIds));
+            m_activeVariableIds = xd.ReadInt16Array(xe, nameof(m_activeVariableIds));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

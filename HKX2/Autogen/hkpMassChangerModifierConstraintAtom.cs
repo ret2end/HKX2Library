@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_factorA = xd.ReadVector4(xe, nameof(m_factorA));
+            m_factorB = xd.ReadVector4(xe, nameof(m_factorB));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

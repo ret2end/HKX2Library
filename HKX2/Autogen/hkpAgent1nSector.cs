@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,7 +15,7 @@ namespace HKX2
         public uint m_pad0;
         public uint m_pad1;
         public uint m_pad2;
-        public List<byte> m_data;
+        public byte[] m_data = new byte[496];
 
         public virtual uint Signature => 0x626e55a;
 
@@ -40,7 +39,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_bytesAllocated = xd.ReadUInt32(xe, nameof(m_bytesAllocated));
+            m_pad0 = xd.ReadUInt32(xe, nameof(m_pad0));
+            m_pad1 = xd.ReadUInt32(xe, nameof(m_pad1));
+            m_pad2 = xd.ReadUInt32(xe, nameof(m_pad2));
+            m_data = xd.ReadByteCStyleArray(xe, nameof(m_data), 496);
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -16,7 +16,7 @@ namespace HKX2
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineStateInfo : hkbBindable
     {
-        public List<hkbStateListener> m_listeners;
+        public List<hkbStateListener> m_listeners = new List<hkbStateListener>();
         public hkbStateMachineEventPropertyArray m_enterNotifyEvents;
         public hkbStateMachineEventPropertyArray m_exitNotifyEvents;
         public hkbStateMachineTransitionInfoArray m_transitions;
@@ -60,7 +60,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_listeners = xd.ReadClassPointerArray<hkbStateListener>(xe, nameof(m_listeners));
+            m_enterNotifyEvents = xd.ReadClassPointer<hkbStateMachineEventPropertyArray>(xe, nameof(m_enterNotifyEvents));
+            m_exitNotifyEvents = xd.ReadClassPointer<hkbStateMachineEventPropertyArray>(xe, nameof(m_exitNotifyEvents));
+            m_transitions = xd.ReadClassPointer<hkbStateMachineTransitionInfoArray>(xe, nameof(m_transitions));
+            m_generator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_generator));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_stateId = xd.ReadInt32(xe, nameof(m_stateId));
+            m_probability = xd.ReadSingle(xe, nameof(m_probability));
+            m_enable = xd.ReadBoolean(xe, nameof(m_enable));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,7 +13,7 @@ namespace HKX2
         public ushort m_modifierAtomSize;
         public ushort m_childSize;
         public hkpConstraintAtom m_child;
-        public List<uint> m_pad;
+        public uint[] m_pad = new uint[2];
 
         public override uint Signature => 0xb13fef1f;
 
@@ -44,7 +43,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_modifierAtomSize = xd.ReadUInt16(xe, nameof(m_modifierAtomSize));
+            m_childSize = xd.ReadUInt16(xe, nameof(m_childSize));
+            m_child = xd.ReadClassPointer<hkpConstraintAtom>(xe, nameof(m_child));
+            m_pad = xd.ReadUInt32CStyleArray(xe, nameof(m_pad), 2);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

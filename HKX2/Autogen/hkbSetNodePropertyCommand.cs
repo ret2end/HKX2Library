@@ -14,7 +14,7 @@ namespace HKX2
         public ulong m_characterId;
         public string m_nodeName;
         public string m_propertyName;
-        public hkbVariableValue m_propertyValue;
+        public hkbVariableValue m_propertyValue = new hkbVariableValue();
         public int m_padding;
 
         public override uint Signature => 0xc5160b64;
@@ -42,7 +42,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_nodeName = xd.ReadString(xe, nameof(m_nodeName));
+            m_propertyName = xd.ReadString(xe, nameof(m_propertyName));
+            m_propertyValue = xd.ReadClass<hkbVariableValue>(xe, nameof(m_propertyValue));
+            m_padding = xd.ReadInt32(xe, nameof(m_padding));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

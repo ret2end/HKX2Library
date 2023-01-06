@@ -12,7 +12,7 @@ namespace HKX2
     {
         public ulong m_characterId;
         public hkbBehaviorGraphData m_data;
-        public List<hkbBehaviorInfoIdToNamePair> m_idToNamePairs;
+        public List<hkbBehaviorInfoIdToNamePair> m_idToNamePairs = new List<hkbBehaviorInfoIdToNamePair>();
 
         public override uint Signature => 0xf7645395;
 
@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_data = xd.ReadClassPointer<hkbBehaviorGraphData>(xe, nameof(m_data));
+            m_idToNamePairs = xd.ReadClassArray<hkbBehaviorInfoIdToNamePair>(xe, nameof(m_idToNamePairs));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

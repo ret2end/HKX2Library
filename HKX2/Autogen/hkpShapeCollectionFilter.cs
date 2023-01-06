@@ -7,7 +7,7 @@ namespace HKX2
 
     public partial class hkpShapeCollectionFilter : IHavokObject
     {
-        public byte[] unk0;
+        public byte[] unk0 = new byte[8];
 
         public virtual uint Signature => 0xe0708a00;
 

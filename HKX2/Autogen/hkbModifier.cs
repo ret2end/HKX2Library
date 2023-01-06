@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,7 +9,7 @@ namespace HKX2
     public partial class hkbModifier : hkbNode
     {
         public bool m_enable;
-        public List<bool> m_padModifier;
+        public bool[] m_padModifier = new bool[3];
 
         public override uint Signature => 0x96ec5ced;
 
@@ -32,7 +31,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_enable = xd.ReadBoolean(xe, nameof(m_enable));
+            m_padModifier = new bool[3];
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

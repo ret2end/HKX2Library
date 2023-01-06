@@ -10,10 +10,10 @@ namespace HKX2
     // m_ballSocket m_class: hkpBallSocketConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 164 flags: FLAGS_NONE enum: 
     public partial class hkpHingeConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms;
-        public hkpSetupStabilizationAtom m_setupStabilization;
-        public hkp2dAngConstraintAtom m_2dAng;
-        public hkpBallSocketConstraintAtom m_ballSocket;
+        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
+        public hkpSetupStabilizationAtom m_setupStabilization = new hkpSetupStabilizationAtom();
+        public hkp2dAngConstraintAtom m_2dAng = new hkp2dAngConstraintAtom();
+        public hkpBallSocketConstraintAtom m_ballSocket = new hkpBallSocketConstraintAtom();
 
         public virtual uint Signature => 0x6958371c;
 
@@ -41,7 +41,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transforms = xd.ReadClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms));
+            m_setupStabilization = xd.ReadClass<hkpSetupStabilizationAtom>(xe, nameof(m_setupStabilization));
+            m_2dAng = xd.ReadClass<hkp2dAngConstraintAtom>(xe, nameof(m_2dAng));
+            m_ballSocket = xd.ReadClass<hkpBallSocketConstraintAtom>(xe, nameof(m_ballSocket));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

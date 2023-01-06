@@ -56,7 +56,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rotation = xd.ReadQuaternion(xe, nameof(m_rotation));
+            m_translation = xd.ReadVector4(xe, nameof(m_translation));
+            m_vectorIn = xd.ReadVector4(xe, nameof(m_vectorIn));
+            m_vectorOut = xd.ReadVector4(xe, nameof(m_vectorOut));
+            m_rotateOnly = xd.ReadBoolean(xe, nameof(m_rotateOnly));
+            m_inverse = xd.ReadBoolean(xe, nameof(m_inverse));
+            m_computeOnActivate = xd.ReadBoolean(xe, nameof(m_computeOnActivate));
+            m_computeOnModify = xd.ReadBoolean(xe, nameof(m_computeOnModify));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

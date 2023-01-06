@@ -56,7 +56,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_lastForce = xd.ReadVector4(xe, nameof(m_lastForce));
+            m_positionAinA = xd.ReadVector4(xe, nameof(m_positionAinA));
+            m_positionBinB = xd.ReadVector4(xe, nameof(m_positionBinB));
+            m_restLength = xd.ReadSingle(xe, nameof(m_restLength));
+            m_strength = xd.ReadSingle(xe, nameof(m_strength));
+            m_damping = xd.ReadSingle(xe, nameof(m_damping));
+            m_onCompression = xd.ReadBoolean(xe, nameof(m_onCompression));
+            m_onExtension = xd.ReadBoolean(xe, nameof(m_onExtension));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

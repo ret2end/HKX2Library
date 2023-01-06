@@ -16,7 +16,7 @@ namespace HKX2
         public Vector4 m_quadValue;
         public ulong m_characterId;
         public int m_variableId;
-        public hkbVariableValue m_value;
+        public hkbVariableValue m_value = new hkbVariableValue();
         public byte m_type;
         public bool m_global;
 
@@ -49,7 +49,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_quadValue = xd.ReadVector4(xe, nameof(m_quadValue));
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_variableId = xd.ReadInt32(xe, nameof(m_variableId));
+            m_value = xd.ReadClass<hkbVariableValue>(xe, nameof(m_value));
+            m_type = xd.ReadFlag<VariableType, byte>(xe, nameof(m_type));
+            m_global = xd.ReadBoolean(xe, nameof(m_global));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

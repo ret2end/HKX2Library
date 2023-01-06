@@ -55,7 +55,15 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_sectionTag = xd.ReadString(xe, nameof(m_sectionTag));
+            m_nullByte = xd.ReadString(xe, nameof(m_nullByte));
+            m_absoluteDataStart = xd.ReadInt32(xe, nameof(m_absoluteDataStart));
+            m_localFixupsOffset = xd.ReadInt32(xe, nameof(m_localFixupsOffset));
+            m_globalFixupsOffset = xd.ReadInt32(xe, nameof(m_globalFixupsOffset));
+            m_virtualFixupsOffset = xd.ReadInt32(xe, nameof(m_virtualFixupsOffset));
+            m_exportsOffset = xd.ReadInt32(xe, nameof(m_exportsOffset));
+            m_importsOffset = xd.ReadInt32(xe, nameof(m_importsOffset));
+            m_endOffset = xd.ReadInt32(xe, nameof(m_endOffset));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

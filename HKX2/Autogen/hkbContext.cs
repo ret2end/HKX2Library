@@ -61,7 +61,16 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_character = default;
+            m_behavior = default;
+            m_nodeToIndexMap = default;
+            m_eventQueue = default;
+            m_sharedEventQueue = default;
+            m_generatorOutputListener = xd.ReadClassPointer<hkbGeneratorOutputListener>(xe, nameof(m_generatorOutputListener));
+            m_eventTriggeredTransition = default;
+            m_world = default;
+            m_attachmentManager = default;
+            m_animationCache = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

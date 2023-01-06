@@ -40,7 +40,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_desiredVelocity = xd.ReadVector4(xe, nameof(m_desiredVelocity));
+            m_verticalGain = xd.ReadSingle(xe, nameof(m_verticalGain));
+            m_horizontalCatchUpGain = xd.ReadSingle(xe, nameof(m_horizontalCatchUpGain));
+            m_maxVerticalSeparation = xd.ReadSingle(xe, nameof(m_maxVerticalSeparation));
+            m_maxHorizontalSeparation = xd.ReadSingle(xe, nameof(m_maxHorizontalSeparation));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

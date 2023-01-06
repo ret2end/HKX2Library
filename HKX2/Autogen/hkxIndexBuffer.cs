@@ -44,7 +44,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_indexType = xd.ReadFlag<IndexType, sbyte>(xe, nameof(m_indexType));
+            m_indices16 = xd.ReadUInt16Array(xe, nameof(m_indices16));
+            m_indices32 = xd.ReadUInt32Array(xe, nameof(m_indices32));
+            m_vertexBaseOffset = xd.ReadUInt32(xe, nameof(m_vertexBaseOffset));
+            m_length = xd.ReadUInt32(xe, nameof(m_length));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

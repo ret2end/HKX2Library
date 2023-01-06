@@ -21,7 +21,7 @@ namespace HKX2
         public byte m_numUserDatasForBodyB;
         public byte m_contactPointPropertiesStriding;
         public ushort m_maxNumContactPoints;
-        public hkpSimpleContactConstraintDataInfo m_info;
+        public hkpSimpleContactConstraintDataInfo m_info = new hkpSimpleContactConstraintDataInfo();
 
         public override uint Signature => 0x920df11a;
 
@@ -58,7 +58,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_sizeOfAllAtoms = xd.ReadUInt16(xe, nameof(m_sizeOfAllAtoms));
+            m_numContactPoints = xd.ReadUInt16(xe, nameof(m_numContactPoints));
+            m_numReservedContactPoints = xd.ReadUInt16(xe, nameof(m_numReservedContactPoints));
+            m_numUserDatasForBodyA = xd.ReadByte(xe, nameof(m_numUserDatasForBodyA));
+            m_numUserDatasForBodyB = xd.ReadByte(xe, nameof(m_numUserDatasForBodyB));
+            m_contactPointPropertiesStriding = xd.ReadByte(xe, nameof(m_contactPointPropertiesStriding));
+            m_maxNumContactPoints = xd.ReadUInt16(xe, nameof(m_maxNumContactPoints));
+            m_info = xd.ReadClass<hkpSimpleContactConstraintDataInfo>(xe, nameof(m_info));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

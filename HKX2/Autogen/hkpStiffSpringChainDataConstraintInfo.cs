@@ -34,7 +34,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_pivotInA = xd.ReadVector4(xe, nameof(m_pivotInA));
+            m_pivotInB = xd.ReadVector4(xe, nameof(m_pivotInB));
+            m_springLength = xd.ReadSingle(xe, nameof(m_springLength));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -10,7 +10,7 @@ namespace HKX2
     // m_ignoreHandle m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkbSenseHandleModifierRange : IHavokObject
     {
-        public hkbEventProperty m_event;
+        public hkbEventProperty m_event = new hkbEventProperty();
         public float m_minDistance;
         public float m_maxDistance;
         public bool m_ignoreHandle;
@@ -38,7 +38,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_event = xd.ReadClass<hkbEventProperty>(xe, nameof(m_event));
+            m_minDistance = xd.ReadSingle(xe, nameof(m_minDistance));
+            m_maxDistance = xd.ReadSingle(xe, nameof(m_maxDistance));
+            m_ignoreHandle = xd.ReadBoolean(xe, nameof(m_ignoreHandle));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

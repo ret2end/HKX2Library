@@ -33,7 +33,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_sortValue = xd.ReadUInt64(xe, nameof(m_sortValue));
+            m_body = xd.ReadClassPointer<hkpRigidBody>(xe, nameof(m_body));
+            m_operation = xd.ReadFlag<Operation, int>(xe, nameof(m_operation));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

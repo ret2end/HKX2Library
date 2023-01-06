@@ -10,7 +10,7 @@ namespace HKX2
     public partial class hkbEventRangeData : IHavokObject
     {
         public float m_upperBound;
-        public hkbEventProperty m_event;
+        public hkbEventProperty m_event = new hkbEventProperty();
         public sbyte m_eventMode;
 
         public virtual uint Signature => 0x6cb92c76;
@@ -36,7 +36,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_upperBound = xd.ReadSingle(xe, nameof(m_upperBound));
+            m_event = xd.ReadClass<hkbEventProperty>(xe, nameof(m_event));
+            m_eventMode = xd.ReadFlag<EventRangeMode, sbyte>(xe, nameof(m_eventMode));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

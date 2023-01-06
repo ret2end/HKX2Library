@@ -12,8 +12,8 @@ namespace HKX2
     // m_alignWithGroundRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 160 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkControlsModifier : hkbModifier
     {
-        public hkbFootIkControlData m_controlData;
-        public List<hkbFootIkControlsModifierLeg> m_legs;
+        public hkbFootIkControlData m_controlData = new hkbFootIkControlData();
+        public List<hkbFootIkControlsModifierLeg> m_legs = new List<hkbFootIkControlsModifierLeg>();
         public Vector4 m_errorOutTranslation;
         public Quaternion m_alignWithGroundRotation;
 
@@ -40,7 +40,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_controlData = xd.ReadClass<hkbFootIkControlData>(xe, nameof(m_controlData));
+            m_legs = xd.ReadClassArray<hkbFootIkControlsModifierLeg>(xe, nameof(m_legs));
+            m_errorOutTranslation = xd.ReadVector4(xe, nameof(m_errorOutTranslation));
+            m_alignWithGroundRotation = xd.ReadQuaternion(xe, nameof(m_alignWithGroundRotation));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

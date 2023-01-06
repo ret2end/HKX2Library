@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +7,7 @@ namespace HKX2
     // m_pad16 m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 3 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpSphereShape : hkpConvexShape
     {
-        public List<uint> m_pad16;
+        public uint[] m_pad16 = new uint[3];
 
         public override uint Signature => 0x795d9fa;
 
@@ -28,7 +27,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pad16 = new uint[3];
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

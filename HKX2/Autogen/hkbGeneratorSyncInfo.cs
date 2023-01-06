@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,7 +14,7 @@ namespace HKX2
     // m_isAdditive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 79 flags: FLAGS_NONE enum: 
     public partial class hkbGeneratorSyncInfo : IHavokObject
     {
-        public List<hkbGeneratorSyncInfoSyncPoint> m_syncPoints;
+        public hkbGeneratorSyncInfoSyncPoint[] m_syncPoints = new hkbGeneratorSyncInfoSyncPoint[8];
         public float m_baseFrequency;
         public float m_localTime;
         public float m_playbackSpeed;
@@ -54,7 +53,14 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_syncPoints = xd.ReadClassCStyleArray<hkbGeneratorSyncInfoSyncPoint>(xe, nameof(m_syncPoints), 8);
+            m_baseFrequency = xd.ReadSingle(xe, nameof(m_baseFrequency));
+            m_localTime = xd.ReadSingle(xe, nameof(m_localTime));
+            m_playbackSpeed = xd.ReadSingle(xe, nameof(m_playbackSpeed));
+            m_numSyncPoints = xd.ReadSByte(xe, nameof(m_numSyncPoints));
+            m_isCyclic = xd.ReadBoolean(xe, nameof(m_isCyclic));
+            m_isMirrored = xd.ReadBoolean(xe, nameof(m_isMirrored));
+            m_isAdditive = xd.ReadBoolean(xe, nameof(m_isAdditive));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

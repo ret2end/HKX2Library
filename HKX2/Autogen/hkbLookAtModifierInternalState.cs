@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_lookAtLastTargetWS = xd.ReadVector4(xe, nameof(m_lookAtLastTargetWS));
+            m_lookAtWeight = xd.ReadSingle(xe, nameof(m_lookAtWeight));
+            m_isTargetInsideLimitCone = xd.ReadBoolean(xe, nameof(m_isTargetInsideLimitCone));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

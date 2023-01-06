@@ -26,7 +26,7 @@ namespace HKX2
         public float m_extrapolationTimeStep;
         public float m_handleChangeSpeed;
         public sbyte m_handleChangeMode;
-        public hkbHandle m_oldHandle;
+        public hkbHandle m_oldHandle = new hkbHandle();
         public Vector4 m_oldHandlePosition;
         public Quaternion m_oldHandleRotation;
         public float m_timeSinceLastModify;
@@ -79,7 +79,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_handle = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_handle));
+            m_handlePositionOut = xd.ReadVector4(xe, nameof(m_handlePositionOut));
+            m_handleRotationOut = xd.ReadQuaternion(xe, nameof(m_handleRotationOut));
+            m_isValidOut = xd.ReadBoolean(xe, nameof(m_isValidOut));
+            m_extrapolationTimeStep = xd.ReadSingle(xe, nameof(m_extrapolationTimeStep));
+            m_handleChangeSpeed = xd.ReadSingle(xe, nameof(m_handleChangeSpeed));
+            m_handleChangeMode = xd.ReadFlag<HandleChangeMode, sbyte>(xe, nameof(m_handleChangeMode));
+            m_oldHandle = new hkbHandle();
+            m_oldHandlePosition = default;
+            m_oldHandleRotation = default;
+            m_timeSinceLastModify = default;
+            m_smoothlyChangingHandles = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -14,7 +14,7 @@ namespace HKX2
         public byte m_type;
         public string m_name;
         public byte m_keyboardKey;
-        public List<dynamic> m_listeners;
+        public List<dynamic> m_listeners = new List<dynamic>();
 
         public override uint Signature => 0x852ab70b;
 
@@ -42,7 +42,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = default;
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_keyboardKey = xd.ReadFlag<KeyboardKey, byte>(xe, nameof(m_keyboardKey));
+            m_listeners = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

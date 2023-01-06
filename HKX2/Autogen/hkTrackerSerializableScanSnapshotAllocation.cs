@@ -33,7 +33,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_start = xd.ReadUInt64(xe, nameof(m_start));
+            m_size = xd.ReadUInt64(xe, nameof(m_size));
+            m_traceId = xd.ReadInt32(xe, nameof(m_traceId));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

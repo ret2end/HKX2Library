@@ -29,7 +29,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteStringPointer(bw, m_name);
+            s.WriteCStringPointer(bw, m_name);
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
             s.WriteClassPointer(bw, m_attributes);
             bw.WriteUInt32(m_flags);
@@ -38,7 +38,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
+            m_attributes = default;
+            m_flags = xd.ReadFlag<FlagValues, uint>(xe, nameof(m_flags));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

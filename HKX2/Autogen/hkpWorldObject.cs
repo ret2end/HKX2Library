@@ -16,10 +16,10 @@ namespace HKX2
     {
         public dynamic m_world;
         public ulong m_userData;
-        public hkpLinkedCollidable m_collidable;
-        public hkMultiThreadCheck m_multiThreadCheck;
+        public hkpLinkedCollidable m_collidable = new hkpLinkedCollidable();
+        public hkMultiThreadCheck m_multiThreadCheck = new hkMultiThreadCheck();
         public string m_name;
-        public List<hkpProperty> m_properties;
+        public List<hkpProperty> m_properties = new List<hkpProperty>();
         public dynamic m_treeData;
 
         public override uint Signature => 0x49fb6f2e;
@@ -54,7 +54,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_world = default;
+            m_userData = xd.ReadUInt64(xe, nameof(m_userData));
+            m_collidable = xd.ReadClass<hkpLinkedCollidable>(xe, nameof(m_collidable));
+            m_multiThreadCheck = xd.ReadClass<hkMultiThreadCheck>(xe, nameof(m_multiThreadCheck));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_properties = xd.ReadClassArray<hkpProperty>(xe, nameof(m_properties));
+            m_treeData = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

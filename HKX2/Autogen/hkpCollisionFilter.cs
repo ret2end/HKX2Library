@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +9,9 @@ namespace HKX2
     // m_postpad m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 3 offset: 60 flags: FLAGS_NONE enum: 
     public partial class hkpCollisionFilter : hkReferencedObject
     {
-        public List<uint> m_prepad;
+        public uint[] m_prepad = new uint[2];
         public uint m_type;
-        public List<uint> m_postpad;
+        public uint[] m_postpad = new uint[3];
 
         public override uint Signature => 0x60960336;
 
@@ -36,7 +35,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_prepad = xd.ReadUInt32CStyleArray(xe, nameof(m_prepad), 2);
+            m_type = xd.ReadFlag<hkpFilterType, uint>(xe, nameof(m_type));
+            m_postpad = xd.ReadUInt32CStyleArray(xe, nameof(m_postpad), 3);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

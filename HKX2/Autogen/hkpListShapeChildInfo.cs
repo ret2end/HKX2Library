@@ -37,7 +37,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_shape = xd.ReadClassPointer<hkpShape>(xe, nameof(m_shape));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_shapeSize = default;
+            m_numChildShapes = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

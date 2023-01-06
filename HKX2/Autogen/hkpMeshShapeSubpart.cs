@@ -85,7 +85,21 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_vertexBase = default;
+            m_vertexStriding = xd.ReadInt32(xe, nameof(m_vertexStriding));
+            m_numVertices = xd.ReadInt32(xe, nameof(m_numVertices));
+            m_indexBase = default;
+            m_stridingType = xd.ReadFlag<MeshShapeIndexStridingType, sbyte>(xe, nameof(m_stridingType));
+            m_materialIndexStridingType = xd.ReadFlag<MeshShapeMaterialIndexStridingType, sbyte>(xe, nameof(m_materialIndexStridingType));
+            m_indexStriding = xd.ReadInt32(xe, nameof(m_indexStriding));
+            m_flipAlternateTriangles = xd.ReadInt32(xe, nameof(m_flipAlternateTriangles));
+            m_numTriangles = xd.ReadInt32(xe, nameof(m_numTriangles));
+            m_materialIndexBase = default;
+            m_materialIndexStriding = xd.ReadInt32(xe, nameof(m_materialIndexStriding));
+            m_materialBase = default;
+            m_materialStriding = xd.ReadInt32(xe, nameof(m_materialStriding));
+            m_numMaterials = xd.ReadInt32(xe, nameof(m_numMaterials));
+            m_triangleOffset = xd.ReadInt32(xe, nameof(m_triangleOffset));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

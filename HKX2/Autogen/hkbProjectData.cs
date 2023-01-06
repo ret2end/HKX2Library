@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_worldUpWS = xd.ReadVector4(xe, nameof(m_worldUpWS));
+            m_stringData = xd.ReadClassPointer<hkbProjectStringData>(xe, nameof(m_stringData));
+            m_defaultEventMode = xd.ReadFlag<EventMode, sbyte>(xe, nameof(m_defaultEventMode));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

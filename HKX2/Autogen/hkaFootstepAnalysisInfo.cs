@@ -80,7 +80,21 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_nameStrike = xd.ReadString(xe, nameof(m_nameStrike));
+            m_nameLift = xd.ReadString(xe, nameof(m_nameLift));
+            m_nameLock = xd.ReadString(xe, nameof(m_nameLock));
+            m_nameUnlock = xd.ReadString(xe, nameof(m_nameUnlock));
+            m_minPos = xd.ReadSingleArray(xe, nameof(m_minPos));
+            m_maxPos = xd.ReadSingleArray(xe, nameof(m_maxPos));
+            m_minVel = xd.ReadSingleArray(xe, nameof(m_minVel));
+            m_maxVel = xd.ReadSingleArray(xe, nameof(m_maxVel));
+            m_allBonesDown = xd.ReadSingleArray(xe, nameof(m_allBonesDown));
+            m_anyBonesDown = xd.ReadSingleArray(xe, nameof(m_anyBonesDown));
+            m_posTol = xd.ReadSingle(xe, nameof(m_posTol));
+            m_velTol = xd.ReadSingle(xe, nameof(m_velTol));
+            m_duration = xd.ReadSingle(xe, nameof(m_duration));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

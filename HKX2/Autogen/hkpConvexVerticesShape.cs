@@ -18,7 +18,7 @@ namespace HKX2
     {
         public Vector4 m_aabbHalfExtents;
         public Vector4 m_aabbCenter;
-        public List<hkpConvexVerticesShapeFourVectors> m_rotatedVertices;
+        public List<hkpConvexVerticesShapeFourVectors> m_rotatedVertices = new List<hkpConvexVerticesShapeFourVectors>();
         public int m_numVertices;
         public dynamic m_externalObject;
         public dynamic m_getFaceNormals;
@@ -59,7 +59,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_aabbHalfExtents = xd.ReadVector4(xe, nameof(m_aabbHalfExtents));
+            m_aabbCenter = xd.ReadVector4(xe, nameof(m_aabbCenter));
+            m_rotatedVertices = xd.ReadClassArray<hkpConvexVerticesShapeFourVectors>(xe, nameof(m_rotatedVertices));
+            m_numVertices = xd.ReadInt32(xe, nameof(m_numVertices));
+            m_externalObject = default;
+            m_getFaceNormals = default;
+            m_planeEquations = xd.ReadVector4Array(xe, nameof(m_planeEquations));
+            m_connectivity = xd.ReadClassPointer<hkpConvexVerticesConnectivity>(xe, nameof(m_connectivity));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

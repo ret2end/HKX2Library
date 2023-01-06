@@ -54,7 +54,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bulletRadius = xd.ReadSingle(xe, nameof(m_bulletRadius));
+            m_bulletVelocity = xd.ReadSingle(xe, nameof(m_bulletVelocity));
+            m_bulletMass = xd.ReadSingle(xe, nameof(m_bulletMass));
+            m_damageMultiplier = xd.ReadSingle(xe, nameof(m_damageMultiplier));
+            m_maxBulletsInWorld = xd.ReadInt32(xe, nameof(m_maxBulletsInWorld));
+            m_bulletOffsetFromCenter = xd.ReadVector4(xe, nameof(m_bulletOffsetFromCenter));
+            m_addedBodies = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

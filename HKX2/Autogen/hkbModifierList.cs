@@ -8,7 +8,7 @@ namespace HKX2
     // m_modifiers m_class: hkbModifier Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbModifierList : hkbModifier
     {
-        public List<hkbModifier> m_modifiers;
+        public List<hkbModifier> m_modifiers = new List<hkbModifier>();
 
         public override uint Signature => 0xa4180ca1;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_modifiers = xd.ReadClassPointerArray<hkbModifier>(xe, nameof(m_modifiers));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

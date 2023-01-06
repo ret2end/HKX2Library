@@ -28,7 +28,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rotation = xd.ReadQuaternion(xe, nameof(m_rotation));
+            m_translation = xd.ReadVector4(xe, nameof(m_translation));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

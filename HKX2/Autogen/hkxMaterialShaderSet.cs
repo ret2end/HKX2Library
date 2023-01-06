@@ -8,7 +8,7 @@ namespace HKX2
     // m_shaders m_class: hkxMaterialShader Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxMaterialShaderSet : hkReferencedObject
     {
-        public List<hkxMaterialShader> m_shaders;
+        public List<hkxMaterialShader> m_shaders = new List<hkxMaterialShader>();
 
         public override uint Signature => 0x154650f3;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_shaders = xd.ReadClassPointerArray<hkxMaterialShader>(xe, nameof(m_shaders));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

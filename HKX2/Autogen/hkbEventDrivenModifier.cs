@@ -39,7 +39,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_activateEventId = xd.ReadInt32(xe, nameof(m_activateEventId));
+            m_deactivateEventId = xd.ReadInt32(xe, nameof(m_deactivateEventId));
+            m_activeByDefault = xd.ReadBoolean(xe, nameof(m_activeByDefault));
+            m_isActive = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

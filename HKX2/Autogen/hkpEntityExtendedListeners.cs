@@ -8,8 +8,8 @@ namespace HKX2
     // m_entityListeners m_class: hkpEntitySmallArraySerializeOverrideType Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpEntityExtendedListeners : IHavokObject
     {
-        public hkpEntitySmallArraySerializeOverrideType m_activationListeners;
-        public hkpEntitySmallArraySerializeOverrideType m_entityListeners;
+        public hkpEntitySmallArraySerializeOverrideType m_activationListeners = new hkpEntitySmallArraySerializeOverrideType();
+        public hkpEntitySmallArraySerializeOverrideType m_entityListeners = new hkpEntitySmallArraySerializeOverrideType();
 
         public virtual uint Signature => 0xf557023c;
 
@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_activationListeners = new hkpEntitySmallArraySerializeOverrideType();
+            m_entityListeners = new hkpEntitySmallArraySerializeOverrideType();
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -27,9 +27,9 @@ namespace HKX2
     // m_rangeIndexForEventToSendNextUpdate m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 220 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbSenseHandleModifier : hkbModifier
     {
-        public hkbHandle m_handle;
+        public hkbHandle m_handle = new hkbHandle();
         public Vector4 m_sensorLocalOffset;
-        public List<hkbSenseHandleModifierRange> m_ranges;
+        public List<hkbSenseHandleModifierRange> m_ranges = new List<hkbSenseHandleModifierRange>();
         public hkbHandle m_handleOut;
         public hkbHandle m_handleIn;
         public string m_localFrameName;
@@ -100,7 +100,26 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_handle = new hkbHandle();
+            m_sensorLocalOffset = xd.ReadVector4(xe, nameof(m_sensorLocalOffset));
+            m_ranges = xd.ReadClassArray<hkbSenseHandleModifierRange>(xe, nameof(m_ranges));
+            m_handleOut = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_handleOut));
+            m_handleIn = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_handleIn));
+            m_localFrameName = xd.ReadString(xe, nameof(m_localFrameName));
+            m_sensorLocalFrameName = xd.ReadString(xe, nameof(m_sensorLocalFrameName));
+            m_minDistance = xd.ReadSingle(xe, nameof(m_minDistance));
+            m_maxDistance = xd.ReadSingle(xe, nameof(m_maxDistance));
+            m_distanceOut = xd.ReadSingle(xe, nameof(m_distanceOut));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_sensorRagdollBoneIndex = xd.ReadInt16(xe, nameof(m_sensorRagdollBoneIndex));
+            m_sensorAnimationBoneIndex = xd.ReadInt16(xe, nameof(m_sensorAnimationBoneIndex));
+            m_sensingMode = xd.ReadFlag<SensingMode, sbyte>(xe, nameof(m_sensingMode));
+            m_extrapolateSensorPosition = xd.ReadBoolean(xe, nameof(m_extrapolateSensorPosition));
+            m_keepFirstSensedHandle = xd.ReadBoolean(xe, nameof(m_keepFirstSensedHandle));
+            m_foundHandleOut = xd.ReadBoolean(xe, nameof(m_foundHandleOut));
+            m_timeSinceLastModify = default;
+            m_rangeIndexForEventToSendNextUpdate = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

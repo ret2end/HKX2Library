@@ -69,7 +69,7 @@ namespace HKX2
         public float m_contactRestingVelocity;
         public sbyte m_broadPhaseBorderBehaviour;
         public bool m_mtPostponeAndSortBroadPhaseBorderCallbacks;
-        public hkAabb m_broadPhaseWorldAabb;
+        public hkAabb m_broadPhaseWorldAabb = new hkAabb();
         public bool m_useKdTree;
         public bool m_useMultipleTree;
         public sbyte m_treeUpdateType;
@@ -269,7 +269,64 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_gravity = xd.ReadVector4(xe, nameof(m_gravity));
+            m_broadPhaseQuerySize = xd.ReadInt32(xe, nameof(m_broadPhaseQuerySize));
+            m_contactRestingVelocity = xd.ReadSingle(xe, nameof(m_contactRestingVelocity));
+            m_broadPhaseBorderBehaviour = xd.ReadFlag<BroadPhaseBorderBehaviour, sbyte>(xe, nameof(m_broadPhaseBorderBehaviour));
+            m_mtPostponeAndSortBroadPhaseBorderCallbacks = xd.ReadBoolean(xe, nameof(m_mtPostponeAndSortBroadPhaseBorderCallbacks));
+            m_broadPhaseWorldAabb = xd.ReadClass<hkAabb>(xe, nameof(m_broadPhaseWorldAabb));
+            m_useKdTree = xd.ReadBoolean(xe, nameof(m_useKdTree));
+            m_useMultipleTree = xd.ReadBoolean(xe, nameof(m_useMultipleTree));
+            m_treeUpdateType = xd.ReadFlag<TreeUpdateType, sbyte>(xe, nameof(m_treeUpdateType));
+            m_autoUpdateKdTree = xd.ReadBoolean(xe, nameof(m_autoUpdateKdTree));
+            m_collisionTolerance = xd.ReadSingle(xe, nameof(m_collisionTolerance));
+            m_collisionFilter = xd.ReadClassPointer<hkpCollisionFilter>(xe, nameof(m_collisionFilter));
+            m_convexListFilter = xd.ReadClassPointer<hkpConvexListFilter>(xe, nameof(m_convexListFilter));
+            m_expectedMaxLinearVelocity = xd.ReadSingle(xe, nameof(m_expectedMaxLinearVelocity));
+            m_sizeOfToiEventQueue = xd.ReadInt32(xe, nameof(m_sizeOfToiEventQueue));
+            m_expectedMinPsiDeltaTime = xd.ReadSingle(xe, nameof(m_expectedMinPsiDeltaTime));
+            m_memoryWatchDog = xd.ReadClassPointer<hkWorldMemoryAvailableWatchDog>(xe, nameof(m_memoryWatchDog));
+            m_broadPhaseNumMarkers = xd.ReadInt32(xe, nameof(m_broadPhaseNumMarkers));
+            m_contactPointGeneration = xd.ReadFlag<ContactPointGeneration, sbyte>(xe, nameof(m_contactPointGeneration));
+            m_allowToSkipConfirmedCallbacks = xd.ReadBoolean(xe, nameof(m_allowToSkipConfirmedCallbacks));
+            m_useHybridBroadphase = xd.ReadBoolean(xe, nameof(m_useHybridBroadphase));
+            m_solverTau = xd.ReadSingle(xe, nameof(m_solverTau));
+            m_solverDamp = xd.ReadSingle(xe, nameof(m_solverDamp));
+            m_solverIterations = xd.ReadInt32(xe, nameof(m_solverIterations));
+            m_solverMicrosteps = xd.ReadInt32(xe, nameof(m_solverMicrosteps));
+            m_maxConstraintViolation = xd.ReadSingle(xe, nameof(m_maxConstraintViolation));
+            m_forceCoherentConstraintOrderingInSolver = xd.ReadBoolean(xe, nameof(m_forceCoherentConstraintOrderingInSolver));
+            m_snapCollisionToConvexEdgeThreshold = xd.ReadSingle(xe, nameof(m_snapCollisionToConvexEdgeThreshold));
+            m_snapCollisionToConcaveEdgeThreshold = xd.ReadSingle(xe, nameof(m_snapCollisionToConcaveEdgeThreshold));
+            m_enableToiWeldRejection = xd.ReadBoolean(xe, nameof(m_enableToiWeldRejection));
+            m_enableDeprecatedWelding = xd.ReadBoolean(xe, nameof(m_enableDeprecatedWelding));
+            m_iterativeLinearCastEarlyOutDistance = xd.ReadSingle(xe, nameof(m_iterativeLinearCastEarlyOutDistance));
+            m_iterativeLinearCastMaxIterations = xd.ReadInt32(xe, nameof(m_iterativeLinearCastMaxIterations));
+            m_deactivationNumInactiveFramesSelectFlag0 = xd.ReadByte(xe, nameof(m_deactivationNumInactiveFramesSelectFlag0));
+            m_deactivationNumInactiveFramesSelectFlag1 = xd.ReadByte(xe, nameof(m_deactivationNumInactiveFramesSelectFlag1));
+            m_deactivationIntegrateCounter = xd.ReadByte(xe, nameof(m_deactivationIntegrateCounter));
+            m_shouldActivateOnRigidBodyTransformChange = xd.ReadBoolean(xe, nameof(m_shouldActivateOnRigidBodyTransformChange));
+            m_deactivationReferenceDistance = xd.ReadSingle(xe, nameof(m_deactivationReferenceDistance));
+            m_toiCollisionResponseRotateNormal = xd.ReadSingle(xe, nameof(m_toiCollisionResponseRotateNormal));
+            m_maxSectorsPerMidphaseCollideTask = xd.ReadInt32(xe, nameof(m_maxSectorsPerMidphaseCollideTask));
+            m_maxSectorsPerNarrowphaseCollideTask = xd.ReadInt32(xe, nameof(m_maxSectorsPerNarrowphaseCollideTask));
+            m_processToisMultithreaded = xd.ReadBoolean(xe, nameof(m_processToisMultithreaded));
+            m_maxEntriesPerToiMidphaseCollideTask = xd.ReadInt32(xe, nameof(m_maxEntriesPerToiMidphaseCollideTask));
+            m_maxEntriesPerToiNarrowphaseCollideTask = xd.ReadInt32(xe, nameof(m_maxEntriesPerToiNarrowphaseCollideTask));
+            m_maxNumToiCollisionPairsSinglethreaded = xd.ReadInt32(xe, nameof(m_maxNumToiCollisionPairsSinglethreaded));
+            m_numToisTillAllowedPenetrationSimplifiedToi = xd.ReadSingle(xe, nameof(m_numToisTillAllowedPenetrationSimplifiedToi));
+            m_numToisTillAllowedPenetrationToi = xd.ReadSingle(xe, nameof(m_numToisTillAllowedPenetrationToi));
+            m_numToisTillAllowedPenetrationToiHigher = xd.ReadSingle(xe, nameof(m_numToisTillAllowedPenetrationToiHigher));
+            m_numToisTillAllowedPenetrationToiForced = xd.ReadSingle(xe, nameof(m_numToisTillAllowedPenetrationToiForced));
+            m_enableDeactivation = xd.ReadBoolean(xe, nameof(m_enableDeactivation));
+            m_simulationType = xd.ReadFlag<SimulationType, sbyte>(xe, nameof(m_simulationType));
+            m_enableSimulationIslands = xd.ReadBoolean(xe, nameof(m_enableSimulationIslands));
+            m_minDesiredIslandSize = xd.ReadUInt32(xe, nameof(m_minDesiredIslandSize));
+            m_processActionsInSingleThread = xd.ReadBoolean(xe, nameof(m_processActionsInSingleThread));
+            m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob = xd.ReadBoolean(xe, nameof(m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob));
+            m_frameMarkerPsiSnap = xd.ReadSingle(xe, nameof(m_frameMarkerPsiSnap));
+            m_fireCollisionCallbacks = xd.ReadBoolean(xe, nameof(m_fireCollisionCallbacks));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

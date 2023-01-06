@@ -9,7 +9,7 @@ namespace HKX2
     // m_system m_class: hkpPhysicsSystem Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpDisplayBindingDataPhysicsSystem : hkReferencedObject
     {
-        public List<hkpDisplayBindingDataRigidBody> m_bindings;
+        public List<hkpDisplayBindingDataRigidBody> m_bindings = new List<hkpDisplayBindingDataRigidBody>();
         public hkpPhysicsSystem m_system;
 
         public override uint Signature => 0xc8ae86a7;
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bindings = xd.ReadClassPointerArray<hkpDisplayBindingDataRigidBody>(xe, nameof(m_bindings));
+            m_system = xd.ReadClassPointer<hkpPhysicsSystem>(xe, nameof(m_system));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

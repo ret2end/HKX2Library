@@ -18,7 +18,7 @@ namespace HKX2
         public int m_numberOfTransformTracks;
         public int m_numberOfFloatTracks;
         public hkaAnimatedReferenceFrame m_extractedMotion;
-        public List<hkaAnnotationTrack> m_annotationTracks;
+        public List<hkaAnnotationTrack> m_annotationTracks = new List<hkaAnnotationTrack>();
 
         public override uint Signature => 0xa6fa7e88;
 
@@ -46,7 +46,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = xd.ReadFlag<AnimationType, int>(xe, nameof(m_type));
+            m_duration = xd.ReadSingle(xe, nameof(m_duration));
+            m_numberOfTransformTracks = xd.ReadInt32(xe, nameof(m_numberOfTransformTracks));
+            m_numberOfFloatTracks = xd.ReadInt32(xe, nameof(m_numberOfFloatTracks));
+            m_extractedMotion = xd.ReadClassPointer<hkaAnimatedReferenceFrame>(xe, nameof(m_extractedMotion));
+            m_annotationTracks = xd.ReadClassArray<hkaAnnotationTrack>(xe, nameof(m_annotationTracks));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

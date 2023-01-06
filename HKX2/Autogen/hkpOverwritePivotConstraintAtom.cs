@@ -27,7 +27,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_copyToPivotBFromPivotA = xd.ReadByte(xe, nameof(m_copyToPivotBFromPivotA));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

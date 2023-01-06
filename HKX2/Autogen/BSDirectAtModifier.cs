@@ -129,7 +129,31 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_directAtTarget = xd.ReadBoolean(xe, nameof(m_directAtTarget));
+            m_sourceBoneIndex = xd.ReadInt16(xe, nameof(m_sourceBoneIndex));
+            m_startBoneIndex = xd.ReadInt16(xe, nameof(m_startBoneIndex));
+            m_endBoneIndex = xd.ReadInt16(xe, nameof(m_endBoneIndex));
+            m_limitHeadingDegrees = xd.ReadSingle(xe, nameof(m_limitHeadingDegrees));
+            m_limitPitchDegrees = xd.ReadSingle(xe, nameof(m_limitPitchDegrees));
+            m_offsetHeadingDegrees = xd.ReadSingle(xe, nameof(m_offsetHeadingDegrees));
+            m_offsetPitchDegrees = xd.ReadSingle(xe, nameof(m_offsetPitchDegrees));
+            m_onGain = xd.ReadSingle(xe, nameof(m_onGain));
+            m_offGain = xd.ReadSingle(xe, nameof(m_offGain));
+            m_targetLocation = xd.ReadVector4(xe, nameof(m_targetLocation));
+            m_userInfo = xd.ReadUInt32(xe, nameof(m_userInfo));
+            m_directAtCamera = xd.ReadBoolean(xe, nameof(m_directAtCamera));
+            m_directAtCameraX = xd.ReadSingle(xe, nameof(m_directAtCameraX));
+            m_directAtCameraY = xd.ReadSingle(xe, nameof(m_directAtCameraY));
+            m_directAtCameraZ = xd.ReadSingle(xe, nameof(m_directAtCameraZ));
+            m_active = xd.ReadBoolean(xe, nameof(m_active));
+            m_currentHeadingOffset = xd.ReadSingle(xe, nameof(m_currentHeadingOffset));
+            m_currentPitchOffset = xd.ReadSingle(xe, nameof(m_currentPitchOffset));
+            m_timeStep = default;
+            m_pSkeletonMemory = default;
+            m_hasTarget = default;
+            m_directAtTargetLocation = default;
+            m_boneChainIndices = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

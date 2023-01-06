@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_role = xd.ReadFlag<Role, short>(xe, nameof(m_role));
+            m_flags = xd.ReadFlag<RoleFlags, short>(xe, nameof(m_flags));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

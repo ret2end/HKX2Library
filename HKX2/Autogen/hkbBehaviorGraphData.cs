@@ -16,11 +16,11 @@ namespace HKX2
     public partial class hkbBehaviorGraphData : hkReferencedObject
     {
         public List<float> m_attributeDefaults;
-        public List<hkbVariableInfo> m_variableInfos;
-        public List<hkbVariableInfo> m_characterPropertyInfos;
-        public List<hkbEventInfo> m_eventInfos;
-        public List<hkbVariableValue> m_wordMinVariableValues;
-        public List<hkbVariableValue> m_wordMaxVariableValues;
+        public List<hkbVariableInfo> m_variableInfos = new List<hkbVariableInfo>();
+        public List<hkbVariableInfo> m_characterPropertyInfos = new List<hkbVariableInfo>();
+        public List<hkbEventInfo> m_eventInfos = new List<hkbEventInfo>();
+        public List<hkbVariableValue> m_wordMinVariableValues = new List<hkbVariableValue>();
+        public List<hkbVariableValue> m_wordMaxVariableValues = new List<hkbVariableValue>();
         public hkbVariableValueSet m_variableInitialValues;
         public hkbBehaviorGraphStringData m_stringData;
 
@@ -54,7 +54,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_attributeDefaults = xd.ReadSingleArray(xe, nameof(m_attributeDefaults));
+            m_variableInfos = xd.ReadClassArray<hkbVariableInfo>(xe, nameof(m_variableInfos));
+            m_characterPropertyInfos = xd.ReadClassArray<hkbVariableInfo>(xe, nameof(m_characterPropertyInfos));
+            m_eventInfos = xd.ReadClassArray<hkbEventInfo>(xe, nameof(m_eventInfos));
+            m_wordMinVariableValues = xd.ReadClassArray<hkbVariableValue>(xe, nameof(m_wordMinVariableValues));
+            m_wordMaxVariableValues = xd.ReadClassArray<hkbVariableValue>(xe, nameof(m_wordMaxVariableValues));
+            m_variableInitialValues = xd.ReadClassPointer<hkbVariableValueSet>(xe, nameof(m_variableInitialValues));
+            m_stringData = xd.ReadClassPointer<hkbBehaviorGraphStringData>(xe, nameof(m_stringData));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

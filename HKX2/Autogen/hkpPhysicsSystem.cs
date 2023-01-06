@@ -14,10 +14,10 @@ namespace HKX2
     // m_active m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkpPhysicsSystem : hkReferencedObject
     {
-        public List<hkpRigidBody> m_rigidBodies;
-        public List<hkpConstraintInstance> m_constraints;
-        public List<hkpAction> m_actions;
-        public List<hkpPhantom> m_phantoms;
+        public List<hkpRigidBody> m_rigidBodies = new List<hkpRigidBody>();
+        public List<hkpConstraintInstance> m_constraints = new List<hkpConstraintInstance>();
+        public List<hkpAction> m_actions = new List<hkpAction>();
+        public List<hkpPhantom> m_phantoms = new List<hkpPhantom>();
         public string m_name;
         public ulong m_userData;
         public bool m_active;
@@ -52,7 +52,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rigidBodies = xd.ReadClassPointerArray<hkpRigidBody>(xe, nameof(m_rigidBodies));
+            m_constraints = xd.ReadClassPointerArray<hkpConstraintInstance>(xe, nameof(m_constraints));
+            m_actions = xd.ReadClassPointerArray<hkpAction>(xe, nameof(m_actions));
+            m_phantoms = xd.ReadClassPointerArray<hkpPhantom>(xe, nameof(m_phantoms));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_userData = xd.ReadUInt64(xe, nameof(m_userData));
+            m_active = xd.ReadBoolean(xe, nameof(m_active));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -18,10 +18,10 @@ namespace HKX2
     // m_attachment m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 192 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbAttachmentModifier : hkbModifier
     {
-        public hkbEventProperty m_sendToAttacherOnAttach;
-        public hkbEventProperty m_sendToAttacheeOnAttach;
-        public hkbEventProperty m_sendToAttacherOnDetach;
-        public hkbEventProperty m_sendToAttacheeOnDetach;
+        public hkbEventProperty m_sendToAttacherOnAttach = new hkbEventProperty();
+        public hkbEventProperty m_sendToAttacheeOnAttach = new hkbEventProperty();
+        public hkbEventProperty m_sendToAttacherOnDetach = new hkbEventProperty();
+        public hkbEventProperty m_sendToAttacheeOnDetach = new hkbEventProperty();
         public hkbAttachmentSetup m_attachmentSetup;
         public hkbHandle m_attacherHandle;
         public hkbHandle m_attacheeHandle;
@@ -77,7 +77,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_sendToAttacherOnAttach = xd.ReadClass<hkbEventProperty>(xe, nameof(m_sendToAttacherOnAttach));
+            m_sendToAttacheeOnAttach = xd.ReadClass<hkbEventProperty>(xe, nameof(m_sendToAttacheeOnAttach));
+            m_sendToAttacherOnDetach = xd.ReadClass<hkbEventProperty>(xe, nameof(m_sendToAttacherOnDetach));
+            m_sendToAttacheeOnDetach = xd.ReadClass<hkbEventProperty>(xe, nameof(m_sendToAttacheeOnDetach));
+            m_attachmentSetup = xd.ReadClassPointer<hkbAttachmentSetup>(xe, nameof(m_attachmentSetup));
+            m_attacherHandle = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_attacherHandle));
+            m_attacheeHandle = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_attacheeHandle));
+            m_attacheeLayer = xd.ReadInt32(xe, nameof(m_attacheeLayer));
+            m_attacheeRB = default;
+            m_oldMotionType = default;
+            m_oldFilterInfo = default;
+            m_attachment = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -43,7 +43,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_heightfield = xd.ReadClassPointer<hkpSampledHeightFieldShape>(xe, nameof(m_heightfield));
+            m_childSize = default;
+            m_radius = xd.ReadSingle(xe, nameof(m_radius));
+            m_weldingInfo = xd.ReadUInt16Array(xe, nameof(m_weldingInfo));
+            m_triangleExtrusion = xd.ReadVector4(xe, nameof(m_triangleExtrusion));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

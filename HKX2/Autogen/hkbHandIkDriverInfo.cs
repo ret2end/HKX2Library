@@ -9,7 +9,7 @@ namespace HKX2
     // m_fadeInOutCurve m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: BlendCurve
     public partial class hkbHandIkDriverInfo : hkReferencedObject
     {
-        public List<hkbHandIkDriverInfoHand> m_hands;
+        public List<hkbHandIkDriverInfoHand> m_hands = new List<hkbHandIkDriverInfoHand>();
         public sbyte m_fadeInOutCurve;
 
         public override uint Signature => 0xc299090a;
@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_hands = xd.ReadClassArray<hkbHandIkDriverInfoHand>(xe, nameof(m_hands));
+            m_fadeInOutCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_fadeInOutCurve));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -23,7 +23,7 @@ namespace HKX2
         public float m_maxRelativeForce;
         public float m_objectDamping;
         public uint m_shapeKey;
-        public List<dynamic> m_applyCallbacks;
+        public List<dynamic> m_applyCallbacks = new List<dynamic>();
 
         public override uint Signature => 0x6e087fd6;
 
@@ -61,7 +61,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_positionInRbLocal = xd.ReadVector4(xe, nameof(m_positionInRbLocal));
+            m_mousePositionInWorld = xd.ReadVector4(xe, nameof(m_mousePositionInWorld));
+            m_springDamping = xd.ReadSingle(xe, nameof(m_springDamping));
+            m_springElasticity = xd.ReadSingle(xe, nameof(m_springElasticity));
+            m_maxRelativeForce = xd.ReadSingle(xe, nameof(m_maxRelativeForce));
+            m_objectDamping = xd.ReadSingle(xe, nameof(m_objectDamping));
+            m_shapeKey = xd.ReadUInt32(xe, nameof(m_shapeKey));
+            m_applyCallbacks = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

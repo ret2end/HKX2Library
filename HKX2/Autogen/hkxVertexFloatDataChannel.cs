@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_perVertexFloats = xd.ReadSingleArray(xe, nameof(m_perVertexFloats));
+            m_dimensions = xd.ReadFlag<VertexFloatDimensions, byte>(xe, nameof(m_dimensions));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -11,8 +11,8 @@ namespace HKX2
     // m_sequenceNumber m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpTriggerVolume : hkReferencedObject
     {
-        public List<hkpRigidBody> m_overlappingBodies;
-        public List<hkpTriggerVolumeEventInfo> m_eventQueue;
+        public List<hkpRigidBody> m_overlappingBodies = new List<hkpRigidBody>();
+        public List<hkpTriggerVolumeEventInfo> m_eventQueue = new List<hkpTriggerVolumeEventInfo>();
         public hkpRigidBody m_triggerBody;
         public uint m_sequenceNumber;
 
@@ -42,7 +42,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_overlappingBodies = xd.ReadClassPointerArray<hkpRigidBody>(xe, nameof(m_overlappingBodies));
+            m_eventQueue = xd.ReadClassArray<hkpTriggerVolumeEventInfo>(xe, nameof(m_eventQueue));
+            m_triggerBody = xd.ReadClassPointer<hkpRigidBody>(xe, nameof(m_triggerBody));
+            m_sequenceNumber = xd.ReadUInt32(xe, nameof(m_sequenceNumber));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

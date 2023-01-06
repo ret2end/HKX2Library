@@ -25,7 +25,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_entity = xd.ReadClassPointer<hkpEntity>(xe, nameof(m_entity));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -8,7 +8,7 @@ namespace HKX2
     // m_variables m_class: hkxEnvironmentVariable Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxEnvironment : hkReferencedObject
     {
-        public List<hkxEnvironmentVariable> m_variables;
+        public List<hkxEnvironmentVariable> m_variables = new List<hkxEnvironmentVariable>();
 
         public override uint Signature => 0x41e1aa5;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_variables = xd.ReadClassArray<hkxEnvironmentVariable>(xe, nameof(m_variables));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

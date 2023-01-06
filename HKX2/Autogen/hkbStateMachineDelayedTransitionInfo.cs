@@ -10,7 +10,7 @@ namespace HKX2
     // m_wasInAbutRangeLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 21 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineDelayedTransitionInfo : IHavokObject
     {
-        public hkbStateMachineProspectiveTransitionInfo m_delayedTransition;
+        public hkbStateMachineProspectiveTransitionInfo m_delayedTransition = new hkbStateMachineProspectiveTransitionInfo();
         public float m_timeDelayed;
         public bool m_isDelayedTransitionReturnToPreviousState;
         public bool m_wasInAbutRangeLastFrame;
@@ -38,7 +38,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_delayedTransition = xd.ReadClass<hkbStateMachineProspectiveTransitionInfo>(xe, nameof(m_delayedTransition));
+            m_timeDelayed = xd.ReadSingle(xe, nameof(m_timeDelayed));
+            m_isDelayedTransitionReturnToPreviousState = xd.ReadBoolean(xe, nameof(m_isDelayedTransitionReturnToPreviousState));
+            m_wasInAbutRangeLastFrame = xd.ReadBoolean(xe, nameof(m_wasInAbutRangeLastFrame));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -33,7 +33,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_data = default;
+            m_size = xd.ReadUInt16(xe, nameof(m_size));
+            m_capacityAndFlags = xd.ReadUInt16(xe, nameof(m_capacityAndFlags));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

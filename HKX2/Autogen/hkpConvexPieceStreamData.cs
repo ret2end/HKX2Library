@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_convexPieceStream = xd.ReadUInt32Array(xe, nameof(m_convexPieceStream));
+            m_convexPieceOffsets = xd.ReadUInt32Array(xe, nameof(m_convexPieceOffsets));
+            m_convexPieceSingleTriangles = xd.ReadUInt32Array(xe, nameof(m_convexPieceSingleTriangles));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

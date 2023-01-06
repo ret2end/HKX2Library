@@ -8,8 +8,8 @@ namespace HKX2
     // m_cogWheels m_class: hkpCogWheelConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
     public partial class hkpCogWheelConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms;
-        public hkpCogWheelConstraintAtom m_cogWheels;
+        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
+        public hkpCogWheelConstraintAtom m_cogWheels = new hkpCogWheelConstraintAtom();
 
         public virtual uint Signature => 0xf855ba44;
 
@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transforms = xd.ReadClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms));
+            m_cogWheels = xd.ReadClass<hkpCogWheelConstraintAtom>(xe, nameof(m_cogWheels));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

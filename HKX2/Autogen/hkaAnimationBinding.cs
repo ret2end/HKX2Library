@@ -44,7 +44,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_originalSkeletonName = xd.ReadString(xe, nameof(m_originalSkeletonName));
+            m_animation = xd.ReadClassPointer<hkaAnimation>(xe, nameof(m_animation));
+            m_transformTrackToBoneIndices = xd.ReadInt16Array(xe, nameof(m_transformTrackToBoneIndices));
+            m_floatTrackToFloatSlotIndices = xd.ReadInt16Array(xe, nameof(m_floatTrackToFloatSlotIndices));
+            m_blendHint = xd.ReadFlag<BlendHint, sbyte>(xe, nameof(m_blendHint));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

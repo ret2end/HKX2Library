@@ -18,10 +18,10 @@ namespace HKX2
     // m_echoNextUpdate m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 101 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineInternalState : hkReferencedObject
     {
-        public List<hkbStateMachineActiveTransitionInfo> m_activeTransitions;
+        public List<hkbStateMachineActiveTransitionInfo> m_activeTransitions = new List<hkbStateMachineActiveTransitionInfo>();
         public List<byte> m_transitionFlags;
         public List<byte> m_wildcardTransitionFlags;
-        public List<hkbStateMachineDelayedTransitionInfo> m_delayedTransitions;
+        public List<hkbStateMachineDelayedTransitionInfo> m_delayedTransitions = new List<hkbStateMachineDelayedTransitionInfo>();
         public float m_timeInState;
         public float m_lastLocalTime;
         public int m_currentStateId;
@@ -68,7 +68,18 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_activeTransitions = xd.ReadClassArray<hkbStateMachineActiveTransitionInfo>(xe, nameof(m_activeTransitions));
+            m_transitionFlags = xd.ReadByteArray(xe, nameof(m_transitionFlags));
+            m_wildcardTransitionFlags = xd.ReadByteArray(xe, nameof(m_wildcardTransitionFlags));
+            m_delayedTransitions = xd.ReadClassArray<hkbStateMachineDelayedTransitionInfo>(xe, nameof(m_delayedTransitions));
+            m_timeInState = xd.ReadSingle(xe, nameof(m_timeInState));
+            m_lastLocalTime = xd.ReadSingle(xe, nameof(m_lastLocalTime));
+            m_currentStateId = xd.ReadInt32(xe, nameof(m_currentStateId));
+            m_previousStateId = xd.ReadInt32(xe, nameof(m_previousStateId));
+            m_nextStartStateIndexOverride = xd.ReadInt32(xe, nameof(m_nextStartStateIndexOverride));
+            m_stateOrTransitionChanged = xd.ReadBoolean(xe, nameof(m_stateOrTransitionChanged));
+            m_echoNextUpdate = xd.ReadBoolean(xe, nameof(m_echoNextUpdate));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

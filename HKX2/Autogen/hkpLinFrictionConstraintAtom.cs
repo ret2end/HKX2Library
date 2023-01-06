@@ -33,7 +33,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_isEnabled = xd.ReadByte(xe, nameof(m_isEnabled));
+            m_frictionAxis = xd.ReadByte(xe, nameof(m_frictionAxis));
+            m_maxFrictionForce = xd.ReadSingle(xe, nameof(m_maxFrictionForce));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

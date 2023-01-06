@@ -7,7 +7,7 @@ namespace HKX2
     // m_gains m_class: hkbFootIkGains Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkbFootIkControlData : IHavokObject
     {
-        public hkbFootIkGains m_gains;
+        public hkbFootIkGains m_gains = new hkbFootIkGains();
 
         public virtual uint Signature => 0xa111b704;
 
@@ -24,7 +24,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_gains = xd.ReadClass<hkbFootIkGains>(xe, nameof(m_gains));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

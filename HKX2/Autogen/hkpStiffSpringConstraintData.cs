@@ -7,7 +7,7 @@ namespace HKX2
     // m_atoms m_class: hkpStiffSpringConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpStiffSpringConstraintData : hkpConstraintData
     {
-        public hkpStiffSpringConstraintDataAtoms m_atoms;
+        public hkpStiffSpringConstraintDataAtoms m_atoms = new hkpStiffSpringConstraintDataAtoms();
 
         public override uint Signature => 0xb98f66f4;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpStiffSpringConstraintDataAtoms>(xe, nameof(m_atoms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

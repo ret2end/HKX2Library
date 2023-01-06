@@ -17,11 +17,11 @@ namespace HKX2
     {
         public string m_name;
         public List<short> m_parentIndices;
-        public List<hkaBone> m_bones;
+        public List<hkaBone> m_bones = new List<hkaBone>();
         public List<Matrix4x4> m_referencePose;
         public List<float> m_referenceFloats;
         public List<string> m_floatSlots;
-        public List<hkaSkeletonLocalFrameOnBone> m_localFrames;
+        public List<hkaSkeletonLocalFrameOnBone> m_localFrames = new List<hkaSkeletonLocalFrameOnBone>();
 
         public override uint Signature => 0x366e8220;
 
@@ -51,7 +51,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_parentIndices = xd.ReadInt16Array(xe, nameof(m_parentIndices));
+            m_bones = xd.ReadClassArray<hkaBone>(xe, nameof(m_bones));
+            m_referencePose = xd.ReadQSTransformArray(xe, nameof(m_referencePose));
+            m_referenceFloats = xd.ReadSingleArray(xe, nameof(m_referenceFloats));
+            m_floatSlots = xd.ReadStringArray(xe, nameof(m_floatSlots));
+            m_localFrames = xd.ReadClassArray<hkaSkeletonLocalFrameOnBone>(xe, nameof(m_localFrames));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

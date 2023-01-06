@@ -8,7 +8,7 @@ namespace HKX2
     // m_transitions m_class: hkbStateMachineTransitionInfo Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineTransitionInfoArray : hkReferencedObject
     {
-        public List<hkbStateMachineTransitionInfo> m_transitions;
+        public List<hkbStateMachineTransitionInfo> m_transitions = new List<hkbStateMachineTransitionInfo>();
 
         public override uint Signature => 0xe397b11e;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_transitions = xd.ReadClassArray<hkbStateMachineTransitionInfo>(xe, nameof(m_transitions));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

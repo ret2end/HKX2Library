@@ -10,7 +10,7 @@ namespace HKX2
     public partial class BSBoneSwitchGenerator : hkbGenerator
     {
         public hkbGenerator m_pDefaultGenerator;
-        public List<BSBoneSwitchGeneratorBoneData> m_ChildrenA;
+        public List<BSBoneSwitchGeneratorBoneData> m_ChildrenA = new List<BSBoneSwitchGeneratorBoneData>();
 
         public override uint Signature => 0xf33d3eea;
 
@@ -34,7 +34,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pDefaultGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pDefaultGenerator));
+            m_ChildrenA = xd.ReadClassPointerArray<BSBoneSwitchGeneratorBoneData>(xe, nameof(m_ChildrenA));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

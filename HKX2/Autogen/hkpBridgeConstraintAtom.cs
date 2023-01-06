@@ -31,7 +31,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_buildJacobianFunc = default;
+            m_constraintData = xd.ReadClassPointer<hkpConstraintData>(xe, nameof(m_constraintData));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

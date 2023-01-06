@@ -31,7 +31,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_mirrorAxis = xd.ReadVector4(xe, nameof(m_mirrorAxis));
+            m_bonePairMap = xd.ReadInt16Array(xe, nameof(m_bonePairMap));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

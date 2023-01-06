@@ -9,8 +9,8 @@ namespace HKX2
     // m_phantomListeners m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 224 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpPhantom : hkpWorldObject
     {
-        public List<dynamic> m_overlapListeners;
-        public List<dynamic> m_phantomListeners;
+        public List<dynamic> m_overlapListeners = new List<dynamic>();
+        public List<dynamic> m_phantomListeners = new List<dynamic>();
 
         public override uint Signature => 0x9b7e6f86;
 
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_overlapListeners = default;
+            m_phantomListeners = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

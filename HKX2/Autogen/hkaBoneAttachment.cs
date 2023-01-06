@@ -46,7 +46,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_originalSkeletonName = xd.ReadString(xe, nameof(m_originalSkeletonName));
+            m_boneFromAttachment = xd.ReadMatrix4(xe, nameof(m_boneFromAttachment));
+            m_attachment = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_attachment));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_boneIndex = xd.ReadInt16(xe, nameof(m_boneIndex));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

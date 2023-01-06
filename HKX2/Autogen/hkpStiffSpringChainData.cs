@@ -12,8 +12,8 @@ namespace HKX2
     // m_cfm m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     public partial class hkpStiffSpringChainData : hkpConstraintChainData
     {
-        public hkpBridgeAtoms m_atoms;
-        public List<hkpStiffSpringChainDataConstraintInfo> m_infos;
+        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
+        public List<hkpStiffSpringChainDataConstraintInfo> m_infos = new List<hkpStiffSpringChainDataConstraintInfo>();
         public float m_tau;
         public float m_damping;
         public float m_cfm;
@@ -45,7 +45,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpBridgeAtoms>(xe, nameof(m_atoms));
+            m_infos = xd.ReadClassArray<hkpStiffSpringChainDataConstraintInfo>(xe, nameof(m_infos));
+            m_tau = xd.ReadSingle(xe, nameof(m_tau));
+            m_damping = xd.ReadSingle(xe, nameof(m_damping));
+            m_cfm = xd.ReadSingle(xe, nameof(m_cfm));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

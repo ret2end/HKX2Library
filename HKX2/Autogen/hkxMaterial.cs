@@ -18,14 +18,14 @@ namespace HKX2
     public partial class hkxMaterial : hkxAttributeHolder
     {
         public string m_name;
-        public List<hkxMaterialTextureStage> m_stages;
+        public List<hkxMaterialTextureStage> m_stages = new List<hkxMaterialTextureStage>();
         public Vector4 m_diffuseColor;
         public Vector4 m_ambientColor;
         public Vector4 m_specularColor;
         public Vector4 m_emissiveColor;
-        public List<hkxMaterial> m_subMaterials;
+        public List<hkxMaterial> m_subMaterials = new List<hkxMaterial>();
         public hkReferencedObject m_extraData;
-        public List<hkxMaterialProperty> m_properties;
+        public List<hkxMaterialProperty> m_properties = new List<hkxMaterialProperty>();
 
         public override uint Signature => 0x2954537a;
 
@@ -63,7 +63,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_stages = xd.ReadClassArray<hkxMaterialTextureStage>(xe, nameof(m_stages));
+            m_diffuseColor = xd.ReadVector4(xe, nameof(m_diffuseColor));
+            m_ambientColor = xd.ReadVector4(xe, nameof(m_ambientColor));
+            m_specularColor = xd.ReadVector4(xe, nameof(m_specularColor));
+            m_emissiveColor = xd.ReadVector4(xe, nameof(m_emissiveColor));
+            m_subMaterials = xd.ReadClassPointerArray<hkxMaterial>(xe, nameof(m_subMaterials));
+            m_extraData = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_extraData));
+            m_properties = xd.ReadClassArray<hkxMaterialProperty>(xe, nameof(m_properties));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

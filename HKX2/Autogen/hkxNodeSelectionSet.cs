@@ -9,7 +9,7 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkxNodeSelectionSet : hkxAttributeHolder
     {
-        public List<hkxNode> m_selectedNodes;
+        public List<hkxNode> m_selectedNodes = new List<hkxNode>();
         public string m_name;
 
         public override uint Signature => 0xd753fc4d;
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_selectedNodes = xd.ReadClassPointerArray<hkxNode>(xe, nameof(m_selectedNodes));
+            m_name = xd.ReadString(xe, nameof(m_name));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

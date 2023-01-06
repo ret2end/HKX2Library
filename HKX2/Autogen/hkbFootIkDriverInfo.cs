@@ -19,7 +19,7 @@ namespace HKX2
     // m_isQuadrupedNarrow m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 66 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkDriverInfo : hkReferencedObject
     {
-        public List<hkbFootIkDriverInfoLeg> m_legs;
+        public List<hkbFootIkDriverInfoLeg> m_legs = new List<hkbFootIkDriverInfoLeg>();
         public float m_raycastDistanceUp;
         public float m_raycastDistanceDown;
         public float m_originalGroundHeightMS;
@@ -72,7 +72,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_legs = xd.ReadClassArray<hkbFootIkDriverInfoLeg>(xe, nameof(m_legs));
+            m_raycastDistanceUp = xd.ReadSingle(xe, nameof(m_raycastDistanceUp));
+            m_raycastDistanceDown = xd.ReadSingle(xe, nameof(m_raycastDistanceDown));
+            m_originalGroundHeightMS = xd.ReadSingle(xe, nameof(m_originalGroundHeightMS));
+            m_verticalOffset = xd.ReadSingle(xe, nameof(m_verticalOffset));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_forwardAlignFraction = xd.ReadSingle(xe, nameof(m_forwardAlignFraction));
+            m_sidewaysAlignFraction = xd.ReadSingle(xe, nameof(m_sidewaysAlignFraction));
+            m_sidewaysSampleWidth = xd.ReadSingle(xe, nameof(m_sidewaysSampleWidth));
+            m_lockFeetWhenPlanted = xd.ReadBoolean(xe, nameof(m_lockFeetWhenPlanted));
+            m_useCharacterUpVector = xd.ReadBoolean(xe, nameof(m_useCharacterUpVector));
+            m_isQuadrupedNarrow = xd.ReadBoolean(xe, nameof(m_isQuadrupedNarrow));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

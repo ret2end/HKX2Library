@@ -12,7 +12,7 @@ namespace HKX2
     {
         public hkReferencedObject m_variant;
         public string m_name;
-        public List<hkMemoryResourceHandleExternalLink> m_references;
+        public List<hkMemoryResourceHandleExternalLink> m_references = new List<hkMemoryResourceHandleExternalLink>();
 
         public override uint Signature => 0xbffac086;
 
@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_variant = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_variant));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_references = xd.ReadClassArray<hkMemoryResourceHandleExternalLink>(xe, nameof(m_references));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

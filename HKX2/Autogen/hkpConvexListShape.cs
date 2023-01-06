@@ -17,7 +17,7 @@ namespace HKX2
         public Vector4 m_aabbHalfExtents;
         public Vector4 m_aabbCenter;
         public bool m_useCachedAabb;
-        public List<hkpConvexShape> m_childShapes;
+        public List<hkpConvexShape> m_childShapes = new List<hkpConvexShape>();
 
         public override uint Signature => 0x450b26e8;
 
@@ -51,7 +51,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_minDistanceToUseConvexHullForGetClosestPoints = xd.ReadSingle(xe, nameof(m_minDistanceToUseConvexHullForGetClosestPoints));
+            m_aabbHalfExtents = xd.ReadVector4(xe, nameof(m_aabbHalfExtents));
+            m_aabbCenter = xd.ReadVector4(xe, nameof(m_aabbCenter));
+            m_useCachedAabb = xd.ReadBoolean(xe, nameof(m_useCachedAabb));
+            m_childShapes = xd.ReadClassPointerArray<hkpConvexShape>(xe, nameof(m_childShapes));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

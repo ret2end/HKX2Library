@@ -22,11 +22,11 @@ namespace HKX2
     // m_numFloatSlots m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 174 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacterData : hkReferencedObject
     {
-        public hkbCharacterDataCharacterControllerInfo m_characterControllerInfo;
+        public hkbCharacterDataCharacterControllerInfo m_characterControllerInfo = new hkbCharacterDataCharacterControllerInfo();
         public Vector4 m_modelUpMS;
         public Vector4 m_modelForwardMS;
         public Vector4 m_modelRightMS;
-        public List<hkbVariableInfo> m_characterPropertyInfos;
+        public List<hkbVariableInfo> m_characterPropertyInfos = new List<hkbVariableInfo>();
         public List<int> m_numBonesPerLod;
         public hkbVariableValueSet m_characterPropertyValues;
         public hkbFootIkDriverInfo m_footIkDriverInfo;
@@ -82,7 +82,21 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterControllerInfo = xd.ReadClass<hkbCharacterDataCharacterControllerInfo>(xe, nameof(m_characterControllerInfo));
+            m_modelUpMS = xd.ReadVector4(xe, nameof(m_modelUpMS));
+            m_modelForwardMS = xd.ReadVector4(xe, nameof(m_modelForwardMS));
+            m_modelRightMS = xd.ReadVector4(xe, nameof(m_modelRightMS));
+            m_characterPropertyInfos = xd.ReadClassArray<hkbVariableInfo>(xe, nameof(m_characterPropertyInfos));
+            m_numBonesPerLod = xd.ReadInt32Array(xe, nameof(m_numBonesPerLod));
+            m_characterPropertyValues = xd.ReadClassPointer<hkbVariableValueSet>(xe, nameof(m_characterPropertyValues));
+            m_footIkDriverInfo = xd.ReadClassPointer<hkbFootIkDriverInfo>(xe, nameof(m_footIkDriverInfo));
+            m_handIkDriverInfo = xd.ReadClassPointer<hkbHandIkDriverInfo>(xe, nameof(m_handIkDriverInfo));
+            m_stringData = xd.ReadClassPointer<hkbCharacterStringData>(xe, nameof(m_stringData));
+            m_mirroredSkeletonInfo = xd.ReadClassPointer<hkbMirroredSkeletonInfo>(xe, nameof(m_mirroredSkeletonInfo));
+            m_scale = xd.ReadSingle(xe, nameof(m_scale));
+            m_numHands = default;
+            m_numFloatSlots = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -8,8 +8,8 @@ namespace HKX2
     // m_rackAndPinion m_class: hkpRackAndPinionConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
     public partial class hkpRackAndPinionConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms;
-        public hkpRackAndPinionConstraintAtom m_rackAndPinion;
+        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
+        public hkpRackAndPinionConstraintAtom m_rackAndPinion = new hkpRackAndPinionConstraintAtom();
 
         public virtual uint Signature => 0xa58a9659;
 
@@ -31,7 +31,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transforms = xd.ReadClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms));
+            m_rackAndPinion = xd.ReadClass<hkpRackAndPinionConstraintAtom>(xe, nameof(m_rackAndPinion));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

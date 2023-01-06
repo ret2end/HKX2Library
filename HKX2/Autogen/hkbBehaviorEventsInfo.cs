@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_externalEventIds = xd.ReadInt16Array(xe, nameof(m_externalEventIds));
+            m_padding = xd.ReadInt32(xe, nameof(m_padding));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

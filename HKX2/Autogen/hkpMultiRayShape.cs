@@ -9,7 +9,7 @@ namespace HKX2
     // m_rayPenetrationDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpMultiRayShape : hkpShape
     {
-        public List<hkpMultiRayShapeRay> m_rays;
+        public List<hkpMultiRayShapeRay> m_rays = new List<hkpMultiRayShapeRay>();
         public float m_rayPenetrationDistance;
 
         public override uint Signature => 0xea2e7ec9;
@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rays = xd.ReadClassArray<hkpMultiRayShapeRay>(xe, nameof(m_rays));
+            m_rayPenetrationDistance = xd.ReadSingle(xe, nameof(m_rayPenetrationDistance));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

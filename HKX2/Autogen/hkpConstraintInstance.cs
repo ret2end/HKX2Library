@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -22,11 +21,11 @@ namespace HKX2
         public dynamic m_owner;
         public hkpConstraintData m_data;
         public hkpModifierConstraintAtom m_constraintModifiers;
-        public List<hkpEntity> m_entities;
+        public hkpEntity[] m_entities = new hkpEntity[2];
         public byte m_priority;
         public bool m_wantRuntime;
         public byte m_destructionRemapInfo;
-        public hkpConstraintInstanceSmallArraySerializeOverrideType m_listeners;
+        public hkpConstraintInstanceSmallArraySerializeOverrideType m_listeners = new hkpConstraintInstanceSmallArraySerializeOverrideType();
         public string m_name;
         public ulong m_userData;
         public dynamic m_internal;
@@ -75,7 +74,19 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_owner = default;
+            m_data = xd.ReadClassPointer<hkpConstraintData>(xe, nameof(m_data));
+            m_constraintModifiers = xd.ReadClassPointer<hkpModifierConstraintAtom>(xe, nameof(m_constraintModifiers));
+            m_entities = xd.ReadClassPointerCStyleArray<hkpEntity>(xe, nameof(m_entities), 2);
+            m_priority = xd.ReadFlag<ConstraintPriority, byte>(xe, nameof(m_priority));
+            m_wantRuntime = xd.ReadBoolean(xe, nameof(m_wantRuntime));
+            m_destructionRemapInfo = xd.ReadFlag<OnDestructionRemapInfo, byte>(xe, nameof(m_destructionRemapInfo));
+            m_listeners = new hkpConstraintInstanceSmallArraySerializeOverrideType();
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_userData = xd.ReadUInt64(xe, nameof(m_userData));
+            m_internal = default;
+            m_uid = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

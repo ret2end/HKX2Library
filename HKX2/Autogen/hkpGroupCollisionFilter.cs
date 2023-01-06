@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,7 +9,7 @@ namespace HKX2
     public partial class hkpGroupCollisionFilter : hkpCollisionFilter
     {
         public bool m_noGroupCollisionEnabled;
-        public List<uint> m_collisionGroups;
+        public uint[] m_collisionGroups = new uint[32];
 
         public override uint Signature => 0x5cc01561;
 
@@ -34,7 +33,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_noGroupCollisionEnabled = xd.ReadBoolean(xe, nameof(m_noGroupCollisionEnabled));
+            m_collisionGroups = xd.ReadUInt32CStyleArray(xe, nameof(m_collisionGroups), 32);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

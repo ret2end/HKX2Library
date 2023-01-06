@@ -11,7 +11,7 @@ namespace HKX2
     {
         public uint m_key;
         public uint m_alignmentPadding;
-        public hkpPropertyValue m_value;
+        public hkpPropertyValue m_value = new hkpPropertyValue();
 
         public virtual uint Signature => 0x9ce308e9;
 
@@ -32,7 +32,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_key = xd.ReadUInt32(xe, nameof(m_key));
+            m_alignmentPadding = xd.ReadUInt32(xe, nameof(m_alignmentPadding));
+            m_value = xd.ReadClass<hkpPropertyValue>(xe, nameof(m_value));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

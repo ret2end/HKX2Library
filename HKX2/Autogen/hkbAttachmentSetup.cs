@@ -55,7 +55,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_blendInTime = xd.ReadSingle(xe, nameof(m_blendInTime));
+            m_moveAttacherFraction = xd.ReadSingle(xe, nameof(m_moveAttacherFraction));
+            m_gain = xd.ReadSingle(xe, nameof(m_gain));
+            m_extrapolationTimeStep = xd.ReadSingle(xe, nameof(m_extrapolationTimeStep));
+            m_fixUpGain = xd.ReadSingle(xe, nameof(m_fixUpGain));
+            m_maxLinearDistance = xd.ReadSingle(xe, nameof(m_maxLinearDistance));
+            m_maxAngularDistance = xd.ReadSingle(xe, nameof(m_maxAngularDistance));
+            m_attachmentType = xd.ReadFlag<AttachmentType, sbyte>(xe, nameof(m_attachmentType));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

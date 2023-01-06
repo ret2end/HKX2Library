@@ -28,14 +28,16 @@ namespace HKX2
         {
             bw.WriteBoolean(m_visible);
             bw.Position += 7;
-            s.WriteStringPointer(bw, m_label);
+            s.WriteCStringPointer(bw, m_label);
             s.WriteSByte(bw, m_type);
             bw.Position += 7;
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_visible = xd.ReadBoolean(xe, nameof(m_visible));
+            m_label = xd.ReadString(xe, nameof(m_label));
+            m_type = xd.ReadFlag<GizmoType, sbyte>(xe, nameof(m_type));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

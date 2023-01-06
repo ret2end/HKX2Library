@@ -60,7 +60,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_xRes = xd.ReadInt32(xe, nameof(m_xRes));
+            m_zRes = xd.ReadInt32(xe, nameof(m_zRes));
+            m_heightCenter = xd.ReadSingle(xe, nameof(m_heightCenter));
+            m_useProjectionBasedHeight = xd.ReadBoolean(xe, nameof(m_useProjectionBasedHeight));
+            m_heightfieldType = xd.ReadFlag<HeightFieldType, byte>(xe, nameof(m_heightfieldType));
+            m_intToFloatScale = xd.ReadVector4(xe, nameof(m_intToFloatScale));
+            m_floatToIntScale = xd.ReadVector4(xe, nameof(m_floatToIntScale));
+            m_floatToIntOffsetFloorCorrected = xd.ReadVector4(xe, nameof(m_floatToIntOffsetFloorCorrected));
+            m_extents = xd.ReadVector4(xe, nameof(m_extents));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

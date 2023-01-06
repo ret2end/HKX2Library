@@ -98,7 +98,25 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_worldFromModelRotation = xd.ReadQuaternion(xe, nameof(m_worldFromModelRotation));
+            m_blendSpeed = xd.ReadSingle(xe, nameof(m_blendSpeed));
+            m_minSpeedToSwitch = xd.ReadSingle(xe, nameof(m_minSpeedToSwitch));
+            m_minSwitchTimeNoError = xd.ReadSingle(xe, nameof(m_minSwitchTimeNoError));
+            m_minSwitchTimeFullError = xd.ReadSingle(xe, nameof(m_minSwitchTimeFullError));
+            m_startPlayingEventId = xd.ReadInt32(xe, nameof(m_startPlayingEventId));
+            m_startMatchingEventId = xd.ReadInt32(xe, nameof(m_startMatchingEventId));
+            m_rootBoneIndex = xd.ReadInt16(xe, nameof(m_rootBoneIndex));
+            m_otherBoneIndex = xd.ReadInt16(xe, nameof(m_otherBoneIndex));
+            m_anotherBoneIndex = xd.ReadInt16(xe, nameof(m_anotherBoneIndex));
+            m_pelvisIndex = xd.ReadInt16(xe, nameof(m_pelvisIndex));
+            m_mode = xd.ReadFlag<Mode, sbyte>(xe, nameof(m_mode));
+            m_currentMatch = default;
+            m_bestMatch = default;
+            m_timeSinceBetterMatch = default;
+            m_error = default;
+            m_resetCurrentMatchLocalTime = default;
+            m_poseMatchingUtility = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

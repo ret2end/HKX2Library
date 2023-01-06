@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_expressions = xd.ReadClassPointer<hkbExpressionDataArray>(xe, nameof(m_expressions));
+            m_compiledExpressionSet = default;
+            m_internalExpressionsData = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

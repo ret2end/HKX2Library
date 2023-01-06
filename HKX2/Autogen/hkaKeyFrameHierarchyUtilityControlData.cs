@@ -67,7 +67,18 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_hierarchyGain = xd.ReadSingle(xe, nameof(m_hierarchyGain));
+            m_velocityDamping = xd.ReadSingle(xe, nameof(m_velocityDamping));
+            m_accelerationGain = xd.ReadSingle(xe, nameof(m_accelerationGain));
+            m_velocityGain = xd.ReadSingle(xe, nameof(m_velocityGain));
+            m_positionGain = xd.ReadSingle(xe, nameof(m_positionGain));
+            m_positionMaxLinearVelocity = xd.ReadSingle(xe, nameof(m_positionMaxLinearVelocity));
+            m_positionMaxAngularVelocity = xd.ReadSingle(xe, nameof(m_positionMaxAngularVelocity));
+            m_snapGain = xd.ReadSingle(xe, nameof(m_snapGain));
+            m_snapMaxLinearVelocity = xd.ReadSingle(xe, nameof(m_snapMaxLinearVelocity));
+            m_snapMaxAngularVelocity = xd.ReadSingle(xe, nameof(m_snapMaxAngularVelocity));
+            m_snapMaxLinearDistance = xd.ReadSingle(xe, nameof(m_snapMaxLinearDistance));
+            m_snapMaxAngularDistance = xd.ReadSingle(xe, nameof(m_snapMaxAngularDistance));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

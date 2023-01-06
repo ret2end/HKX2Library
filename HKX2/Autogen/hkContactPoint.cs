@@ -28,7 +28,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_position = xd.ReadVector4(xe, nameof(m_position));
+            m_separatingNormal = xd.ReadVector4(xe, nameof(m_separatingNormal));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

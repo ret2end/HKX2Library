@@ -31,7 +31,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_tau = xd.ReadSingle(xe, nameof(m_tau));
+            m_maxAcceleration = xd.ReadSingle(xe, nameof(m_maxAcceleration));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

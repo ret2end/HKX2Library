@@ -10,7 +10,7 @@ namespace HKX2
     public partial class hkxAttributeGroup : IHavokObject
     {
         public string m_name;
-        public List<hkxAttribute> m_attributes;
+        public List<hkxAttribute> m_attributes = new List<hkxAttribute>();
 
         public virtual uint Signature => 0x345ca95d;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_attributes = xd.ReadClassArray<hkxAttribute>(xe, nameof(m_attributes));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

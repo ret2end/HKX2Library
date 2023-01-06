@@ -10,7 +10,7 @@ namespace HKX2
     // m_numExpressions m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbCompiledExpressionSet : hkReferencedObject
     {
-        public List<hkbCompiledExpressionSetToken> m_rpn;
+        public List<hkbCompiledExpressionSetToken> m_rpn = new List<hkbCompiledExpressionSetToken>();
         public List<int> m_expressionToRpnIndex;
         public sbyte m_numExpressions;
 
@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rpn = xd.ReadClassArray<hkbCompiledExpressionSetToken>(xe, nameof(m_rpn));
+            m_expressionToRpnIndex = xd.ReadInt32Array(xe, nameof(m_expressionToRpnIndex));
+            m_numExpressions = xd.ReadSByte(xe, nameof(m_numExpressions));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

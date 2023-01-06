@@ -10,7 +10,7 @@ namespace HKX2
     public partial class hkpPhysicsData : hkReferencedObject
     {
         public hkpWorldCinfo m_worldCinfo;
-        public List<hkpPhysicsSystem> m_systems;
+        public List<hkpPhysicsSystem> m_systems = new List<hkpPhysicsSystem>();
 
         public override uint Signature => 0xc2a461e4;
 
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_worldCinfo = xd.ReadClassPointer<hkpWorldCinfo>(xe, nameof(m_worldCinfo));
+            m_systems = xd.ReadClassPointerArray<hkpPhysicsSystem>(xe, nameof(m_systems));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

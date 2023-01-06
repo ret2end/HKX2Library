@@ -13,7 +13,7 @@ namespace HKX2
     public partial class hkbFootIkControlsModifierLeg : IHavokObject
     {
         public Vector4 m_groundPosition;
-        public hkbEventProperty m_ungroundedEvent;
+        public hkbEventProperty m_ungroundedEvent = new hkbEventProperty();
         public float m_verticalError;
         public bool m_hitSomething;
         public bool m_isPlantedMS;
@@ -43,7 +43,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_groundPosition = xd.ReadVector4(xe, nameof(m_groundPosition));
+            m_ungroundedEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_ungroundedEvent));
+            m_verticalError = xd.ReadSingle(xe, nameof(m_verticalError));
+            m_hitSomething = xd.ReadBoolean(xe, nameof(m_hitSomething));
+            m_isPlantedMS = xd.ReadBoolean(xe, nameof(m_isPlantedMS));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

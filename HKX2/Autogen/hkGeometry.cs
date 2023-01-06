@@ -11,7 +11,7 @@ namespace HKX2
     public partial class hkGeometry : IHavokObject
     {
         public List<Vector4> m_vertices;
-        public List<hkGeometryTriangle> m_triangles;
+        public List<hkGeometryTriangle> m_triangles = new List<hkGeometryTriangle>();
 
         public virtual uint Signature => 0x98dd8bdc;
 
@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_vertices = xd.ReadVector4Array(xe, nameof(m_vertices));
+            m_triangles = xd.ReadClassArray<hkGeometryTriangle>(xe, nameof(m_triangles));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

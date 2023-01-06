@@ -52,7 +52,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_weldingInfo = xd.ReadUInt16(xe, nameof(m_weldingInfo));
+            m_weldingType = xd.ReadFlag<WeldingType, byte>(xe, nameof(m_weldingType));
+            m_isExtruded = xd.ReadByte(xe, nameof(m_isExtruded));
+            m_vertexA = xd.ReadVector4(xe, nameof(m_vertexA));
+            m_vertexB = xd.ReadVector4(xe, nameof(m_vertexB));
+            m_vertexC = xd.ReadVector4(xe, nameof(m_vertexC));
+            m_extrusion = xd.ReadVector4(xe, nameof(m_extrusion));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

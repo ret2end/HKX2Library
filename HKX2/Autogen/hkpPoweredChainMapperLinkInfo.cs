@@ -31,7 +31,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_firstTargetIdx = xd.ReadInt32(xe, nameof(m_firstTargetIdx));
+            m_numTargets = xd.ReadInt32(xe, nameof(m_numTargets));
+            m_limitConstraint = xd.ReadClassPointer<hkpConstraintInstance>(xe, nameof(m_limitConstraint));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

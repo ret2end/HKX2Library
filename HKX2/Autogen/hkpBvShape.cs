@@ -9,7 +9,7 @@ namespace HKX2
     public partial class hkpBvShape : hkpShape
     {
         public hkpShape m_boundingVolumeShape;
-        public hkpSingleShapeContainer m_childShape;
+        public hkpSingleShapeContainer m_childShape = new hkpSingleShapeContainer();
 
         public override uint Signature => 0x286eb64c;
 
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_boundingVolumeShape = xd.ReadClassPointer<hkpShape>(xe, nameof(m_boundingVolumeShape));
+            m_childShape = xd.ReadClass<hkpSingleShapeContainer>(xe, nameof(m_childShape));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

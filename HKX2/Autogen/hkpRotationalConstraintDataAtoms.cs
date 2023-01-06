@@ -8,8 +8,8 @@ namespace HKX2
     // m_ang m_class: hkpAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpRotationalConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalRotationsConstraintAtom m_rotations;
-        public hkpAngConstraintAtom m_ang;
+        public hkpSetLocalRotationsConstraintAtom m_rotations = new hkpSetLocalRotationsConstraintAtom();
+        public hkpAngConstraintAtom m_ang = new hkpAngConstraintAtom();
 
         public virtual uint Signature => 0xa0c64586;
 
@@ -31,7 +31,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rotations = xd.ReadClass<hkpSetLocalRotationsConstraintAtom>(xe, nameof(m_rotations));
+            m_ang = xd.ReadClass<hkpAngConstraintAtom>(xe, nameof(m_ang));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

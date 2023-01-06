@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_isActive = xd.ReadBoolean(xe, nameof(m_isActive));
+            m_syncNextFrame = xd.ReadBoolean(xe, nameof(m_syncNextFrame));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -11,8 +11,8 @@ namespace HKX2
     public partial class BSIStateManagerModifier : hkbModifier
     {
         public int m_iStateVar;
-        public List<BSIStateManagerModifierBSiStateData> m_stateData;
-        public BSIStateManagerModifierBSIStateManagerStateListener m_myStateListener;
+        public List<BSIStateManagerModifierBSiStateData> m_stateData = new List<BSIStateManagerModifierBSiStateData>();
+        public BSIStateManagerModifierBSIStateManagerStateListener m_myStateListener = new BSIStateManagerModifierBSIStateManagerStateListener();
 
         public override uint Signature => 0x6cb24f2e;
 
@@ -37,7 +37,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_iStateVar = xd.ReadInt32(xe, nameof(m_iStateVar));
+            m_stateData = xd.ReadClassArray<BSIStateManagerModifierBSiStateData>(xe, nameof(m_stateData));
+            m_myStateListener = new BSIStateManagerModifierBSIStateManagerStateListener();
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

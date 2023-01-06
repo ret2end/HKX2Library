@@ -27,7 +27,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = xd.ReadFlag<MotorType, sbyte>(xe, nameof(m_type));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

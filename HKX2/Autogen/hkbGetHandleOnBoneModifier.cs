@@ -39,7 +39,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_handleOut = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_handleOut));
+            m_localFrameName = xd.ReadString(xe, nameof(m_localFrameName));
+            m_ragdollBoneIndex = xd.ReadInt16(xe, nameof(m_ragdollBoneIndex));
+            m_animationBoneIndex = xd.ReadInt16(xe, nameof(m_animationBoneIndex));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

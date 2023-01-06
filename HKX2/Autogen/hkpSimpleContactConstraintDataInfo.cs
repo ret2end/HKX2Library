@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,7 +18,7 @@ namespace HKX2
         public float m_internalData0;
         public Half m_rollingFrictionMultiplier;
         public Half m_internalData1;
-        public List<uint> m_data;
+        public uint[] m_data = new uint[5];
 
         public virtual uint Signature => 0xb59d1734;
 
@@ -45,7 +44,12 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_flags = xd.ReadUInt16(xe, nameof(m_flags));
+            m_index = xd.ReadUInt16(xe, nameof(m_index));
+            m_internalData0 = xd.ReadSingle(xe, nameof(m_internalData0));
+            m_rollingFrictionMultiplier = xd.ReadHalf(xe, nameof(m_rollingFrictionMultiplier));
+            m_internalData1 = xd.ReadHalf(xe, nameof(m_internalData1));
+            m_data = xd.ReadUInt32CStyleArray(xe, nameof(m_data), 5);
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -14,7 +14,7 @@ namespace HKX2
     public partial class hkSimpleLocalFrame : hkLocalFrame
     {
         public Matrix4x4 m_transform;
-        public List<hkLocalFrame> m_children;
+        public List<hkLocalFrame> m_children = new List<hkLocalFrame>();
         public hkLocalFrame m_parentFrame;
         public hkLocalFrameGroup m_group;
         public string m_name;
@@ -45,7 +45,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_transform = xd.ReadTransform(xe, nameof(m_transform));
+            m_children = xd.ReadClassPointerArray<hkLocalFrame>(xe, nameof(m_children));
+            m_parentFrame = xd.ReadClassPointer<hkLocalFrame>(xe, nameof(m_parentFrame));
+            m_group = xd.ReadClassPointer<hkLocalFrameGroup>(xe, nameof(m_group));
+            m_name = xd.ReadString(xe, nameof(m_name));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

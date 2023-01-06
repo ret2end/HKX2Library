@@ -14,8 +14,8 @@ namespace HKX2
     // m_traceParents m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkTrackerSerializableScanSnapshot : hkReferencedObject
     {
-        public List<hkTrackerSerializableScanSnapshotAllocation> m_allocations;
-        public List<hkTrackerSerializableScanSnapshotBlock> m_blocks;
+        public List<hkTrackerSerializableScanSnapshotAllocation> m_allocations = new List<hkTrackerSerializableScanSnapshotAllocation>();
+        public List<hkTrackerSerializableScanSnapshotBlock> m_blocks = new List<hkTrackerSerializableScanSnapshotBlock>();
         public List<int> m_refs;
         public List<byte> m_typeNames;
         public List<byte> m_traceText;
@@ -50,7 +50,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_allocations = xd.ReadClassArray<hkTrackerSerializableScanSnapshotAllocation>(xe, nameof(m_allocations));
+            m_blocks = xd.ReadClassArray<hkTrackerSerializableScanSnapshotBlock>(xe, nameof(m_blocks));
+            m_refs = xd.ReadInt32Array(xe, nameof(m_refs));
+            m_typeNames = xd.ReadByteArray(xe, nameof(m_typeNames));
+            m_traceText = xd.ReadByteArray(xe, nameof(m_traceText));
+            m_traceAddrs = xd.ReadUInt64Array(xe, nameof(m_traceAddrs));
+            m_traceParents = xd.ReadInt32Array(xe, nameof(m_traceParents));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

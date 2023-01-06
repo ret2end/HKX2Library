@@ -59,7 +59,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_limitAngleDegrees = xd.ReadSingle(xe, nameof(m_limitAngleDegrees));
+            m_currentAngle = default;
+            m_startBoneIndex = xd.ReadInt16(xe, nameof(m_startBoneIndex));
+            m_endBoneIndex = xd.ReadInt16(xe, nameof(m_endBoneIndex));
+            m_gain = xd.ReadSingle(xe, nameof(m_gain));
+            m_boneRadius = xd.ReadSingle(xe, nameof(m_boneRadius));
+            m_castOffset = xd.ReadSingle(xe, nameof(m_castOffset));
+            m_timeStep = default;
+            m_pSkeletonMemory = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

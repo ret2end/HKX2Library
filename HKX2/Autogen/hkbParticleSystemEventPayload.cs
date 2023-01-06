@@ -52,7 +52,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = xd.ReadFlag<SystemType, byte>(xe, nameof(m_type));
+            m_emitBoneIndex = xd.ReadInt16(xe, nameof(m_emitBoneIndex));
+            m_offset = xd.ReadVector4(xe, nameof(m_offset));
+            m_direction = xd.ReadVector4(xe, nameof(m_direction));
+            m_numParticles = xd.ReadInt32(xe, nameof(m_numParticles));
+            m_speed = xd.ReadSingle(xe, nameof(m_speed));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

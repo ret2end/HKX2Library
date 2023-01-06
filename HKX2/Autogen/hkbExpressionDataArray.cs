@@ -8,7 +8,7 @@ namespace HKX2
     // m_expressionsData m_class: hkbExpressionData Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbExpressionDataArray : hkReferencedObject
     {
-        public List<hkbExpressionData> m_expressionsData;
+        public List<hkbExpressionData> m_expressionsData = new List<hkbExpressionData>();
 
         public override uint Signature => 0x4b9ee1a2;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_expressionsData = xd.ReadClassArray<hkbExpressionData>(xe, nameof(m_expressionsData));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

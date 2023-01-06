@@ -16,7 +16,7 @@ namespace HKX2
     // m_capturedObjectsOffset m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpGravityGun : hkpFirstPersonGun
     {
-        public List<dynamic> m_grabbedBodies;
+        public List<dynamic> m_grabbedBodies = new List<dynamic>();
         public int m_maxNumObjectsPicked;
         public float m_maxMassOfObjectPicked;
         public float m_maxDistOfObjectPicked;
@@ -57,7 +57,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_grabbedBodies = default;
+            m_maxNumObjectsPicked = xd.ReadInt32(xe, nameof(m_maxNumObjectsPicked));
+            m_maxMassOfObjectPicked = xd.ReadSingle(xe, nameof(m_maxMassOfObjectPicked));
+            m_maxDistOfObjectPicked = xd.ReadSingle(xe, nameof(m_maxDistOfObjectPicked));
+            m_impulseAppliedWhenObjectNotPicked = xd.ReadSingle(xe, nameof(m_impulseAppliedWhenObjectNotPicked));
+            m_throwVelocity = xd.ReadSingle(xe, nameof(m_throwVelocity));
+            m_capturedObjectPosition = xd.ReadVector4(xe, nameof(m_capturedObjectPosition));
+            m_capturedObjectsOffset = xd.ReadVector4(xe, nameof(m_capturedObjectsOffset));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

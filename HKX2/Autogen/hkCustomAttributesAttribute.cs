@@ -23,14 +23,15 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteStringPointer(bw, m_name);
+            s.WriteCStringPointer(bw, m_name);
             throw new NotImplementedException("TPYE_VARIANT");
             bw.Position += 8;
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            throw new NotImplementedException("TPYE_VARIANT");
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

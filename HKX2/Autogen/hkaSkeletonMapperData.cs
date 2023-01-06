@@ -18,8 +18,8 @@ namespace HKX2
     {
         public hkaSkeleton m_skeletonA;
         public hkaSkeleton m_skeletonB;
-        public List<hkaSkeletonMapperDataSimpleMapping> m_simpleMappings;
-        public List<hkaSkeletonMapperDataChainMapping> m_chainMappings;
+        public List<hkaSkeletonMapperDataSimpleMapping> m_simpleMappings = new List<hkaSkeletonMapperDataSimpleMapping>();
+        public List<hkaSkeletonMapperDataChainMapping> m_chainMappings = new List<hkaSkeletonMapperDataChainMapping>();
         public List<short> m_unmappedBones;
         public Matrix4x4 m_extractedMotionMapping;
         public bool m_keepUnmappedLocal;
@@ -57,7 +57,14 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_skeletonA = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeletonA));
+            m_skeletonB = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeletonB));
+            m_simpleMappings = xd.ReadClassArray<hkaSkeletonMapperDataSimpleMapping>(xe, nameof(m_simpleMappings));
+            m_chainMappings = xd.ReadClassArray<hkaSkeletonMapperDataChainMapping>(xe, nameof(m_chainMappings));
+            m_unmappedBones = xd.ReadInt16Array(xe, nameof(m_unmappedBones));
+            m_extractedMotionMapping = xd.ReadQSTransform(xe, nameof(m_extractedMotionMapping));
+            m_keepUnmappedLocal = xd.ReadBoolean(xe, nameof(m_keepUnmappedLocal));
+            m_mappingType = xd.ReadFlag<MappingType, int>(xe, nameof(m_mappingType));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

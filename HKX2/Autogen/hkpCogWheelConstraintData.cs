@@ -7,7 +7,7 @@ namespace HKX2
     // m_atoms m_class: hkpCogWheelConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpCogWheelConstraintData : hkpConstraintData
     {
-        public hkpCogWheelConstraintDataAtoms m_atoms;
+        public hkpCogWheelConstraintDataAtoms m_atoms = new hkpCogWheelConstraintDataAtoms();
 
         public override uint Signature => 0x7f0e53fc;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpCogWheelConstraintDataAtoms>(xe, nameof(m_atoms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

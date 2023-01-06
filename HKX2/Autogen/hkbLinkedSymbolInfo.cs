@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_eventNames = xd.ReadStringArray(xe, nameof(m_eventNames));
+            m_variableNames = xd.ReadStringArray(xe, nameof(m_variableNames));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

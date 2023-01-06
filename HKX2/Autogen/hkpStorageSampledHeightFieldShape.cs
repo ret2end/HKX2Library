@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_storage = xd.ReadSingleArray(xe, nameof(m_storage));
+            m_triangleFlip = xd.ReadBoolean(xe, nameof(m_triangleFlip));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

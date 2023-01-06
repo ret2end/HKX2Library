@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_previewColor = xd.ReadUInt32Array(xe, nameof(m_previewColor));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

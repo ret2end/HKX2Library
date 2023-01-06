@@ -68,7 +68,18 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pointIn = xd.ReadVector4(xe, nameof(m_pointIn));
+            m_pointOut = xd.ReadVector4(xe, nameof(m_pointOut));
+            m_groundAngleOut = xd.ReadSingle(xe, nameof(m_groundAngleOut));
+            m_upAngleOut = xd.ReadSingle(xe, nameof(m_upAngleOut));
+            m_verticalOffset = xd.ReadSingle(xe, nameof(m_verticalOffset));
+            m_reverseGroundAngle = xd.ReadBoolean(xe, nameof(m_reverseGroundAngle));
+            m_reverseUpAngle = xd.ReadBoolean(xe, nameof(m_reverseUpAngle));
+            m_projectPoint = xd.ReadBoolean(xe, nameof(m_projectPoint));
+            m_normalizePoint = xd.ReadBoolean(xe, nameof(m_normalizePoint));
+            m_computeOnlyOnce = xd.ReadBoolean(xe, nameof(m_computeOnlyOnce));
+            m_computedOutput = xd.ReadBoolean(xe, nameof(m_computedOutput));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

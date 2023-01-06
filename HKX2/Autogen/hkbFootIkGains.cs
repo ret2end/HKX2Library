@@ -67,7 +67,18 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_onOffGain = xd.ReadSingle(xe, nameof(m_onOffGain));
+            m_groundAscendingGain = xd.ReadSingle(xe, nameof(m_groundAscendingGain));
+            m_groundDescendingGain = xd.ReadSingle(xe, nameof(m_groundDescendingGain));
+            m_footPlantedGain = xd.ReadSingle(xe, nameof(m_footPlantedGain));
+            m_footRaisedGain = xd.ReadSingle(xe, nameof(m_footRaisedGain));
+            m_footUnlockGain = xd.ReadSingle(xe, nameof(m_footUnlockGain));
+            m_worldFromModelFeedbackGain = xd.ReadSingle(xe, nameof(m_worldFromModelFeedbackGain));
+            m_errorUpDownBias = xd.ReadSingle(xe, nameof(m_errorUpDownBias));
+            m_alignWorldFromModelGain = xd.ReadSingle(xe, nameof(m_alignWorldFromModelGain));
+            m_hipOrientationGain = xd.ReadSingle(xe, nameof(m_hipOrientationGain));
+            m_maxKneeAngleDifference = xd.ReadSingle(xe, nameof(m_maxKneeAngleDifference));
+            m_ankleOrientationGain = xd.ReadSingle(xe, nameof(m_ankleOrientationGain));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -7,7 +7,7 @@ namespace HKX2
     // m_atoms m_class: hkpPointToPlaneConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpPointToPlaneConstraintData : hkpConstraintData
     {
-        public hkpPointToPlaneConstraintDataAtoms m_atoms;
+        public hkpPointToPlaneConstraintDataAtoms m_atoms = new hkpPointToPlaneConstraintDataAtoms();
 
         public override uint Signature => 0x65c56e17;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpPointToPlaneConstraintDataAtoms>(xe, nameof(m_atoms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -25,7 +25,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_conditionString = xd.ReadString(xe, nameof(m_conditionString));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

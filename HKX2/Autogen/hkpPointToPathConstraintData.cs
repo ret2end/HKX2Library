@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,11 +12,11 @@ namespace HKX2
     // m_transform_OS_KS m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 2 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpPointToPathConstraintData : hkpConstraintData
     {
-        public hkpBridgeAtoms m_atoms;
+        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
         public hkpParametricCurve m_path;
         public float m_maxFrictionForce;
         public sbyte m_angularConstrainedDOF;
-        public List<Matrix4x4> m_transform_OS_KS;
+        public Matrix4x4[] m_transform_OS_KS = new Matrix4x4[2];
 
         public override uint Signature => 0x8e7cb5da;
 
@@ -46,7 +45,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpBridgeAtoms>(xe, nameof(m_atoms));
+            m_path = xd.ReadClassPointer<hkpParametricCurve>(xe, nameof(m_path));
+            m_maxFrictionForce = xd.ReadSingle(xe, nameof(m_maxFrictionForce));
+            m_angularConstrainedDOF = xd.ReadFlag<OrientationConstraintType, sbyte>(xe, nameof(m_angularConstrainedDOF));
+            m_transform_OS_KS = xd.ReadTransformCStyleArray(xe, nameof(m_transform_OS_KS), 2);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

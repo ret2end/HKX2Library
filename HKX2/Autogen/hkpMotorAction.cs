@@ -42,7 +42,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_axis = xd.ReadVector4(xe, nameof(m_axis));
+            m_spinRate = xd.ReadSingle(xe, nameof(m_spinRate));
+            m_gain = xd.ReadSingle(xe, nameof(m_gain));
+            m_active = xd.ReadBoolean(xe, nameof(m_active));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -7,7 +7,7 @@ namespace HKX2
     // m_atoms m_class: hkpRackAndPinionConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpRackAndPinionConstraintData : hkpConstraintData
     {
-        public hkpRackAndPinionConstraintDataAtoms m_atoms;
+        public hkpRackAndPinionConstraintDataAtoms m_atoms = new hkpRackAndPinionConstraintDataAtoms();
 
         public override uint Signature => 0xd180ebe0;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpRackAndPinionConstraintDataAtoms>(xe, nameof(m_atoms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

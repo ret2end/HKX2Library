@@ -38,7 +38,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_inputValue = xd.ReadSingle(xe, nameof(m_inputValue));
+            m_lowerBound = xd.ReadSingle(xe, nameof(m_lowerBound));
+            m_eventRanges = xd.ReadClassPointer<hkbEventRangeDataArray>(xe, nameof(m_eventRanges));
+            m_wasActiveInPreviousFrame = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

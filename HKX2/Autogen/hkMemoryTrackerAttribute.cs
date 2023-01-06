@@ -7,7 +7,7 @@ namespace HKX2
 
     public partial class hkMemoryTrackerAttribute : IHavokObject
     {
-        public byte[] unk0;
+        public byte[] unk0 = new byte[1];
 
         public virtual uint Signature => 0x7bd5c66f;
 

@@ -46,7 +46,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_vertices = xd.ReadSingleArray(xe, nameof(m_vertices));
+            m_indices16 = xd.ReadUInt16Array(xe, nameof(m_indices16));
+            m_indices32 = xd.ReadUInt32Array(xe, nameof(m_indices32));
+            m_materialIndices = xd.ReadByteArray(xe, nameof(m_materialIndices));
+            m_materials = xd.ReadUInt32Array(xe, nameof(m_materials));
+            m_materialIndices16 = xd.ReadUInt16Array(xe, nameof(m_materialIndices16));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

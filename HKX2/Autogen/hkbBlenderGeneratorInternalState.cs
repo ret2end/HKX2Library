@@ -15,7 +15,7 @@ namespace HKX2
     // m_doSubtractiveBlend m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 61 flags: FLAGS_NONE enum: 
     public partial class hkbBlenderGeneratorInternalState : hkReferencedObject
     {
-        public List<hkbBlenderGeneratorChildInternalState> m_childrenInternalStates;
+        public List<hkbBlenderGeneratorChildInternalState> m_childrenInternalStates = new List<hkbBlenderGeneratorChildInternalState>();
         public List<short> m_sortedChildren;
         public float m_endIntervalWeight;
         public int m_numActiveChildren;
@@ -56,7 +56,15 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_childrenInternalStates = xd.ReadClassArray<hkbBlenderGeneratorChildInternalState>(xe, nameof(m_childrenInternalStates));
+            m_sortedChildren = xd.ReadInt16Array(xe, nameof(m_sortedChildren));
+            m_endIntervalWeight = xd.ReadSingle(xe, nameof(m_endIntervalWeight));
+            m_numActiveChildren = xd.ReadInt32(xe, nameof(m_numActiveChildren));
+            m_beginIntervalIndex = xd.ReadInt16(xe, nameof(m_beginIntervalIndex));
+            m_endIntervalIndex = xd.ReadInt16(xe, nameof(m_endIntervalIndex));
+            m_initSync = xd.ReadBoolean(xe, nameof(m_initSync));
+            m_doSubtractiveBlend = xd.ReadBoolean(xe, nameof(m_doSubtractiveBlend));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

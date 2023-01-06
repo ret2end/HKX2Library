@@ -53,7 +53,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_instanceName = xd.ReadString(xe, nameof(m_instanceName));
+            m_templateName = xd.ReadString(xe, nameof(m_templateName));
+            m_fullPathToProject = xd.ReadString(xe, nameof(m_fullPathToProject));
+            m_skeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeleton));
+            m_worldFromModel = xd.ReadQSTransform(xe, nameof(m_worldFromModel));
+            m_poseModelSpace = xd.ReadQSTransformArray(xe, nameof(m_poseModelSpace));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

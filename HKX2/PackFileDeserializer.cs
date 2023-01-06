@@ -391,104 +391,104 @@ namespace HKX2
 
 
         #region C Style Array
-        private List<T> ReadCStyleArrayBase<T>(Func<BinaryReaderEx, T> func, BinaryReaderEx br, short length)
+        private T[] ReadCStyleArrayBase<T>(Func<BinaryReaderEx, T> func, BinaryReaderEx br, short length)
         {
-            var res = new List<T>();
+            var res = new T[length];
             for (int i = 0; i < length; i++)
             {
-                res.Add(func(br));
+                res[i] = (func(br));
             }
             return res;
         }
 
-        public List<bool> ReadBooleanCStyleArray(BinaryReaderEx br, short length)
+        public bool[] ReadBooleanCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadBoolean, br, length);
         }
 
-        public List<byte> ReadByteCStyleArray(BinaryReaderEx br, short length)
+        public byte[] ReadByteCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadByte, br, length);
         }
 
-        public List<sbyte> ReadSByteCStyleArray(BinaryReaderEx br, short length)
+        public sbyte[] ReadSByteCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadSByte, br, length);
         }
 
-        public List<short> ReadInt16CStyleArray(BinaryReaderEx br, short length)
+        public short[] ReadInt16CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadInt16, br, length);
         }
 
-        public List<ushort> ReadUInt16CStyleArray(BinaryReaderEx br, short length)
+        public ushort[] ReadUInt16CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadUInt16, br, length);
         }
-        public List<int> ReadInt32CStyleArray(BinaryReaderEx br, short length)
+        public int[] ReadInt32CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadInt32, br, length);
         }
-        public List<uint> ReadUInt32CStyleArray(BinaryReaderEx br, short length)
+        public uint[] ReadUInt32CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadUInt32, br, length);
         }
 
-        public List<long> ReadInt64CStyleArray(BinaryReaderEx br, short length)
+        public long[] ReadInt64CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadInt64, br, length);
         }
 
-        public List<ulong> ReadUInt64CStyleArray(BinaryReaderEx br, short length)
+        public ulong[] ReadUInt64CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadUInt64, br, length);
         }
 
-        public List<Half> ReadHalfCStyleArray(BinaryReaderEx br, short length)
+        public Half[] ReadHalfCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadHalf, br, length);
         }
 
-        public List<float> ReadSingleCStyleArray(BinaryReaderEx br, short length)
+        public float[] ReadSingleCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadSingle, br, length);
         }
 
-        public List<Vector4> ReadVector4CStyleArray(BinaryReaderEx br, short length)
+        public Vector4[] ReadVector4CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadVector4, br, length);
         }
 
-        public List<Quaternion> ReadQuaternionCStyleArray(BinaryReaderEx br, short length)
+        public Quaternion[] ReadQuaternionCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadQuaternion, br, length);
         }
-        public List<Matrix4x4> ReadMatrix3CStyleArray(BinaryReaderEx br, short length)
+        public Matrix4x4[] ReadMatrix3CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadMatrix3, br, length);
         }
 
-        public List<Matrix4x4> ReadRotationCStyleArray(BinaryReaderEx br, short length)
+        public Matrix4x4[] ReadRotationCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadMatrix3, br, length);
         }
 
-        public List<Matrix4x4> ReadQSTransformCStyleArray(BinaryReaderEx br, short length)
+        public Matrix4x4[] ReadQSTransformCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadQSTransform, br, length);
         }
 
-        public List<Matrix4x4> ReadMatrix4CStyleArray(BinaryReaderEx br, short length)
+        public Matrix4x4[] ReadMatrix4CStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadMatrix4, br, length);
         }
 
-        public List<Matrix4x4> ReadTransformCStyleArray(BinaryReaderEx br, short length)
+        public Matrix4x4[] ReadTransformCStyleArray(BinaryReaderEx br, short length)
         {
             return ReadCStyleArrayBase(ReadTransform, br, length);
         }
 
-        public List<T> ReadClassPointerCStyleArray<T>(BinaryReaderEx br, short length) where T : IHavokObject, new()
+        public T[] ReadClassPointerCStyleArray<T>(BinaryReaderEx br, short length) where T : IHavokObject, new()
         {
             return ReadCStyleArrayBase(ReadClassPointer<T>, br, length);
         }
@@ -501,14 +501,14 @@ namespace HKX2
             }
         }
 
-        public List<T> ReadStructCStyleArray<T>(BinaryReaderEx br, short length) where T : IHavokObject, new()
+        public T[] ReadStructCStyleArray<T>(BinaryReaderEx br, short length) where T : IHavokObject, new()
         {
-            var res = new List<T>();
+            var res = new T[length];
             for (int i = 0; i < length; i++)
             {
                 var s = new T();
                 s.Read(this, br);
-                res.Add(s);
+                res[i] = s;
             }
             return res;
         }

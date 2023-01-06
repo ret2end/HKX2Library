@@ -40,7 +40,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_centerOfMass0 = xd.ReadVector4(xe, nameof(m_centerOfMass0));
+            m_centerOfMass1 = xd.ReadVector4(xe, nameof(m_centerOfMass1));
+            m_rotation0 = xd.ReadQuaternion(xe, nameof(m_rotation0));
+            m_rotation1 = xd.ReadQuaternion(xe, nameof(m_rotation1));
+            m_centerOfMassLocal = xd.ReadVector4(xe, nameof(m_centerOfMassLocal));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

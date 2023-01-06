@@ -42,7 +42,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteStringPointer(bw, m_name);
+            s.WriteCStringPointer(bw, m_name);
             s.WriteClassPointer(bw, m_class);
             s.WriteClassPointer(bw, m_enum);
             s.WriteByte(bw, m_type);
@@ -55,7 +55,15 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_class = xd.ReadClassPointer<hkClass>(xe, nameof(m_class));
+            m_enum = xd.ReadClassPointer<hkClassEnum>(xe, nameof(m_enum));
+            m_type = xd.ReadFlag<Type, byte>(xe, nameof(m_type));
+            m_subtype = xd.ReadFlag<Type, byte>(xe, nameof(m_subtype));
+            m_cArraySize = xd.ReadInt16(xe, nameof(m_cArraySize));
+            m_flags = xd.ReadFlag<FlagValues, ushort>(xe, nameof(m_flags));
+            m_offset = xd.ReadUInt16(xe, nameof(m_offset));
+            m_attributes = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

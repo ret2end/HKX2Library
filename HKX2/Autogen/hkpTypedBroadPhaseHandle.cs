@@ -39,7 +39,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = xd.ReadSByte(xe, nameof(m_type));
+            m_ownerOffset = default;
+            m_objectQualityType = xd.ReadSByte(xe, nameof(m_objectQualityType));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

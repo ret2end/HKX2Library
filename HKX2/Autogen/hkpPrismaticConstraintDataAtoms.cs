@@ -13,13 +13,13 @@ namespace HKX2
     // m_linLimit m_class: hkpLinLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 188 flags: FLAGS_NONE enum: 
     public partial class hkpPrismaticConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms;
-        public hkpLinMotorConstraintAtom m_motor;
-        public hkpLinFrictionConstraintAtom m_friction;
-        public hkpAngConstraintAtom m_ang;
-        public hkpLinConstraintAtom m_lin0;
-        public hkpLinConstraintAtom m_lin1;
-        public hkpLinLimitConstraintAtom m_linLimit;
+        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
+        public hkpLinMotorConstraintAtom m_motor = new hkpLinMotorConstraintAtom();
+        public hkpLinFrictionConstraintAtom m_friction = new hkpLinFrictionConstraintAtom();
+        public hkpAngConstraintAtom m_ang = new hkpAngConstraintAtom();
+        public hkpLinConstraintAtom m_lin0 = new hkpLinConstraintAtom();
+        public hkpLinConstraintAtom m_lin1 = new hkpLinConstraintAtom();
+        public hkpLinLimitConstraintAtom m_linLimit = new hkpLinLimitConstraintAtom();
 
         public virtual uint Signature => 0x7f516137;
 
@@ -56,7 +56,13 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transforms = xd.ReadClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms));
+            m_motor = xd.ReadClass<hkpLinMotorConstraintAtom>(xe, nameof(m_motor));
+            m_friction = xd.ReadClass<hkpLinFrictionConstraintAtom>(xe, nameof(m_friction));
+            m_ang = xd.ReadClass<hkpAngConstraintAtom>(xe, nameof(m_ang));
+            m_lin0 = xd.ReadClass<hkpLinConstraintAtom>(xe, nameof(m_lin0));
+            m_lin1 = xd.ReadClass<hkpLinConstraintAtom>(xe, nameof(m_lin1));
+            m_linLimit = xd.ReadClass<hkpLinLimitConstraintAtom>(xe, nameof(m_linLimit));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

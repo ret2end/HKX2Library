@@ -8,7 +8,7 @@ namespace HKX2
     // m_payloads m_class: hkbEventPayload Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbEventPayloadList : hkbEventPayload
     {
-        public List<hkbEventPayload> m_payloads;
+        public List<hkbEventPayload> m_payloads = new List<hkbEventPayload>();
 
         public override uint Signature => 0x3d2dbd34;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_payloads = xd.ReadClassPointerArray<hkbEventPayload>(xe, nameof(m_payloads));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

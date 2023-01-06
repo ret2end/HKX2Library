@@ -10,7 +10,7 @@ namespace HKX2
     public partial class hkaAnnotationTrack : IHavokObject
     {
         public string m_trackName;
-        public List<hkaAnnotationTrackAnnotation> m_annotations;
+        public List<hkaAnnotationTrackAnnotation> m_annotations = new List<hkaAnnotationTrackAnnotation>();
 
         public virtual uint Signature => 0xd4114fdd;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_trackName = xd.ReadString(xe, nameof(m_trackName));
+            m_annotations = xd.ReadClassArray<hkaAnnotationTrackAnnotation>(xe, nameof(m_annotations));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -10,7 +10,7 @@ namespace HKX2
     // m_internalHandData m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbHandIkModifier : hkbModifier
     {
-        public List<hkbHandIkModifierHand> m_hands;
+        public List<hkbHandIkModifierHand> m_hands = new List<hkbHandIkModifierHand>();
         public sbyte m_fadeInOutCurve;
         public List<dynamic> m_internalHandData;
 
@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_hands = xd.ReadClassArray<hkbHandIkModifierHand>(xe, nameof(m_hands));
+            m_fadeInOutCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_fadeInOutCurve));
+            m_internalHandData = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

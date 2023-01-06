@@ -18,8 +18,8 @@ namespace HKX2
         public string m_name;
         public hkReferencedObject m_object;
         public List<Matrix4x4> m_keyFrames;
-        public List<hkxNode> m_children;
-        public List<hkxNodeAnnotationData> m_annotations;
+        public List<hkxNode> m_children = new List<hkxNode>();
+        public List<hkxNodeAnnotationData> m_annotations = new List<hkxNodeAnnotationData>();
         public string m_userProperties;
         public bool m_selected;
 
@@ -53,7 +53,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_object = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_object));
+            m_keyFrames = xd.ReadMatrix4Array(xe, nameof(m_keyFrames));
+            m_children = xd.ReadClassPointerArray<hkxNode>(xe, nameof(m_children));
+            m_annotations = xd.ReadClassArray<hkxNodeAnnotationData>(xe, nameof(m_annotations));
+            m_userProperties = xd.ReadString(xe, nameof(m_userProperties));
+            m_selected = xd.ReadBoolean(xe, nameof(m_selected));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

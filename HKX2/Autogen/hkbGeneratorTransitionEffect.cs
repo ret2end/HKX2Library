@@ -89,7 +89,23 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_transitionGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_transitionGenerator));
+            m_blendInDuration = xd.ReadSingle(xe, nameof(m_blendInDuration));
+            m_blendOutDuration = xd.ReadSingle(xe, nameof(m_blendOutDuration));
+            m_syncToGeneratorStartTime = xd.ReadBoolean(xe, nameof(m_syncToGeneratorStartTime));
+            m_fromGenerator = default;
+            m_toGenerator = default;
+            m_timeInTransition = default;
+            m_duration = default;
+            m_effectiveBlendInDuration = default;
+            m_effectiveBlendOutDuration = default;
+            m_toGeneratorState = default;
+            m_echoTransitionGenerator = default;
+            m_echoToGenerator = default;
+            m_justActivated = default;
+            m_updateActiveNodes = default;
+            m_stage = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

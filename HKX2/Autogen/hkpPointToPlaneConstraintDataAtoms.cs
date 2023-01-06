@@ -8,8 +8,8 @@ namespace HKX2
     // m_lin m_class: hkpLinConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
     public partial class hkpPointToPlaneConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms;
-        public hkpLinConstraintAtom m_lin;
+        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
+        public hkpLinConstraintAtom m_lin = new hkpLinConstraintAtom();
 
         public virtual uint Signature => 0x749bc260;
 
@@ -31,7 +31,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transforms = xd.ReadClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms));
+            m_lin = xd.ReadClass<hkpLinConstraintAtom>(xe, nameof(m_lin));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

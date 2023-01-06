@@ -16,7 +16,7 @@ namespace HKX2
         public hkxMesh m_mesh;
         public string m_originalSkeletonName;
         public hkaSkeleton m_skeleton;
-        public List<hkaMeshBindingMapping> m_mappings;
+        public List<hkaMeshBindingMapping> m_mappings = new List<hkaMeshBindingMapping>();
         public List<Matrix4x4> m_boneFromSkinMeshTransforms;
 
         public override uint Signature => 0x81d9950b;
@@ -43,7 +43,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_mesh = xd.ReadClassPointer<hkxMesh>(xe, nameof(m_mesh));
+            m_originalSkeletonName = xd.ReadString(xe, nameof(m_originalSkeletonName));
+            m_skeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeleton));
+            m_mappings = xd.ReadClassArray<hkaMeshBindingMapping>(xe, nameof(m_mappings));
+            m_boneFromSkinMeshTransforms = xd.ReadTransformArray(xe, nameof(m_boneFromSkinMeshTransforms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

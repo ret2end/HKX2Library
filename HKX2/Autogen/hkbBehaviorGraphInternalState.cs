@@ -9,7 +9,7 @@ namespace HKX2
     // m_variableValueSet m_class: hkbVariableValueSet Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorGraphInternalState : hkReferencedObject
     {
-        public List<hkbNodeInternalStateInfo> m_nodeInternalStateInfos;
+        public List<hkbNodeInternalStateInfo> m_nodeInternalStateInfos = new List<hkbNodeInternalStateInfo>();
         public hkbVariableValueSet m_variableValueSet;
 
         public override uint Signature => 0x8699b6eb;
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_nodeInternalStateInfos = xd.ReadClassPointerArray<hkbNodeInternalStateInfo>(xe, nameof(m_nodeInternalStateInfos));
+            m_variableValueSet = xd.ReadClassPointer<hkbVariableValueSet>(xe, nameof(m_variableValueSet));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

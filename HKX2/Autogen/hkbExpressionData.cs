@@ -45,7 +45,12 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_expression = xd.ReadString(xe, nameof(m_expression));
+            m_assignmentVariableIndex = xd.ReadInt32(xe, nameof(m_assignmentVariableIndex));
+            m_assignmentEventIndex = xd.ReadInt32(xe, nameof(m_assignmentEventIndex));
+            m_eventMode = xd.ReadFlag<ExpressionEventMode, sbyte>(xe, nameof(m_eventMode));
+            m_raisedEvent = default;
+            m_wasTrueInPreviousFrame = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

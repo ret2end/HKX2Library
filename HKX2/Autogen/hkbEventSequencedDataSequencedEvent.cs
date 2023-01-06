@@ -8,7 +8,7 @@ namespace HKX2
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkbEventSequencedDataSequencedEvent : IHavokObject
     {
-        public hkbEvent m_event;
+        public hkbEvent m_event = new hkbEvent();
         public float m_time;
 
         public virtual uint Signature => 0x9139b821;
@@ -30,7 +30,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_event = xd.ReadClass<hkbEvent>(xe, nameof(m_event));
+            m_time = xd.ReadSingle(xe, nameof(m_time));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

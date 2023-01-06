@@ -37,7 +37,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_poseMatchingBone0 = xd.ReadInt16(xe, nameof(m_poseMatchingBone0));
+            m_poseMatchingBone1 = xd.ReadInt16(xe, nameof(m_poseMatchingBone1));
+            m_poseMatchingBone2 = xd.ReadInt16(xe, nameof(m_poseMatchingBone2));
+            m_mode = xd.ReadFlag<WorldFromModelMode, sbyte>(xe, nameof(m_mode));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -11,7 +11,7 @@ namespace HKX2
     // m_hasActivateBeenCalled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 114 flags: FLAGS_NONE enum: 
     public partial class hkbNodeInternalStateInfo : hkReferencedObject
     {
-        public hkbGeneratorSyncInfo m_syncInfo;
+        public hkbGeneratorSyncInfo m_syncInfo = new hkbGeneratorSyncInfo();
         public string m_name;
         public hkReferencedObject m_internalState;
         public short m_nodeId;
@@ -44,7 +44,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_syncInfo = xd.ReadClass<hkbGeneratorSyncInfo>(xe, nameof(m_syncInfo));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_internalState = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_internalState));
+            m_nodeId = xd.ReadInt16(xe, nameof(m_nodeId));
+            m_hasActivateBeenCalled = xd.ReadBoolean(xe, nameof(m_hasActivateBeenCalled));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

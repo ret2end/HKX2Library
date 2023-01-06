@@ -9,7 +9,7 @@ namespace HKX2
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     public partial class hkbHandIkControlsModifierHand : IHavokObject
     {
-        public hkbHandIkControlData m_controlData;
+        public hkbHandIkControlData m_controlData = new hkbHandIkControlData();
         public int m_handIndex;
         public bool m_enable;
 
@@ -34,7 +34,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_controlData = xd.ReadClass<hkbHandIkControlData>(xe, nameof(m_controlData));
+            m_handIndex = xd.ReadInt32(xe, nameof(m_handIndex));
+            m_enable = xd.ReadBoolean(xe, nameof(m_enable));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

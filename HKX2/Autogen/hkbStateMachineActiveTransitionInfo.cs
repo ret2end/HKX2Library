@@ -15,8 +15,8 @@ namespace HKX2
     {
         public dynamic m_transitionEffect;
         public hkbNodeInternalStateInfo m_transitionEffectInternalStateInfo;
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReference;
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE;
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReference = new hkbStateMachineTransitionInfoReference();
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE = new hkbStateMachineTransitionInfoReference();
         public int m_fromStateId;
         public int m_toStateId;
         public bool m_isReturnToPreviousState;
@@ -51,7 +51,13 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_transitionEffect = default;
+            m_transitionEffectInternalStateInfo = xd.ReadClassPointer<hkbNodeInternalStateInfo>(xe, nameof(m_transitionEffectInternalStateInfo));
+            m_transitionInfoReference = xd.ReadClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReference));
+            m_transitionInfoReferenceForTE = xd.ReadClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReferenceForTE));
+            m_fromStateId = xd.ReadInt32(xe, nameof(m_fromStateId));
+            m_toStateId = xd.ReadInt32(xe, nameof(m_toStateId));
+            m_isReturnToPreviousState = xd.ReadBoolean(xe, nameof(m_isReturnToPreviousState));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -46,7 +46,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteStringPointer(bw, m_name);
+            s.WriteCStringPointer(bw, m_name);
             s.WriteClassPointer(bw, m_parent);
             bw.WriteInt32(m_objectSize);
             bw.WriteInt32(m_numImplementedInterfaces);
@@ -60,7 +60,16 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_parent = xd.ReadClassPointer<hkClass>(xe, nameof(m_parent));
+            m_objectSize = xd.ReadInt32(xe, nameof(m_objectSize));
+            m_numImplementedInterfaces = xd.ReadInt32(xe, nameof(m_numImplementedInterfaces));
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
+            m_defaults = default;
+            m_attributes = default;
+            m_flags = xd.ReadFlag<FlagValues, uint>(xe, nameof(m_flags));
+            m_describedVersion = xd.ReadInt32(xe, nameof(m_describedVersion));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

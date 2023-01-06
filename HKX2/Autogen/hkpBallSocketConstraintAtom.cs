@@ -43,7 +43,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_solvingMethod = xd.ReadFlag<SolvingMethod, byte>(xe, nameof(m_solvingMethod));
+            m_bodiesToNotify = xd.ReadByte(xe, nameof(m_bodiesToNotify));
+            m_velocityStabilizationFactor = xd.ReadByte(xe, nameof(m_velocityStabilizationFactor));
+            m_maxImpulse = xd.ReadSingle(xe, nameof(m_maxImpulse));
+            m_inertiaStabilizationFactor = xd.ReadSingle(xe, nameof(m_inertiaStabilizationFactor));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -61,7 +61,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_invert = xd.ReadBoolean(xe, nameof(m_invert));
+            m_transformPositionX = xd.ReadBoolean(xe, nameof(m_transformPositionX));
+            m_transformPositionY = xd.ReadBoolean(xe, nameof(m_transformPositionY));
+            m_transformPositionZ = xd.ReadBoolean(xe, nameof(m_transformPositionZ));
+            m_transformRotation = xd.ReadBoolean(xe, nameof(m_transformRotation));
+            m_transformScale = xd.ReadBoolean(xe, nameof(m_transformScale));
+            m_transformSkew = xd.ReadBoolean(xe, nameof(m_transformSkew));
+            m_keyframe = xd.ReadInt32(xe, nameof(m_keyframe));
+            m_nodeName = xd.ReadString(xe, nameof(m_nodeName));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

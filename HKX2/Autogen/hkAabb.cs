@@ -28,7 +28,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_min = xd.ReadVector4(xe, nameof(m_min));
+            m_max = xd.ReadVector4(xe, nameof(m_max));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

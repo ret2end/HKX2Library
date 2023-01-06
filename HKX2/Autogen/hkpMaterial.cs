@@ -38,7 +38,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_responseType = xd.ReadFlag<ResponseType, sbyte>(xe, nameof(m_responseType));
+            m_rollingFrictionMultiplier = xd.ReadHalf(xe, nameof(m_rollingFrictionMultiplier));
+            m_friction = xd.ReadSingle(xe, nameof(m_friction));
+            m_restitution = xd.ReadSingle(xe, nameof(m_restitution));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

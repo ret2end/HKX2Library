@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_id = xd.ReadInt32(xe, nameof(m_id));
+            m_payload = xd.ReadClassPointer<hkbEventPayload>(xe, nameof(m_payload));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -35,7 +35,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_absmin = xd.ReadInt32(xe, nameof(m_absmin));
+            m_absmax = xd.ReadInt32(xe, nameof(m_absmax));
+            m_softmin = xd.ReadInt32(xe, nameof(m_softmin));
+            m_softmax = xd.ReadInt32(xe, nameof(m_softmax));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

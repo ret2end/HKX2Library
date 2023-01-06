@@ -78,7 +78,20 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_elbowAxisLS = xd.ReadVector4(xe, nameof(m_elbowAxisLS));
+            m_backHandNormalLS = xd.ReadVector4(xe, nameof(m_backHandNormalLS));
+            m_handOffsetLS = xd.ReadVector4(xe, nameof(m_handOffsetLS));
+            m_handOrienationOffsetLS = xd.ReadQuaternion(xe, nameof(m_handOrienationOffsetLS));
+            m_maxElbowAngleDegrees = xd.ReadSingle(xe, nameof(m_maxElbowAngleDegrees));
+            m_minElbowAngleDegrees = xd.ReadSingle(xe, nameof(m_minElbowAngleDegrees));
+            m_shoulderIndex = xd.ReadInt16(xe, nameof(m_shoulderIndex));
+            m_shoulderSiblingIndex = xd.ReadInt16(xe, nameof(m_shoulderSiblingIndex));
+            m_elbowIndex = xd.ReadInt16(xe, nameof(m_elbowIndex));
+            m_elbowSiblingIndex = xd.ReadInt16(xe, nameof(m_elbowSiblingIndex));
+            m_wristIndex = xd.ReadInt16(xe, nameof(m_wristIndex));
+            m_enforceEndPosition = xd.ReadBoolean(xe, nameof(m_enforceEndPosition));
+            m_enforceEndRotation = xd.ReadBoolean(xe, nameof(m_enforceEndRotation));
+            m_localFrameName = xd.ReadString(xe, nameof(m_localFrameName));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -90,7 +90,23 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_shape = xd.ReadClassPointer<hkpShape>(xe, nameof(m_shape));
+            m_position = xd.ReadVector4(xe, nameof(m_position));
+            m_rotation = xd.ReadQuaternion(xe, nameof(m_rotation));
+            m_mass = xd.ReadSingle(xe, nameof(m_mass));
+            m_friction = xd.ReadSingle(xe, nameof(m_friction));
+            m_maxLinearVelocity = xd.ReadSingle(xe, nameof(m_maxLinearVelocity));
+            m_allowedPenetrationDepth = xd.ReadSingle(xe, nameof(m_allowedPenetrationDepth));
+            m_up = xd.ReadVector4(xe, nameof(m_up));
+            m_maxSlope = xd.ReadSingle(xe, nameof(m_maxSlope));
+            m_maxForce = xd.ReadSingle(xe, nameof(m_maxForce));
+            m_unweldingHeightOffsetFactor = xd.ReadSingle(xe, nameof(m_unweldingHeightOffsetFactor));
+            m_maxSpeedForSimplexSolver = xd.ReadSingle(xe, nameof(m_maxSpeedForSimplexSolver));
+            m_supportDistance = xd.ReadSingle(xe, nameof(m_supportDistance));
+            m_hardSupportDistance = xd.ReadSingle(xe, nameof(m_hardSupportDistance));
+            m_vdbColor = xd.ReadInt32(xe, nameof(m_vdbColor));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -43,7 +43,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_callbackFunc = default;
+            m_callbackType = xd.ReadFlag<CallbackType, uint>(xe, nameof(m_callbackType));
+            m_userData0 = xd.ReadUInt64(xe, nameof(m_userData0));
+            m_userData1 = xd.ReadUInt64(xe, nameof(m_userData1));
+            m_userData2 = xd.ReadUInt64(xe, nameof(m_userData2));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

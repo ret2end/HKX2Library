@@ -17,7 +17,7 @@ namespace HKX2
         public ulong m_characterId;
         public hkbBehaviorGraph m_behavior;
         public hkbGenerator m_rootGenerator;
-        public List<hkbBehaviorGraph> m_referencedBehaviors;
+        public List<hkbBehaviorGraph> m_referencedBehaviors = new List<hkbBehaviorGraph>();
         public int m_startStateIndex;
         public bool m_randomizeSimulation;
         public int m_padding;
@@ -54,7 +54,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_behavior = xd.ReadClassPointer<hkbBehaviorGraph>(xe, nameof(m_behavior));
+            m_rootGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_rootGenerator));
+            m_referencedBehaviors = xd.ReadClassPointerArray<hkbBehaviorGraph>(xe, nameof(m_referencedBehaviors));
+            m_startStateIndex = xd.ReadInt32(xe, nameof(m_startStateIndex));
+            m_randomizeSimulation = xd.ReadBoolean(xe, nameof(m_randomizeSimulation));
+            m_padding = xd.ReadInt32(xe, nameof(m_padding));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

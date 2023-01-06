@@ -33,7 +33,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_matrices = xd.ReadMatrix4Array(xe, nameof(m_matrices));
+            m_hint = xd.ReadFlag<Hint, byte>(xe, nameof(m_hint));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

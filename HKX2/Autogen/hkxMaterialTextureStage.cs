@@ -31,7 +31,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_texture = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_texture));
+            m_usageHint = xd.ReadFlag<TextureType, int>(xe, nameof(m_usageHint));
+            m_tcoordChannel = xd.ReadInt32(xe, nameof(m_tcoordChannel));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,3 @@
-using System;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,7 +13,7 @@ namespace HKX2
 
         public string m_name;
         public string m_className;
-        public hkReferencedObject /*pointer struct*/ m_variant;
+        public hkReferencedObject m_variant;
 
         public uint Signature => 0xb103a2cd;
 
@@ -38,7 +37,9 @@ namespace HKX2
 
         public void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_className = xd.ReadString(xe, nameof(m_className));
+            m_variant = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_variant));
         }
 
         public void WriteXml(XmlSerializer xs, XElement xe)

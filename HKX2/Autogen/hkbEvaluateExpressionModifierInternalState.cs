@@ -8,7 +8,7 @@ namespace HKX2
     // m_internalExpressionsData m_class: hkbEvaluateExpressionModifierInternalExpressionData Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbEvaluateExpressionModifierInternalState : hkReferencedObject
     {
-        public List<hkbEvaluateExpressionModifierInternalExpressionData> m_internalExpressionsData;
+        public List<hkbEvaluateExpressionModifierInternalExpressionData> m_internalExpressionsData = new List<hkbEvaluateExpressionModifierInternalExpressionData>();
 
         public override uint Signature => 0xb414d58e;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_internalExpressionsData = xd.ReadClassArray<hkbEvaluateExpressionModifierInternalExpressionData>(xe, nameof(m_internalExpressionsData));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

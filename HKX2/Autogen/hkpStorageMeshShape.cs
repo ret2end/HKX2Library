@@ -8,7 +8,7 @@ namespace HKX2
     // m_storage m_class: hkpStorageMeshShapeSubpartStorage Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkpStorageMeshShape : hkpMeshShape
     {
-        public List<hkpStorageMeshShapeSubpartStorage> m_storage;
+        public List<hkpStorageMeshShapeSubpartStorage> m_storage = new List<hkpStorageMeshShapeSubpartStorage>();
 
         public override uint Signature => 0xbefd8b39;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_storage = xd.ReadClassPointerArray<hkpStorageMeshShapeSubpartStorage>(xe, nameof(m_storage));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

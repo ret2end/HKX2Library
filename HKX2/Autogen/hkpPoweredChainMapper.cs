@@ -10,9 +10,9 @@ namespace HKX2
     // m_chains m_class: hkpConstraintChainInstance Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpPoweredChainMapper : hkReferencedObject
     {
-        public List<hkpPoweredChainMapperLinkInfo> m_links;
-        public List<hkpPoweredChainMapperTarget> m_targets;
-        public List<hkpConstraintChainInstance> m_chains;
+        public List<hkpPoweredChainMapperLinkInfo> m_links = new List<hkpPoweredChainMapperLinkInfo>();
+        public List<hkpPoweredChainMapperTarget> m_targets = new List<hkpPoweredChainMapperTarget>();
+        public List<hkpConstraintChainInstance> m_chains = new List<hkpConstraintChainInstance>();
 
         public override uint Signature => 0x7a77ef5;
 
@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_links = xd.ReadClassArray<hkpPoweredChainMapperLinkInfo>(xe, nameof(m_links));
+            m_targets = xd.ReadClassArray<hkpPoweredChainMapperTarget>(xe, nameof(m_targets));
+            m_chains = xd.ReadClassPointerArray<hkpConstraintChainInstance>(xe, nameof(m_chains));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

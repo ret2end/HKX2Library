@@ -62,7 +62,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_groundNormal = xd.ReadVector4(xe, nameof(m_groundNormal));
+            m_duration = xd.ReadSingle(xe, nameof(m_duration));
+            m_alignWithGroundDuration = xd.ReadSingle(xe, nameof(m_alignWithGroundDuration));
+            m_rootBoneIndex = xd.ReadInt16(xe, nameof(m_rootBoneIndex));
+            m_otherBoneIndex = xd.ReadInt16(xe, nameof(m_otherBoneIndex));
+            m_anotherBoneIndex = xd.ReadInt16(xe, nameof(m_anotherBoneIndex));
+            m_timeSinceBegin = default;
+            m_timeStep = default;
+            m_initNextModify = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -10,7 +10,7 @@ namespace HKX2
     // m_initialSteeringAxisInB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 352 flags: FLAGS_NONE enum: 
     public partial class hkpWheelConstraintData : hkpConstraintData
     {
-        public hkpWheelConstraintDataAtoms m_atoms;
+        public hkpWheelConstraintDataAtoms m_atoms = new hkpWheelConstraintDataAtoms();
         public Vector4 m_initialAxleInB;
         public Vector4 m_initialSteeringAxisInB;
 
@@ -37,7 +37,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpWheelConstraintDataAtoms>(xe, nameof(m_atoms));
+            m_initialAxleInB = xd.ReadVector4(xe, nameof(m_initialAxleInB));
+            m_initialSteeringAxisInB = xd.ReadVector4(xe, nameof(m_initialSteeringAxisInB));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_nestedStateMachine = default;
+            m_eventIdMap = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

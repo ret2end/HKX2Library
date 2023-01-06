@@ -27,13 +27,13 @@ namespace HKX2
         public ulong m_bodyBId;
         public bool m_useEntityIds;
         public sbyte m_agentType;
-        public hkpSimpleContactConstraintAtom m_atom;
+        public hkpSimpleContactConstraintAtom m_atom = new hkpSimpleContactConstraintAtom();
         public List<byte> m_propertiesStream;
-        public List<hkContactPoint> m_contactPoints;
+        public List<hkContactPoint> m_contactPoints = new List<hkContactPoint>();
         public List<byte> m_cpIdMgr;
-        public List<byte> m_nnEntryData;
-        public hkpSerializedTrack1nInfo m_trackInfo;
-        public List<byte> m_endianCheckBuffer;
+        public byte[] m_nnEntryData = new byte[160];
+        public hkpSerializedTrack1nInfo m_trackInfo = new hkpSerializedTrack1nInfo();
+        public byte[] m_endianCheckBuffer = new byte[4];
         public uint m_version;
 
         public override uint Signature => 0x49ec7de3;
@@ -84,7 +84,21 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bodyA = xd.ReadClassPointer<hkpEntity>(xe, nameof(m_bodyA));
+            m_bodyB = xd.ReadClassPointer<hkpEntity>(xe, nameof(m_bodyB));
+            m_bodyAId = xd.ReadUInt64(xe, nameof(m_bodyAId));
+            m_bodyBId = xd.ReadUInt64(xe, nameof(m_bodyBId));
+            m_useEntityIds = xd.ReadBoolean(xe, nameof(m_useEntityIds));
+            m_agentType = xd.ReadFlag<SerializedAgentType, sbyte>(xe, nameof(m_agentType));
+            m_atom = xd.ReadClass<hkpSimpleContactConstraintAtom>(xe, nameof(m_atom));
+            m_propertiesStream = xd.ReadByteArray(xe, nameof(m_propertiesStream));
+            m_contactPoints = xd.ReadClassArray<hkContactPoint>(xe, nameof(m_contactPoints));
+            m_cpIdMgr = xd.ReadByteArray(xe, nameof(m_cpIdMgr));
+            m_nnEntryData = xd.ReadByteCStyleArray(xe, nameof(m_nnEntryData), 160);
+            m_trackInfo = xd.ReadClass<hkpSerializedTrack1nInfo>(xe, nameof(m_trackInfo));
+            m_endianCheckBuffer = xd.ReadByteCStyleArray(xe, nameof(m_endianCheckBuffer), 4);
+            m_version = xd.ReadUInt32(xe, nameof(m_version));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

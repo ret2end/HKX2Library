@@ -8,7 +8,7 @@ namespace HKX2
     // m_bones m_class: hkbBoneIndexArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
     public partial class hkbRigidBodyRagdollControlsModifier : hkbModifier
     {
-        public hkbRigidBodyRagdollControlData m_controlData;
+        public hkbRigidBodyRagdollControlData m_controlData = new hkbRigidBodyRagdollControlData();
         public hkbBoneIndexArray m_bones;
 
         public override uint Signature => 0xaa87d1eb;
@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_controlData = xd.ReadClass<hkbRigidBodyRagdollControlData>(xe, nameof(m_controlData));
+            m_bones = xd.ReadClassPointer<hkbBoneIndexArray>(xe, nameof(m_bones));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

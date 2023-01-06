@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_attributeIndex = xd.ReadInt32(xe, nameof(m_attributeIndex));
+            m_attributeValue = xd.ReadSingle(xe, nameof(m_attributeValue));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

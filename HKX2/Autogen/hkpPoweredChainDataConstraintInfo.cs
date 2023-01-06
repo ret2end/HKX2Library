@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -18,7 +17,7 @@ namespace HKX2
         public Vector4 m_pivotInB;
         public Quaternion m_aTc;
         public Quaternion m_bTc;
-        public List<hkpConstraintMotor> m_motors;
+        public hkpConstraintMotor[] m_motors = new hkpConstraintMotor[3];
         public bool m_switchBodies;
 
         public virtual uint Signature => 0xf88aee25;
@@ -47,7 +46,12 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_pivotInA = xd.ReadVector4(xe, nameof(m_pivotInA));
+            m_pivotInB = xd.ReadVector4(xe, nameof(m_pivotInB));
+            m_aTc = xd.ReadQuaternion(xe, nameof(m_aTc));
+            m_bTc = xd.ReadQuaternion(xe, nameof(m_bTc));
+            m_motors = xd.ReadClassPointerCStyleArray<hkpConstraintMotor>(xe, nameof(m_motors), 3);
+            m_switchBodies = xd.ReadBoolean(xe, nameof(m_switchBodies));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -24,7 +24,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            throw new NotImplementedException("TPYE_SIMPLEARRAY");
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -28,8 +28,8 @@ namespace HKX2
     public partial class BSLookAtModifier : hkbModifier
     {
         public bool m_lookAtTarget;
-        public List<BSLookAtModifierBoneData> m_bones;
-        public List<BSLookAtModifierBoneData> m_eyeBones;
+        public List<BSLookAtModifierBoneData> m_bones = new List<BSLookAtModifierBoneData>();
+        public List<BSLookAtModifierBoneData> m_eyeBones = new List<BSLookAtModifierBoneData>();
         public float m_limitAngleDegrees;
         public float m_limitAngleThresholdDegrees;
         public bool m_continueLookOutsideOfLimit;
@@ -38,7 +38,7 @@ namespace HKX2
         public bool m_useBoneGains;
         public Vector4 m_targetLocation;
         public bool m_targetOutsideLimits;
-        public hkbEventProperty m_targetOutOfLimitEvent;
+        public hkbEventProperty m_targetOutOfLimitEvent = new hkbEventProperty();
         public bool m_lookAtCamera;
         public float m_lookAtCameraX;
         public float m_lookAtCameraY;
@@ -114,7 +114,26 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_lookAtTarget = xd.ReadBoolean(xe, nameof(m_lookAtTarget));
+            m_bones = xd.ReadClassArray<BSLookAtModifierBoneData>(xe, nameof(m_bones));
+            m_eyeBones = xd.ReadClassArray<BSLookAtModifierBoneData>(xe, nameof(m_eyeBones));
+            m_limitAngleDegrees = xd.ReadSingle(xe, nameof(m_limitAngleDegrees));
+            m_limitAngleThresholdDegrees = xd.ReadSingle(xe, nameof(m_limitAngleThresholdDegrees));
+            m_continueLookOutsideOfLimit = xd.ReadBoolean(xe, nameof(m_continueLookOutsideOfLimit));
+            m_onGain = xd.ReadSingle(xe, nameof(m_onGain));
+            m_offGain = xd.ReadSingle(xe, nameof(m_offGain));
+            m_useBoneGains = xd.ReadBoolean(xe, nameof(m_useBoneGains));
+            m_targetLocation = xd.ReadVector4(xe, nameof(m_targetLocation));
+            m_targetOutsideLimits = xd.ReadBoolean(xe, nameof(m_targetOutsideLimits));
+            m_targetOutOfLimitEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_targetOutOfLimitEvent));
+            m_lookAtCamera = xd.ReadBoolean(xe, nameof(m_lookAtCamera));
+            m_lookAtCameraX = xd.ReadSingle(xe, nameof(m_lookAtCameraX));
+            m_lookAtCameraY = xd.ReadSingle(xe, nameof(m_lookAtCameraY));
+            m_lookAtCameraZ = xd.ReadSingle(xe, nameof(m_lookAtCameraZ));
+            m_timeStep = default;
+            m_ballBonesValid = default;
+            m_pSkeletonMemory = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

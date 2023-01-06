@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_memberName = xd.ReadString(xe, nameof(m_memberName));
+            m_externalId = xd.ReadString(xe, nameof(m_externalId));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

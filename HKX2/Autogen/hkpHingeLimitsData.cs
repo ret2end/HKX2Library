@@ -7,7 +7,7 @@ namespace HKX2
     // m_atoms m_class: hkpHingeLimitsDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpHingeLimitsData : hkpConstraintData
     {
-        public hkpHingeLimitsDataAtoms m_atoms;
+        public hkpHingeLimitsDataAtoms m_atoms = new hkpHingeLimitsDataAtoms();
 
         public override uint Signature => 0xbd46760a;
 
@@ -28,7 +28,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpHingeLimitsDataAtoms>(xe, nameof(m_atoms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

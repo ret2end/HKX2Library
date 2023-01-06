@@ -45,7 +45,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterPoseAtBeginningOfTransition = xd.ReadQSTransformArray(xe, nameof(m_characterPoseAtBeginningOfTransition));
+            m_timeRemaining = xd.ReadSingle(xe, nameof(m_timeRemaining));
+            m_timeInTransition = xd.ReadSingle(xe, nameof(m_timeInTransition));
+            m_applySelfTransition = xd.ReadBoolean(xe, nameof(m_applySelfTransition));
+            m_initializeCharacterPose = xd.ReadBoolean(xe, nameof(m_initializeCharacterPose));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -8,8 +8,8 @@ namespace HKX2
     // m_scheme m_class: hkpGenericConstraintDataScheme Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpGenericConstraintData : hkpConstraintData
     {
-        public hkpBridgeAtoms m_atoms;
-        public hkpGenericConstraintDataScheme m_scheme;
+        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
+        public hkpGenericConstraintDataScheme m_scheme = new hkpGenericConstraintDataScheme();
 
         public override uint Signature => 0xfa824640;
 
@@ -31,7 +31,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpBridgeAtoms>(xe, nameof(m_atoms));
+            m_scheme = xd.ReadClass<hkpGenericConstraintDataScheme>(xe, nameof(m_scheme));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

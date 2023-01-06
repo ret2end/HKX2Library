@@ -7,7 +7,7 @@ namespace HKX2
     // m_event m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class BSEventOnDeactivateModifier : hkbModifier
     {
-        public hkbEventProperty m_event;
+        public hkbEventProperty m_event = new hkbEventProperty();
 
         public override uint Signature => 0x1062d993;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_event = xd.ReadClass<hkbEventProperty>(xe, nameof(m_event));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

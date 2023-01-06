@@ -35,7 +35,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_selfTransitionMode = xd.ReadFlag<SelfTransitionMode, sbyte>(xe, nameof(m_selfTransitionMode));
+            m_eventMode = xd.ReadFlag<EventMode, sbyte>(xe, nameof(m_eventMode));
+            m_defaultEventMode = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

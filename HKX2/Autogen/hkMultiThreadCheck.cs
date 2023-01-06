@@ -35,7 +35,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_threadId = default;
+            m_stackTraceId = default;
+            m_markCount = default;
+            m_markBitStack = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -25,14 +25,14 @@ namespace HKX2
         public string m_asset;
         public float m_sceneLength;
         public hkxNode m_rootNode;
-        public List<hkxNodeSelectionSet> m_selectionSets;
-        public List<hkxCamera> m_cameras;
-        public List<hkxLight> m_lights;
-        public List<hkxMesh> m_meshes;
-        public List<hkxMaterial> m_materials;
-        public List<hkxTextureInplace> m_inplaceTextures;
-        public List<hkxTextureFile> m_externalTextures;
-        public List<hkxSkinBinding> m_skinBindings;
+        public List<hkxNodeSelectionSet> m_selectionSets = new List<hkxNodeSelectionSet>();
+        public List<hkxCamera> m_cameras = new List<hkxCamera>();
+        public List<hkxLight> m_lights = new List<hkxLight>();
+        public List<hkxMesh> m_meshes = new List<hkxMesh>();
+        public List<hkxMaterial> m_materials = new List<hkxMaterial>();
+        public List<hkxTextureInplace> m_inplaceTextures = new List<hkxTextureInplace>();
+        public List<hkxTextureFile> m_externalTextures = new List<hkxTextureFile>();
+        public List<hkxSkinBinding> m_skinBindings = new List<hkxSkinBinding>();
         public Matrix4x4 m_appliedTransform;
 
         public override uint Signature => 0x5f673ddd;
@@ -77,7 +77,20 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_modeller = xd.ReadString(xe, nameof(m_modeller));
+            m_asset = xd.ReadString(xe, nameof(m_asset));
+            m_sceneLength = xd.ReadSingle(xe, nameof(m_sceneLength));
+            m_rootNode = xd.ReadClassPointer<hkxNode>(xe, nameof(m_rootNode));
+            m_selectionSets = xd.ReadClassPointerArray<hkxNodeSelectionSet>(xe, nameof(m_selectionSets));
+            m_cameras = xd.ReadClassPointerArray<hkxCamera>(xe, nameof(m_cameras));
+            m_lights = xd.ReadClassPointerArray<hkxLight>(xe, nameof(m_lights));
+            m_meshes = xd.ReadClassPointerArray<hkxMesh>(xe, nameof(m_meshes));
+            m_materials = xd.ReadClassPointerArray<hkxMaterial>(xe, nameof(m_materials));
+            m_inplaceTextures = xd.ReadClassPointerArray<hkxTextureInplace>(xe, nameof(m_inplaceTextures));
+            m_externalTextures = xd.ReadClassPointerArray<hkxTextureFile>(xe, nameof(m_externalTextures));
+            m_skinBindings = xd.ReadClassPointerArray<hkxSkinBinding>(xe, nameof(m_skinBindings));
+            m_appliedTransform = xd.ReadMatrix3(xe, nameof(m_appliedTransform));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -31,7 +31,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_pStateMachine = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pStateMachine));
+            m_StateID = xd.ReadInt32(xe, nameof(m_StateID));
+            m_iStateToSetAs = xd.ReadInt32(xe, nameof(m_iStateToSetAs));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

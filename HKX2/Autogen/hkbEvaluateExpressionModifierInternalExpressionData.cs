@@ -27,7 +27,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_raisedEvent = xd.ReadBoolean(xe, nameof(m_raisedEvent));
+            m_wasTrueInPreviousFrame = xd.ReadBoolean(xe, nameof(m_wasTrueInPreviousFrame));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

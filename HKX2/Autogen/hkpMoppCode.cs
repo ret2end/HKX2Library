@@ -10,7 +10,7 @@ namespace HKX2
     // m_buildType m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: BuildType
     public partial class hkpMoppCode : hkReferencedObject
     {
-        public hkpMoppCodeCodeInfo m_info;
+        public hkpMoppCodeCodeInfo m_info = new hkpMoppCodeCodeInfo();
         public List<byte> m_data;
         public sbyte m_buildType;
 
@@ -37,7 +37,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_info = xd.ReadClass<hkpMoppCodeCodeInfo>(xe, nameof(m_info));
+            m_data = xd.ReadByteArray(xe, nameof(m_data));
+            m_buildType = xd.ReadFlag<BuildType, sbyte>(xe, nameof(m_buildType));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

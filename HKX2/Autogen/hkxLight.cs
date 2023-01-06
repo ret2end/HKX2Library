@@ -46,7 +46,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_type = xd.ReadFlag<LightType, sbyte>(xe, nameof(m_type));
+            m_position = xd.ReadVector4(xe, nameof(m_position));
+            m_direction = xd.ReadVector4(xe, nameof(m_direction));
+            m_color = xd.ReadUInt32(xe, nameof(m_color));
+            m_angle = xd.ReadSingle(xe, nameof(m_angle));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

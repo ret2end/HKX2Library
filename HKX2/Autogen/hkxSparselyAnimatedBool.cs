@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_bools = xd.ReadBooleanArray(xe, nameof(m_bools));
+            m_times = xd.ReadSingleArray(xe, nameof(m_times));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

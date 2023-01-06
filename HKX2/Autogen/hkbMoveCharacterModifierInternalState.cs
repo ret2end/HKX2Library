@@ -27,7 +27,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_timeSinceLastModify = xd.ReadSingle(xe, nameof(m_timeSinceLastModify));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

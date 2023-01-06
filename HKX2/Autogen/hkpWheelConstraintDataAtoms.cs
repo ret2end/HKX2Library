@@ -13,13 +13,13 @@ namespace HKX2
     // m_2dAng m_class: hkp2dAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 288 flags: FLAGS_NONE enum: 
     public partial class hkpWheelConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_suspensionBase;
-        public hkpLinLimitConstraintAtom m_lin0Limit;
-        public hkpLinSoftConstraintAtom m_lin0Soft;
-        public hkpLinConstraintAtom m_lin1;
-        public hkpLinConstraintAtom m_lin2;
-        public hkpSetLocalRotationsConstraintAtom m_steeringBase;
-        public hkp2dAngConstraintAtom m_2dAng;
+        public hkpSetLocalTransformsConstraintAtom m_suspensionBase = new hkpSetLocalTransformsConstraintAtom();
+        public hkpLinLimitConstraintAtom m_lin0Limit = new hkpLinLimitConstraintAtom();
+        public hkpLinSoftConstraintAtom m_lin0Soft = new hkpLinSoftConstraintAtom();
+        public hkpLinConstraintAtom m_lin1 = new hkpLinConstraintAtom();
+        public hkpLinConstraintAtom m_lin2 = new hkpLinConstraintAtom();
+        public hkpSetLocalRotationsConstraintAtom m_steeringBase = new hkpSetLocalRotationsConstraintAtom();
+        public hkp2dAngConstraintAtom m_2dAng = new hkp2dAngConstraintAtom();
 
         public virtual uint Signature => 0x1188cbe1;
 
@@ -56,7 +56,13 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_suspensionBase = xd.ReadClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_suspensionBase));
+            m_lin0Limit = xd.ReadClass<hkpLinLimitConstraintAtom>(xe, nameof(m_lin0Limit));
+            m_lin0Soft = xd.ReadClass<hkpLinSoftConstraintAtom>(xe, nameof(m_lin0Soft));
+            m_lin1 = xd.ReadClass<hkpLinConstraintAtom>(xe, nameof(m_lin1));
+            m_lin2 = xd.ReadClass<hkpLinConstraintAtom>(xe, nameof(m_lin2));
+            m_steeringBase = xd.ReadClass<hkpSetLocalRotationsConstraintAtom>(xe, nameof(m_steeringBase));
+            m_2dAng = xd.ReadClass<hkp2dAngConstraintAtom>(xe, nameof(m_2dAng));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

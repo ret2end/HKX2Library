@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_removeInfo = xd.ReadUInt32Array(xe, nameof(m_removeInfo));
+            m_tempShapesToRemove = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

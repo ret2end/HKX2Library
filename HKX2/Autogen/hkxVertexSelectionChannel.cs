@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_selectedVertices = xd.ReadInt32Array(xe, nameof(m_selectedVertices));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

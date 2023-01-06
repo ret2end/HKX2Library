@@ -13,7 +13,7 @@ namespace HKX2
     // m_revertBackVelocityOnBreak m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 65 flags: FLAGS_NONE enum: 
     public partial class hkpBreakableConstraintData : hkpConstraintData
     {
-        public hkpBridgeAtoms m_atoms;
+        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
         public hkpConstraintData m_constraintData;
         public ushort m_childRuntimeSize;
         public ushort m_childNumSolverResults;
@@ -52,7 +52,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpBridgeAtoms>(xe, nameof(m_atoms));
+            m_constraintData = xd.ReadClassPointer<hkpConstraintData>(xe, nameof(m_constraintData));
+            m_childRuntimeSize = xd.ReadUInt16(xe, nameof(m_childRuntimeSize));
+            m_childNumSolverResults = xd.ReadUInt16(xe, nameof(m_childNumSolverResults));
+            m_solverResultLimit = xd.ReadSingle(xe, nameof(m_solverResultLimit));
+            m_removeWhenBroken = xd.ReadBoolean(xe, nameof(m_removeWhenBroken));
+            m_revertBackVelocityOnBreak = xd.ReadBoolean(xe, nameof(m_revertBackVelocityOnBreak));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

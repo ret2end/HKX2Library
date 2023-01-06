@@ -10,7 +10,7 @@ namespace HKX2
     public partial class hkpMalleableConstraintData : hkpConstraintData
     {
         public hkpConstraintData m_constraintData;
-        public hkpBridgeAtoms m_atoms;
+        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
         public float m_strength;
 
         public override uint Signature => 0x6748b2cf;
@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_constraintData = xd.ReadClassPointer<hkpConstraintData>(xe, nameof(m_constraintData));
+            m_atoms = xd.ReadClass<hkpBridgeAtoms>(xe, nameof(m_atoms));
+            m_strength = xd.ReadSingle(xe, nameof(m_strength));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

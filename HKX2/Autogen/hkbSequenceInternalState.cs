@@ -48,7 +48,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_nextSampleEvents = xd.ReadInt32Array(xe, nameof(m_nextSampleEvents));
+            m_nextSampleReals = xd.ReadInt32Array(xe, nameof(m_nextSampleReals));
+            m_nextSampleBools = xd.ReadInt32Array(xe, nameof(m_nextSampleBools));
+            m_nextSampleInts = xd.ReadInt32Array(xe, nameof(m_nextSampleInts));
+            m_time = xd.ReadSingle(xe, nameof(m_time));
+            m_isEnabled = xd.ReadBoolean(xe, nameof(m_isEnabled));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

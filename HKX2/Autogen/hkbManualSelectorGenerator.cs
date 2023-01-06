@@ -10,7 +10,7 @@ namespace HKX2
     // m_currentGeneratorIndex m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 89 flags: FLAGS_NONE enum: 
     public partial class hkbManualSelectorGenerator : hkbGenerator
     {
-        public List<hkbGenerator> m_generators;
+        public List<hkbGenerator> m_generators = new List<hkbGenerator>();
         public sbyte m_selectedGeneratorIndex;
         public sbyte m_currentGeneratorIndex;
 
@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_generators = xd.ReadClassPointerArray<hkbGenerator>(xe, nameof(m_generators));
+            m_selectedGeneratorIndex = xd.ReadSByte(xe, nameof(m_selectedGeneratorIndex));
+            m_currentGeneratorIndex = xd.ReadSByte(xe, nameof(m_currentGeneratorIndex));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

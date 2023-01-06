@@ -16,8 +16,8 @@ namespace HKX2
     // m_maxErrorDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     public partial class hkpPoweredChainData : hkpConstraintChainData
     {
-        public hkpBridgeAtoms m_atoms;
-        public List<hkpPoweredChainDataConstraintInfo> m_infos;
+        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
+        public List<hkpPoweredChainDataConstraintInfo> m_infos = new List<hkpPoweredChainDataConstraintInfo>();
         public float m_tau;
         public float m_damping;
         public float m_cfmLinAdd;
@@ -61,7 +61,16 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_atoms = xd.ReadClass<hkpBridgeAtoms>(xe, nameof(m_atoms));
+            m_infos = xd.ReadClassArray<hkpPoweredChainDataConstraintInfo>(xe, nameof(m_infos));
+            m_tau = xd.ReadSingle(xe, nameof(m_tau));
+            m_damping = xd.ReadSingle(xe, nameof(m_damping));
+            m_cfmLinAdd = xd.ReadSingle(xe, nameof(m_cfmLinAdd));
+            m_cfmLinMul = xd.ReadSingle(xe, nameof(m_cfmLinMul));
+            m_cfmAngAdd = xd.ReadSingle(xe, nameof(m_cfmAngAdd));
+            m_cfmAngMul = xd.ReadSingle(xe, nameof(m_cfmAngMul));
+            m_maxErrorDistance = xd.ReadSingle(xe, nameof(m_maxErrorDistance));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

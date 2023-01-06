@@ -10,9 +10,9 @@ namespace HKX2
     // m_boneWeights m_class: hkbBoneWeightArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkbPoweredRagdollControlsModifier : hkbModifier
     {
-        public hkbPoweredRagdollControlData m_controlData;
+        public hkbPoweredRagdollControlData m_controlData = new hkbPoweredRagdollControlData();
         public hkbBoneIndexArray m_bones;
-        public hkbWorldFromModelModeData m_worldFromModelModeData;
+        public hkbWorldFromModelModeData m_worldFromModelModeData = new hkbWorldFromModelModeData();
         public hkbBoneWeightArray m_boneWeights;
 
         public override uint Signature => 0x7cb54065;
@@ -41,7 +41,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_controlData = xd.ReadClass<hkbPoweredRagdollControlData>(xe, nameof(m_controlData));
+            m_bones = xd.ReadClassPointer<hkbBoneIndexArray>(xe, nameof(m_bones));
+            m_worldFromModelModeData = xd.ReadClass<hkbWorldFromModelModeData>(xe, nameof(m_worldFromModelModeData));
+            m_boneWeights = xd.ReadClassPointer<hkbBoneWeightArray>(xe, nameof(m_boneWeights));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

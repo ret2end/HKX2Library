@@ -23,7 +23,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_type = xd.ReadFlag<Link, sbyte>(xe, nameof(m_type));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -45,7 +45,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_smoothingFactor = xd.ReadSingle(xe, nameof(m_smoothingFactor));
+            m_closedLoop = xd.ReadBoolean(xe, nameof(m_closedLoop));
+            m_dirNotParallelToTangentAlongWholePath = xd.ReadVector4(xe, nameof(m_dirNotParallelToTangentAlongWholePath));
+            m_points = xd.ReadVector4Array(xe, nameof(m_points));
+            m_distance = xd.ReadSingleArray(xe, nameof(m_distance));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -9,8 +9,8 @@ namespace HKX2
     // m_userChannelInfos m_class: hkxMeshUserChannelInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkxMesh : hkReferencedObject
     {
-        public List<hkxMeshSection> m_sections;
-        public List<hkxMeshUserChannelInfo> m_userChannelInfos;
+        public List<hkxMeshSection> m_sections = new List<hkxMeshSection>();
+        public List<hkxMeshUserChannelInfo> m_userChannelInfos = new List<hkxMeshUserChannelInfo>();
 
         public override uint Signature => 0xf2edcc5f;
 
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_sections = xd.ReadClassPointerArray<hkxMeshSection>(xe, nameof(m_sections));
+            m_userChannelInfos = xd.ReadClassPointerArray<hkxMeshUserChannelInfo>(xe, nameof(m_userChannelInfos));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

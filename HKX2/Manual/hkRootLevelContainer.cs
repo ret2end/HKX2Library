@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -27,7 +26,7 @@ namespace HKX2
 
         public void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_namedVariants = xd.ReadClassArray<hkRootLevelContainerNamedVariant>(xe, nameof(m_namedVariants));
         }
 
         public void WriteXml(XmlSerializer xs, XElement xe)

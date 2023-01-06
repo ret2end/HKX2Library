@@ -30,7 +30,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rb = xd.ReadClassPointer<hkpRigidBody>(xe, nameof(m_rb));
+            m_localToDisplay = xd.ReadTransform(xe, nameof(m_localToDisplay));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

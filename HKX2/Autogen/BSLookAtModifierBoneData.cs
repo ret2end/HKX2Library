@@ -52,7 +52,13 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_index = xd.ReadInt16(xe, nameof(m_index));
+            m_fwdAxisLS = xd.ReadVector4(xe, nameof(m_fwdAxisLS));
+            m_limitAngleDegrees = xd.ReadSingle(xe, nameof(m_limitAngleDegrees));
+            m_onGain = xd.ReadSingle(xe, nameof(m_onGain));
+            m_offGain = xd.ReadSingle(xe, nameof(m_offGain));
+            m_enabled = xd.ReadBoolean(xe, nameof(m_enabled));
+            m_currentFwdAxisLS = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

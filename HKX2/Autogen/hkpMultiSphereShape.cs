@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,7 +10,7 @@ namespace HKX2
     public partial class hkpMultiSphereShape : hkpSphereRepShape
     {
         public int m_numSpheres;
-        public List<Vector4> m_spheres;
+        public Vector4[] m_spheres = new Vector4[8];
 
         public override uint Signature => 0x61a590fc;
 
@@ -33,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_numSpheres = xd.ReadInt32(xe, nameof(m_numSpheres));
+            m_spheres = xd.ReadVector4CStyleArray(xe, nameof(m_spheres), 8);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

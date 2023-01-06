@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,7 +15,7 @@ namespace HKX2
         public string m_name;
         public short m_id;
         public sbyte m_cloneState;
-        public List<bool> m_padNode;
+        public bool[] m_padNode = new bool[1];
 
         public override uint Signature => 0x6d26f61d;
 
@@ -44,7 +43,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_userData = xd.ReadUInt64(xe, nameof(m_userData));
+            m_name = xd.ReadString(xe, nameof(m_name));
+            m_id = default;
+            m_cloneState = default;
+            m_padNode = new bool[1];
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

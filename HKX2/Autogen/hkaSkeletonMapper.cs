@@ -7,7 +7,7 @@ namespace HKX2
     // m_mapping m_class: hkaSkeletonMapperData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkaSkeletonMapper : hkReferencedObject
     {
-        public hkaSkeletonMapperData m_mapping;
+        public hkaSkeletonMapperData m_mapping = new hkaSkeletonMapperData();
 
         public override uint Signature => 0x12df42a5;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_mapping = xd.ReadClass<hkaSkeletonMapperData>(xe, nameof(m_mapping));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

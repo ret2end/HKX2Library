@@ -12,9 +12,9 @@ namespace HKX2
     public partial class hkxMeshSection : hkReferencedObject
     {
         public hkxVertexBuffer m_vertexBuffer;
-        public List<hkxIndexBuffer> m_indexBuffers;
+        public List<hkxIndexBuffer> m_indexBuffers = new List<hkxIndexBuffer>();
         public hkxMaterial m_material;
-        public List<hkReferencedObject> m_userChannels;
+        public List<hkReferencedObject> m_userChannels = new List<hkReferencedObject>();
 
         public override uint Signature => 0xe2286cf8;
 
@@ -38,7 +38,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_vertexBuffer = xd.ReadClassPointer<hkxVertexBuffer>(xe, nameof(m_vertexBuffer));
+            m_indexBuffers = xd.ReadClassPointerArray<hkxIndexBuffer>(xe, nameof(m_indexBuffers));
+            m_material = xd.ReadClassPointer<hkxMaterial>(xe, nameof(m_material));
+            m_userChannels = xd.ReadClassPointerArray<hkReferencedObject>(xe, nameof(m_userChannels));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

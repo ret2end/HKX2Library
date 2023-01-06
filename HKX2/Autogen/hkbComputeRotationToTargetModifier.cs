@@ -52,7 +52,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rotationOut = xd.ReadQuaternion(xe, nameof(m_rotationOut));
+            m_targetPosition = xd.ReadVector4(xe, nameof(m_targetPosition));
+            m_currentPosition = xd.ReadVector4(xe, nameof(m_currentPosition));
+            m_currentRotation = xd.ReadQuaternion(xe, nameof(m_currentRotation));
+            m_localAxisOfRotation = xd.ReadVector4(xe, nameof(m_localAxisOfRotation));
+            m_localFacingDirection = xd.ReadVector4(xe, nameof(m_localFacingDirection));
+            m_resultIsDelta = xd.ReadBoolean(xe, nameof(m_resultIsDelta));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

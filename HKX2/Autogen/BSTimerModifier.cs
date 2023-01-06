@@ -11,7 +11,7 @@ namespace HKX2
     public partial class BSTimerModifier : hkbModifier
     {
         public float m_alarmTimeSeconds;
-        public hkbEventProperty m_alarmEvent;
+        public hkbEventProperty m_alarmEvent = new hkbEventProperty();
         public bool m_resetAlarm;
         public float m_secondsElapsed;
 
@@ -42,7 +42,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_alarmTimeSeconds = xd.ReadSingle(xe, nameof(m_alarmTimeSeconds));
+            m_alarmEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_alarmEvent));
+            m_resetAlarm = xd.ReadBoolean(xe, nameof(m_resetAlarm));
+            m_secondsElapsed = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

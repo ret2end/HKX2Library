@@ -32,7 +32,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_x = xd.ReadVector4(xe, nameof(m_x));
+            m_y = xd.ReadVector4(xe, nameof(m_y));
+            m_z = xd.ReadVector4(xe, nameof(m_z));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

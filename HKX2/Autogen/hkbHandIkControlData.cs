@@ -70,7 +70,18 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_targetPosition = xd.ReadVector4(xe, nameof(m_targetPosition));
+            m_targetRotation = xd.ReadQuaternion(xe, nameof(m_targetRotation));
+            m_targetNormal = xd.ReadVector4(xe, nameof(m_targetNormal));
+            m_targetHandle = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_targetHandle));
+            m_transformOnFraction = xd.ReadSingle(xe, nameof(m_transformOnFraction));
+            m_normalOnFraction = xd.ReadSingle(xe, nameof(m_normalOnFraction));
+            m_fadeInDuration = xd.ReadSingle(xe, nameof(m_fadeInDuration));
+            m_fadeOutDuration = xd.ReadSingle(xe, nameof(m_fadeOutDuration));
+            m_extrapolationTimeStep = xd.ReadSingle(xe, nameof(m_extrapolationTimeStep));
+            m_handleChangeSpeed = xd.ReadSingle(xe, nameof(m_handleChangeSpeed));
+            m_handleChangeMode = xd.ReadFlag<HandleChangeMode, sbyte>(xe, nameof(m_handleChangeMode));
+            m_fixUp = xd.ReadBoolean(xe, nameof(m_fixUp));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

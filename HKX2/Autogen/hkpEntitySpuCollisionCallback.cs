@@ -37,7 +37,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_util = default;
+            m_capacity = default;
+            m_eventFilter = xd.ReadByte(xe, nameof(m_eventFilter));
+            m_userFilter = xd.ReadByte(xe, nameof(m_userFilter));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

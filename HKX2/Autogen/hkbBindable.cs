@@ -36,7 +36,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_variableBindingSet = xd.ReadClassPointer<hkbVariableBindingSet>(xe, nameof(m_variableBindingSet));
+            m_cachedBindables = default;
+            m_areBindablesCached = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

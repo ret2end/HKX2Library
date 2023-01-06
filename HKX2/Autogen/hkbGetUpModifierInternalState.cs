@@ -35,7 +35,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_timeSinceBegin = xd.ReadSingle(xe, nameof(m_timeSinceBegin));
+            m_timeStep = xd.ReadSingle(xe, nameof(m_timeStep));
+            m_initNextModify = xd.ReadBoolean(xe, nameof(m_initNextModify));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

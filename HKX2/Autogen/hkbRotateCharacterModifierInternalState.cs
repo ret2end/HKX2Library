@@ -27,7 +27,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_angle = xd.ReadSingle(xe, nameof(m_angle));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

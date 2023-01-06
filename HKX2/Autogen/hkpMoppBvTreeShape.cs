@@ -8,7 +8,7 @@ namespace HKX2
     // m_childSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpMoppBvTreeShape : hkMoppBvTreeShapeBase
     {
-        public hkpSingleShapeContainer m_child;
+        public hkpSingleShapeContainer m_child = new hkpSingleShapeContainer();
         public int m_childSize;
 
         public override uint Signature => 0x90b29d39;
@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_child = xd.ReadClass<hkpSingleShapeContainer>(xe, nameof(m_child));
+            m_childSize = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

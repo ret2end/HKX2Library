@@ -106,7 +106,27 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_targetWS = xd.ReadVector4(xe, nameof(m_targetWS));
+            m_headForwardLS = xd.ReadVector4(xe, nameof(m_headForwardLS));
+            m_neckForwardLS = xd.ReadVector4(xe, nameof(m_neckForwardLS));
+            m_neckRightLS = xd.ReadVector4(xe, nameof(m_neckRightLS));
+            m_eyePositionHS = xd.ReadVector4(xe, nameof(m_eyePositionHS));
+            m_newTargetGain = xd.ReadSingle(xe, nameof(m_newTargetGain));
+            m_onGain = xd.ReadSingle(xe, nameof(m_onGain));
+            m_offGain = xd.ReadSingle(xe, nameof(m_offGain));
+            m_limitAngleDegrees = xd.ReadSingle(xe, nameof(m_limitAngleDegrees));
+            m_limitAngleLeft = xd.ReadSingle(xe, nameof(m_limitAngleLeft));
+            m_limitAngleRight = xd.ReadSingle(xe, nameof(m_limitAngleRight));
+            m_limitAngleUp = xd.ReadSingle(xe, nameof(m_limitAngleUp));
+            m_limitAngleDown = xd.ReadSingle(xe, nameof(m_limitAngleDown));
+            m_headIndex = xd.ReadInt16(xe, nameof(m_headIndex));
+            m_neckIndex = xd.ReadInt16(xe, nameof(m_neckIndex));
+            m_isOn = xd.ReadBoolean(xe, nameof(m_isOn));
+            m_individualLimitsOn = xd.ReadBoolean(xe, nameof(m_individualLimitsOn));
+            m_isTargetInsideLimitCone = xd.ReadBoolean(xe, nameof(m_isTargetInsideLimitCone));
+            m_lookAtLastTargetWS = default;
+            m_lookAtWeight = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -24,12 +24,13 @@ namespace HKX2
         {
             bw.WriteInt32(m_value);
             bw.Position += 4;
-            s.WriteStringPointer(bw, m_name);
+            s.WriteCStringPointer(bw, m_name);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_value = xd.ReadInt32(xe, nameof(m_value));
+            m_name = xd.ReadString(xe, nameof(m_name));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

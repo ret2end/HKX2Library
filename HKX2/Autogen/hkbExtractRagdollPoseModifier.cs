@@ -39,7 +39,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_poseMatchingBone0 = xd.ReadInt16(xe, nameof(m_poseMatchingBone0));
+            m_poseMatchingBone1 = xd.ReadInt16(xe, nameof(m_poseMatchingBone1));
+            m_poseMatchingBone2 = xd.ReadInt16(xe, nameof(m_poseMatchingBone2));
+            m_enableComputeWorldFromModel = xd.ReadBoolean(xe, nameof(m_enableComputeWorldFromModel));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

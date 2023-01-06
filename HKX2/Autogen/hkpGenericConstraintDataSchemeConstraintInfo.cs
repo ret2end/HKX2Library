@@ -35,7 +35,10 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_maxSizeOfSchema = xd.ReadInt32(xe, nameof(m_maxSizeOfSchema));
+            m_sizeOfSchemas = xd.ReadInt32(xe, nameof(m_sizeOfSchemas));
+            m_numSolverResults = xd.ReadInt32(xe, nameof(m_numSolverResults));
+            m_numSolverElemTemps = xd.ReadInt32(xe, nameof(m_numSolverElemTemps));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_maxFramesPerBlock = xd.ReadUInt16(xe, nameof(m_maxFramesPerBlock));
+            m_enableSampleSingleTracks = xd.ReadBoolean(xe, nameof(m_enableSampleSingleTracks));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

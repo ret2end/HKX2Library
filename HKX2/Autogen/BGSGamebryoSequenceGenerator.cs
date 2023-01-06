@@ -41,7 +41,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteStringPointer(bw, m_pSequence);
+            s.WriteCStringPointer(bw, m_pSequence);
             s.WriteSByte(bw, m_eBlendModeFunction);
             bw.Position += 3;
             bw.WriteSingle(m_fPercent);
@@ -54,7 +54,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pSequence = xd.ReadString(xe, nameof(m_pSequence));
+            m_eBlendModeFunction = xd.ReadFlag<BlendModeFunction, sbyte>(xe, nameof(m_eBlendModeFunction));
+            m_fPercent = xd.ReadSingle(xe, nameof(m_fPercent));
+            m_events = default;
+            m_fTime = default;
+            m_bDelayedActivate = default;
+            m_bLooping = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -35,7 +35,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pDefaultGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_pDefaultGenerator));
+            m_iStateToSetAs = xd.ReadInt32(xe, nameof(m_iStateToSetAs));
+            m_iPriority = xd.ReadInt32(xe, nameof(m_iPriority));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

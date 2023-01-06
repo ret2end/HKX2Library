@@ -41,7 +41,11 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_userData = xd.ReadUInt64(xe, nameof(m_userData));
+            m_friction = xd.ReadByte(xe, nameof(m_friction));
+            m_restitution = xd.ReadByte(xe, nameof(m_restitution));
+            m_maxImpulse = xd.ReadByte(xe, nameof(m_maxImpulse));
+            m_flags = xd.ReadByte(xe, nameof(m_flags));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

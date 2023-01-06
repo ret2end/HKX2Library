@@ -9,7 +9,7 @@ namespace HKX2
     // m_action m_class: hkpConstraintChainInstanceAction Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkpConstraintChainInstance : hkpConstraintInstance
     {
-        public List<hkpEntity> m_chainedEntities;
+        public List<hkpEntity> m_chainedEntities = new List<hkpEntity>();
         public hkpConstraintChainInstanceAction m_action;
 
         public override uint Signature => 0x7a490753;
@@ -30,7 +30,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_chainedEntities = xd.ReadClassPointerArray<hkpEntity>(xe, nameof(m_chainedEntities));
+            m_action = xd.ReadClassPointer<hkpConstraintChainInstanceAction>(xe, nameof(m_action));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -30,7 +30,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_words = xd.ReadUInt32Array(xe, nameof(m_words));
+            m_numBits = xd.ReadInt32(xe, nameof(m_numBits));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

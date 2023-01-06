@@ -9,9 +9,9 @@ namespace HKX2
     // m_2dAng m_class: hkp2dAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkpHingeLimitsDataAtoms : IHavokObject
     {
-        public hkpSetLocalRotationsConstraintAtom m_rotations;
-        public hkpAngLimitConstraintAtom m_angLimit;
-        public hkp2dAngConstraintAtom m_2dAng;
+        public hkpSetLocalRotationsConstraintAtom m_rotations = new hkpSetLocalRotationsConstraintAtom();
+        public hkpAngLimitConstraintAtom m_angLimit = new hkpAngLimitConstraintAtom();
+        public hkp2dAngConstraintAtom m_2dAng = new hkp2dAngConstraintAtom();
 
         public virtual uint Signature => 0x555876ff;
 
@@ -36,7 +36,9 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_rotations = xd.ReadClass<hkpSetLocalRotationsConstraintAtom>(xe, nameof(m_rotations));
+            m_angLimit = xd.ReadClass<hkpAngLimitConstraintAtom>(xe, nameof(m_angLimit));
+            m_2dAng = xd.ReadClass<hkp2dAngConstraintAtom>(xe, nameof(m_2dAng));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

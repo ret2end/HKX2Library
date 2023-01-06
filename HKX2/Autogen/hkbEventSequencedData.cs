@@ -8,7 +8,7 @@ namespace HKX2
     // m_events m_class: hkbEventSequencedDataSequencedEvent Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbEventSequencedData : hkbSequencedData
     {
-        public List<hkbEventSequencedDataSequencedEvent> m_events;
+        public List<hkbEventSequencedDataSequencedEvent> m_events = new List<hkbEventSequencedDataSequencedEvent>();
 
         public override uint Signature => 0x76798eb8;
 
@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_events = xd.ReadClassArray<hkbEventSequencedDataSequencedEvent>(xe, nameof(m_events));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -45,7 +45,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_characterId = xd.ReadUInt64(xe, nameof(m_characterId));
+            m_deltaTime = xd.ReadSingle(xe, nameof(m_deltaTime));
+            m_worldFromModel = xd.ReadQSTransform(xe, nameof(m_worldFromModel));
+            m_poseModelSpace = xd.ReadQSTransformArray(xe, nameof(m_poseModelSpace));
+            m_rigidAttachmentTransforms = xd.ReadQSTransformArray(xe, nameof(m_rigidAttachmentTransforms));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -45,7 +45,12 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_a = xd.ReadUInt16(xe, nameof(m_a));
+            m_b = xd.ReadUInt16(xe, nameof(m_b));
+            m_c = xd.ReadUInt16(xe, nameof(m_c));
+            m_material = xd.ReadUInt32(xe, nameof(m_material));
+            m_weldingInfo = xd.ReadUInt16(xe, nameof(m_weldingInfo));
+            m_transformIndex = xd.ReadUInt16(xe, nameof(m_transformIndex));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

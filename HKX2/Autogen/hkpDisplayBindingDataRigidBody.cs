@@ -34,7 +34,10 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_rigidBody = xd.ReadClassPointer<hkpRigidBody>(xe, nameof(m_rigidBody));
+            m_displayObjectPtr = xd.ReadClassPointer<hkReferencedObject>(xe, nameof(m_displayObjectPtr));
+            m_rigidBodyFromDisplayObjectTransform = xd.ReadMatrix4(xe, nameof(m_rigidBodyFromDisplayObjectTransform));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

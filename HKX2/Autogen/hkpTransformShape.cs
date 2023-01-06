@@ -11,7 +11,7 @@ namespace HKX2
     // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpTransformShape : hkpShape
     {
-        public hkpSingleShapeContainer m_childShape;
+        public hkpSingleShapeContainer m_childShape = new hkpSingleShapeContainer();
         public int m_childShapeSize;
         public Quaternion m_rotation;
         public Matrix4x4 m_transform;
@@ -41,7 +41,11 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_childShape = xd.ReadClass<hkpSingleShapeContainer>(xe, nameof(m_childShape));
+            m_childShapeSize = default;
+            m_rotation = xd.ReadQuaternion(xe, nameof(m_rotation));
+            m_transform = xd.ReadTransform(xe, nameof(m_transform));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

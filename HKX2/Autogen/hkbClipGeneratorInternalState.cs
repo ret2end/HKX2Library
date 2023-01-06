@@ -19,7 +19,7 @@ namespace HKX2
     public partial class hkbClipGeneratorInternalState : hkReferencedObject
     {
         public Matrix4x4 m_extractedMotion;
-        public List<hkbClipGeneratorEcho> m_echos;
+        public List<hkbClipGeneratorEcho> m_echos = new List<hkbClipGeneratorEcho>();
         public float m_localTime;
         public float m_time;
         public float m_previousUserControlledTimeFraction;
@@ -65,7 +65,17 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_extractedMotion = xd.ReadQSTransform(xe, nameof(m_extractedMotion));
+            m_echos = xd.ReadClassArray<hkbClipGeneratorEcho>(xe, nameof(m_echos));
+            m_localTime = xd.ReadSingle(xe, nameof(m_localTime));
+            m_time = xd.ReadSingle(xe, nameof(m_time));
+            m_previousUserControlledTimeFraction = xd.ReadSingle(xe, nameof(m_previousUserControlledTimeFraction));
+            m_bufferSize = xd.ReadInt32(xe, nameof(m_bufferSize));
+            m_echoBufferSize = xd.ReadInt32(xe, nameof(m_echoBufferSize));
+            m_atEnd = xd.ReadBoolean(xe, nameof(m_atEnd));
+            m_ignoreStartTime = xd.ReadBoolean(xe, nameof(m_ignoreStartTime));
+            m_pingPongBackward = xd.ReadBoolean(xe, nameof(m_pingPongBackward));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

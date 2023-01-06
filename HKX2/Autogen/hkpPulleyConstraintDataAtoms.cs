@@ -8,8 +8,8 @@ namespace HKX2
     // m_pulley m_class: hkpPulleyConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpPulleyConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTranslationsConstraintAtom m_translations;
-        public hkpPulleyConstraintAtom m_pulley;
+        public hkpSetLocalTranslationsConstraintAtom m_translations = new hkpSetLocalTranslationsConstraintAtom();
+        public hkpPulleyConstraintAtom m_pulley = new hkpPulleyConstraintAtom();
 
         public virtual uint Signature => 0xb149e5a;
 
@@ -29,7 +29,8 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            m_translations = xd.ReadClass<hkpSetLocalTranslationsConstraintAtom>(xe, nameof(m_translations));
+            m_pulley = xd.ReadClass<hkpPulleyConstraintAtom>(xe, nameof(m_pulley));
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

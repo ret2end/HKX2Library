@@ -26,7 +26,8 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_transform = xd.ReadTransform(xe, nameof(m_transform));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

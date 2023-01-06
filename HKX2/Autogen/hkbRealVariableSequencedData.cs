@@ -9,7 +9,7 @@ namespace HKX2
     // m_variableIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbRealVariableSequencedData : hkbSequencedData
     {
-        public List<hkbRealVariableSequencedDataSample> m_samples;
+        public List<hkbRealVariableSequencedDataSample> m_samples = new List<hkbRealVariableSequencedDataSample>();
         public int m_variableIndex;
 
         public override uint Signature => 0xe2862d02;
@@ -32,7 +32,9 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_samples = xd.ReadClassArray<hkbRealVariableSequencedDataSample>(xe, nameof(m_samples));
+            m_variableIndex = xd.ReadInt32(xe, nameof(m_variableIndex));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

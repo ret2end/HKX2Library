@@ -16,7 +16,7 @@ namespace HKX2
         public int m_maxProjectiles;
         public float m_reloadTime;
         public float m_reload;
-        public List<dynamic> m_projectiles;
+        public List<dynamic> m_projectiles = new List<dynamic>();
         public dynamic m_world;
         public dynamic m_destructionWorld;
 
@@ -48,7 +48,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_maxProjectiles = xd.ReadInt32(xe, nameof(m_maxProjectiles));
+            m_reloadTime = xd.ReadSingle(xe, nameof(m_reloadTime));
+            m_reload = default;
+            m_projectiles = default;
+            m_world = default;
+            m_destructionWorld = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

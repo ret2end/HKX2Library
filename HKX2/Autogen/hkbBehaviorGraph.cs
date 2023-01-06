@@ -59,8 +59,8 @@ namespace HKX2
         public dynamic m_stateListenerTemplateToCloneMap;
         public dynamic m_nodePartitionInfo;
         public int m_numIntermediateOutputs;
-        public List<dynamic> m_jobs;
-        public List<dynamic> m_allPartitionMemory;
+        public List<dynamic> m_jobs = new List<dynamic>();
+        public List<dynamic> m_allPartitionMemory = new List<dynamic>();
         public short m_numStaticNodes;
         public short m_nextUniqueId;
         public bool m_isActive;
@@ -146,7 +146,37 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_variableMode = xd.ReadFlag<VariableMode, sbyte>(xe, nameof(m_variableMode));
+            m_uniqueIdPool = default;
+            m_idToStateMachineTemplateMap = default;
+            m_mirroredExternalIdMap = default;
+            m_pseudoRandomGenerator = default;
+            m_rootGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_rootGenerator));
+            m_data = xd.ReadClassPointer<hkbBehaviorGraphData>(xe, nameof(m_data));
+            m_rootGeneratorClone = default;
+            m_activeNodes = default;
+            m_activeNodeTemplateToIndexMap = default;
+            m_activeNodesChildrenIndices = default;
+            m_globalTransitionData = default;
+            m_eventIdMap = default;
+            m_attributeIdMap = default;
+            m_variableIdMap = default;
+            m_characterPropertyIdMap = default;
+            m_variableValueSet = default;
+            m_nodeTemplateToCloneMap = default;
+            m_nodeCloneToTemplateMap = default;
+            m_stateListenerTemplateToCloneMap = default;
+            m_nodePartitionInfo = default;
+            m_numIntermediateOutputs = default;
+            m_jobs = default;
+            m_allPartitionMemory = default;
+            m_numStaticNodes = default;
+            m_nextUniqueId = default;
+            m_isActive = default;
+            m_isLinked = default;
+            m_updateActiveNodes = default;
+            m_stateOrTransitionChanged = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -46,7 +46,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_cylRadius = xd.ReadSingle(xe, nameof(m_cylRadius));
+            m_cylBaseRadiusFactorForHeightFieldCollisions = xd.ReadSingle(xe, nameof(m_cylBaseRadiusFactorForHeightFieldCollisions));
+            m_vertexA = xd.ReadVector4(xe, nameof(m_vertexA));
+            m_vertexB = xd.ReadVector4(xe, nameof(m_vertexB));
+            m_perpendicular1 = xd.ReadVector4(xe, nameof(m_perpendicular1));
+            m_perpendicular2 = xd.ReadVector4(xe, nameof(m_perpendicular2));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

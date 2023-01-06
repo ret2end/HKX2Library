@@ -51,7 +51,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_isEnabled = xd.ReadBoolean(xe, nameof(m_isEnabled));
+            m_motorAxis = xd.ReadByte(xe, nameof(m_motorAxis));
+            m_initializedOffset = xd.ReadInt16(xe, nameof(m_initializedOffset));
+            m_previousTargetAngleOffset = xd.ReadInt16(xe, nameof(m_previousTargetAngleOffset));
+            m_correspondingAngLimitSolverResultOffset = xd.ReadInt16(xe, nameof(m_correspondingAngLimitSolverResultOffset));
+            m_targetAngle = xd.ReadSingle(xe, nameof(m_targetAngle));
+            m_motor = xd.ReadClassPointer<hkpConstraintMotor>(xe, nameof(m_motor));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

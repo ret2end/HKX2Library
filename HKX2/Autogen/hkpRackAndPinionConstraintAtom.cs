@@ -43,7 +43,12 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_pinionRadiusOrScrewPitch = xd.ReadSingle(xe, nameof(m_pinionRadiusOrScrewPitch));
+            m_isScrew = xd.ReadBoolean(xe, nameof(m_isScrew));
+            m_memOffsetToInitialAngleOffset = xd.ReadSByte(xe, nameof(m_memOffsetToInitialAngleOffset));
+            m_memOffsetToPrevAngle = xd.ReadSByte(xe, nameof(m_memOffsetToPrevAngle));
+            m_memOffsetToRevolutionCounter = xd.ReadSByte(xe, nameof(m_memOffsetToRevolutionCounter));
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

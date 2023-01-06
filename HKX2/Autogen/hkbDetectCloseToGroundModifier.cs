@@ -13,7 +13,7 @@ namespace HKX2
     // m_isCloseToGround m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbDetectCloseToGroundModifier : hkbModifier
     {
-        public hkbEventProperty m_closeToGroundEvent;
+        public hkbEventProperty m_closeToGroundEvent = new hkbEventProperty();
         public float m_closeToGroundHeight;
         public float m_raycastDistanceDown;
         public uint m_collisionFilterInfo;
@@ -52,7 +52,14 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_closeToGroundEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_closeToGroundEvent));
+            m_closeToGroundHeight = xd.ReadSingle(xe, nameof(m_closeToGroundHeight));
+            m_raycastDistanceDown = xd.ReadSingle(xe, nameof(m_raycastDistanceDown));
+            m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
+            m_boneIndex = xd.ReadInt16(xe, nameof(m_boneIndex));
+            m_animBoneIndex = xd.ReadInt16(xe, nameof(m_animBoneIndex));
+            m_isCloseToGround = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

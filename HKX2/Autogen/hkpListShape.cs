@@ -14,12 +14,12 @@ namespace HKX2
     // m_enabledChildren m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 8 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpListShape : hkpShapeCollection
     {
-        public List<hkpListShapeChildInfo> m_childInfo;
+        public List<hkpListShapeChildInfo> m_childInfo = new List<hkpListShapeChildInfo>();
         public ushort m_flags;
         public ushort m_numDisabledChildren;
         public Vector4 m_aabbHalfExtents;
         public Vector4 m_aabbCenter;
-        public List<uint> m_enabledChildren;
+        public uint[] m_enabledChildren = new uint[8];
 
         public override uint Signature => 0xa1937cbd;
 
@@ -49,7 +49,13 @@ namespace HKX2
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
-
+            base.ReadXml(xd, xe);
+            m_childInfo = xd.ReadClassArray<hkpListShapeChildInfo>(xe, nameof(m_childInfo));
+            m_flags = xd.ReadUInt16(xe, nameof(m_flags));
+            m_numDisabledChildren = xd.ReadUInt16(xe, nameof(m_numDisabledChildren));
+            m_aabbHalfExtents = xd.ReadVector4(xe, nameof(m_aabbHalfExtents));
+            m_aabbCenter = xd.ReadVector4(xe, nameof(m_aabbCenter));
+            m_enabledChildren = xd.ReadUInt32CStyleArray(xe, nameof(m_enabledChildren), 8);
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)
