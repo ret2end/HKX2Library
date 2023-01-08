@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Security.AccessControl;
 
 namespace HKX2
 {
@@ -16,7 +17,7 @@ namespace HKX2
 
         private bool _ignoreNonFatalError;
 
-        private IHavokObject ConstructVirtualClass(BinaryReaderEx br, uint offset, System.Type sourceType = null)
+        private IHavokObject ConstructVirtualClass(BinaryReaderEx br, uint offset)
         {
             if (_deserializedObjects.ContainsKey(offset)) return _deserializedObjects[offset];
 
@@ -25,12 +26,6 @@ namespace HKX2
 
             var hkClass = System.Type.GetType($@"HKX2.{hkClassName}");
             if (hkClass is null) throw new Exception($@"Havok class type '{hkClassName}' not found!");
-
-            if (sourceType is not null && !sourceType.IsAssignableFrom(hkClass))
-            {
-                if (!_ignoreNonFatalError)
-                    throw new Exception($@"Could not convert '{hkClassName}' to '{sourceType}'. Is source malformed?");
-            }
 
             var ret = (IHavokObject)Activator.CreateInstance(hkClass);
             if (ret is null) throw new Exception($@"Failed to Activator.CreateInstance({hkClass})");
@@ -173,7 +168,17 @@ namespace HKX2
             if (!_dataSection._globalMap.ContainsKey(key)) return default;
 
             var f = _dataSection._globalMap[key];
-            return (T)ConstructVirtualClass(br, f.Dst, typeof(T));
+            var klass = ConstructVirtualClass(br, f.Dst);
+
+            // TODO: this assume klass was read on correct block, will
+            if(!klass.GetType().IsAssignableTo(typeof(T)))
+            {
+                if (_ignoreNonFatalError)
+                    return default;
+                throw new Exception($@"Could not convert '{typeof(T)}' to '{klass.GetType()}'. Is source malformed?");
+            }
+
+            return (T) klass;
         }
 
         public List<T> ReadClassPointerArray<T>(BinaryReaderEx br) where T : IHavokObject
