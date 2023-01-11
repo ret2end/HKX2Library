@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,7 +10,7 @@ namespace HKX2
     // m_rotationOut m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbComputeRotationFromAxisAngleModifierInternalState : hkReferencedObject
     {
-        public Quaternion m_rotationOut;
+        public Quaternion m_rotationOut { set; get; } = default;
 
         public override uint Signature => 0x71cd1eb0;
 

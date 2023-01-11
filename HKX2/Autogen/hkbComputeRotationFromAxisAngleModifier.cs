@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_angleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkbComputeRotationFromAxisAngleModifier : hkbModifier
     {
-        public Quaternion m_rotationOut;
-        public Vector4 m_axis;
-        public float m_angleDegrees;
+        public Quaternion m_rotationOut { set; get; } = default;
+        public Vector4 m_axis { set; get; } = default;
+        public float m_angleDegrees { set; get; } = default;
 
         public override uint Signature => 0x9b3f6936;
 

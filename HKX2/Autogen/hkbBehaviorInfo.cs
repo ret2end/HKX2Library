@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_idToNamePairs m_class: hkbBehaviorInfoIdToNamePair Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public hkbBehaviorGraphData m_data;
-        public List<hkbBehaviorInfoIdToNamePair> m_idToNamePairs = new List<hkbBehaviorInfoIdToNamePair>();
+        public ulong m_characterId { set; get; } = default;
+        public hkbBehaviorGraphData? m_data { set; get; } = default;
+        public IList<hkbBehaviorInfoIdToNamePair> m_idToNamePairs { set; get; } = new List<hkbBehaviorInfoIdToNamePair>();
 
         public override uint Signature => 0xf7645395;
 
@@ -29,7 +31,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.WriteUInt64(m_characterId);
             s.WriteClassPointer(bw, m_data);
-            s.WriteClassArray<hkbBehaviorInfoIdToNamePair>(bw, m_idToNamePairs);
+            s.WriteClassArray(bw, m_idToNamePairs);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

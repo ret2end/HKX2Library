@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_isActive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
     public partial class hkbDelayedModifierInternalState : hkReferencedObject
     {
-        public float m_secondsElapsed;
-        public bool m_isActive;
+        public float m_secondsElapsed { set; get; } = default;
+        public bool m_isActive { set; get; } = default;
 
         public override uint Signature => 0x85fb0b80;
 

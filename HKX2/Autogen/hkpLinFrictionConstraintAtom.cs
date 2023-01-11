@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_maxFrictionForce m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkpLinFrictionConstraintAtom : hkpConstraintAtom
     {
-        public byte m_isEnabled;
-        public byte m_frictionAxis;
-        public float m_maxFrictionForce;
+        public byte m_isEnabled { set; get; } = default;
+        public byte m_frictionAxis { set; get; } = default;
+        public float m_maxFrictionForce { set; get; } = default;
 
         public override uint Signature => 0x3e94ef7c;
 

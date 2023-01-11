@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_initializeCharacterPose m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 41 flags: FLAGS_NONE enum: 
     public partial class hkbBlendingTransitionEffectInternalState : hkReferencedObject
     {
-        public List<Matrix4x4> m_characterPoseAtBeginningOfTransition;
-        public float m_timeRemaining;
-        public float m_timeInTransition;
-        public bool m_applySelfTransition;
-        public bool m_initializeCharacterPose;
+        public IList<Matrix4x4> m_characterPoseAtBeginningOfTransition { set; get; } = new List<Matrix4x4>();
+        public float m_timeRemaining { set; get; } = default;
+        public float m_timeInTransition { set; get; } = default;
+        public bool m_applySelfTransition { set; get; } = default;
+        public bool m_initializeCharacterPose { set; get; } = default;
 
         public override uint Signature => 0xb18c70c2;
 

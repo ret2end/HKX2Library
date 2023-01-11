@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_filterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkpMeshMaterial : IHavokObject
     {
-        public uint m_filterInfo;
+        public uint m_filterInfo { set; get; } = default;
 
         public virtual uint Signature => 0x886cde0c;
 

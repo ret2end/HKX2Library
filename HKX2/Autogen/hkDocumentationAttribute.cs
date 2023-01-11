@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_docsSectionTag m_class:  Type.TYPE_CSTRING Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkDocumentationAttribute : IHavokObject
     {
-        public string m_docsSectionTag;
+        public string m_docsSectionTag { set; get; } = "";
 
         public virtual uint Signature => 0x630edd9e;
 

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -19,18 +21,18 @@ namespace HKX2
     // m_fixUp m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 81 flags: FLAGS_NONE enum: 
     public partial class hkbHandIkControlData : IHavokObject
     {
-        public Vector4 m_targetPosition;
-        public Quaternion m_targetRotation;
-        public Vector4 m_targetNormal;
-        public hkbHandle m_targetHandle;
-        public float m_transformOnFraction;
-        public float m_normalOnFraction;
-        public float m_fadeInDuration;
-        public float m_fadeOutDuration;
-        public float m_extrapolationTimeStep;
-        public float m_handleChangeSpeed;
-        public sbyte m_handleChangeMode;
-        public bool m_fixUp;
+        public Vector4 m_targetPosition { set; get; } = default;
+        public Quaternion m_targetRotation { set; get; } = default;
+        public Vector4 m_targetNormal { set; get; } = default;
+        public hkbHandle? m_targetHandle { set; get; } = default;
+        public float m_transformOnFraction { set; get; } = default;
+        public float m_normalOnFraction { set; get; } = default;
+        public float m_fadeInDuration { set; get; } = default;
+        public float m_fadeOutDuration { set; get; } = default;
+        public float m_extrapolationTimeStep { set; get; } = default;
+        public float m_handleChangeSpeed { set; get; } = default;
+        public sbyte m_handleChangeMode { set; get; } = default;
+        public bool m_fixUp { set; get; } = default;
 
         public virtual uint Signature => 0xd72b8d17;
 
@@ -63,7 +65,7 @@ namespace HKX2
             bw.WriteSingle(m_fadeOutDuration);
             bw.WriteSingle(m_extrapolationTimeStep);
             bw.WriteSingle(m_handleChangeSpeed);
-            s.WriteSByte(bw, m_handleChangeMode);
+            bw.WriteSByte(m_handleChangeMode);
             bw.WriteBoolean(m_fixUp);
             bw.Position += 14;
         }

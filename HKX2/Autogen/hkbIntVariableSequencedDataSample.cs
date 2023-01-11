@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_value m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkbIntVariableSequencedDataSample : IHavokObject
     {
-        public float m_time;
-        public int m_value;
+        public float m_time { set; get; } = default;
+        public int m_value { set; get; } = default;
 
         public virtual uint Signature => 0xbe7ac63c;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_limitConstraint m_class: hkpConstraintInstance Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpPoweredChainMapperLinkInfo : IHavokObject
     {
-        public int m_firstTargetIdx;
-        public int m_numTargets;
-        public hkpConstraintInstance m_limitConstraint;
+        public int m_firstTargetIdx { set; get; } = default;
+        public int m_numTargets { set; get; } = default;
+        public hkpConstraintInstance? m_limitConstraint { set; get; } = default;
 
         public virtual uint Signature => 0xcf071a1b;
 

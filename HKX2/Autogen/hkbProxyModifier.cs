@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -36,42 +38,41 @@ namespace HKX2
     // m_previousFrameFollowWorldFromModel m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 280 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbProxyModifier : hkbModifier
     {
-        public hkbProxyModifierProxyInfo m_proxyInfo = new hkbProxyModifierProxyInfo();
-        public Vector4 m_linearVelocity;
-        public float m_horizontalGain;
-        public float m_verticalGain;
-        public float m_maxHorizontalSeparation;
-        public float m_maxVerticalSeparation;
-        public float m_verticalDisplacementError;
-        public float m_verticalDisplacementErrorGain;
-        public float m_maxVerticalDisplacement;
-        public float m_minVerticalDisplacement;
-        public float m_capsuleHeight;
-        public float m_capsuleRadius;
-        public float m_maxSlopeForRotation;
-        public uint m_collisionFilterInfo;
-        public sbyte m_phantomType;
-        public sbyte m_linearVelocityMode;
-        public bool m_ignoreIncomingRotation;
-        public bool m_ignoreCollisionDuringRotation;
-        public bool m_ignoreIncomingTranslation;
-        public bool m_includeDownwardMomentum;
-        public bool m_followWorldFromModel;
-        public bool m_isTouchingGround;
-        public dynamic m_characterProxy;
-        public dynamic m_phantom;
-        public dynamic m_phantomShape;
-        public Vector4 m_horizontalDisplacement;
-        public float m_verticalDisplacement;
-        public float m_timestep;
-        public bool m_previousFrameFollowWorldFromModel;
+        public hkbProxyModifierProxyInfo m_proxyInfo { set; get; } = new();
+        public Vector4 m_linearVelocity { set; get; } = default;
+        public float m_horizontalGain { set; get; } = default;
+        public float m_verticalGain { set; get; } = default;
+        public float m_maxHorizontalSeparation { set; get; } = default;
+        public float m_maxVerticalSeparation { set; get; } = default;
+        public float m_verticalDisplacementError { set; get; } = default;
+        public float m_verticalDisplacementErrorGain { set; get; } = default;
+        public float m_maxVerticalDisplacement { set; get; } = default;
+        public float m_minVerticalDisplacement { set; get; } = default;
+        public float m_capsuleHeight { set; get; } = default;
+        public float m_capsuleRadius { set; get; } = default;
+        public float m_maxSlopeForRotation { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public sbyte m_phantomType { set; get; } = default;
+        public sbyte m_linearVelocityMode { set; get; } = default;
+        public bool m_ignoreIncomingRotation { set; get; } = default;
+        public bool m_ignoreCollisionDuringRotation { set; get; } = default;
+        public bool m_ignoreIncomingTranslation { set; get; } = default;
+        public bool m_includeDownwardMomentum { set; get; } = default;
+        public bool m_followWorldFromModel { set; get; } = default;
+        public bool m_isTouchingGround { set; get; } = default;
+        private object? m_characterProxy { set; get; } = default;
+        private object? m_phantom { set; get; } = default;
+        private object? m_phantomShape { set; get; } = default;
+        private Vector4 m_horizontalDisplacement { set; get; } = default;
+        private float m_verticalDisplacement { set; get; } = default;
+        private float m_timestep { set; get; } = default;
+        private bool m_previousFrameFollowWorldFromModel { set; get; } = default;
 
         public override uint Signature => 0x8a41554f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_proxyInfo = new hkbProxyModifierProxyInfo();
             m_proxyInfo.Read(des, br);
             m_linearVelocity = br.ReadVector4();
             m_horizontalGain = br.ReadSingle();
@@ -121,8 +122,8 @@ namespace HKX2
             bw.WriteSingle(m_capsuleRadius);
             bw.WriteSingle(m_maxSlopeForRotation);
             bw.WriteUInt32(m_collisionFilterInfo);
-            s.WriteSByte(bw, m_phantomType);
-            s.WriteSByte(bw, m_linearVelocityMode);
+            bw.WriteSByte(m_phantomType);
+            bw.WriteSByte(m_linearVelocityMode);
             bw.WriteBoolean(m_ignoreIncomingRotation);
             bw.WriteBoolean(m_ignoreCollisionDuringRotation);
             bw.WriteBoolean(m_ignoreIncomingTranslation);
@@ -164,13 +165,6 @@ namespace HKX2
             m_includeDownwardMomentum = xd.ReadBoolean(xe, nameof(m_includeDownwardMomentum));
             m_followWorldFromModel = xd.ReadBoolean(xe, nameof(m_followWorldFromModel));
             m_isTouchingGround = xd.ReadBoolean(xe, nameof(m_isTouchingGround));
-            m_characterProxy = default;
-            m_phantom = default;
-            m_phantomShape = default;
-            m_horizontalDisplacement = default;
-            m_verticalDisplacement = default;
-            m_timestep = default;
-            m_previousFrameFollowWorldFromModel = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

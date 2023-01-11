@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +14,10 @@ namespace HKX2
     // m_padNode m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 1 offset: 67 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbNode : hkbBindable
     {
-        public ulong m_userData;
-        public string m_name;
-        public short m_id;
-        public sbyte m_cloneState;
+        public ulong m_userData { set; get; } = default;
+        public string m_name { set; get; } = "";
+        private short m_id { set; get; } = default;
+        private sbyte m_cloneState { set; get; } = default;
         public bool[] m_padNode = new bool[1];
 
         public override uint Signature => 0x6d26f61d;
@@ -36,7 +39,7 @@ namespace HKX2
             bw.WriteUInt64(m_userData);
             s.WriteStringPointer(bw, m_name);
             bw.WriteInt16(m_id);
-            s.WriteSByte(bw, m_cloneState);
+            bw.WriteSByte(m_cloneState);
             s.WriteBooleanCStyleArray(bw, m_padNode);
             bw.Position += 4;
         }
@@ -46,9 +49,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_userData = xd.ReadUInt64(xe, nameof(m_userData));
             m_name = xd.ReadString(xe, nameof(m_name));
-            m_id = default;
-            m_cloneState = default;
-            m_padNode = new bool[1];
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

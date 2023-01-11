@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,25 +28,25 @@ namespace HKX2
     // m_bAllCharactersAtMarks m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 300 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSSynchronizedClipGenerator : hkbGenerator
     {
-        public hkbGenerator m_pClipGenerator;
-        public string m_SyncAnimPrefix;
-        public bool m_bSyncClipIgnoreMarkPlacement;
-        public float m_fGetToMarkTime;
-        public float m_fMarkErrorThreshold;
-        public bool m_bLeadCharacter;
-        public bool m_bReorientSupportChar;
-        public bool m_bApplyMotionFromRoot;
-        public dynamic m_pSyncScene;
-        public Matrix4x4 m_StartMarkWS;
-        public Matrix4x4 m_EndMarkWS;
-        public Matrix4x4 m_StartMarkMS;
-        public float m_fCurrentLerp;
-        public dynamic m_pLocalSyncBinding;
-        public dynamic m_pEventMap;
-        public short m_sAnimationBindingIndex;
-        public bool m_bAtMark;
-        public bool m_bAllCharactersInScene;
-        public bool m_bAllCharactersAtMarks;
+        public hkbGenerator? m_pClipGenerator { set; get; } = default;
+        public string m_SyncAnimPrefix { set; get; } = "";
+        public bool m_bSyncClipIgnoreMarkPlacement { set; get; } = default;
+        public float m_fGetToMarkTime { set; get; } = default;
+        public float m_fMarkErrorThreshold { set; get; } = default;
+        public bool m_bLeadCharacter { set; get; } = default;
+        public bool m_bReorientSupportChar { set; get; } = default;
+        public bool m_bApplyMotionFromRoot { set; get; } = default;
+        private object? m_pSyncScene { set; get; } = default;
+        private Matrix4x4 m_StartMarkWS { set; get; } = default;
+        private Matrix4x4 m_EndMarkWS { set; get; } = default;
+        private Matrix4x4 m_StartMarkMS { set; get; } = default;
+        private float m_fCurrentLerp { set; get; } = default;
+        private object? m_pLocalSyncBinding { set; get; } = default;
+        private object? m_pEventMap { set; get; } = default;
+        public short m_sAnimationBindingIndex { set; get; } = default;
+        private bool m_bAtMark { set; get; } = default;
+        private bool m_bAllCharactersInScene { set; get; } = default;
+        private bool m_bAllCharactersAtMarks { set; get; } = default;
 
         public override uint Signature => 0xd83bea64;
 
@@ -119,17 +121,7 @@ namespace HKX2
             m_bLeadCharacter = xd.ReadBoolean(xe, nameof(m_bLeadCharacter));
             m_bReorientSupportChar = xd.ReadBoolean(xe, nameof(m_bReorientSupportChar));
             m_bApplyMotionFromRoot = xd.ReadBoolean(xe, nameof(m_bApplyMotionFromRoot));
-            m_pSyncScene = default;
-            m_StartMarkWS = default;
-            m_EndMarkWS = default;
-            m_StartMarkMS = default;
-            m_fCurrentLerp = default;
-            m_pLocalSyncBinding = default;
-            m_pEventMap = default;
             m_sAnimationBindingIndex = xd.ReadInt16(xe, nameof(m_sAnimationBindingIndex));
-            m_bAtMark = default;
-            m_bAllCharactersInScene = default;
-            m_bAllCharactersAtMarks = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

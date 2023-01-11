@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_characterControllerCinfo m_class: hkpCharacterControllerCinfo Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbCharacterDataCharacterControllerInfo : IHavokObject
     {
-        public float m_capsuleHeight;
-        public float m_capsuleRadius;
-        public uint m_collisionFilterInfo;
-        public hkpCharacterControllerCinfo m_characterControllerCinfo;
+        public float m_capsuleHeight { set; get; } = default;
+        public float m_capsuleRadius { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public hkpCharacterControllerCinfo? m_characterControllerCinfo { set; get; } = default;
 
         public virtual uint Signature => 0xa0f415bf;
 

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,16 +19,16 @@ namespace HKX2
     // m_describedVersion m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
     public partial class hkClass : IHavokObject
     {
-        public string m_name;
-        public hkClass m_parent;
-        public int m_objectSize;
-        public int m_numImplementedInterfaces;
-        public dynamic m_declaredEnums;
-        public dynamic m_declaredMembers;
-        public dynamic m_defaults;
-        public hkCustomAttributes m_attributes;
-        public uint m_flags;
-        public int m_describedVersion;
+        public string m_name { set; get; } = "";
+        public hkClass? m_parent { set; get; } = default;
+        public int m_objectSize { set; get; } = default;
+        public int m_numImplementedInterfaces { set; get; } = default;
+        public object? m_declaredEnums { set; get; } = default;
+        public object? m_declaredMembers { set; get; } = default;
+        private object? m_defaults { set; get; } = default;
+        private hkCustomAttributes? m_attributes { set; get; } = default;
+        public uint m_flags { set; get; } = default;
+        public int m_describedVersion { set; get; } = default;
 
         public virtual uint Signature => 0x75585ef6;
 
@@ -66,8 +68,6 @@ namespace HKX2
             m_numImplementedInterfaces = xd.ReadInt32(xe, nameof(m_numImplementedInterfaces));
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
-            m_defaults = default;
-            m_attributes = default;
             m_flags = xd.ReadFlag<FlagValues, uint>(xe, nameof(m_flags));
             m_describedVersion = xd.ReadInt32(xe, nameof(m_describedVersion));
         }

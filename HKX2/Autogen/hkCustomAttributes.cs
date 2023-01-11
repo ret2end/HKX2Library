@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_attributes m_class: hkCustomAttributesAttribute Type.TYPE_SIMPLEARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkCustomAttributes : IHavokObject
     {
-        public dynamic m_attributes;
+        public object? m_attributes { set; get; } = default;
 
         public virtual uint Signature => 0xbff19005;
 

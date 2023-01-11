@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_previewColor m_class:  Type.TYPE_ARRAY Type.TYPE_UINT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkaAnimationPreviewColorContainer : hkReferencedObject
     {
-        public List<uint> m_previewColor;
+        public IList<uint> m_previewColor { set; get; } = new List<uint>();
 
         public override uint Signature => 0x4bc4c3e0;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_maxMessages m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbMessageLog : IHavokObject
     {
-        public dynamic m_messages;
-        public int m_maxMessages;
+        private object? m_messages { set; get; } = default;
+        private int m_maxMessages { set; get; } = default;
 
         public virtual uint Signature => 0x26a196c5;
 
@@ -29,8 +32,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_messages = default;
-            m_maxMessages = default;
+
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

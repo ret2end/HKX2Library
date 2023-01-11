@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_collidable m_class: hkpCollidable Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkpSimpleShapePhantomCollisionDetail : IHavokObject
     {
-        public hkpCollidable m_collidable;
+        public hkpCollidable? m_collidable { set; get; } = default;
 
         public virtual uint Signature => 0x98bfa6ce;
 

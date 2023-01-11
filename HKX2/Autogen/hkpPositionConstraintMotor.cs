@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_constantRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
     public partial class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor
     {
-        public float m_tau;
-        public float m_damping;
-        public float m_proportionalRecoveryVelocity;
-        public float m_constantRecoveryVelocity;
+        public float m_tau { set; get; } = default;
+        public float m_damping { set; get; } = default;
+        public float m_proportionalRecoveryVelocity { set; get; } = default;
+        public float m_constantRecoveryVelocity { set; get; } = default;
 
         public override uint Signature => 0x748fb303;
 

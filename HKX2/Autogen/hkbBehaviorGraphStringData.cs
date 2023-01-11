@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_characterPropertyNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorGraphStringData : hkReferencedObject
     {
-        public List<string> m_eventNames;
-        public List<string> m_attributeNames;
-        public List<string> m_variableNames;
-        public List<string> m_characterPropertyNames;
+        public IList<string> m_eventNames { set; get; } = new List<string>();
+        public IList<string> m_attributeNames { set; get; } = new List<string>();
+        public IList<string> m_variableNames { set; get; } = new List<string>();
+        public IList<string> m_characterPropertyNames { set; get; } = new List<string>();
 
         public override uint Signature => 0xc713064e;
 

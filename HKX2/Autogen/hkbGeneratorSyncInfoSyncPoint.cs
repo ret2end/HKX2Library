@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkbGeneratorSyncInfoSyncPoint : IHavokObject
     {
-        public int m_id;
-        public float m_time;
+        public int m_id { set; get; } = default;
+        public float m_time { set; get; } = default;
 
         public virtual uint Signature => 0xb597cf92;
 

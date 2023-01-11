@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -27,32 +28,31 @@ namespace HKX2
     // m_rangeIndexForEventToSendNextUpdate m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 220 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbSenseHandleModifier : hkbModifier
     {
-        public hkbHandle m_handle = new hkbHandle();
-        public Vector4 m_sensorLocalOffset;
-        public List<hkbSenseHandleModifierRange> m_ranges = new List<hkbSenseHandleModifierRange>();
-        public hkbHandle m_handleOut;
-        public hkbHandle m_handleIn;
-        public string m_localFrameName;
-        public string m_sensorLocalFrameName;
-        public float m_minDistance;
-        public float m_maxDistance;
-        public float m_distanceOut;
-        public uint m_collisionFilterInfo;
-        public short m_sensorRagdollBoneIndex;
-        public short m_sensorAnimationBoneIndex;
-        public sbyte m_sensingMode;
-        public bool m_extrapolateSensorPosition;
-        public bool m_keepFirstSensedHandle;
-        public bool m_foundHandleOut;
-        public float m_timeSinceLastModify;
-        public int m_rangeIndexForEventToSendNextUpdate;
+        public hkbHandle m_handle { set; get; } = new();
+        public Vector4 m_sensorLocalOffset { set; get; } = default;
+        public IList<hkbSenseHandleModifierRange> m_ranges { set; get; } = new List<hkbSenseHandleModifierRange>();
+        public hkbHandle? m_handleOut { set; get; } = default;
+        public hkbHandle? m_handleIn { set; get; } = default;
+        public string m_localFrameName { set; get; } = "";
+        public string m_sensorLocalFrameName { set; get; } = "";
+        public float m_minDistance { set; get; } = default;
+        public float m_maxDistance { set; get; } = default;
+        public float m_distanceOut { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public short m_sensorRagdollBoneIndex { set; get; } = default;
+        public short m_sensorAnimationBoneIndex { set; get; } = default;
+        public sbyte m_sensingMode { set; get; } = default;
+        public bool m_extrapolateSensorPosition { set; get; } = default;
+        public bool m_keepFirstSensedHandle { set; get; } = default;
+        public bool m_foundHandleOut { set; get; } = default;
+        private float m_timeSinceLastModify { set; get; } = default;
+        private int m_rangeIndexForEventToSendNextUpdate { set; get; } = default;
 
         public override uint Signature => 0x2a064d99;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_handle = new hkbHandle();
             m_handle.Read(des, br);
             m_sensorLocalOffset = br.ReadVector4();
             m_ranges = des.ReadClassArray<hkbSenseHandleModifierRange>(br);
@@ -79,7 +79,7 @@ namespace HKX2
             base.Write(s, bw);
             m_handle.Write(s, bw);
             bw.WriteVector4(m_sensorLocalOffset);
-            s.WriteClassArray<hkbSenseHandleModifierRange>(bw, m_ranges);
+            s.WriteClassArray(bw, m_ranges);
             s.WriteClassPointer(bw, m_handleOut);
             s.WriteClassPointer(bw, m_handleIn);
             s.WriteStringPointer(bw, m_localFrameName);
@@ -90,7 +90,7 @@ namespace HKX2
             bw.WriteUInt32(m_collisionFilterInfo);
             bw.WriteInt16(m_sensorRagdollBoneIndex);
             bw.WriteInt16(m_sensorAnimationBoneIndex);
-            s.WriteSByte(bw, m_sensingMode);
+            bw.WriteSByte(m_sensingMode);
             bw.WriteBoolean(m_extrapolateSensorPosition);
             bw.WriteBoolean(m_keepFirstSensedHandle);
             bw.WriteBoolean(m_foundHandleOut);
@@ -101,7 +101,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_handle = new hkbHandle();
             m_sensorLocalOffset = xd.ReadVector4(xe, nameof(m_sensorLocalOffset));
             m_ranges = xd.ReadClassArray<hkbSenseHandleModifierRange>(xe, nameof(m_ranges));
             m_handleOut = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_handleOut));
@@ -118,8 +117,6 @@ namespace HKX2
             m_extrapolateSensorPosition = xd.ReadBoolean(xe, nameof(m_extrapolateSensorPosition));
             m_keepFirstSensedHandle = xd.ReadBoolean(xe, nameof(m_keepFirstSensedHandle));
             m_foundHandleOut = xd.ReadBoolean(xe, nameof(m_foundHandleOut));
-            m_timeSinceLastModify = default;
-            m_rangeIndexForEventToSendNextUpdate = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

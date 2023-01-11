@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -22,22 +25,22 @@ namespace HKX2
     // m_stage m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 141 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbGeneratorTransitionEffect : hkbTransitionEffect
     {
-        public hkbGenerator m_transitionGenerator;
-        public float m_blendInDuration;
-        public float m_blendOutDuration;
-        public bool m_syncToGeneratorStartTime;
-        public dynamic m_fromGenerator;
-        public dynamic m_toGenerator;
-        public float m_timeInTransition;
-        public float m_duration;
-        public float m_effectiveBlendInDuration;
-        public float m_effectiveBlendOutDuration;
-        public sbyte m_toGeneratorState;
-        public bool m_echoTransitionGenerator;
-        public bool m_echoToGenerator;
-        public bool m_justActivated;
-        public bool m_updateActiveNodes;
-        public sbyte m_stage;
+        public hkbGenerator? m_transitionGenerator { set; get; } = default;
+        public float m_blendInDuration { set; get; } = default;
+        public float m_blendOutDuration { set; get; } = default;
+        public bool m_syncToGeneratorStartTime { set; get; } = default;
+        private object? m_fromGenerator { set; get; } = default;
+        private object? m_toGenerator { set; get; } = default;
+        private float m_timeInTransition { set; get; } = default;
+        private float m_duration { set; get; } = default;
+        private float m_effectiveBlendInDuration { set; get; } = default;
+        private float m_effectiveBlendOutDuration { set; get; } = default;
+        private sbyte m_toGeneratorState { set; get; } = default;
+        private bool m_echoTransitionGenerator { set; get; } = default;
+        private bool m_echoToGenerator { set; get; } = default;
+        private bool m_justActivated { set; get; } = default;
+        private bool m_updateActiveNodes { set; get; } = default;
+        private sbyte m_stage { set; get; } = default;
 
         public override uint Signature => 0x5f771b12;
 
@@ -78,12 +81,12 @@ namespace HKX2
             bw.WriteSingle(m_duration);
             bw.WriteSingle(m_effectiveBlendInDuration);
             bw.WriteSingle(m_effectiveBlendOutDuration);
-            s.WriteSByte(bw, m_toGeneratorState);
+            bw.WriteSByte(m_toGeneratorState);
             bw.WriteBoolean(m_echoTransitionGenerator);
             bw.WriteBoolean(m_echoToGenerator);
             bw.WriteBoolean(m_justActivated);
             bw.WriteBoolean(m_updateActiveNodes);
-            s.WriteSByte(bw, m_stage);
+            bw.WriteSByte(m_stage);
             bw.Position += 2;
         }
 
@@ -94,18 +97,6 @@ namespace HKX2
             m_blendInDuration = xd.ReadSingle(xe, nameof(m_blendInDuration));
             m_blendOutDuration = xd.ReadSingle(xe, nameof(m_blendOutDuration));
             m_syncToGeneratorStartTime = xd.ReadBoolean(xe, nameof(m_syncToGeneratorStartTime));
-            m_fromGenerator = default;
-            m_toGenerator = default;
-            m_timeInTransition = default;
-            m_duration = default;
-            m_effectiveBlendInDuration = default;
-            m_effectiveBlendOutDuration = default;
-            m_toGeneratorState = default;
-            m_echoTransitionGenerator = default;
-            m_echoToGenerator = default;
-            m_justActivated = default;
-            m_updateActiveNodes = default;
-            m_stage = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

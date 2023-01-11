@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_collectionType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 41 flags: FLAGS_NONE enum: CollectionType
     public partial class hkpShapeCollection : hkpShape
     {
-        public bool m_disableWelding;
-        public byte m_collectionType;
+        public bool m_disableWelding { set; get; } = default;
+        public byte m_collectionType { set; get; } = default;
 
         public override uint Signature => 0xe8c3991d;
 
@@ -27,7 +30,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.Position += 8;
             bw.WriteBoolean(m_disableWelding);
-            s.WriteByte(bw, m_collectionType);
+            bw.WriteByte(m_collectionType);
             bw.Position += 6;
         }
 

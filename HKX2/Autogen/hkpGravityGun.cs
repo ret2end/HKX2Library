@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -16,14 +17,14 @@ namespace HKX2
     // m_capturedObjectsOffset m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpGravityGun : hkpFirstPersonGun
     {
-        public List<dynamic> m_grabbedBodies = new List<dynamic>();
-        public int m_maxNumObjectsPicked;
-        public float m_maxMassOfObjectPicked;
-        public float m_maxDistOfObjectPicked;
-        public float m_impulseAppliedWhenObjectNotPicked;
-        public float m_throwVelocity;
-        public Vector4 m_capturedObjectPosition;
-        public Vector4 m_capturedObjectsOffset;
+        public IList<object> m_grabbedBodies { set; get; } = new List<object>();
+        public int m_maxNumObjectsPicked { set; get; } = default;
+        public float m_maxMassOfObjectPicked { set; get; } = default;
+        public float m_maxDistOfObjectPicked { set; get; } = default;
+        public float m_impulseAppliedWhenObjectNotPicked { set; get; } = default;
+        public float m_throwVelocity { set; get; } = default;
+        public Vector4 m_capturedObjectPosition { set; get; } = default;
+        public Vector4 m_capturedObjectsOffset { set; get; } = default;
 
         public override uint Signature => 0x5e2754cd;
 
@@ -58,7 +59,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_grabbedBodies = default;
             m_maxNumObjectsPicked = xd.ReadInt32(xe, nameof(m_maxNumObjectsPicked));
             m_maxMassOfObjectPicked = xd.ReadSingle(xe, nameof(m_maxMassOfObjectPicked));
             m_maxDistOfObjectPicked = xd.ReadSingle(xe, nameof(m_maxDistOfObjectPicked));

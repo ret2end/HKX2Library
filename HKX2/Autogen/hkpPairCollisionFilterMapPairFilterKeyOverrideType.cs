@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_hashMod m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkpPairCollisionFilterMapPairFilterKeyOverrideType : IHavokObject
     {
-        public dynamic m_elem;
-        public int m_numElems;
-        public int m_hashMod;
+        private object? m_elem { set; get; } = default;
+        public int m_numElems { set; get; } = default;
+        public int m_hashMod { set; get; } = default;
 
         public virtual uint Signature => 0x36195969;
 
@@ -31,7 +34,6 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_elem = default;
             m_numElems = xd.ReadInt32(xe, nameof(m_numElems));
             m_hashMod = xd.ReadInt32(xe, nameof(m_hashMod));
         }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,12 +15,12 @@ namespace HKX2
     // m_materialIndices16 m_class:  Type.TYPE_ARRAY Type.TYPE_UINT16 arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkpStorageMeshShapeSubpartStorage : hkReferencedObject
     {
-        public List<float> m_vertices;
-        public List<ushort> m_indices16;
-        public List<uint> m_indices32;
-        public List<byte> m_materialIndices;
-        public List<uint> m_materials;
-        public List<ushort> m_materialIndices16;
+        public IList<float> m_vertices { set; get; } = new List<float>();
+        public IList<ushort> m_indices16 { set; get; } = new List<ushort>();
+        public IList<uint> m_indices32 { set; get; } = new List<uint>();
+        public IList<byte> m_materialIndices { set; get; } = new List<byte>();
+        public IList<uint> m_materials { set; get; } = new List<uint>();
+        public IList<ushort> m_materialIndices16 { set; get; } = new List<ushort>();
 
         public override uint Signature => 0xbf27438;
 

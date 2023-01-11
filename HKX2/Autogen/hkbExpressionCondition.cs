@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_compiledExpressionSet m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 24 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbExpressionCondition : hkbCondition
     {
-        public string m_expression;
-        public dynamic m_compiledExpressionSet;
+        public string m_expression { set; get; } = "";
+        private object? m_compiledExpressionSet { set; get; } = default;
 
         public override uint Signature => 0x1c3c1045;
 
@@ -31,7 +34,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_expression = xd.ReadString(xe, nameof(m_expression));
-            m_compiledExpressionSet = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

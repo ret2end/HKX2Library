@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_isActive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 97 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbEventDrivenModifier : hkbModifierWrapper
     {
-        public int m_activateEventId;
-        public int m_deactivateEventId;
-        public bool m_activeByDefault;
-        public bool m_isActive;
+        public int m_activateEventId { set; get; } = default;
+        public int m_deactivateEventId { set; get; } = default;
+        public bool m_activeByDefault { set; get; } = default;
+        private bool m_isActive { set; get; } = default;
 
         public override uint Signature => 0x7ed3f44e;
 
@@ -43,7 +46,6 @@ namespace HKX2
             m_activateEventId = xd.ReadInt32(xe, nameof(m_activateEventId));
             m_deactivateEventId = xd.ReadInt32(xe, nameof(m_deactivateEventId));
             m_activeByDefault = xd.ReadBoolean(xe, nameof(m_activeByDefault));
-            m_isActive = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

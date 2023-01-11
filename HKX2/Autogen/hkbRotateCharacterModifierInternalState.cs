@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_angle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbRotateCharacterModifierInternalState : hkReferencedObject
     {
-        public float m_angle;
+        public float m_angle { set; get; } = default;
 
         public override uint Signature => 0xdc40bf4a;
 

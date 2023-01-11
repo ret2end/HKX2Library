@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_isAnnotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 26 flags: FLAGS_NONE enum: 
     public partial class hkbClipTrigger : IHavokObject
     {
-        public float m_localTime;
-        public hkbEventProperty m_event = new hkbEventProperty();
-        public bool m_relativeToEndOfClip;
-        public bool m_acyclic;
-        public bool m_isAnnotation;
+        public float m_localTime { set; get; } = default;
+        public hkbEventProperty m_event { set; get; } = new();
+        public bool m_relativeToEndOfClip { set; get; } = default;
+        public bool m_acyclic { set; get; } = default;
+        public bool m_isAnnotation { set; get; } = default;
 
         public virtual uint Signature => 0x7eb45cea;
 
@@ -23,7 +26,6 @@ namespace HKX2
         {
             m_localTime = br.ReadSingle();
             br.Position += 4;
-            m_event = new hkbEventProperty();
             m_event.Read(des, br);
             m_relativeToEndOfClip = br.ReadBoolean();
             m_acyclic = br.ReadBoolean();

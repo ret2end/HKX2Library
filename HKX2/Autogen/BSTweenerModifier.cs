@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,15 +18,15 @@ namespace HKX2
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 192 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSTweenerModifier : hkbModifier
     {
-        public bool m_tweenPosition;
-        public bool m_tweenRotation;
-        public bool m_useTweenDuration;
-        public float m_tweenDuration;
-        public Vector4 m_targetPosition;
-        public Quaternion m_targetRotation;
-        public float m_duration;
-        public Matrix4x4 m_startTransform;
-        public float m_time;
+        public bool m_tweenPosition { set; get; } = default;
+        public bool m_tweenRotation { set; get; } = default;
+        public bool m_useTweenDuration { set; get; } = default;
+        public float m_tweenDuration { set; get; } = default;
+        public Vector4 m_targetPosition { set; get; } = default;
+        public Quaternion m_targetRotation { set; get; } = default;
+        private float m_duration { set; get; } = default;
+        private Matrix4x4 m_startTransform { set; get; } = default;
+        private float m_time { set; get; } = default;
 
         public override uint Signature => 0xd2d9a04;
 
@@ -73,9 +75,6 @@ namespace HKX2
             m_tweenDuration = xd.ReadSingle(xe, nameof(m_tweenDuration));
             m_targetPosition = xd.ReadVector4(xe, nameof(m_targetPosition));
             m_targetRotation = xd.ReadQuaternion(xe, nameof(m_targetRotation));
-            m_duration = default;
-            m_startTransform = default;
-            m_time = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

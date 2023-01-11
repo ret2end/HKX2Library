@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,13 +16,13 @@ namespace HKX2
     // m_currentFwdAxisLS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSLookAtModifierBoneData : IHavokObject
     {
-        public short m_index;
-        public Vector4 m_fwdAxisLS;
-        public float m_limitAngleDegrees;
-        public float m_onGain;
-        public float m_offGain;
-        public bool m_enabled;
-        public Vector4 m_currentFwdAxisLS;
+        public short m_index { set; get; } = default;
+        public Vector4 m_fwdAxisLS { set; get; } = default;
+        public float m_limitAngleDegrees { set; get; } = default;
+        public float m_onGain { set; get; } = default;
+        public float m_offGain { set; get; } = default;
+        public bool m_enabled { set; get; } = default;
+        private Vector4 m_currentFwdAxisLS { set; get; } = default;
 
         public virtual uint Signature => 0x29efee59;
 
@@ -58,7 +60,6 @@ namespace HKX2
             m_onGain = xd.ReadSingle(xe, nameof(m_onGain));
             m_offGain = xd.ReadSingle(xe, nameof(m_offGain));
             m_enabled = xd.ReadBoolean(xe, nameof(m_enabled));
-            m_currentFwdAxisLS = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

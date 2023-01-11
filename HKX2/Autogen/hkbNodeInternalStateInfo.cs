@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,18 +14,17 @@ namespace HKX2
     // m_hasActivateBeenCalled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 114 flags: FLAGS_NONE enum: 
     public partial class hkbNodeInternalStateInfo : hkReferencedObject
     {
-        public hkbGeneratorSyncInfo m_syncInfo = new hkbGeneratorSyncInfo();
-        public string m_name;
-        public hkReferencedObject m_internalState;
-        public short m_nodeId;
-        public bool m_hasActivateBeenCalled;
+        public hkbGeneratorSyncInfo m_syncInfo { set; get; } = new();
+        public string m_name { set; get; } = "";
+        public hkReferencedObject? m_internalState { set; get; } = default;
+        public short m_nodeId { set; get; } = default;
+        public bool m_hasActivateBeenCalled { set; get; } = default;
 
         public override uint Signature => 0x7db9971d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_syncInfo = new hkbGeneratorSyncInfo();
             m_syncInfo.Read(des, br);
             m_name = des.ReadStringPointer(br);
             m_internalState = des.ReadClassPointer<hkReferencedObject>(br);

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_leverageOnBodyB m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
     public partial class hkpPulleyConstraintAtom : hkpConstraintAtom
     {
-        public Vector4 m_fixedPivotAinWorld;
-        public Vector4 m_fixedPivotBinWorld;
-        public float m_ropeLength;
-        public float m_leverageOnBodyB;
+        public Vector4 m_fixedPivotAinWorld { set; get; } = default;
+        public Vector4 m_fixedPivotBinWorld { set; get; } = default;
+        public float m_ropeLength { set; get; } = default;
+        public float m_leverageOnBodyB { set; get; } = default;
 
         public override uint Signature => 0x94a08848;
 

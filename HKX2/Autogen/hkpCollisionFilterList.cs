@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_collisionFilters m_class: hkpCollisionFilter Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     public partial class hkpCollisionFilterList : hkpCollisionFilter
     {
-        public List<hkpCollisionFilter> m_collisionFilters = new List<hkpCollisionFilter>();
+        public IList<hkpCollisionFilter> m_collisionFilters { set; get; } = new List<hkpCollisionFilter>();
 
         public override uint Signature => 0x2603bf04;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpCollisionFilter>(bw, m_collisionFilters);
+            s.WriteClassPointerArray(bw, m_collisionFilters);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

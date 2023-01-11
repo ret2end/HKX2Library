@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -11,9 +12,9 @@ namespace HKX2
     // m_variantVariableValues m_class: hkReferencedObject Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbVariableValueSet : hkReferencedObject
     {
-        public List<hkbVariableValue> m_wordVariableValues = new List<hkbVariableValue>();
-        public List<Vector4> m_quadVariableValues;
-        public List<hkReferencedObject> m_variantVariableValues = new List<hkReferencedObject>();
+        public IList<hkbVariableValue> m_wordVariableValues { set; get; } = new List<hkbVariableValue>();
+        public IList<Vector4> m_quadVariableValues { set; get; } = new List<Vector4>();
+        public IList<hkReferencedObject> m_variantVariableValues { set; get; } = new List<hkReferencedObject>();
 
         public override uint Signature => 0x27812d8d;
 
@@ -28,9 +29,9 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbVariableValue>(bw, m_wordVariableValues);
+            s.WriteClassArray(bw, m_wordVariableValues);
             s.WriteVector4Array(bw, m_quadVariableValues);
-            s.WriteClassPointerArray<hkReferencedObject>(bw, m_variantVariableValues);
+            s.WriteClassPointerArray(bw, m_variantVariableValues);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

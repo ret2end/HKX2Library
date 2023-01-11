@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_numBits m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkBitField : IHavokObject
     {
-        public List<uint> m_words;
-        public int m_numBits;
+        public IList<uint> m_words { set; get; } = new List<uint>();
+        public int m_numBits { set; get; } = default;
 
         public virtual uint Signature => 0xda41bd9b;
 

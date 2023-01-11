@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_numElements m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkxVertexDescriptionElementDecl : IHavokObject
     {
-        public uint m_byteOffset;
-        public ushort m_type;
-        public ushort m_usage;
-        public uint m_byteStride;
-        public byte m_numElements;
+        public uint m_byteOffset { set; get; } = default;
+        public ushort m_type { set; get; } = default;
+        public ushort m_usage { set; get; } = default;
+        public uint m_byteStride { set; get; } = default;
+        public byte m_numElements { set; get; } = default;
 
         public virtual uint Signature => 0x483a429b;
 
@@ -32,8 +35,8 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             bw.WriteUInt32(m_byteOffset);
-            s.WriteUInt16(bw, m_type);
-            s.WriteUInt16(bw, m_usage);
+            bw.WriteUInt16(m_type);
+            bw.WriteUInt16(m_usage);
             bw.WriteUInt32(m_byteStride);
             bw.WriteByte(m_numElements);
             bw.Position += 3;

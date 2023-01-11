@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_wasActiveInPreviousFrame m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbEventsFromRangeModifier : hkbModifier
     {
-        public float m_inputValue;
-        public float m_lowerBound;
-        public hkbEventRangeDataArray m_eventRanges;
-        public List<dynamic> m_wasActiveInPreviousFrame;
+        public float m_inputValue { set; get; } = default;
+        public float m_lowerBound { set; get; } = default;
+        public hkbEventRangeDataArray? m_eventRanges { set; get; } = default;
+        public IList<object> m_wasActiveInPreviousFrame { set; get; } = new List<object>();
 
         public override uint Signature => 0xbc561b6e;
 
@@ -42,7 +44,6 @@ namespace HKX2
             m_inputValue = xd.ReadSingle(xe, nameof(m_inputValue));
             m_lowerBound = xd.ReadSingle(xe, nameof(m_lowerBound));
             m_eventRanges = xd.ReadClassPointer<hkbEventRangeDataArray>(xe, nameof(m_eventRanges));
-            m_wasActiveInPreviousFrame = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

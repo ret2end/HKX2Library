@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_isActive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbDelayedModifier : hkbModifierWrapper
     {
-        public float m_delaySeconds;
-        public float m_durationSeconds;
-        public float m_secondsElapsed;
-        public bool m_isActive;
+        public float m_delaySeconds { set; get; } = default;
+        public float m_durationSeconds { set; get; } = default;
+        private float m_secondsElapsed { set; get; } = default;
+        private bool m_isActive { set; get; } = default;
 
         public override uint Signature => 0x8e101a7a;
 
@@ -42,8 +45,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_delaySeconds = xd.ReadSingle(xe, nameof(m_delaySeconds));
             m_durationSeconds = xd.ReadSingle(xe, nameof(m_durationSeconds));
-            m_secondsElapsed = default;
-            m_isActive = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

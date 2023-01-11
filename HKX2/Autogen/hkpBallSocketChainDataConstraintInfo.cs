@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_pivotInB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpBallSocketChainDataConstraintInfo : IHavokObject
     {
-        public Vector4 m_pivotInA;
-        public Vector4 m_pivotInB;
+        public Vector4 m_pivotInA { set; get; } = default;
+        public Vector4 m_pivotInB { set; get; } = default;
 
         public virtual uint Signature => 0xc9cbedf2;
 

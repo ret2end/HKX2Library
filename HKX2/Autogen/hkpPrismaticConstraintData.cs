@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_atoms m_class: hkpPrismaticConstraintDataAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 32 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpPrismaticConstraintData : hkpConstraintData
     {
-        public hkpPrismaticConstraintDataAtoms m_atoms = new hkpPrismaticConstraintDataAtoms();
+        public hkpPrismaticConstraintDataAtoms m_atoms { set; get; } = new();
 
         public override uint Signature => 0x3996c387;
 
@@ -15,7 +18,6 @@ namespace HKX2
         {
             base.Read(des, br);
             br.Position += 8;
-            m_atoms = new hkpPrismaticConstraintDataAtoms();
             m_atoms.Read(des, br);
         }
 

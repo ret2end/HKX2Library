@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -29,35 +31,34 @@ namespace HKX2
     // m_npData m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 704 flags: FLAGS_NONE enum: 
     public partial class hkpEntity : hkpWorldObject
     {
-        public hkpMaterial m_material = new hkpMaterial();
-        public dynamic m_limitContactImpulseUtilAndFlag;
-        public float m_damageMultiplier;
-        public dynamic m_breakableBody;
-        public uint m_solverData;
-        public ushort m_storageIndex;
-        public ushort m_contactPointCallbackDelay;
-        public hkpEntitySmallArraySerializeOverrideType m_constraintsMaster = new hkpEntitySmallArraySerializeOverrideType();
-        public List<dynamic> m_constraintsSlave = new List<dynamic>();
-        public List<byte> m_constraintRuntime;
-        public dynamic m_simulationIsland;
-        public sbyte m_autoRemoveLevel;
-        public byte m_numShapeKeysInContactPointProperties;
-        public byte m_responseModifierFlags;
-        public uint m_uid;
-        public hkpEntitySpuCollisionCallback m_spuCollisionCallback = new hkpEntitySpuCollisionCallback();
-        public hkpMaxSizeMotion m_motion = new hkpMaxSizeMotion();
-        public hkpEntitySmallArraySerializeOverrideType m_contactListeners = new hkpEntitySmallArraySerializeOverrideType();
-        public hkpEntitySmallArraySerializeOverrideType m_actions = new hkpEntitySmallArraySerializeOverrideType();
-        public hkLocalFrame m_localFrame;
-        public hkpEntityExtendedListeners m_extendedListeners;
-        public uint m_npData;
+        public hkpMaterial m_material { set; get; } = new();
+        private object? m_limitContactImpulseUtilAndFlag { set; get; } = default;
+        public float m_damageMultiplier { set; get; } = default;
+        private object? m_breakableBody { set; get; } = default;
+        private uint m_solverData { set; get; } = default;
+        public ushort m_storageIndex { set; get; } = default;
+        public ushort m_contactPointCallbackDelay { set; get; } = default;
+        public hkpEntitySmallArraySerializeOverrideType m_constraintsMaster { set; get; } = new();
+        public IList<hkpConstraintInstance> m_constraintsSlave { set; get; } = new List<hkpConstraintInstance>();
+        public IList<byte> m_constraintRuntime { set; get; } = new List<byte>();
+        private object? m_simulationIsland { set; get; } = default;
+        public sbyte m_autoRemoveLevel { set; get; } = default;
+        public byte m_numShapeKeysInContactPointProperties { set; get; } = default;
+        public byte m_responseModifierFlags { set; get; } = default;
+        public uint m_uid { set; get; } = default;
+        public hkpEntitySpuCollisionCallback m_spuCollisionCallback { set; get; } = new();
+        public hkpMaxSizeMotion m_motion { set; get; } = new();
+        public hkpEntitySmallArraySerializeOverrideType m_contactListeners { set; get; } = new();
+        public hkpEntitySmallArraySerializeOverrideType m_actions { set; get; } = new();
+        public hkLocalFrame? m_localFrame { set; get; } = default;
+        private hkpEntityExtendedListeners? m_extendedListeners { set; get; } = default;
+        public uint m_npData { set; get; } = default;
 
         public override uint Signature => 0xa03c774b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_material = new hkpMaterial();
             m_material.Read(des, br);
             br.Position += 4;
             des.ReadEmptyPointer(br);
@@ -67,7 +68,6 @@ namespace HKX2
             m_solverData = br.ReadUInt32();
             m_storageIndex = br.ReadUInt16();
             m_contactPointCallbackDelay = br.ReadUInt16();
-            m_constraintsMaster = new hkpEntitySmallArraySerializeOverrideType();
             m_constraintsMaster.Read(des, br);
             des.ReadEmptyArray(br);
             m_constraintRuntime = des.ReadByteArray(br);
@@ -77,13 +77,9 @@ namespace HKX2
             m_responseModifierFlags = br.ReadByte();
             br.Position += 1;
             m_uid = br.ReadUInt32();
-            m_spuCollisionCallback = new hkpEntitySpuCollisionCallback();
             m_spuCollisionCallback.Read(des, br);
-            m_motion = new hkpMaxSizeMotion();
             m_motion.Read(des, br);
-            m_contactListeners = new hkpEntitySmallArraySerializeOverrideType();
             m_contactListeners.Read(des, br);
-            m_actions = new hkpEntitySmallArraySerializeOverrideType();
             m_actions.Read(des, br);
             m_localFrame = des.ReadClassPointer<hkLocalFrame>(br);
             m_extendedListeners = des.ReadClassPointer<hkpEntityExtendedListeners>(br);
@@ -126,26 +122,16 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_material = xd.ReadClass<hkpMaterial>(xe, nameof(m_material));
-            m_limitContactImpulseUtilAndFlag = default;
             m_damageMultiplier = xd.ReadSingle(xe, nameof(m_damageMultiplier));
-            m_breakableBody = default;
-            m_solverData = default;
             m_storageIndex = xd.ReadUInt16(xe, nameof(m_storageIndex));
             m_contactPointCallbackDelay = xd.ReadUInt16(xe, nameof(m_contactPointCallbackDelay));
-            m_constraintsMaster = new hkpEntitySmallArraySerializeOverrideType();
-            m_constraintsSlave = default;
-            m_constraintRuntime = new List<byte>();
-            m_simulationIsland = default;
             m_autoRemoveLevel = xd.ReadSByte(xe, nameof(m_autoRemoveLevel));
             m_numShapeKeysInContactPointProperties = xd.ReadByte(xe, nameof(m_numShapeKeysInContactPointProperties));
             m_responseModifierFlags = xd.ReadByte(xe, nameof(m_responseModifierFlags));
             m_uid = xd.ReadUInt32(xe, nameof(m_uid));
             m_spuCollisionCallback = xd.ReadClass<hkpEntitySpuCollisionCallback>(xe, nameof(m_spuCollisionCallback));
             m_motion = xd.ReadClass<hkpMaxSizeMotion>(xe, nameof(m_motion));
-            m_contactListeners = new hkpEntitySmallArraySerializeOverrideType();
-            m_actions = new hkpEntitySmallArraySerializeOverrideType();
             m_localFrame = xd.ReadClassPointer<hkLocalFrame>(xe, nameof(m_localFrame));
-            m_extendedListeners = default;
             m_npData = xd.ReadUInt32(xe, nameof(m_npData));
         }
 

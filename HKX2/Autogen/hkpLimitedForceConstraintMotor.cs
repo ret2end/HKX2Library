@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_maxForce m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     public partial class hkpLimitedForceConstraintMotor : hkpConstraintMotor
     {
-        public float m_minForce;
-        public float m_maxForce;
+        public float m_minForce { set; get; } = default;
+        public float m_maxForce { set; get; } = default;
 
         public override uint Signature => 0x3377b0b0;
 

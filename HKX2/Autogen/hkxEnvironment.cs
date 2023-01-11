@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_variables m_class: hkxEnvironmentVariable Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxEnvironment : hkReferencedObject
     {
-        public List<hkxEnvironmentVariable> m_variables = new List<hkxEnvironmentVariable>();
+        public IList<hkxEnvironmentVariable> m_variables { set; get; } = new List<hkxEnvironmentVariable>();
 
         public override uint Signature => 0x41e1aa5;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkxEnvironmentVariable>(bw, m_variables);
+            s.WriteClassArray(bw, m_variables);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

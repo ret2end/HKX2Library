@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,15 +18,15 @@ namespace HKX2
     // m_initNextModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbGetUpModifier : hkbModifier
     {
-        public Vector4 m_groundNormal;
-        public float m_duration;
-        public float m_alignWithGroundDuration;
-        public short m_rootBoneIndex;
-        public short m_otherBoneIndex;
-        public short m_anotherBoneIndex;
-        public float m_timeSinceBegin;
-        public float m_timeStep;
-        public bool m_initNextModify;
+        public Vector4 m_groundNormal { set; get; } = default;
+        public float m_duration { set; get; } = default;
+        public float m_alignWithGroundDuration { set; get; } = default;
+        public short m_rootBoneIndex { set; get; } = default;
+        public short m_otherBoneIndex { set; get; } = default;
+        public short m_anotherBoneIndex { set; get; } = default;
+        private float m_timeSinceBegin { set; get; } = default;
+        private float m_timeStep { set; get; } = default;
+        private bool m_initNextModify { set; get; } = default;
 
         public override uint Signature => 0x61cb7ac0;
 
@@ -69,9 +71,6 @@ namespace HKX2
             m_rootBoneIndex = xd.ReadInt16(xe, nameof(m_rootBoneIndex));
             m_otherBoneIndex = xd.ReadInt16(xe, nameof(m_otherBoneIndex));
             m_anotherBoneIndex = xd.ReadInt16(xe, nameof(m_anotherBoneIndex));
-            m_timeSinceBegin = default;
-            m_timeStep = default;
-            m_initNextModify = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

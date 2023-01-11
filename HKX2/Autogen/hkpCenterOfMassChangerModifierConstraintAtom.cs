@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_displacementB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpCenterOfMassChangerModifierConstraintAtom : hkpModifierConstraintAtom
     {
-        public Vector4 m_displacementA;
-        public Vector4 m_displacementB;
+        public Vector4 m_displacementA { set; get; } = default;
+        public Vector4 m_displacementB { set; get; } = default;
 
         public override uint Signature => 0x1d7dbdd2;
 

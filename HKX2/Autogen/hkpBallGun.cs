@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,13 +16,13 @@ namespace HKX2
     // m_addedBodies m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpBallGun : hkpFirstPersonGun
     {
-        public float m_bulletRadius;
-        public float m_bulletVelocity;
-        public float m_bulletMass;
-        public float m_damageMultiplier;
-        public int m_maxBulletsInWorld;
-        public Vector4 m_bulletOffsetFromCenter;
-        public dynamic m_addedBodies;
+        public float m_bulletRadius { set; get; } = default;
+        public float m_bulletVelocity { set; get; } = default;
+        public float m_bulletMass { set; get; } = default;
+        public float m_damageMultiplier { set; get; } = default;
+        public int m_maxBulletsInWorld { set; get; } = default;
+        public Vector4 m_bulletOffsetFromCenter { set; get; } = default;
+        private object? m_addedBodies { set; get; } = default;
 
         public override uint Signature => 0x57b06d35;
 
@@ -61,7 +63,6 @@ namespace HKX2
             m_damageMultiplier = xd.ReadSingle(xe, nameof(m_damageMultiplier));
             m_maxBulletsInWorld = xd.ReadInt32(xe, nameof(m_maxBulletsInWorld));
             m_bulletOffsetFromCenter = xd.ReadVector4(xe, nameof(m_bulletOffsetFromCenter));
-            m_addedBodies = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

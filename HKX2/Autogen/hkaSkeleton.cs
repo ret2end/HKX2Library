@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -15,13 +16,13 @@ namespace HKX2
     // m_localFrames m_class: hkaSkeletonLocalFrameOnBone Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     public partial class hkaSkeleton : hkReferencedObject
     {
-        public string m_name;
-        public List<short> m_parentIndices;
-        public List<hkaBone> m_bones = new List<hkaBone>();
-        public List<Matrix4x4> m_referencePose;
-        public List<float> m_referenceFloats;
-        public List<string> m_floatSlots;
-        public List<hkaSkeletonLocalFrameOnBone> m_localFrames = new List<hkaSkeletonLocalFrameOnBone>();
+        public string m_name { set; get; } = "";
+        public IList<short> m_parentIndices { set; get; } = new List<short>();
+        public IList<hkaBone> m_bones { set; get; } = new List<hkaBone>();
+        public IList<Matrix4x4> m_referencePose { set; get; } = new List<Matrix4x4>();
+        public IList<float> m_referenceFloats { set; get; } = new List<float>();
+        public IList<string> m_floatSlots { set; get; } = new List<string>();
+        public IList<hkaSkeletonLocalFrameOnBone> m_localFrames { set; get; } = new List<hkaSkeletonLocalFrameOnBone>();
 
         public override uint Signature => 0x366e8220;
 
@@ -42,11 +43,11 @@ namespace HKX2
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
             s.WriteInt16Array(bw, m_parentIndices);
-            s.WriteClassArray<hkaBone>(bw, m_bones);
+            s.WriteClassArray(bw, m_bones);
             s.WriteQSTransformArray(bw, m_referencePose);
             s.WriteSingleArray(bw, m_referenceFloats);
             s.WriteStringPointerArray(bw, m_floatSlots);
-            s.WriteClassArray<hkaSkeletonLocalFrameOnBone>(bw, m_localFrames);
+            s.WriteClassArray(bw, m_localFrames);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

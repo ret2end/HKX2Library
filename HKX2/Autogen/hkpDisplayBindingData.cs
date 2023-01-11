@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_physicsSystemBindings m_class: hkpDisplayBindingDataPhysicsSystem Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpDisplayBindingData : hkReferencedObject
     {
-        public List<hkpDisplayBindingDataRigidBody> m_rigidBodyBindings = new List<hkpDisplayBindingDataRigidBody>();
-        public List<hkpDisplayBindingDataPhysicsSystem> m_physicsSystemBindings = new List<hkpDisplayBindingDataPhysicsSystem>();
+        public IList<hkpDisplayBindingDataRigidBody> m_rigidBodyBindings { set; get; } = new List<hkpDisplayBindingDataRigidBody>();
+        public IList<hkpDisplayBindingDataPhysicsSystem> m_physicsSystemBindings { set; get; } = new List<hkpDisplayBindingDataPhysicsSystem>();
 
         public override uint Signature => 0xdc46c906;
 
@@ -24,8 +26,8 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpDisplayBindingDataRigidBody>(bw, m_rigidBodyBindings);
-            s.WriteClassPointerArray<hkpDisplayBindingDataPhysicsSystem>(bw, m_physicsSystemBindings);
+            s.WriteClassPointerArray(bw, m_rigidBodyBindings);
+            s.WriteClassPointerArray(bw, m_physicsSystemBindings);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

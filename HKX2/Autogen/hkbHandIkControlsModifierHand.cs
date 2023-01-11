@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,15 +12,14 @@ namespace HKX2
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     public partial class hkbHandIkControlsModifierHand : IHavokObject
     {
-        public hkbHandIkControlData m_controlData = new hkbHandIkControlData();
-        public int m_handIndex;
-        public bool m_enable;
+        public hkbHandIkControlData m_controlData { set; get; } = new();
+        public int m_handIndex { set; get; } = default;
+        public bool m_enable { set; get; } = default;
 
         public virtual uint Signature => 0x9c72e9e3;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_controlData = new hkbHandIkControlData();
             m_controlData.Read(des, br);
             m_handIndex = br.ReadInt32();
             m_enable = br.ReadBoolean();

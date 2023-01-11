@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_spBoneWeight m_class: hkbBoneWeightArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class BSBoneSwitchGeneratorBoneData : hkbBindable
     {
-        public hkbGenerator m_pGenerator;
-        public hkbBoneWeightArray m_spBoneWeight;
+        public hkbGenerator? m_pGenerator { set; get; } = default;
+        public hkbBoneWeightArray? m_spBoneWeight { set; get; } = default;
 
         public override uint Signature => 0xc1215be6;
 

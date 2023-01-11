@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -21,20 +23,20 @@ namespace HKX2
     // m_refreshManifoldInCheckSupport m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     public partial class hkbProxyModifierProxyInfo : IHavokObject
     {
-        public float m_dynamicFriction;
-        public float m_staticFriction;
-        public float m_keepContactTolerance;
-        public Vector4 m_up;
-        public float m_keepDistance;
-        public float m_contactAngleSensitivity;
-        public uint m_userPlanes;
-        public float m_maxCharacterSpeedForSolver;
-        public float m_characterStrength;
-        public float m_characterMass;
-        public float m_maxSlope;
-        public float m_penetrationRecoverySpeed;
-        public int m_maxCastIterations;
-        public bool m_refreshManifoldInCheckSupport;
+        public float m_dynamicFriction { set; get; } = default;
+        public float m_staticFriction { set; get; } = default;
+        public float m_keepContactTolerance { set; get; } = default;
+        public Vector4 m_up { set; get; } = default;
+        public float m_keepDistance { set; get; } = default;
+        public float m_contactAngleSensitivity { set; get; } = default;
+        public uint m_userPlanes { set; get; } = default;
+        public float m_maxCharacterSpeedForSolver { set; get; } = default;
+        public float m_characterStrength { set; get; } = default;
+        public float m_characterMass { set; get; } = default;
+        public float m_maxSlope { set; get; } = default;
+        public float m_penetrationRecoverySpeed { set; get; } = default;
+        public int m_maxCastIterations { set; get; } = default;
+        public bool m_refreshManifoldInCheckSupport { set; get; } = default;
 
         public virtual uint Signature => 0x39de637e;
 

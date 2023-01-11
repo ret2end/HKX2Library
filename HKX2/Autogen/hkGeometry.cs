@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -10,8 +11,8 @@ namespace HKX2
     // m_triangles m_class: hkGeometryTriangle Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkGeometry : IHavokObject
     {
-        public List<Vector4> m_vertices;
-        public List<hkGeometryTriangle> m_triangles = new List<hkGeometryTriangle>();
+        public IList<Vector4> m_vertices { set; get; } = new List<Vector4>();
+        public IList<hkGeometryTriangle> m_triangles { set; get; } = new List<hkGeometryTriangle>();
 
         public virtual uint Signature => 0x98dd8bdc;
 
@@ -24,7 +25,7 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             s.WriteVector4Array(bw, m_vertices);
-            s.WriteClassArray<hkGeometryTriangle>(bw, m_triangles);
+            s.WriteClassArray(bw, m_triangles);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

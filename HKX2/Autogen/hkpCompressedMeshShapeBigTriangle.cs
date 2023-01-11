@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +15,12 @@ namespace HKX2
     // m_transformIndex m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 14 flags: FLAGS_NONE enum: 
     public partial class hkpCompressedMeshShapeBigTriangle : IHavokObject
     {
-        public ushort m_a;
-        public ushort m_b;
-        public ushort m_c;
-        public uint m_material;
-        public ushort m_weldingInfo;
-        public ushort m_transformIndex;
+        public ushort m_a { set; get; } = default;
+        public ushort m_b { set; get; } = default;
+        public ushort m_c { set; get; } = default;
+        public uint m_material { set; get; } = default;
+        public ushort m_weldingInfo { set; get; } = default;
+        public ushort m_transformIndex { set; get; } = default;
 
         public virtual uint Signature => 0xcbfc95a4;
 

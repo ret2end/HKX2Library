@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +18,15 @@ namespace HKX2
     // m_previousStepResult m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class hkpSimulation : hkReferencedObject
     {
-        public uint m_determinismCheckFrameCounter;
-        public hkpWorld m_world;
-        public byte m_lastProcessingStep;
-        public float m_currentTime;
-        public float m_currentPsiTime;
-        public float m_physicsDeltaTime;
-        public float m_simulateUntilTime;
-        public float m_frameMarkerPsiSnap;
-        public uint m_previousStepResult;
+        public uint m_determinismCheckFrameCounter { set; get; } = default;
+        public hkpWorld? m_world { set; get; } = default;
+        public byte m_lastProcessingStep { set; get; } = default;
+        public float m_currentTime { set; get; } = default;
+        public float m_currentPsiTime { set; get; } = default;
+        public float m_physicsDeltaTime { set; get; } = default;
+        public float m_simulateUntilTime { set; get; } = default;
+        public float m_frameMarkerPsiSnap { set; get; } = default;
+        public uint m_previousStepResult { set; get; } = default;
 
         public override uint Signature => 0x97aba922;
 
@@ -50,7 +53,7 @@ namespace HKX2
             bw.WriteUInt32(m_determinismCheckFrameCounter);
             bw.Position += 4;
             s.WriteClassPointer(bw, m_world);
-            s.WriteByte(bw, m_lastProcessingStep);
+            bw.WriteByte(m_lastProcessingStep);
             bw.Position += 3;
             bw.WriteSingle(m_currentTime);
             bw.WriteSingle(m_currentPsiTime);

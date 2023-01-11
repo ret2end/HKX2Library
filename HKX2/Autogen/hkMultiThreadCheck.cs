@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_markBitStack m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 10 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkMultiThreadCheck : IHavokObject
     {
-        public uint m_threadId;
-        public int m_stackTraceId;
-        public ushort m_markCount;
-        public ushort m_markBitStack;
+        private uint m_threadId { set; get; } = default;
+        private int m_stackTraceId { set; get; } = default;
+        private ushort m_markCount { set; get; } = default;
+        private ushort m_markBitStack { set; get; } = default;
 
         public virtual uint Signature => 0x11e4408b;
 
@@ -35,10 +38,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_threadId = default;
-            m_stackTraceId = default;
-            m_markCount = default;
-            m_markBitStack = default;
+
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

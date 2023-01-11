@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,12 +15,12 @@ namespace HKX2
     // m_annotationTracks m_class: hkaAnnotationTrack Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkaAnimation : hkReferencedObject
     {
-        public int m_type;
-        public float m_duration;
-        public int m_numberOfTransformTracks;
-        public int m_numberOfFloatTracks;
-        public hkaAnimatedReferenceFrame m_extractedMotion;
-        public List<hkaAnnotationTrack> m_annotationTracks = new List<hkaAnnotationTrack>();
+        public int m_type { set; get; } = default;
+        public float m_duration { set; get; } = default;
+        public int m_numberOfTransformTracks { set; get; } = default;
+        public int m_numberOfFloatTracks { set; get; } = default;
+        public hkaAnimatedReferenceFrame? m_extractedMotion { set; get; } = default;
+        public IList<hkaAnnotationTrack> m_annotationTracks { set; get; } = new List<hkaAnnotationTrack>();
 
         public override uint Signature => 0xa6fa7e88;
 
@@ -36,12 +38,12 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteInt32(bw, m_type);
+            bw.WriteInt32(m_type);
             bw.WriteSingle(m_duration);
             bw.WriteInt32(m_numberOfTransformTracks);
             bw.WriteInt32(m_numberOfFloatTracks);
             s.WriteClassPointer(bw, m_extractedMotion);
-            s.WriteClassArray<hkaAnnotationTrack>(bw, m_annotationTracks);
+            s.WriteClassArray(bw, m_annotationTracks);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

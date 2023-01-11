@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_sender m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbEvent : hkbEventBase
     {
-        public dynamic m_sender;
+        private object? m_sender { set; get; } = default;
 
         public override uint Signature => 0x3e0fd810;
 
@@ -26,7 +29,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_sender = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_reindexedShapeKey m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkpMoppCodeReindexedTerminal : IHavokObject
     {
-        public uint m_origShapeKey;
-        public uint m_reindexedShapeKey;
+        public uint m_origShapeKey { set; get; } = default;
+        public uint m_reindexedShapeKey { set; get; } = default;
 
         public virtual uint Signature => 0x6ed8ac06;
 

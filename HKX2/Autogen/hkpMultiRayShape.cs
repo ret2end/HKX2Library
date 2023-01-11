@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_rayPenetrationDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpMultiRayShape : hkpShape
     {
-        public List<hkpMultiRayShapeRay> m_rays = new List<hkpMultiRayShapeRay>();
-        public float m_rayPenetrationDistance;
+        public IList<hkpMultiRayShapeRay> m_rays { set; get; } = new List<hkpMultiRayShapeRay>();
+        public float m_rayPenetrationDistance { set; get; } = default;
 
         public override uint Signature => 0xea2e7ec9;
 
@@ -25,7 +27,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkpMultiRayShapeRay>(bw, m_rays);
+            s.WriteClassArray(bw, m_rays);
             bw.WriteSingle(m_rayPenetrationDistance);
             bw.Position += 4;
         }

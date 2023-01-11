@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +18,15 @@ namespace HKX2
     // m_endOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
     public partial class hkPackfileSectionHeader : IHavokObject
     {
-        public string m_sectionTag;
-        public string m_nullByte;
-        public int m_absoluteDataStart;
-        public int m_localFixupsOffset;
-        public int m_globalFixupsOffset;
-        public int m_virtualFixupsOffset;
-        public int m_exportsOffset;
-        public int m_importsOffset;
-        public int m_endOffset;
+        public string m_sectionTag { set; get; } = "";
+        public string m_nullByte { set; get; } = "";
+        public int m_absoluteDataStart { set; get; } = default;
+        public int m_localFixupsOffset { set; get; } = default;
+        public int m_globalFixupsOffset { set; get; } = default;
+        public int m_virtualFixupsOffset { set; get; } = default;
+        public int m_exportsOffset { set; get; } = default;
+        public int m_importsOffset { set; get; } = default;
+        public int m_endOffset { set; get; } = default;
 
         public virtual uint Signature => 0xf2a92154;
 

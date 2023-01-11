@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,17 +12,15 @@ namespace HKX2
     // m_toStateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineProspectiveTransitionInfo : IHavokObject
     {
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReference = new hkbStateMachineTransitionInfoReference();
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE = new hkbStateMachineTransitionInfoReference();
-        public int m_toStateId;
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReference { set; get; } = new();
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE { set; get; } = new();
+        public int m_toStateId { set; get; } = default;
 
         public virtual uint Signature => 0x3ab09a2e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_transitionInfoReference = new hkbStateMachineTransitionInfoReference();
             m_transitionInfoReference.Read(des, br);
-            m_transitionInfoReferenceForTE = new hkbStateMachineTransitionInfoReference();
             m_transitionInfoReferenceForTE.Read(des, br);
             m_toStateId = br.ReadInt32();
         }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorEventsInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public List<short> m_externalEventIds;
-        public int m_padding;
+        public ulong m_characterId { set; get; } = default;
+        public IList<short> m_externalEventIds { set; get; } = new List<short>();
+        public int m_padding { set; get; } = default;
 
         public override uint Signature => 0x66840004;
 

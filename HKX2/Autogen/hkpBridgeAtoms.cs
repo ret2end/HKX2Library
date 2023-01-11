@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,13 +10,12 @@ namespace HKX2
     // m_bridgeAtom m_class: hkpBridgeConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkpBridgeAtoms : IHavokObject
     {
-        public hkpBridgeConstraintAtom m_bridgeAtom = new hkpBridgeConstraintAtom();
+        public hkpBridgeConstraintAtom m_bridgeAtom { set; get; } = new();
 
         public virtual uint Signature => 0xde152a4d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_bridgeAtom = new hkpBridgeConstraintAtom();
             m_bridgeAtom.Read(des, br);
         }
 

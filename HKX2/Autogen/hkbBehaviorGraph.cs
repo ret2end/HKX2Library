@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -37,36 +39,36 @@ namespace HKX2
     // m_stateOrTransitionChanged m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 303 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbBehaviorGraph : hkbGenerator
     {
-        public sbyte m_variableMode;
-        public List<dynamic> m_uniqueIdPool;
-        public dynamic m_idToStateMachineTemplateMap;
-        public List<dynamic> m_mirroredExternalIdMap;
-        public dynamic m_pseudoRandomGenerator;
-        public hkbGenerator m_rootGenerator;
-        public hkbBehaviorGraphData m_data;
-        public dynamic m_rootGeneratorClone;
-        public dynamic m_activeNodes;
-        public dynamic m_activeNodeTemplateToIndexMap;
-        public dynamic m_activeNodesChildrenIndices;
-        public dynamic m_globalTransitionData;
-        public dynamic m_eventIdMap;
-        public dynamic m_attributeIdMap;
-        public dynamic m_variableIdMap;
-        public dynamic m_characterPropertyIdMap;
-        public dynamic m_variableValueSet;
-        public dynamic m_nodeTemplateToCloneMap;
-        public dynamic m_nodeCloneToTemplateMap;
-        public dynamic m_stateListenerTemplateToCloneMap;
-        public dynamic m_nodePartitionInfo;
-        public int m_numIntermediateOutputs;
-        public List<dynamic> m_jobs = new List<dynamic>();
-        public List<dynamic> m_allPartitionMemory = new List<dynamic>();
-        public short m_numStaticNodes;
-        public short m_nextUniqueId;
-        public bool m_isActive;
-        public bool m_isLinked;
-        public bool m_updateActiveNodes;
-        public bool m_stateOrTransitionChanged;
+        public sbyte m_variableMode { set; get; } = default;
+        public IList<object> m_uniqueIdPool { set; get; } = new List<object>();
+        private object? m_idToStateMachineTemplateMap { set; get; } = default;
+        public IList<object> m_mirroredExternalIdMap { set; get; } = new List<object>();
+        private object? m_pseudoRandomGenerator { set; get; } = default;
+        public hkbGenerator? m_rootGenerator { set; get; } = default;
+        public hkbBehaviorGraphData? m_data { set; get; } = default;
+        private object? m_rootGeneratorClone { set; get; } = default;
+        private object? m_activeNodes { set; get; } = default;
+        private object? m_activeNodeTemplateToIndexMap { set; get; } = default;
+        private object? m_activeNodesChildrenIndices { set; get; } = default;
+        private object? m_globalTransitionData { set; get; } = default;
+        private object? m_eventIdMap { set; get; } = default;
+        private object? m_attributeIdMap { set; get; } = default;
+        private object? m_variableIdMap { set; get; } = default;
+        private object? m_characterPropertyIdMap { set; get; } = default;
+        private object? m_variableValueSet { set; get; } = default;
+        private object? m_nodeTemplateToCloneMap { set; get; } = default;
+        private object? m_nodeCloneToTemplateMap { set; get; } = default;
+        private object? m_stateListenerTemplateToCloneMap { set; get; } = default;
+        private object? m_nodePartitionInfo { set; get; } = default;
+        private int m_numIntermediateOutputs { set; get; } = default;
+        public IList<object> m_jobs { set; get; } = new List<object>();
+        public IList<object> m_allPartitionMemory { set; get; } = new List<object>();
+        private short m_numStaticNodes { set; get; } = default;
+        private short m_nextUniqueId { set; get; } = default;
+        private bool m_isActive { set; get; } = default;
+        private bool m_isLinked { set; get; } = default;
+        private bool m_updateActiveNodes { set; get; } = default;
+        private bool m_stateOrTransitionChanged { set; get; } = default;
 
         public override uint Signature => 0xb1218f86;
 
@@ -110,7 +112,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteSByte(bw, m_variableMode);
+            bw.WriteSByte(m_variableMode);
             bw.Position += 7;
             s.WriteVoidArray(bw);
             s.WriteVoidPointer(bw);
@@ -148,35 +150,8 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_variableMode = xd.ReadFlag<VariableMode, sbyte>(xe, nameof(m_variableMode));
-            m_uniqueIdPool = default;
-            m_idToStateMachineTemplateMap = default;
-            m_mirroredExternalIdMap = default;
-            m_pseudoRandomGenerator = default;
             m_rootGenerator = xd.ReadClassPointer<hkbGenerator>(xe, nameof(m_rootGenerator));
             m_data = xd.ReadClassPointer<hkbBehaviorGraphData>(xe, nameof(m_data));
-            m_rootGeneratorClone = default;
-            m_activeNodes = default;
-            m_activeNodeTemplateToIndexMap = default;
-            m_activeNodesChildrenIndices = default;
-            m_globalTransitionData = default;
-            m_eventIdMap = default;
-            m_attributeIdMap = default;
-            m_variableIdMap = default;
-            m_characterPropertyIdMap = default;
-            m_variableValueSet = default;
-            m_nodeTemplateToCloneMap = default;
-            m_nodeCloneToTemplateMap = default;
-            m_stateListenerTemplateToCloneMap = default;
-            m_nodePartitionInfo = default;
-            m_numIntermediateOutputs = default;
-            m_jobs = default;
-            m_allPartitionMemory = default;
-            m_numStaticNodes = default;
-            m_nextUniqueId = default;
-            m_isActive = default;
-            m_isLinked = default;
-            m_updateActiveNodes = default;
-            m_stateOrTransitionChanged = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

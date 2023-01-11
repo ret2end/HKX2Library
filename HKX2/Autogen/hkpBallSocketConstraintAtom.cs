@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_inertiaStabilizationFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkpBallSocketConstraintAtom : hkpConstraintAtom
     {
-        public byte m_solvingMethod;
-        public byte m_bodiesToNotify;
-        public byte m_velocityStabilizationFactor;
-        public float m_maxImpulse;
-        public float m_inertiaStabilizationFactor;
+        public byte m_solvingMethod { set; get; } = default;
+        public byte m_bodiesToNotify { set; get; } = default;
+        public byte m_velocityStabilizationFactor { set; get; } = default;
+        public float m_maxImpulse { set; get; } = default;
+        public float m_inertiaStabilizationFactor { set; get; } = default;
 
         public override uint Signature => 0xe70e4dfa;
 
@@ -33,7 +36,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_solvingMethod);
+            bw.WriteByte(m_solvingMethod);
             bw.WriteByte(m_bodiesToNotify);
             bw.WriteByte(m_velocityStabilizationFactor);
             bw.Position += 3;

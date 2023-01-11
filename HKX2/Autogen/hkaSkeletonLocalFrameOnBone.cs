@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_boneIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkaSkeletonLocalFrameOnBone : IHavokObject
     {
-        public hkLocalFrame m_localFrame;
-        public int m_boneIndex;
+        public hkLocalFrame? m_localFrame { set; get; } = default;
+        public int m_boneIndex { set; get; } = default;
 
         public virtual uint Signature => 0x52e8043;
 

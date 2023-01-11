@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_z m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpConvexVerticesShapeFourVectors : IHavokObject
     {
-        public Vector4 m_x;
-        public Vector4 m_y;
-        public Vector4 m_z;
+        public Vector4 m_x { set; get; } = default;
+        public Vector4 m_y { set; get; } = default;
+        public Vector4 m_z { set; get; } = default;
 
         public virtual uint Signature => 0x3d80c5bf;
 

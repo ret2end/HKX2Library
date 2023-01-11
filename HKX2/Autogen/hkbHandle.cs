@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_animationBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkbHandle : hkReferencedObject
     {
-        public hkLocalFrame m_frame;
-        public hkpRigidBody m_rigidBody;
-        public hkbCharacter m_character;
-        public short m_animationBoneIndex;
+        public hkLocalFrame? m_frame { set; get; } = default;
+        public hkpRigidBody? m_rigidBody { set; get; } = default;
+        public hkbCharacter? m_character { set; get; } = default;
+        public short m_animationBoneIndex { set; get; } = default;
 
         public override uint Signature => 0xd8b6401c;
 

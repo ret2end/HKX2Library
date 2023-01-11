@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,14 +17,14 @@ namespace HKX2
     // m_info m_class: hkpSimpleContactConstraintDataInfo Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkpSimpleContactConstraintAtom : hkpConstraintAtom
     {
-        public ushort m_sizeOfAllAtoms;
-        public ushort m_numContactPoints;
-        public ushort m_numReservedContactPoints;
-        public byte m_numUserDatasForBodyA;
-        public byte m_numUserDatasForBodyB;
-        public byte m_contactPointPropertiesStriding;
-        public ushort m_maxNumContactPoints;
-        public hkpSimpleContactConstraintDataInfo m_info = new hkpSimpleContactConstraintDataInfo();
+        public ushort m_sizeOfAllAtoms { set; get; } = default;
+        public ushort m_numContactPoints { set; get; } = default;
+        public ushort m_numReservedContactPoints { set; get; } = default;
+        public byte m_numUserDatasForBodyA { set; get; } = default;
+        public byte m_numUserDatasForBodyB { set; get; } = default;
+        public byte m_contactPointPropertiesStriding { set; get; } = default;
+        public ushort m_maxNumContactPoints { set; get; } = default;
+        public hkpSimpleContactConstraintDataInfo m_info { set; get; } = new();
 
         public override uint Signature => 0x920df11a;
 
@@ -37,7 +40,6 @@ namespace HKX2
             br.Position += 1;
             m_maxNumContactPoints = br.ReadUInt16();
             br.Position += 2;
-            m_info = new hkpSimpleContactConstraintDataInfo();
             m_info.Read(des, br);
         }
 

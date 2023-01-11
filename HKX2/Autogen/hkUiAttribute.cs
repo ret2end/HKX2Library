@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,14 +17,14 @@ namespace HKX2
     // m_advanced m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 34 flags: FLAGS_NONE enum: 
     public partial class hkUiAttribute : IHavokObject
     {
-        public bool m_visible;
-        public sbyte m_hideInModeler;
-        public string m_label;
-        public string m_group;
-        public string m_hideBaseClassMembers;
-        public bool m_endGroup;
-        public bool m_endGroup2;
-        public bool m_advanced;
+        public bool m_visible { set; get; } = default;
+        public sbyte m_hideInModeler { set; get; } = default;
+        public string m_label { set; get; } = "";
+        public string m_group { set; get; } = "";
+        public string m_hideBaseClassMembers { set; get; } = "";
+        public bool m_endGroup { set; get; } = default;
+        public bool m_endGroup2 { set; get; } = default;
+        public bool m_advanced { set; get; } = default;
 
         public virtual uint Signature => 0xeb6e96e3;
 
@@ -42,7 +45,7 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             bw.WriteBoolean(m_visible);
-            s.WriteSByte(bw, m_hideInModeler);
+            bw.WriteSByte(m_hideInModeler);
             bw.Position += 6;
             s.WriteCStringPointer(bw, m_label);
             s.WriteCStringPointer(bw, m_group);

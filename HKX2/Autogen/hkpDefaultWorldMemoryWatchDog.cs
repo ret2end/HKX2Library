@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_freeHeapMemoryRequested m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpDefaultWorldMemoryWatchDog : hkWorldMemoryAvailableWatchDog
     {
-        public int m_freeHeapMemoryRequested;
+        public int m_freeHeapMemoryRequested { set; get; } = default;
 
         public override uint Signature => 0x77d6b19f;
 

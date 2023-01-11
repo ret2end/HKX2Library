@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_timeSinceLastModify m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbMoveCharacterModifier : hkbModifier
     {
-        public Vector4 m_offsetPerSecondMS;
-        public float m_timeSinceLastModify;
+        public Vector4 m_offsetPerSecondMS { set; get; } = default;
+        private float m_timeSinceLastModify { set; get; } = default;
 
         public override uint Signature => 0x8f7492a0;
 
@@ -34,7 +36,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_offsetPerSecondMS = xd.ReadVector4(xe, nameof(m_offsetPerSecondMS));
-            m_timeSinceLastModify = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

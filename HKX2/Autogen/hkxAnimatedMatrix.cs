@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -10,8 +11,8 @@ namespace HKX2
     // m_hint m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: Hint
     public partial class hkxAnimatedMatrix : hkReferencedObject
     {
-        public List<Matrix4x4> m_matrices;
-        public byte m_hint;
+        public IList<Matrix4x4> m_matrices { set; get; } = new List<Matrix4x4>();
+        public byte m_hint { set; get; } = default;
 
         public override uint Signature => 0x5838e337;
 
@@ -27,7 +28,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteMatrix4Array(bw, m_matrices);
-            s.WriteByte(bw, m_hint);
+            bw.WriteByte(m_hint);
             bw.Position += 7;
         }
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_radius m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpConvexShape : hkpSphereRepShape
     {
-        public float m_radius;
+        public float m_radius { set; get; } = default;
 
         public override uint Signature => 0xf8f74f85;
 

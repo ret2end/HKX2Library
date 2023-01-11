@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,17 +11,15 @@ namespace HKX2
     // m_scheme m_class: hkpGenericConstraintDataScheme Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpGenericConstraintData : hkpConstraintData
     {
-        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
-        public hkpGenericConstraintDataScheme m_scheme = new hkpGenericConstraintDataScheme();
+        public hkpBridgeAtoms m_atoms { set; get; } = new();
+        public hkpGenericConstraintDataScheme m_scheme { set; get; } = new();
 
         public override uint Signature => 0xfa824640;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_atoms = new hkpBridgeAtoms();
             m_atoms.Read(des, br);
-            m_scheme = new hkpGenericConstraintDataScheme();
             m_scheme.Read(des, br);
         }
 

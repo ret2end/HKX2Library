@@ -8,8 +8,8 @@ namespace HKX2
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 4 flags: FLAGS_NONE enum: VariableType
     public partial class hkbVariableInfo : IHavokObject
     {
-        public hkbRoleAttribute m_role;
-        public sbyte m_type;
+        public hkbRoleAttribute m_role { set; get; } = new hkbRoleAttribute();
+        public sbyte m_type { set; get; } = default;
 
         public virtual uint Signature => 0x9e746ba2;
 

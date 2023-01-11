@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,14 +10,13 @@ namespace HKX2
     // m_event m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class BSEventOnDeactivateModifier : hkbModifier
     {
-        public hkbEventProperty m_event = new hkbEventProperty();
+        public hkbEventProperty m_event { set; get; } = new();
 
         public override uint Signature => 0x1062d993;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_event = new hkbEventProperty();
             m_event.Read(des, br);
         }
 

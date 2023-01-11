@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_wasTrueInPreviousFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 1 flags: FLAGS_NONE enum: 
     public partial class hkbEvaluateExpressionModifierInternalExpressionData : IHavokObject
     {
-        public bool m_raisedEvent;
-        public bool m_wasTrueInPreviousFrame;
+        public bool m_raisedEvent { set; get; } = default;
+        public bool m_wasTrueInPreviousFrame { set; get; } = default;
 
         public virtual uint Signature => 0xb8686f6b;
 

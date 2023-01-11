@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,9 +13,9 @@ namespace HKX2
     public partial class hkRootLevelContainerNamedVariant : IHavokObject
     {
 
-        public string m_name;
-        public string m_className;
-        public hkReferencedObject m_variant;
+        public string m_name { set; get; } = "";
+        public string m_className { set; get; } = "";
+        public hkReferencedObject? m_variant { set; get; } = default;
 
         public uint Signature => 0xb103a2cd;
 

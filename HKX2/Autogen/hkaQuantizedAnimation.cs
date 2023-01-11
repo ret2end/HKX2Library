@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_skeleton m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkaQuantizedAnimation : hkaAnimation
     {
-        public List<byte> m_data;
-        public uint m_endian;
-        public dynamic m_skeleton;
+        public IList<byte> m_data { set; get; } = new List<byte>();
+        public uint m_endian { set; get; } = default;
+        private object? m_skeleton { set; get; } = default;
 
         public override uint Signature => 0x3920f053;
 
@@ -39,7 +41,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_data = xd.ReadByteArray(xe, nameof(m_data));
             m_endian = xd.ReadUInt32(xe, nameof(m_endian));
-            m_skeleton = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

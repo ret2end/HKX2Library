@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_contacts m_class: hkpSerializedAgentNnEntry Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     public partial class hkpPhysicsSystemWithContacts : hkpPhysicsSystem
     {
-        public List<hkpSerializedAgentNnEntry> m_contacts = new List<hkpSerializedAgentNnEntry>();
+        public IList<hkpSerializedAgentNnEntry> m_contacts { set; get; } = new List<hkpSerializedAgentNnEntry>();
 
         public override uint Signature => 0xd0fd4bbe;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpSerializedAgentNnEntry>(bw, m_contacts);
+            s.WriteClassPointerArray(bw, m_contacts);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

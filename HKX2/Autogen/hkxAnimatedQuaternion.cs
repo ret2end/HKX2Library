@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -9,7 +10,7 @@ namespace HKX2
     // m_quaternions m_class:  Type.TYPE_ARRAY Type.TYPE_QUATERNION arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxAnimatedQuaternion : hkReferencedObject
     {
-        public List<Quaternion> m_quaternions;
+        public IList<Quaternion> m_quaternions { set; get; } = new List<Quaternion>();
 
         public override uint Signature => 0xb4f01baa;
 

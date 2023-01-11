@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_enableComputeWorldFromModel m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 86 flags: FLAGS_NONE enum: 
     public partial class hkbExtractRagdollPoseModifier : hkbModifier
     {
-        public short m_poseMatchingBone0;
-        public short m_poseMatchingBone1;
-        public short m_poseMatchingBone2;
-        public bool m_enableComputeWorldFromModel;
+        public short m_poseMatchingBone0 { set; get; } = default;
+        public short m_poseMatchingBone1 { set; get; } = default;
+        public short m_poseMatchingBone2 { set; get; } = default;
+        public bool m_enableComputeWorldFromModel { set; get; } = default;
 
         public override uint Signature => 0x804dcbab;
 

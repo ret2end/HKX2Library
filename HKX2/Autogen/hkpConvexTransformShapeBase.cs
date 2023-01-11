@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,15 +11,14 @@ namespace HKX2
     // m_childShapeSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpConvexTransformShapeBase : hkpConvexShape
     {
-        public hkpSingleShapeContainer m_childShape = new hkpSingleShapeContainer();
-        public int m_childShapeSize;
+        public hkpSingleShapeContainer m_childShape { set; get; } = new();
+        private int m_childShapeSize { set; get; } = default;
 
         public override uint Signature => 0xfbd72f9;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_childShape = new hkpSingleShapeContainer();
             m_childShape.Read(des, br);
             m_childShapeSize = br.ReadInt32();
             br.Position += 4;
@@ -34,7 +36,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_childShape = xd.ReadClass<hkpSingleShapeContainer>(xe, nameof(m_childShape));
-            m_childShapeSize = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

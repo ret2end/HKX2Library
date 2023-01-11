@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_tcoordChannel m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkxMaterialTextureStage : IHavokObject
     {
-        public hkReferencedObject m_texture;
-        public int m_usageHint;
-        public int m_tcoordChannel;
+        public hkReferencedObject? m_texture { set; get; } = default;
+        public int m_usageHint { set; get; } = default;
+        public int m_tcoordChannel { set; get; } = default;
 
         public virtual uint Signature => 0xfa6facb2;
 
@@ -25,7 +28,7 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             s.WriteClassPointer(bw, m_texture);
-            s.WriteInt32(bw, m_usageHint);
+            bw.WriteInt32(m_usageHint);
             bw.WriteInt32(m_tcoordChannel);
         }
 

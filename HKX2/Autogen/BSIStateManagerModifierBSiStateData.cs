@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_iStateToSetAs m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class BSIStateManagerModifierBSiStateData : IHavokObject
     {
-        public hkbGenerator m_pStateMachine;
-        public int m_StateID;
-        public int m_iStateToSetAs;
+        public hkbGenerator? m_pStateMachine { set; get; } = default;
+        public int m_StateID { set; get; } = default;
+        public int m_iStateToSetAs { set; get; } = default;
 
         public virtual uint Signature => 0x6b8a15fc;
 

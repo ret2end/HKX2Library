@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,18 +21,18 @@ namespace HKX2
     // m_initializeCharacterPose m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 137 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbBlendingTransitionEffect : hkbTransitionEffect
     {
-        public float m_duration;
-        public float m_toGeneratorStartTimeFraction;
-        public ushort m_flags;
-        public sbyte m_endMode;
-        public sbyte m_blendCurve;
-        public dynamic m_fromGenerator;
-        public dynamic m_toGenerator;
-        public List<dynamic> m_characterPoseAtBeginningOfTransition;
-        public float m_timeRemaining;
-        public float m_timeInTransition;
-        public bool m_applySelfTransition;
-        public bool m_initializeCharacterPose;
+        public float m_duration { set; get; } = default;
+        public float m_toGeneratorStartTimeFraction { set; get; } = default;
+        public ushort m_flags { set; get; } = default;
+        public sbyte m_endMode { set; get; } = default;
+        public sbyte m_blendCurve { set; get; } = default;
+        private object? m_fromGenerator { set; get; } = default;
+        private object? m_toGenerator { set; get; } = default;
+        public IList<object> m_characterPoseAtBeginningOfTransition { set; get; } = new List<object>();
+        private float m_timeRemaining { set; get; } = default;
+        private float m_timeInTransition { set; get; } = default;
+        private bool m_applySelfTransition { set; get; } = default;
+        private bool m_initializeCharacterPose { set; get; } = default;
 
         public override uint Signature => 0xfd8584fe;
 
@@ -59,8 +61,8 @@ namespace HKX2
             bw.WriteSingle(m_duration);
             bw.WriteSingle(m_toGeneratorStartTimeFraction);
             bw.WriteUInt16(m_flags);
-            s.WriteSByte(bw, m_endMode);
-            s.WriteSByte(bw, m_blendCurve);
+            bw.WriteSByte(m_endMode);
+            bw.WriteSByte(m_blendCurve);
             bw.Position += 4;
             s.WriteVoidPointer(bw);
             s.WriteVoidPointer(bw);
@@ -80,13 +82,6 @@ namespace HKX2
             m_flags = xd.ReadFlag<FlagBits, ushort>(xe, nameof(m_flags));
             m_endMode = xd.ReadFlag<EndMode, sbyte>(xe, nameof(m_endMode));
             m_blendCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_blendCurve));
-            m_fromGenerator = default;
-            m_toGenerator = default;
-            m_characterPoseAtBeginningOfTransition = default;
-            m_timeRemaining = default;
-            m_timeInTransition = default;
-            m_applySelfTransition = default;
-            m_initializeCharacterPose = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

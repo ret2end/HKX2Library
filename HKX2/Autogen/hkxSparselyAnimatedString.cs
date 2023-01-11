@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_times m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkxSparselyAnimatedString : hkReferencedObject
     {
-        public List<string> m_strings;
-        public List<float> m_times;
+        public IList<string> m_strings { set; get; } = new List<string>();
+        public IList<float> m_times { set; get; } = new List<float>();
 
         public override uint Signature => 0x185da6fd;
 

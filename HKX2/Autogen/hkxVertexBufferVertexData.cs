@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -19,17 +20,17 @@ namespace HKX2
     // m_uint8Stride m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     public partial class hkxVertexBufferVertexData : IHavokObject
     {
-        public List<Vector4> m_vectorData;
-        public List<float> m_floatData;
-        public List<uint> m_uint32Data;
-        public List<ushort> m_uint16Data;
-        public List<byte> m_uint8Data;
-        public uint m_numVerts;
-        public uint m_vectorStride;
-        public uint m_floatStride;
-        public uint m_uint32Stride;
-        public uint m_uint16Stride;
-        public uint m_uint8Stride;
+        public IList<Vector4> m_vectorData { set; get; } = new List<Vector4>();
+        public IList<float> m_floatData { set; get; } = new List<float>();
+        public IList<uint> m_uint32Data { set; get; } = new List<uint>();
+        public IList<ushort> m_uint16Data { set; get; } = new List<ushort>();
+        public IList<byte> m_uint8Data { set; get; } = new List<byte>();
+        public uint m_numVerts { set; get; } = default;
+        public uint m_vectorStride { set; get; } = default;
+        public uint m_floatStride { set; get; } = default;
+        public uint m_uint32Stride { set; get; } = default;
+        public uint m_uint16Stride { set; get; } = default;
+        public uint m_uint8Stride { set; get; } = default;
 
         public virtual uint Signature => 0xd72b6fd0;
 

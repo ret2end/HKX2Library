@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -27,25 +28,25 @@ namespace HKX2
     // m_deletePoseLocal m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacter : hkReferencedObject
     {
-        public List<hkbCharacter> m_nearbyCharacters = new List<hkbCharacter>();
-        public short m_currentLod;
-        public short m_numTracksInLod;
-        public string m_name;
-        public dynamic m_ragdollDriver;
-        public dynamic m_characterControllerDriver;
-        public dynamic m_footIkDriver;
-        public dynamic m_handIkDriver;
-        public hkbCharacterSetup m_setup;
-        public hkbBehaviorGraph m_behaviorGraph;
-        public hkbProjectData m_projectData;
-        public dynamic m_animationBindingSet;
-        public dynamic m_raycastInterface;
-        public dynamic m_world;
-        public dynamic m_eventQueue;
-        public dynamic m_worldFromModel;
-        public dynamic m_poseLocal;
-        public bool m_deleteWorldFromModel;
-        public bool m_deletePoseLocal;
+        public IList<hkbCharacter> m_nearbyCharacters { set; get; } = new List<hkbCharacter>();
+        public short m_currentLod { set; get; } = default;
+        private short m_numTracksInLod { set; get; } = default;
+        public string m_name { set; get; } = "";
+        private object? m_ragdollDriver { set; get; } = default;
+        private object? m_characterControllerDriver { set; get; } = default;
+        private object? m_footIkDriver { set; get; } = default;
+        private object? m_handIkDriver { set; get; } = default;
+        public hkbCharacterSetup? m_setup { set; get; } = default;
+        public hkbBehaviorGraph? m_behaviorGraph { set; get; } = default;
+        public hkbProjectData? m_projectData { set; get; } = default;
+        private object? m_animationBindingSet { set; get; } = default;
+        private object? m_raycastInterface { set; get; } = default;
+        private object? m_world { set; get; } = default;
+        private object? m_eventQueue { set; get; } = default;
+        private object? m_worldFromModel { set; get; } = default;
+        private object? m_poseLocal { set; get; } = default;
+        private bool m_deleteWorldFromModel { set; get; } = default;
+        private bool m_deletePoseLocal { set; get; } = default;
 
         public override uint Signature => 0x3088a5c5;
 
@@ -77,7 +78,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkbCharacter>(bw, m_nearbyCharacters);
+            s.WriteClassPointerArray(bw, m_nearbyCharacters);
             bw.WriteInt16(m_currentLod);
             bw.WriteInt16(m_numTracksInLod);
             bw.Position += 4;
@@ -104,23 +105,10 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_nearbyCharacters = xd.ReadClassPointerArray<hkbCharacter>(xe, nameof(m_nearbyCharacters));
             m_currentLod = xd.ReadInt16(xe, nameof(m_currentLod));
-            m_numTracksInLod = default;
             m_name = xd.ReadString(xe, nameof(m_name));
-            m_ragdollDriver = default;
-            m_characterControllerDriver = default;
-            m_footIkDriver = default;
-            m_handIkDriver = default;
             m_setup = xd.ReadClassPointer<hkbCharacterSetup>(xe, nameof(m_setup));
             m_behaviorGraph = xd.ReadClassPointer<hkbBehaviorGraph>(xe, nameof(m_behaviorGraph));
             m_projectData = xd.ReadClassPointer<hkbProjectData>(xe, nameof(m_projectData));
-            m_animationBindingSet = default;
-            m_raycastInterface = default;
-            m_world = default;
-            m_eventQueue = default;
-            m_worldFromModel = default;
-            m_poseLocal = default;
-            m_deleteWorldFromModel = default;
-            m_deletePoseLocal = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

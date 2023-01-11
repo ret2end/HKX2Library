@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_secondsElapsed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbTimerModifierInternalState : hkReferencedObject
     {
-        public float m_secondsElapsed;
+        public float m_secondsElapsed { set; get; } = default;
 
         public override uint Signature => 0x83ec2d42;
 

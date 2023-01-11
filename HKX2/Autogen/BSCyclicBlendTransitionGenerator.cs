@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +18,15 @@ namespace HKX2
     // m_currentMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 168 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSCyclicBlendTransitionGenerator : hkbGenerator
     {
-        public hkbGenerator m_pBlenderGenerator;
-        public hkbEventProperty m_EventToFreezeBlendValue = new hkbEventProperty();
-        public hkbEventProperty m_EventToCrossBlend = new hkbEventProperty();
-        public float m_fBlendParameter;
-        public float m_fTransitionDuration;
-        public sbyte m_eBlendCurve;
-        public dynamic m_pTransitionBlenderGenerator;
-        public dynamic m_pTransitionEffect;
-        public sbyte m_currentMode;
+        public hkbGenerator? m_pBlenderGenerator { set; get; } = default;
+        public hkbEventProperty m_EventToFreezeBlendValue { set; get; } = new();
+        public hkbEventProperty m_EventToCrossBlend { set; get; } = new();
+        public float m_fBlendParameter { set; get; } = default;
+        public float m_fTransitionDuration { set; get; } = default;
+        public sbyte m_eBlendCurve { set; get; } = default;
+        private object? m_pTransitionBlenderGenerator { set; get; } = default;
+        private object? m_pTransitionEffect { set; get; } = default;
+        private sbyte m_currentMode { set; get; } = default;
 
         public override uint Signature => 0x5119eb06;
 
@@ -32,9 +35,7 @@ namespace HKX2
             base.Read(des, br);
             br.Position += 8;
             m_pBlenderGenerator = des.ReadClassPointer<hkbGenerator>(br);
-            m_EventToFreezeBlendValue = new hkbEventProperty();
             m_EventToFreezeBlendValue.Read(des, br);
-            m_EventToCrossBlend = new hkbEventProperty();
             m_EventToCrossBlend.Read(des, br);
             m_fBlendParameter = br.ReadSingle();
             m_fTransitionDuration = br.ReadSingle();
@@ -56,12 +57,12 @@ namespace HKX2
             m_EventToCrossBlend.Write(s, bw);
             bw.WriteSingle(m_fBlendParameter);
             bw.WriteSingle(m_fTransitionDuration);
-            s.WriteSByte(bw, m_eBlendCurve);
+            bw.WriteSByte(m_eBlendCurve);
             bw.Position += 15;
             s.WriteVoidPointer(bw);
             bw.Position += 8;
             s.WriteVoidPointer(bw);
-            s.WriteSByte(bw, m_currentMode);
+            bw.WriteSByte(m_currentMode);
             bw.Position += 7;
         }
 
@@ -74,9 +75,6 @@ namespace HKX2
             m_fBlendParameter = xd.ReadSingle(xe, nameof(m_fBlendParameter));
             m_fTransitionDuration = xd.ReadSingle(xe, nameof(m_fTransitionDuration));
             m_eBlendCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_eBlendCurve));
-            m_pTransitionBlenderGenerator = default;
-            m_pTransitionEffect = default;
-            m_currentMode = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

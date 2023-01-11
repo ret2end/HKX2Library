@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,9 +14,9 @@ namespace HKX2
     public partial class hkpDashpotAction : hkpBinaryAction
     {
         public Vector4[] m_point = new Vector4[2];
-        public float m_strength;
-        public float m_damping;
-        public Vector4 m_impulse;
+        public float m_strength { set; get; } = default;
+        public float m_damping { set; get; } = default;
+        public Vector4 m_impulse { set; get; } = default;
 
         public override uint Signature => 0x50746c6e;
 

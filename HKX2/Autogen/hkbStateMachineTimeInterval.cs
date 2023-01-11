@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_exitTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineTimeInterval : IHavokObject
     {
-        public int m_enterEventId;
-        public int m_exitEventId;
-        public float m_enterTime;
-        public float m_exitTime;
+        public int m_enterEventId { set; get; } = default;
+        public int m_exitEventId { set; get; } = default;
+        public float m_enterTime { set; get; } = default;
+        public float m_exitTime { set; get; } = default;
 
         public virtual uint Signature => 0x60a881e5;
 

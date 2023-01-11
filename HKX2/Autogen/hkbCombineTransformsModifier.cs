@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,15 +18,15 @@ namespace HKX2
     // m_invertResult m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 178 flags: FLAGS_NONE enum: 
     public partial class hkbCombineTransformsModifier : hkbModifier
     {
-        public Vector4 m_translationOut;
-        public Quaternion m_rotationOut;
-        public Vector4 m_leftTranslation;
-        public Quaternion m_leftRotation;
-        public Vector4 m_rightTranslation;
-        public Quaternion m_rightRotation;
-        public bool m_invertLeftTransform;
-        public bool m_invertRightTransform;
-        public bool m_invertResult;
+        public Vector4 m_translationOut { set; get; } = default;
+        public Quaternion m_rotationOut { set; get; } = default;
+        public Vector4 m_leftTranslation { set; get; } = default;
+        public Quaternion m_leftRotation { set; get; } = default;
+        public Vector4 m_rightTranslation { set; get; } = default;
+        public Quaternion m_rightRotation { set; get; } = default;
+        public bool m_invertLeftTransform { set; get; } = default;
+        public bool m_invertRightTransform { set; get; } = default;
+        public bool m_invertResult { set; get; } = default;
 
         public override uint Signature => 0xfd1f0b79;
 

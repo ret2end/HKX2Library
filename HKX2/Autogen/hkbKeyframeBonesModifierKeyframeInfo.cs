@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_isValid m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 34 flags: FLAGS_NONE enum: 
     public partial class hkbKeyframeBonesModifierKeyframeInfo : IHavokObject
     {
-        public Vector4 m_keyframedPosition;
-        public Quaternion m_keyframedRotation;
-        public short m_boneIndex;
-        public bool m_isValid;
+        public Vector4 m_keyframedPosition { set; get; } = default;
+        public Quaternion m_keyframedRotation { set; get; } = default;
+        public short m_boneIndex { set; get; } = default;
+        public bool m_isValid { set; get; } = default;
 
         public virtual uint Signature => 0x72deb7a6;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -28,7 +31,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_pad16 = new uint[3];
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_eventIdMap m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbStateMachineNestedStateMachineData : IHavokObject
     {
-        public dynamic m_nestedStateMachine;
-        public dynamic m_eventIdMap;
+        private object? m_nestedStateMachine { set; get; } = default;
+        private object? m_eventIdMap { set; get; } = default;
 
         public virtual uint Signature => 0x7358f5da;
 
@@ -27,8 +30,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_nestedStateMachine = default;
-            m_eventIdMap = default;
+
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

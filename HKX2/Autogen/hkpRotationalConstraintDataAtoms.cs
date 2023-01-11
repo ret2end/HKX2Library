@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,16 +11,14 @@ namespace HKX2
     // m_ang m_class: hkpAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpRotationalConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalRotationsConstraintAtom m_rotations = new hkpSetLocalRotationsConstraintAtom();
-        public hkpAngConstraintAtom m_ang = new hkpAngConstraintAtom();
+        public hkpSetLocalRotationsConstraintAtom m_rotations { set; get; } = new();
+        public hkpAngConstraintAtom m_ang { set; get; } = new();
 
         public virtual uint Signature => 0xa0c64586;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_rotations = new hkpSetLocalRotationsConstraintAtom();
             m_rotations.Read(des, br);
-            m_ang = new hkpAngConstraintAtom();
             m_ang.Read(des, br);
             br.Position += 12;
         }

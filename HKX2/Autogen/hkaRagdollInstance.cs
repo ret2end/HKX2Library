@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_skeleton m_class: hkaSkeleton Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkaRagdollInstance : hkReferencedObject
     {
-        public List<hkpRigidBody> m_rigidBodies = new List<hkpRigidBody>();
-        public List<hkpConstraintInstance> m_constraints = new List<hkpConstraintInstance>();
-        public List<int> m_boneToRigidBodyMap;
-        public hkaSkeleton m_skeleton;
+        public IList<hkpRigidBody> m_rigidBodies { set; get; } = new List<hkpRigidBody>();
+        public IList<hkpConstraintInstance> m_constraints { set; get; } = new List<hkpConstraintInstance>();
+        public IList<int> m_boneToRigidBodyMap { set; get; } = new List<int>();
+        public hkaSkeleton? m_skeleton { set; get; } = default;
 
         public override uint Signature => 0x154948e8;
 
@@ -30,8 +32,8 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpRigidBody>(bw, m_rigidBodies);
-            s.WriteClassPointerArray<hkpConstraintInstance>(bw, m_constraints);
+            s.WriteClassPointerArray(bw, m_rigidBodies);
+            s.WriteClassPointerArray(bw, m_constraints);
             s.WriteInt32Array(bw, m_boneToRigidBodyMap);
             s.WriteClassPointer(bw, m_skeleton);
         }

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,18 +21,18 @@ namespace HKX2
     // m_bSlot3ActivatedLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 154 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSEventOnFalseToTrueModifier : hkbModifier
     {
-        public bool m_bEnableEvent1;
-        public bool m_bVariableToTest1;
-        public hkbEventProperty m_EventToSend1 = new hkbEventProperty();
-        public bool m_bEnableEvent2;
-        public bool m_bVariableToTest2;
-        public hkbEventProperty m_EventToSend2 = new hkbEventProperty();
-        public bool m_bEnableEvent3;
-        public bool m_bVariableToTest3;
-        public hkbEventProperty m_EventToSend3 = new hkbEventProperty();
-        public bool m_bSlot1ActivatedLastFrame;
-        public bool m_bSlot2ActivatedLastFrame;
-        public bool m_bSlot3ActivatedLastFrame;
+        public bool m_bEnableEvent1 { set; get; } = default;
+        public bool m_bVariableToTest1 { set; get; } = default;
+        public hkbEventProperty m_EventToSend1 { set; get; } = new();
+        public bool m_bEnableEvent2 { set; get; } = default;
+        public bool m_bVariableToTest2 { set; get; } = default;
+        public hkbEventProperty m_EventToSend2 { set; get; } = new();
+        public bool m_bEnableEvent3 { set; get; } = default;
+        public bool m_bVariableToTest3 { set; get; } = default;
+        public hkbEventProperty m_EventToSend3 { set; get; } = new();
+        private bool m_bSlot1ActivatedLastFrame { set; get; } = default;
+        private bool m_bSlot2ActivatedLastFrame { set; get; } = default;
+        private bool m_bSlot3ActivatedLastFrame { set; get; } = default;
 
         public override uint Signature => 0x81d0777a;
 
@@ -39,17 +42,14 @@ namespace HKX2
             m_bEnableEvent1 = br.ReadBoolean();
             m_bVariableToTest1 = br.ReadBoolean();
             br.Position += 6;
-            m_EventToSend1 = new hkbEventProperty();
             m_EventToSend1.Read(des, br);
             m_bEnableEvent2 = br.ReadBoolean();
             m_bVariableToTest2 = br.ReadBoolean();
             br.Position += 6;
-            m_EventToSend2 = new hkbEventProperty();
             m_EventToSend2.Read(des, br);
             m_bEnableEvent3 = br.ReadBoolean();
             m_bVariableToTest3 = br.ReadBoolean();
             br.Position += 6;
-            m_EventToSend3 = new hkbEventProperty();
             m_EventToSend3.Read(des, br);
             m_bSlot1ActivatedLastFrame = br.ReadBoolean();
             m_bSlot2ActivatedLastFrame = br.ReadBoolean();
@@ -90,9 +90,6 @@ namespace HKX2
             m_bEnableEvent3 = xd.ReadBoolean(xe, nameof(m_bEnableEvent3));
             m_bVariableToTest3 = xd.ReadBoolean(xe, nameof(m_bVariableToTest3));
             m_EventToSend3 = xd.ReadClass<hkbEventProperty>(xe, nameof(m_EventToSend3));
-            m_bSlot1ActivatedLastFrame = default;
-            m_bSlot2ActivatedLastFrame = default;
-            m_bSlot3ActivatedLastFrame = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

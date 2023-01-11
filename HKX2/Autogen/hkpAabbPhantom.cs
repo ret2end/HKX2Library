@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,16 +12,15 @@ namespace HKX2
     // m_orderDirty m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 288 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpAabbPhantom : hkpPhantom
     {
-        public hkAabb m_aabb = new hkAabb();
-        public List<dynamic> m_overlappingCollidables = new List<dynamic>();
-        public bool m_orderDirty;
+        public hkAabb m_aabb { set; get; } = new();
+        public IList<object> m_overlappingCollidables { set; get; } = new List<object>();
+        private bool m_orderDirty { set; get; } = default;
 
         public override uint Signature => 0x2c5189dd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_aabb = new hkAabb();
             m_aabb.Read(des, br);
             des.ReadEmptyArray(br);
             m_orderDirty = br.ReadBoolean();
@@ -39,8 +40,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_aabb = xd.ReadClass<hkAabb>(xe, nameof(m_aabb));
-            m_overlappingCollidables = default;
-            m_orderDirty = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

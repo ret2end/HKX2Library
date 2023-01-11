@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_references m_class: hkMemoryResourceHandleExternalLink Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkMemoryResourceHandle : hkResourceHandle
     {
-        public hkReferencedObject m_variant;
-        public string m_name;
-        public List<hkMemoryResourceHandleExternalLink> m_references = new List<hkMemoryResourceHandleExternalLink>();
+        public hkReferencedObject? m_variant { set; get; } = default;
+        public string m_name { set; get; } = "";
+        public IList<hkMemoryResourceHandleExternalLink> m_references { set; get; } = new List<hkMemoryResourceHandleExternalLink>();
 
         public override uint Signature => 0xbffac086;
 
@@ -29,7 +31,7 @@ namespace HKX2
             base.Write(s, bw);
             s.WriteClassPointer(bw, m_variant);
             s.WriteStringPointer(bw, m_name);
-            s.WriteClassArray<hkMemoryResourceHandleExternalLink>(bw, m_references);
+            s.WriteClassArray(bw, m_references);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

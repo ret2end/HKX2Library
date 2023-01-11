@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,11 +14,11 @@ namespace HKX2
     // m_angle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     public partial class hkxLight : hkReferencedObject
     {
-        public sbyte m_type;
-        public Vector4 m_position;
-        public Vector4 m_direction;
-        public uint m_color;
-        public float m_angle;
+        public sbyte m_type { set; get; } = default;
+        public Vector4 m_position { set; get; } = default;
+        public Vector4 m_direction { set; get; } = default;
+        public uint m_color { set; get; } = default;
+        public float m_angle { set; get; } = default;
 
         public override uint Signature => 0x81c86d42;
 
@@ -35,7 +37,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteSByte(bw, m_type);
+            bw.WriteSByte(m_type);
             bw.Position += 15;
             bw.WriteVector4(m_position);
             bw.WriteVector4(m_direction);

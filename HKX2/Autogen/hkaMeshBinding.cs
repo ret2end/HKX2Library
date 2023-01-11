@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_boneFromSkinMeshTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_TRANSFORM arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class hkaMeshBinding : hkReferencedObject
     {
-        public hkxMesh m_mesh;
-        public string m_originalSkeletonName;
-        public hkaSkeleton m_skeleton;
-        public List<hkaMeshBindingMapping> m_mappings = new List<hkaMeshBindingMapping>();
-        public List<Matrix4x4> m_boneFromSkinMeshTransforms;
+        public hkxMesh? m_mesh { set; get; } = default;
+        public string m_originalSkeletonName { set; get; } = "";
+        public hkaSkeleton? m_skeleton { set; get; } = default;
+        public IList<hkaMeshBindingMapping> m_mappings { set; get; } = new List<hkaMeshBindingMapping>();
+        public IList<Matrix4x4> m_boneFromSkinMeshTransforms { set; get; } = new List<Matrix4x4>();
 
         public override uint Signature => 0x81d9950b;
 
@@ -37,7 +38,7 @@ namespace HKX2
             s.WriteClassPointer(bw, m_mesh);
             s.WriteStringPointer(bw, m_originalSkeletonName);
             s.WriteClassPointer(bw, m_skeleton);
-            s.WriteClassArray<hkaMeshBindingMapping>(bw, m_mappings);
+            s.WriteClassArray(bw, m_mappings);
             s.WriteTransformArray(bw, m_boneFromSkinMeshTransforms);
         }
 

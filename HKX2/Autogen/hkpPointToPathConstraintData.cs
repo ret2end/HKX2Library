@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,10 +14,10 @@ namespace HKX2
     // m_transform_OS_KS m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 2 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpPointToPathConstraintData : hkpConstraintData
     {
-        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
-        public hkpParametricCurve m_path;
-        public float m_maxFrictionForce;
-        public sbyte m_angularConstrainedDOF;
+        public hkpBridgeAtoms m_atoms { set; get; } = new();
+        public hkpParametricCurve? m_path { set; get; } = default;
+        public float m_maxFrictionForce { set; get; } = default;
+        public sbyte m_angularConstrainedDOF { set; get; } = default;
         public Matrix4x4[] m_transform_OS_KS = new Matrix4x4[2];
 
         public override uint Signature => 0x8e7cb5da;
@@ -23,7 +25,6 @@ namespace HKX2
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_atoms = new hkpBridgeAtoms();
             m_atoms.Read(des, br);
             m_path = des.ReadClassPointer<hkpParametricCurve>(br);
             m_maxFrictionForce = br.ReadSingle();
@@ -38,7 +39,7 @@ namespace HKX2
             m_atoms.Write(s, bw);
             s.WriteClassPointer(bw, m_path);
             bw.WriteSingle(m_maxFrictionForce);
-            s.WriteSByte(bw, m_angularConstrainedDOF);
+            bw.WriteSByte(m_angularConstrainedDOF);
             bw.Position += 3;
             s.WriteTransformCStyleArray(bw, m_transform_OS_KS);
         }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_angle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbRotateCharacterModifier : hkbModifier
     {
-        public float m_degreesPerSecond;
-        public float m_speedMultiplier;
-        public Vector4 m_axisOfRotation;
-        public float m_angle;
+        public float m_degreesPerSecond { set; get; } = default;
+        public float m_speedMultiplier { set; get; } = default;
+        public Vector4 m_axisOfRotation { set; get; } = default;
+        private float m_angle { set; get; } = default;
 
         public override uint Signature => 0x877ebc0b;
 
@@ -46,7 +48,6 @@ namespace HKX2
             m_degreesPerSecond = xd.ReadSingle(xe, nameof(m_degreesPerSecond));
             m_speedMultiplier = xd.ReadSingle(xe, nameof(m_speedMultiplier));
             m_axisOfRotation = xd.ReadVector4(xe, nameof(m_axisOfRotation));
-            m_angle = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

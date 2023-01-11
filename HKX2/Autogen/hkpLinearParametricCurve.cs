@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_distance m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpLinearParametricCurve : hkpParametricCurve
     {
-        public float m_smoothingFactor;
-        public bool m_closedLoop;
-        public Vector4 m_dirNotParallelToTangentAlongWholePath;
-        public List<Vector4> m_points;
-        public List<float> m_distance;
+        public float m_smoothingFactor { set; get; } = default;
+        public bool m_closedLoop { set; get; } = default;
+        public Vector4 m_dirNotParallelToTangentAlongWholePath { set; get; } = default;
+        public IList<Vector4> m_points { set; get; } = new List<Vector4>();
+        public IList<float> m_distance { set; get; } = new List<float>();
 
         public override uint Signature => 0xd7b3be03;
 

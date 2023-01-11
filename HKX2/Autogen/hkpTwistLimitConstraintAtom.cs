@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +15,12 @@ namespace HKX2
     // m_angularLimitsTauFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpTwistLimitConstraintAtom : hkpConstraintAtom
     {
-        public byte m_isEnabled;
-        public byte m_twistAxis;
-        public byte m_refAxis;
-        public float m_minAngle;
-        public float m_maxAngle;
-        public float m_angularLimitsTauFactor;
+        public byte m_isEnabled { set; get; } = default;
+        public byte m_twistAxis { set; get; } = default;
+        public byte m_refAxis { set; get; } = default;
+        public float m_minAngle { set; get; } = default;
+        public float m_maxAngle { set; get; } = default;
+        public float m_angularLimitsTauFactor { set; get; } = default;
 
         public override uint Signature => 0x7c9b1052;
 

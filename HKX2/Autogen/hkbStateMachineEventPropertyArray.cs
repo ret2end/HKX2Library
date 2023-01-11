@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_events m_class: hkbEventProperty Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineEventPropertyArray : hkReferencedObject
     {
-        public List<hkbEventProperty> m_events = new List<hkbEventProperty>();
+        public IList<hkbEventProperty> m_events { set; get; } = new List<hkbEventProperty>();
 
         public override uint Signature => 0xb07b4388;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbEventProperty>(bw, m_events);
+            s.WriteClassArray(bw, m_events);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

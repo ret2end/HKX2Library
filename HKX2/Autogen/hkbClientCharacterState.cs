@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -27,25 +28,25 @@ namespace HKX2
     // m_rigidAttachmentTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 256 flags: FLAGS_NONE enum: 
     public partial class hkbClientCharacterState : hkReferencedObject
     {
-        public List<ulong> m_deformableSkinIds;
-        public List<ulong> m_rigidSkinIds;
-        public List<short> m_externalEventIds;
-        public List<hkbAuxiliaryNodeInfo> m_auxiliaryInfo = new List<hkbAuxiliaryNodeInfo>();
-        public List<short> m_activeEventIds;
-        public List<short> m_activeVariableIds;
-        public ulong m_characterId;
-        public string m_instanceName;
-        public string m_templateName;
-        public string m_fullPathToProject;
-        public hkbBehaviorGraphData m_behaviorData;
-        public hkbBehaviorGraphInternalState m_behaviorInternalState;
-        public dynamic m_nodeIdToInternalStateMap;
-        public bool m_visible;
-        public float m_elapsedSimulationTime;
-        public hkaSkeleton m_skeleton;
-        public Matrix4x4 m_worldFromModel;
-        public List<Matrix4x4> m_poseModelSpace;
-        public List<Matrix4x4> m_rigidAttachmentTransforms;
+        public IList<ulong> m_deformableSkinIds { set; get; } = new List<ulong>();
+        public IList<ulong> m_rigidSkinIds { set; get; } = new List<ulong>();
+        public IList<short> m_externalEventIds { set; get; } = new List<short>();
+        public IList<hkbAuxiliaryNodeInfo> m_auxiliaryInfo { set; get; } = new List<hkbAuxiliaryNodeInfo>();
+        public IList<short> m_activeEventIds { set; get; } = new List<short>();
+        public IList<short> m_activeVariableIds { set; get; } = new List<short>();
+        public ulong m_characterId { set; get; } = default;
+        public string m_instanceName { set; get; } = "";
+        public string m_templateName { set; get; } = "";
+        public string m_fullPathToProject { set; get; } = "";
+        public hkbBehaviorGraphData? m_behaviorData { set; get; } = default;
+        public hkbBehaviorGraphInternalState? m_behaviorInternalState { set; get; } = default;
+        private object? m_nodeIdToInternalStateMap { set; get; } = default;
+        public bool m_visible { set; get; } = default;
+        public float m_elapsedSimulationTime { set; get; } = default;
+        public hkaSkeleton? m_skeleton { set; get; } = default;
+        public Matrix4x4 m_worldFromModel { set; get; } = default;
+        public IList<Matrix4x4> m_poseModelSpace { set; get; } = new List<Matrix4x4>();
+        public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = new List<Matrix4x4>();
 
         public override uint Signature => 0xa2624c97;
 
@@ -81,7 +82,7 @@ namespace HKX2
             s.WriteUInt64Array(bw, m_deformableSkinIds);
             s.WriteUInt64Array(bw, m_rigidSkinIds);
             s.WriteInt16Array(bw, m_externalEventIds);
-            s.WriteClassPointerArray<hkbAuxiliaryNodeInfo>(bw, m_auxiliaryInfo);
+            s.WriteClassPointerArray(bw, m_auxiliaryInfo);
             s.WriteInt16Array(bw, m_activeEventIds);
             s.WriteInt16Array(bw, m_activeVariableIds);
             bw.WriteUInt64(m_characterId);
@@ -116,7 +117,6 @@ namespace HKX2
             m_fullPathToProject = xd.ReadString(xe, nameof(m_fullPathToProject));
             m_behaviorData = xd.ReadClassPointer<hkbBehaviorGraphData>(xe, nameof(m_behaviorData));
             m_behaviorInternalState = xd.ReadClassPointer<hkbBehaviorGraphInternalState>(xe, nameof(m_behaviorInternalState));
-            m_nodeIdToInternalStateMap = default;
             m_visible = xd.ReadBoolean(xe, nameof(m_visible));
             m_elapsedSimulationTime = xd.ReadSingle(xe, nameof(m_elapsedSimulationTime));
             m_skeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_skeleton));

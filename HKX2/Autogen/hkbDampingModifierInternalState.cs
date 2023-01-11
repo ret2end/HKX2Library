@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,12 +15,12 @@ namespace HKX2
     // m_previousError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     public partial class hkbDampingModifierInternalState : hkReferencedObject
     {
-        public Vector4 m_dampedVector;
-        public Vector4 m_vecErrorSum;
-        public Vector4 m_vecPreviousError;
-        public float m_dampedValue;
-        public float m_errorSum;
-        public float m_previousError;
+        public Vector4 m_dampedVector { set; get; } = default;
+        public Vector4 m_vecErrorSum { set; get; } = default;
+        public Vector4 m_vecPreviousError { set; get; } = default;
+        public float m_dampedValue { set; get; } = default;
+        public float m_errorSum { set; get; } = default;
+        public float m_previousError { set; get; } = default;
 
         public override uint Signature => 0x508d3b36;
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_sequenceNumber m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpTriggerVolume : hkReferencedObject
     {
-        public List<hkpRigidBody> m_overlappingBodies = new List<hkpRigidBody>();
-        public List<hkpTriggerVolumeEventInfo> m_eventQueue = new List<hkpTriggerVolumeEventInfo>();
-        public hkpRigidBody m_triggerBody;
-        public uint m_sequenceNumber;
+        public IList<hkpRigidBody> m_overlappingBodies { set; get; } = new List<hkpRigidBody>();
+        public IList<hkpTriggerVolumeEventInfo> m_eventQueue { set; get; } = new List<hkpTriggerVolumeEventInfo>();
+        public hkpRigidBody? m_triggerBody { set; get; } = default;
+        public uint m_sequenceNumber { set; get; } = default;
 
         public override uint Signature => 0xa29a8d1a;
 
@@ -33,8 +35,8 @@ namespace HKX2
         {
             base.Write(s, bw);
             bw.Position += 24;
-            s.WriteClassPointerArray<hkpRigidBody>(bw, m_overlappingBodies);
-            s.WriteClassArray<hkpTriggerVolumeEventInfo>(bw, m_eventQueue);
+            s.WriteClassPointerArray(bw, m_overlappingBodies);
+            s.WriteClassArray(bw, m_eventQueue);
             s.WriteClassPointer(bw, m_triggerBody);
             bw.WriteUInt32(m_sequenceNumber);
             bw.Position += 4;

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_separatingNormal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkContactPoint : IHavokObject
     {
-        public Vector4 m_position;
-        public Vector4 m_separatingNormal;
+        public Vector4 m_position { set; get; } = default;
+        public Vector4 m_separatingNormal { set; get; } = default;
 
         public virtual uint Signature => 0x91d7dd8e;
 

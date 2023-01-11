@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_springLength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpStiffSpringChainDataConstraintInfo : IHavokObject
     {
-        public Vector4 m_pivotInA;
-        public Vector4 m_pivotInB;
-        public float m_springLength;
+        public Vector4 m_pivotInA { set; get; } = default;
+        public Vector4 m_pivotInB { set; get; } = default;
+        public float m_springLength { set; get; } = default;
 
         public virtual uint Signature => 0xc624a180;
 

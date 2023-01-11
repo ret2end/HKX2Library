@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_simulationState m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: SimulationState
     public partial class hkbSimulationStateInfo : hkReferencedObject
     {
-        public byte m_simulationState;
+        public byte m_simulationState { set; get; } = default;
 
         public override uint Signature => 0xa40822b4;
 
@@ -21,7 +24,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_simulationState);
+            bw.WriteByte(m_simulationState);
             bw.Position += 7;
         }
 

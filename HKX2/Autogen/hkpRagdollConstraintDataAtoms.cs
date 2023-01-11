@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,34 +17,26 @@ namespace HKX2
     // m_ballSocket m_class: hkpBallSocketConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 328 flags: FLAGS_NONE enum: 
     public partial class hkpRagdollConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
-        public hkpSetupStabilizationAtom m_setupStabilization = new hkpSetupStabilizationAtom();
-        public hkpRagdollMotorConstraintAtom m_ragdollMotors = new hkpRagdollMotorConstraintAtom();
-        public hkpAngFrictionConstraintAtom m_angFriction = new hkpAngFrictionConstraintAtom();
-        public hkpTwistLimitConstraintAtom m_twistLimit = new hkpTwistLimitConstraintAtom();
-        public hkpConeLimitConstraintAtom m_coneLimit = new hkpConeLimitConstraintAtom();
-        public hkpConeLimitConstraintAtom m_planesLimit = new hkpConeLimitConstraintAtom();
-        public hkpBallSocketConstraintAtom m_ballSocket = new hkpBallSocketConstraintAtom();
+        public hkpSetLocalTransformsConstraintAtom m_transforms { set; get; } = new();
+        public hkpSetupStabilizationAtom m_setupStabilization { set; get; } = new();
+        public hkpRagdollMotorConstraintAtom m_ragdollMotors { set; get; } = new();
+        public hkpAngFrictionConstraintAtom m_angFriction { set; get; } = new();
+        public hkpTwistLimitConstraintAtom m_twistLimit { set; get; } = new();
+        public hkpConeLimitConstraintAtom m_coneLimit { set; get; } = new();
+        public hkpConeLimitConstraintAtom m_planesLimit { set; get; } = new();
+        public hkpBallSocketConstraintAtom m_ballSocket { set; get; } = new();
 
         public virtual uint Signature => 0xeed76b00;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_transforms = new hkpSetLocalTransformsConstraintAtom();
             m_transforms.Read(des, br);
-            m_setupStabilization = new hkpSetupStabilizationAtom();
             m_setupStabilization.Read(des, br);
-            m_ragdollMotors = new hkpRagdollMotorConstraintAtom();
             m_ragdollMotors.Read(des, br);
-            m_angFriction = new hkpAngFrictionConstraintAtom();
             m_angFriction.Read(des, br);
-            m_twistLimit = new hkpTwistLimitConstraintAtom();
             m_twistLimit.Read(des, br);
-            m_coneLimit = new hkpConeLimitConstraintAtom();
             m_coneLimit.Read(des, br);
-            m_planesLimit = new hkpConeLimitConstraintAtom();
             m_planesLimit.Read(des, br);
-            m_ballSocket = new hkpBallSocketConstraintAtom();
             m_ballSocket.Read(des, br);
             br.Position += 8;
         }

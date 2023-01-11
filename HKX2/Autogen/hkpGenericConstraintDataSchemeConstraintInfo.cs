@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_numSolverElemTemps m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkpGenericConstraintDataSchemeConstraintInfo : IHavokObject
     {
-        public int m_maxSizeOfSchema;
-        public int m_sizeOfSchemas;
-        public int m_numSolverResults;
-        public int m_numSolverElemTemps;
+        public int m_maxSizeOfSchema { set; get; } = default;
+        public int m_sizeOfSchemas { set; get; } = default;
+        public int m_numSolverResults { set; get; } = default;
+        public int m_numSolverElemTemps { set; get; } = default;
 
         public virtual uint Signature => 0xd6421f19;
 

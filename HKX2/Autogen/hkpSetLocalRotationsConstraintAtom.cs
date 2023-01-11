@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_rotationB m_class:  Type.TYPE_ROTATION Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom
     {
-        public Matrix4x4 m_rotationA;
-        public Matrix4x4 m_rotationB;
+        public Matrix4x4 m_rotationA { set; get; } = default;
+        public Matrix4x4 m_rotationB { set; get; } = default;
 
         public override uint Signature => 0xf81db8e;
 

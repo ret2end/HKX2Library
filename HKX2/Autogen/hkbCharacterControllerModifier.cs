@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -18,24 +20,23 @@ namespace HKX2
     // m_isInitialVelocityAdded m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 164 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacterControllerModifier : hkbModifier
     {
-        public hkbCharacterControllerControlData m_controlData = new hkbCharacterControllerControlData();
-        public Vector4 m_initialVelocity;
-        public sbyte m_initialVelocityCoordinates;
-        public sbyte m_motionMode;
-        public bool m_forceDownwardMomentum;
-        public bool m_applyGravity;
-        public bool m_setInitialVelocity;
-        public bool m_isTouchingGround;
-        public Vector4 m_gravity;
-        public float m_timestep;
-        public bool m_isInitialVelocityAdded;
+        public hkbCharacterControllerControlData m_controlData { set; get; } = new();
+        public Vector4 m_initialVelocity { set; get; } = default;
+        public sbyte m_initialVelocityCoordinates { set; get; } = default;
+        public sbyte m_motionMode { set; get; } = default;
+        public bool m_forceDownwardMomentum { set; get; } = default;
+        public bool m_applyGravity { set; get; } = default;
+        public bool m_setInitialVelocity { set; get; } = default;
+        public bool m_isTouchingGround { set; get; } = default;
+        private Vector4 m_gravity { set; get; } = default;
+        private float m_timestep { set; get; } = default;
+        private bool m_isInitialVelocityAdded { set; get; } = default;
 
         public override uint Signature => 0xf675d6fb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_controlData = new hkbCharacterControllerControlData();
             m_controlData.Read(des, br);
             m_initialVelocity = br.ReadVector4();
             m_initialVelocityCoordinates = br.ReadSByte();
@@ -56,8 +57,8 @@ namespace HKX2
             base.Write(s, bw);
             m_controlData.Write(s, bw);
             bw.WriteVector4(m_initialVelocity);
-            s.WriteSByte(bw, m_initialVelocityCoordinates);
-            s.WriteSByte(bw, m_motionMode);
+            bw.WriteSByte(m_initialVelocityCoordinates);
+            bw.WriteSByte(m_motionMode);
             bw.WriteBoolean(m_forceDownwardMomentum);
             bw.WriteBoolean(m_applyGravity);
             bw.WriteBoolean(m_setInitialVelocity);
@@ -80,9 +81,6 @@ namespace HKX2
             m_applyGravity = xd.ReadBoolean(xe, nameof(m_applyGravity));
             m_setInitialVelocity = xd.ReadBoolean(xe, nameof(m_setInitialVelocity));
             m_isTouchingGround = xd.ReadBoolean(xe, nameof(m_isTouchingGround));
-            m_gravity = default;
-            m_timestep = default;
-            m_isInitialVelocityAdded = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

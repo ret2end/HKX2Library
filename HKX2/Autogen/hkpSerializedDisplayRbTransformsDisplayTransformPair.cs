@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_localToDisplay m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpSerializedDisplayRbTransformsDisplayTransformPair : IHavokObject
     {
-        public hkpRigidBody m_rb;
-        public Matrix4x4 m_localToDisplay;
+        public hkpRigidBody? m_rb { set; get; } = default;
+        public Matrix4x4 m_localToDisplay { set; get; } = default;
 
         public virtual uint Signature => 0x94ac5bec;
 

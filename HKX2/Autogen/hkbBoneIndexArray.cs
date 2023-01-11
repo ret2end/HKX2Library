@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_boneIndices m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbBoneIndexArray : hkbBindable
     {
-        public List<short> m_boneIndices;
+        public IList<short> m_boneIndices { set; get; } = new List<short>();
 
         public override uint Signature => 0xaa8619;
 

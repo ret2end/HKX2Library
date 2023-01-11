@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_behavior m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbBehaviorReferenceGenerator : hkbGenerator
     {
-        public string m_behaviorName;
-        public dynamic m_behavior;
+        public string m_behaviorName { set; get; } = "";
+        private object? m_behavior { set; get; } = default;
 
         public override uint Signature => 0xfcb5423;
 
@@ -31,7 +34,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_behaviorName = xd.ReadString(xe, nameof(m_behaviorName));
-            m_behavior = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

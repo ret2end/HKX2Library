@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,11 +14,11 @@ namespace HKX2
     // m_motors m_class: hkpConstraintMotor Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 3 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpRagdollMotorConstraintAtom : hkpConstraintAtom
     {
-        public bool m_isEnabled;
-        public short m_initializedOffset;
-        public short m_previousTargetAnglesOffset;
-        public Matrix4x4 m_target_bRca;
-        public hkpConstraintMotor[] m_motors = new hkpConstraintMotor[3];
+        public bool m_isEnabled { set; get; } = default;
+        public short m_initializedOffset { set; get; } = default;
+        public short m_previousTargetAnglesOffset { set; get; } = default;
+        public Matrix4x4 m_target_bRca { set; get; } = default;
+        public hkpConstraintMotor?[] m_motors = new hkpConstraintMotor?[3];
 
         public override uint Signature => 0x71013826;
 

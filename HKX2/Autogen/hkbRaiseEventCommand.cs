@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_externalId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     public partial class hkbRaiseEventCommand : hkReferencedObject
     {
-        public ulong m_characterId;
-        public bool m_global;
-        public int m_externalId;
+        public ulong m_characterId { set; get; } = default;
+        public bool m_global { set; get; } = default;
+        public int m_externalId { set; get; } = default;
 
         public override uint Signature => 0xa0a7bf9c;
 

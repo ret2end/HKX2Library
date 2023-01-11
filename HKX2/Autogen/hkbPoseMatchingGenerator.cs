@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -25,24 +27,24 @@ namespace HKX2
     // m_poseMatchingUtility m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 232 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbPoseMatchingGenerator : hkbBlenderGenerator
     {
-        public Quaternion m_worldFromModelRotation;
-        public float m_blendSpeed;
-        public float m_minSpeedToSwitch;
-        public float m_minSwitchTimeNoError;
-        public float m_minSwitchTimeFullError;
-        public int m_startPlayingEventId;
-        public int m_startMatchingEventId;
-        public short m_rootBoneIndex;
-        public short m_otherBoneIndex;
-        public short m_anotherBoneIndex;
-        public short m_pelvisIndex;
-        public sbyte m_mode;
-        public int m_currentMatch;
-        public int m_bestMatch;
-        public float m_timeSinceBetterMatch;
-        public float m_error;
-        public bool m_resetCurrentMatchLocalTime;
-        public dynamic m_poseMatchingUtility;
+        public Quaternion m_worldFromModelRotation { set; get; } = default;
+        public float m_blendSpeed { set; get; } = default;
+        public float m_minSpeedToSwitch { set; get; } = default;
+        public float m_minSwitchTimeNoError { set; get; } = default;
+        public float m_minSwitchTimeFullError { set; get; } = default;
+        public int m_startPlayingEventId { set; get; } = default;
+        public int m_startMatchingEventId { set; get; } = default;
+        public short m_rootBoneIndex { set; get; } = default;
+        public short m_otherBoneIndex { set; get; } = default;
+        public short m_anotherBoneIndex { set; get; } = default;
+        public short m_pelvisIndex { set; get; } = default;
+        public sbyte m_mode { set; get; } = default;
+        private int m_currentMatch { set; get; } = default;
+        private int m_bestMatch { set; get; } = default;
+        private float m_timeSinceBetterMatch { set; get; } = default;
+        private float m_error { set; get; } = default;
+        private bool m_resetCurrentMatchLocalTime { set; get; } = default;
+        private object? m_poseMatchingUtility { set; get; } = default;
 
         public override uint Signature => 0x29e271b4;
 
@@ -85,7 +87,7 @@ namespace HKX2
             bw.WriteInt16(m_otherBoneIndex);
             bw.WriteInt16(m_anotherBoneIndex);
             bw.WriteInt16(m_pelvisIndex);
-            s.WriteSByte(bw, m_mode);
+            bw.WriteSByte(m_mode);
             bw.Position += 3;
             bw.WriteInt32(m_currentMatch);
             bw.WriteInt32(m_bestMatch);
@@ -111,12 +113,6 @@ namespace HKX2
             m_anotherBoneIndex = xd.ReadInt16(xe, nameof(m_anotherBoneIndex));
             m_pelvisIndex = xd.ReadInt16(xe, nameof(m_pelvisIndex));
             m_mode = xd.ReadFlag<Mode, sbyte>(xe, nameof(m_mode));
-            m_currentMatch = default;
-            m_bestMatch = default;
-            m_timeSinceBetterMatch = default;
-            m_error = default;
-            m_resetCurrentMatchLocalTime = default;
-            m_poseMatchingUtility = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

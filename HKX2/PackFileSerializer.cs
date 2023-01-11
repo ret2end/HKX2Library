@@ -281,7 +281,7 @@ namespace HKX2
             if (pad) _localWriteQueues[_currentLocalWriteQueue].Enqueue(() => { bw.Pad(16); });
         }
 
-        public void WriteClassArray<T>(BinaryWriterEx bw, List<T> d) where T : IHavokObject
+        public void WriteClassArray<T>(BinaryWriterEx bw, IList<T> d) where T : IHavokObject
         {
             WriteArrayBase(bw, d, e => { e.Write(this, bw); }, true);
         }
@@ -315,7 +315,7 @@ namespace HKX2
             _pendingGlobals[d].Add(pos);
         }
 
-        public void WriteClassPointerArray<T>(BinaryWriterEx bw, List<T> d) where T : IHavokObject
+        public void WriteClassPointerArray<T>(BinaryWriterEx bw, IList<T> d) where T : IHavokObject
         {
             WriteArrayBase(bw, d, e => WriteClassPointer(bw, e));
         }
@@ -358,7 +358,7 @@ namespace HKX2
             });
         }
 
-        public void WriteStringPointerArray(BinaryWriterEx bw, List<string> d)
+        public void WriteStringPointerArray(BinaryWriterEx bw, IList<string> d)
         {
             WriteArrayBase(bw, d, e => { WriteStringPointer(bw, e, 2); });
         }
@@ -368,7 +368,7 @@ namespace HKX2
             bw.WriteByte(d);
         }
 
-        public void WriteByteArray(BinaryWriterEx bw, List<byte> d)
+        public void WriteByteArray(BinaryWriterEx bw, IList<byte> d)
         {
             WriteArrayBase(bw, d, e => WriteByte(bw, e));
         }
@@ -378,7 +378,7 @@ namespace HKX2
             bw.WriteSByte(d);
         }
 
-        public void WriteSByteArray(BinaryWriterEx bw, List<sbyte> d)
+        public void WriteSByteArray(BinaryWriterEx bw, IList<sbyte> d)
         {
             WriteArrayBase(bw, d, e => WriteSByte(bw, e));
         }
@@ -388,7 +388,7 @@ namespace HKX2
             bw.WriteUInt16(d);
         }
 
-        public void WriteUInt16Array(BinaryWriterEx bw, List<ushort> d)
+        public void WriteUInt16Array(BinaryWriterEx bw, IList<ushort> d)
         {
             WriteArrayBase(bw, d, e => WriteUInt16(bw, e));
         }
@@ -398,7 +398,7 @@ namespace HKX2
             bw.WriteInt16(d);
         }
 
-        public void WriteInt16Array(BinaryWriterEx bw, List<short> d)
+        public void WriteInt16Array(BinaryWriterEx bw, IList<short> d)
         {
             WriteArrayBase(bw, d, e => WriteInt16(bw, e));
         }
@@ -408,7 +408,7 @@ namespace HKX2
             bw.WriteUInt32(d);
         }
 
-        public void WriteUInt32Array(BinaryWriterEx bw, List<uint> d)
+        public void WriteUInt32Array(BinaryWriterEx bw, IList<uint> d)
         {
             WriteArrayBase(bw, d, e => WriteUInt32(bw, e));
         }
@@ -418,7 +418,7 @@ namespace HKX2
             bw.WriteInt32(d);
         }
 
-        public void WriteInt32Array(BinaryWriterEx bw, List<int> d)
+        public void WriteInt32Array(BinaryWriterEx bw, IList<int> d)
         {
             WriteArrayBase(bw, d, e => WriteInt32(bw, e));
         }
@@ -428,7 +428,7 @@ namespace HKX2
             bw.WriteUInt64(d);
         }
 
-        public void WriteUInt64Array(BinaryWriterEx bw, List<ulong> d)
+        public void WriteUInt64Array(BinaryWriterEx bw, IList<ulong> d)
         {
             WriteArrayBase(bw, d, e => WriteUInt64(bw, e));
         }
@@ -438,7 +438,7 @@ namespace HKX2
             bw.WriteInt64(d);
         }
 
-        public void WriteInt64Array(BinaryWriterEx bw, List<long> d)
+        public void WriteInt64Array(BinaryWriterEx bw, IList<long> d)
         {
             WriteArrayBase(bw, d, e => WriteInt64(bw, e));
         }
@@ -448,7 +448,7 @@ namespace HKX2
             bw.WriteHalf(d);
         }
 
-        public void WriteHalfArray(BinaryWriterEx bw, List<Half> d)
+        public void WriteHalfArray(BinaryWriterEx bw, IList<Half> d)
         {
             WriteArrayBase(bw, d, e => WriteHalf(bw, e));
         }
@@ -458,7 +458,7 @@ namespace HKX2
             bw.WriteSingle(d);
         }
 
-        public void WriteSingleArray(BinaryWriterEx bw, List<float> d)
+        public void WriteSingleArray(BinaryWriterEx bw, IList<float> d)
         {
             WriteArrayBase(bw, d, e => WriteSingle(bw, e));
         }
@@ -468,7 +468,7 @@ namespace HKX2
             bw.WriteBoolean(d);
         }
 
-        public void WriteBooleanArray(BinaryWriterEx bw, List<bool> d)
+        public void WriteBooleanArray(BinaryWriterEx bw, IList<bool> d)
         {
             WriteArrayBase(bw, d, e => WriteBoolean(bw, e));
         }
@@ -478,7 +478,7 @@ namespace HKX2
             bw.WriteVector4(d);
         }
 
-        public void WriteVector4Array(BinaryWriterEx bw, List<Vector4> d)
+        public void WriteVector4Array(BinaryWriterEx bw, IList<Vector4> d)
         {
             WriteArrayBase(bw, d, e => WriteVector4(bw, e));
         }
@@ -499,7 +499,7 @@ namespace HKX2
             bw.WriteSingle(d.M34);
         }
 
-        public void WriteMatrix3Array(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteMatrix3Array(BinaryWriterEx bw, IList<Matrix4x4> d)
         {
             WriteArrayBase(bw, d, e => WriteMatrix3(bw, e));
         }
@@ -524,7 +524,7 @@ namespace HKX2
             bw.WriteSingle(d.M44);
         }
 
-        public void WriteMatrix4Array(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteMatrix4Array(BinaryWriterEx bw, IList<Matrix4x4> d)
         {
             WriteArrayBase(bw, d, e => WriteMatrix4(bw, e));
         }
@@ -549,7 +549,7 @@ namespace HKX2
             bw.WriteSingle(d.M44);
         }
 
-        public void WriteTransformArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteTransformArray(BinaryWriterEx bw, IList<Matrix4x4> d)
         {
             WriteArrayBase(bw, d, e => WriteTransform(bw, e));
         }
@@ -559,7 +559,7 @@ namespace HKX2
             WriteMatrix3(bw, d);
         }
 
-        public void WriteQSTransformArray(BinaryWriterEx bw, List<Matrix4x4> d)
+        public void WriteQSTransformArray(BinaryWriterEx bw, IList<Matrix4x4> d)
         {
             WriteMatrix3Array(bw, d);
         }
@@ -572,7 +572,7 @@ namespace HKX2
             bw.WriteSingle(d.W);
         }
 
-        public void WriteQuaternionArray(BinaryWriterEx bw, List<Quaternion> d)
+        public void WriteQuaternionArray(BinaryWriterEx bw, IList<Quaternion> d)
         {
             WriteArrayBase(bw, d, e => WriteQuaternion(bw, e));
         }

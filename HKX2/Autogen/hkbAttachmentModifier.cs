@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,31 +21,27 @@ namespace HKX2
     // m_attachment m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 192 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbAttachmentModifier : hkbModifier
     {
-        public hkbEventProperty m_sendToAttacherOnAttach = new hkbEventProperty();
-        public hkbEventProperty m_sendToAttacheeOnAttach = new hkbEventProperty();
-        public hkbEventProperty m_sendToAttacherOnDetach = new hkbEventProperty();
-        public hkbEventProperty m_sendToAttacheeOnDetach = new hkbEventProperty();
-        public hkbAttachmentSetup m_attachmentSetup;
-        public hkbHandle m_attacherHandle;
-        public hkbHandle m_attacheeHandle;
-        public int m_attacheeLayer;
-        public dynamic m_attacheeRB;
-        public byte m_oldMotionType;
-        public int m_oldFilterInfo;
-        public dynamic m_attachment;
+        public hkbEventProperty m_sendToAttacherOnAttach { set; get; } = new();
+        public hkbEventProperty m_sendToAttacheeOnAttach { set; get; } = new();
+        public hkbEventProperty m_sendToAttacherOnDetach { set; get; } = new();
+        public hkbEventProperty m_sendToAttacheeOnDetach { set; get; } = new();
+        public hkbAttachmentSetup? m_attachmentSetup { set; get; } = default;
+        public hkbHandle? m_attacherHandle { set; get; } = default;
+        public hkbHandle? m_attacheeHandle { set; get; } = default;
+        public int m_attacheeLayer { set; get; } = default;
+        private object? m_attacheeRB { set; get; } = default;
+        private byte m_oldMotionType { set; get; } = default;
+        private int m_oldFilterInfo { set; get; } = default;
+        private object? m_attachment { set; get; } = default;
 
         public override uint Signature => 0xcc0aab32;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_sendToAttacherOnAttach = new hkbEventProperty();
             m_sendToAttacherOnAttach.Read(des, br);
-            m_sendToAttacheeOnAttach = new hkbEventProperty();
             m_sendToAttacheeOnAttach.Read(des, br);
-            m_sendToAttacherOnDetach = new hkbEventProperty();
             m_sendToAttacherOnDetach.Read(des, br);
-            m_sendToAttacheeOnDetach = new hkbEventProperty();
             m_sendToAttacheeOnDetach.Read(des, br);
             m_attachmentSetup = des.ReadClassPointer<hkbAttachmentSetup>(br);
             m_attacherHandle = des.ReadClassPointer<hkbHandle>(br);
@@ -69,7 +68,7 @@ namespace HKX2
             bw.WriteInt32(m_attacheeLayer);
             bw.Position += 4;
             s.WriteVoidPointer(bw);
-            s.WriteByte(bw, m_oldMotionType);
+            bw.WriteByte(m_oldMotionType);
             bw.Position += 3;
             bw.WriteInt32(m_oldFilterInfo);
             s.WriteVoidPointer(bw);
@@ -86,10 +85,6 @@ namespace HKX2
             m_attacherHandle = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_attacherHandle));
             m_attacheeHandle = xd.ReadClassPointer<hkbHandle>(xe, nameof(m_attacheeHandle));
             m_attacheeLayer = xd.ReadInt32(xe, nameof(m_attacheeLayer));
-            m_attacheeRB = default;
-            m_oldMotionType = default;
-            m_oldFilterInfo = default;
-            m_attachment = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

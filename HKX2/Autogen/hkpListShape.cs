@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -14,11 +15,11 @@ namespace HKX2
     // m_enabledChildren m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 8 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpListShape : hkpShapeCollection
     {
-        public List<hkpListShapeChildInfo> m_childInfo = new List<hkpListShapeChildInfo>();
-        public ushort m_flags;
-        public ushort m_numDisabledChildren;
-        public Vector4 m_aabbHalfExtents;
-        public Vector4 m_aabbCenter;
+        public IList<hkpListShapeChildInfo> m_childInfo { set; get; } = new List<hkpListShapeChildInfo>();
+        public ushort m_flags { set; get; } = default;
+        public ushort m_numDisabledChildren { set; get; } = default;
+        public Vector4 m_aabbHalfExtents { set; get; } = default;
+        public Vector4 m_aabbCenter { set; get; } = default;
         public uint[] m_enabledChildren = new uint[8];
 
         public override uint Signature => 0xa1937cbd;
@@ -38,7 +39,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkpListShapeChildInfo>(bw, m_childInfo);
+            s.WriteClassArray(bw, m_childInfo);
             bw.WriteUInt16(m_flags);
             bw.WriteUInt16(m_numDisabledChildren);
             bw.Position += 12;

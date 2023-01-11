@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,13 +10,12 @@ namespace HKX2
     // m_gains m_class: hkbFootIkGains Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class hkbFootIkControlData : IHavokObject
     {
-        public hkbFootIkGains m_gains = new hkbFootIkGains();
+        public hkbFootIkGains m_gains { set; get; } = new();
 
         public virtual uint Signature => 0xa111b704;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_gains = new hkbFootIkGains();
             m_gains.Read(des, br);
         }
 

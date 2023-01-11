@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 0 flags: FLAGS_NONE enum: Semantics
     public partial class hkSemanticsAttribute : IHavokObject
     {
-        public sbyte m_type;
+        public sbyte m_type { set; get; } = default;
 
         public virtual uint Signature => 0x837099c3;
 
@@ -18,7 +21,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteSByte(bw, m_type);
+            bw.WriteSByte(m_type);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

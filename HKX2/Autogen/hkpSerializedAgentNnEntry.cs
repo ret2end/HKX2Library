@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -21,20 +23,20 @@ namespace HKX2
     // m_version m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 356 flags: FLAGS_NONE enum: 
     public partial class hkpSerializedAgentNnEntry : hkReferencedObject
     {
-        public hkpEntity m_bodyA;
-        public hkpEntity m_bodyB;
-        public ulong m_bodyAId;
-        public ulong m_bodyBId;
-        public bool m_useEntityIds;
-        public sbyte m_agentType;
-        public hkpSimpleContactConstraintAtom m_atom = new hkpSimpleContactConstraintAtom();
-        public List<byte> m_propertiesStream;
-        public List<hkContactPoint> m_contactPoints = new List<hkContactPoint>();
-        public List<byte> m_cpIdMgr;
+        public hkpEntity? m_bodyA { set; get; } = default;
+        public hkpEntity? m_bodyB { set; get; } = default;
+        public ulong m_bodyAId { set; get; } = default;
+        public ulong m_bodyBId { set; get; } = default;
+        public bool m_useEntityIds { set; get; } = default;
+        public sbyte m_agentType { set; get; } = default;
+        public hkpSimpleContactConstraintAtom m_atom { set; get; } = new();
+        public IList<byte> m_propertiesStream { set; get; } = new List<byte>();
+        public IList<hkContactPoint> m_contactPoints { set; get; } = new List<hkContactPoint>();
+        public IList<byte> m_cpIdMgr { set; get; } = new List<byte>();
         public byte[] m_nnEntryData = new byte[160];
-        public hkpSerializedTrack1nInfo m_trackInfo = new hkpSerializedTrack1nInfo();
+        public hkpSerializedTrack1nInfo m_trackInfo { set; get; } = new();
         public byte[] m_endianCheckBuffer = new byte[4];
-        public uint m_version;
+        public uint m_version { set; get; } = default;
 
         public override uint Signature => 0x49ec7de3;
 
@@ -48,13 +50,11 @@ namespace HKX2
             m_useEntityIds = br.ReadBoolean();
             m_agentType = br.ReadSByte();
             br.Position += 14;
-            m_atom = new hkpSimpleContactConstraintAtom();
             m_atom.Read(des, br);
             m_propertiesStream = des.ReadByteArray(br);
             m_contactPoints = des.ReadClassArray<hkContactPoint>(br);
             m_cpIdMgr = des.ReadByteArray(br);
             m_nnEntryData = des.ReadByteCStyleArray(br, 160);
-            m_trackInfo = new hkpSerializedTrack1nInfo();
             m_trackInfo.Read(des, br);
             m_endianCheckBuffer = des.ReadByteCStyleArray(br, 4);
             m_version = br.ReadUInt32();
@@ -69,11 +69,11 @@ namespace HKX2
             bw.WriteUInt64(m_bodyAId);
             bw.WriteUInt64(m_bodyBId);
             bw.WriteBoolean(m_useEntityIds);
-            s.WriteSByte(bw, m_agentType);
+            bw.WriteSByte(m_agentType);
             bw.Position += 14;
             m_atom.Write(s, bw);
             s.WriteByteArray(bw, m_propertiesStream);
-            s.WriteClassArray<hkContactPoint>(bw, m_contactPoints);
+            s.WriteClassArray(bw, m_contactPoints);
             s.WriteByteArray(bw, m_cpIdMgr);
             s.WriteByteCStyleArray(bw, m_nnEntryData);
             m_trackInfo.Write(s, bw);

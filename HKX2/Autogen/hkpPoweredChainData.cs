@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,22 +18,21 @@ namespace HKX2
     // m_maxErrorDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     public partial class hkpPoweredChainData : hkpConstraintChainData
     {
-        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
-        public List<hkpPoweredChainDataConstraintInfo> m_infos = new List<hkpPoweredChainDataConstraintInfo>();
-        public float m_tau;
-        public float m_damping;
-        public float m_cfmLinAdd;
-        public float m_cfmLinMul;
-        public float m_cfmAngAdd;
-        public float m_cfmAngMul;
-        public float m_maxErrorDistance;
+        public hkpBridgeAtoms m_atoms { set; get; } = new();
+        public IList<hkpPoweredChainDataConstraintInfo> m_infos { set; get; } = new List<hkpPoweredChainDataConstraintInfo>();
+        public float m_tau { set; get; } = default;
+        public float m_damping { set; get; } = default;
+        public float m_cfmLinAdd { set; get; } = default;
+        public float m_cfmLinMul { set; get; } = default;
+        public float m_cfmAngAdd { set; get; } = default;
+        public float m_cfmAngMul { set; get; } = default;
+        public float m_maxErrorDistance { set; get; } = default;
 
         public override uint Signature => 0x38aeafc3;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_atoms = new hkpBridgeAtoms();
             m_atoms.Read(des, br);
             m_infos = des.ReadClassArray<hkpPoweredChainDataConstraintInfo>(br);
             m_tau = br.ReadSingle();
@@ -48,7 +49,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             m_atoms.Write(s, bw);
-            s.WriteClassArray<hkpPoweredChainDataConstraintInfo>(bw, m_infos);
+            s.WriteClassArray(bw, m_infos);
             bw.WriteSingle(m_tau);
             bw.WriteSingle(m_damping);
             bw.WriteSingle(m_cfmLinAdd);

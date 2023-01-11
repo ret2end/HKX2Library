@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -18,17 +20,17 @@ namespace HKX2
     // m_computedOutput m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 129 flags: FLAGS_NONE enum: 
     public partial class hkbComputeDirectionModifier : hkbModifier
     {
-        public Vector4 m_pointIn;
-        public Vector4 m_pointOut;
-        public float m_groundAngleOut;
-        public float m_upAngleOut;
-        public float m_verticalOffset;
-        public bool m_reverseGroundAngle;
-        public bool m_reverseUpAngle;
-        public bool m_projectPoint;
-        public bool m_normalizePoint;
-        public bool m_computeOnlyOnce;
-        public bool m_computedOutput;
+        public Vector4 m_pointIn { set; get; } = default;
+        public Vector4 m_pointOut { set; get; } = default;
+        public float m_groundAngleOut { set; get; } = default;
+        public float m_upAngleOut { set; get; } = default;
+        public float m_verticalOffset { set; get; } = default;
+        public bool m_reverseGroundAngle { set; get; } = default;
+        public bool m_reverseUpAngle { set; get; } = default;
+        public bool m_projectPoint { set; get; } = default;
+        public bool m_normalizePoint { set; get; } = default;
+        public bool m_computeOnlyOnce { set; get; } = default;
+        public bool m_computedOutput { set; get; } = default;
 
         public override uint Signature => 0xdf358bd3;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,14 +11,13 @@ namespace HKX2
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkbEventSequencedDataSequencedEvent : IHavokObject
     {
-        public hkbEvent m_event = new hkbEvent();
-        public float m_time;
+        public hkbEvent m_event { set; get; } = new();
+        public float m_time { set; get; } = default;
 
         public virtual uint Signature => 0x9139b821;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_event = new hkbEvent();
             m_event.Read(des, br);
             m_time = br.ReadSingle();
             br.Position += 4;

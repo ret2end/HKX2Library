@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -15,14 +17,14 @@ namespace HKX2
     // m_onExtension m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 125 flags: FLAGS_NONE enum: 
     public partial class hkpSpringAction : hkpBinaryAction
     {
-        public Vector4 m_lastForce;
-        public Vector4 m_positionAinA;
-        public Vector4 m_positionBinB;
-        public float m_restLength;
-        public float m_strength;
-        public float m_damping;
-        public bool m_onCompression;
-        public bool m_onExtension;
+        public Vector4 m_lastForce { set; get; } = default;
+        public Vector4 m_positionAinA { set; get; } = default;
+        public Vector4 m_positionBinB { set; get; } = default;
+        public float m_restLength { set; get; } = default;
+        public float m_strength { set; get; } = default;
+        public float m_damping { set; get; } = default;
+        public bool m_onCompression { set; get; } = default;
+        public bool m_onExtension { set; get; } = default;
 
         public override uint Signature => 0x88fc09fa;
 

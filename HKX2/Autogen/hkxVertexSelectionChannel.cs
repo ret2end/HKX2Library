@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_selectedVertices m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxVertexSelectionChannel : hkReferencedObject
     {
-        public List<int> m_selectedVertices;
+        public IList<int> m_selectedVertices { set; get; } = new List<int>();
 
         public override uint Signature => 0x866ec6d0;
 

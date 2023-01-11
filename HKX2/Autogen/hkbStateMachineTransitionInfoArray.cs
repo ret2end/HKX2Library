@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_transitions m_class: hkbStateMachineTransitionInfo Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineTransitionInfoArray : hkReferencedObject
     {
-        public List<hkbStateMachineTransitionInfo> m_transitions = new List<hkbStateMachineTransitionInfo>();
+        public IList<hkbStateMachineTransitionInfo> m_transitions { set; get; } = new List<hkbStateMachineTransitionInfo>();
 
         public override uint Signature => 0xe397b11e;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbStateMachineTransitionInfo>(bw, m_transitions);
+            s.WriteClassArray(bw, m_transitions);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

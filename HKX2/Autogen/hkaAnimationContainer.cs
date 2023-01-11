@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,11 +14,11 @@ namespace HKX2
     // m_skins m_class: hkaMeshBinding Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkaAnimationContainer : hkReferencedObject
     {
-        public List<hkaSkeleton> m_skeletons = new List<hkaSkeleton>();
-        public List<hkaAnimation> m_animations = new List<hkaAnimation>();
-        public List<hkaAnimationBinding> m_bindings = new List<hkaAnimationBinding>();
-        public List<hkaBoneAttachment> m_attachments = new List<hkaBoneAttachment>();
-        public List<hkaMeshBinding> m_skins = new List<hkaMeshBinding>();
+        public IList<hkaSkeleton> m_skeletons { set; get; } = new List<hkaSkeleton>();
+        public IList<hkaAnimation> m_animations { set; get; } = new List<hkaAnimation>();
+        public IList<hkaAnimationBinding> m_bindings { set; get; } = new List<hkaAnimationBinding>();
+        public IList<hkaBoneAttachment> m_attachments { set; get; } = new List<hkaBoneAttachment>();
+        public IList<hkaMeshBinding> m_skins { set; get; } = new List<hkaMeshBinding>();
 
         public override uint Signature => 0x8dc20333;
 
@@ -33,11 +35,11 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkaSkeleton>(bw, m_skeletons);
-            s.WriteClassPointerArray<hkaAnimation>(bw, m_animations);
-            s.WriteClassPointerArray<hkaAnimationBinding>(bw, m_bindings);
-            s.WriteClassPointerArray<hkaBoneAttachment>(bw, m_attachments);
-            s.WriteClassPointerArray<hkaMeshBinding>(bw, m_skins);
+            s.WriteClassPointerArray(bw, m_skeletons);
+            s.WriteClassPointerArray(bw, m_animations);
+            s.WriteClassPointerArray(bw, m_bindings);
+            s.WriteClassPointerArray(bw, m_attachments);
+            s.WriteClassPointerArray(bw, m_skins);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

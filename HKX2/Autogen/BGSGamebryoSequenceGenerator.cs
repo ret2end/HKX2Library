@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,13 +16,13 @@ namespace HKX2
     // m_bLooping m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 109 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BGSGamebryoSequenceGenerator : hkbGenerator
     {
-        public string m_pSequence;
-        public sbyte m_eBlendModeFunction;
-        public float m_fPercent;
-        public List<dynamic> m_events;
-        public float m_fTime;
-        public bool m_bDelayedActivate;
-        public bool m_bLooping;
+        public string m_pSequence { set; get; } = "";
+        public sbyte m_eBlendModeFunction { set; get; } = default;
+        public float m_fPercent { set; get; } = default;
+        public IList<object> m_events { set; get; } = new List<object>();
+        private float m_fTime { set; get; } = default;
+        private bool m_bDelayedActivate { set; get; } = default;
+        private bool m_bLooping { set; get; } = default;
 
         public override uint Signature => 0xc8df2d77;
 
@@ -42,7 +44,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteCStringPointer(bw, m_pSequence);
-            s.WriteSByte(bw, m_eBlendModeFunction);
+            bw.WriteSByte(m_eBlendModeFunction);
             bw.Position += 3;
             bw.WriteSingle(m_fPercent);
             s.WriteVoidArray(bw);
@@ -58,10 +60,6 @@ namespace HKX2
             m_pSequence = xd.ReadString(xe, nameof(m_pSequence));
             m_eBlendModeFunction = xd.ReadFlag<BlendModeFunction, sbyte>(xe, nameof(m_eBlendModeFunction));
             m_fPercent = xd.ReadSingle(xe, nameof(m_fPercent));
-            m_events = default;
-            m_fTime = default;
-            m_bDelayedActivate = default;
-            m_bLooping = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

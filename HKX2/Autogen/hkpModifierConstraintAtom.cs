@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +13,9 @@ namespace HKX2
     // m_pad m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 2 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpModifierConstraintAtom : hkpConstraintAtom
     {
-        public ushort m_modifierAtomSize;
-        public ushort m_childSize;
-        public hkpConstraintAtom m_child;
+        public ushort m_modifierAtomSize { set; get; } = default;
+        public ushort m_childSize { set; get; } = default;
+        public hkpConstraintAtom? m_child { set; get; } = default;
         public uint[] m_pad = new uint[2];
 
         public override uint Signature => 0xb13fef1f;

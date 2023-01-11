@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_operation m_class:  Type.TYPE_ENUM Type.TYPE_INT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: Operation
     public partial class hkpTriggerVolumeEventInfo : IHavokObject
     {
-        public ulong m_sortValue;
-        public hkpRigidBody m_body;
-        public int m_operation;
+        public ulong m_sortValue { set; get; } = default;
+        public hkpRigidBody? m_body { set; get; } = default;
+        public int m_operation { set; get; } = default;
 
         public virtual uint Signature => 0xeb60f431;
 
@@ -27,7 +30,7 @@ namespace HKX2
         {
             bw.WriteUInt64(m_sortValue);
             s.WriteClassPointer(bw, m_body);
-            s.WriteInt32(bw, m_operation);
+            bw.WriteInt32(m_operation);
             bw.Position += 4;
         }
 

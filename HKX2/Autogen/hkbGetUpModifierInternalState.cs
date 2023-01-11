@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_initNextModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkbGetUpModifierInternalState : hkReferencedObject
     {
-        public float m_timeSinceBegin;
-        public float m_timeStep;
-        public bool m_initNextModify;
+        public float m_timeSinceBegin { set; get; } = default;
+        public float m_timeStep { set; get; } = default;
+        public bool m_initNextModify { set; get; } = default;
 
         public override uint Signature => 0xd84cad4a;
 

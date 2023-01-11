@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,16 +13,15 @@ namespace HKX2
     // m_ignoreHandle m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkbSenseHandleModifierRange : IHavokObject
     {
-        public hkbEventProperty m_event = new hkbEventProperty();
-        public float m_minDistance;
-        public float m_maxDistance;
-        public bool m_ignoreHandle;
+        public hkbEventProperty m_event { set; get; } = new();
+        public float m_minDistance { set; get; } = default;
+        public float m_maxDistance { set; get; } = default;
+        public bool m_ignoreHandle { set; get; } = default;
 
         public virtual uint Signature => 0xfb56b692;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_event = new hkbEventProperty();
             m_event.Read(des, br);
             m_minDistance = br.ReadSingle();
             m_maxDistance = br.ReadSingle();

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,20 +16,19 @@ namespace HKX2
     // m_revertBackVelocityOnBreak m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 65 flags: FLAGS_NONE enum: 
     public partial class hkpBreakableConstraintData : hkpConstraintData
     {
-        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
-        public hkpConstraintData m_constraintData;
-        public ushort m_childRuntimeSize;
-        public ushort m_childNumSolverResults;
-        public float m_solverResultLimit;
-        public bool m_removeWhenBroken;
-        public bool m_revertBackVelocityOnBreak;
+        public hkpBridgeAtoms m_atoms { set; get; } = new();
+        public hkpConstraintData? m_constraintData { set; get; } = default;
+        public ushort m_childRuntimeSize { set; get; } = default;
+        public ushort m_childNumSolverResults { set; get; } = default;
+        public float m_solverResultLimit { set; get; } = default;
+        public bool m_removeWhenBroken { set; get; } = default;
+        public bool m_revertBackVelocityOnBreak { set; get; } = default;
 
         public override uint Signature => 0x7d6310c8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_atoms = new hkpBridgeAtoms();
             m_atoms.Read(des, br);
             m_constraintData = des.ReadClassPointer<hkpConstraintData>(br);
             m_childRuntimeSize = br.ReadUInt16();

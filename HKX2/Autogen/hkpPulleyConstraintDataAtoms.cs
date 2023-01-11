@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,16 +11,14 @@ namespace HKX2
     // m_pulley m_class: hkpPulleyConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpPulleyConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTranslationsConstraintAtom m_translations = new hkpSetLocalTranslationsConstraintAtom();
-        public hkpPulleyConstraintAtom m_pulley = new hkpPulleyConstraintAtom();
+        public hkpSetLocalTranslationsConstraintAtom m_translations { set; get; } = new();
+        public hkpPulleyConstraintAtom m_pulley { set; get; } = new();
 
         public virtual uint Signature => 0xb149e5a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_translations = new hkpSetLocalTranslationsConstraintAtom();
             m_translations.Read(des, br);
-            m_pulley = new hkpPulleyConstraintAtom();
             m_pulley.Read(des, br);
         }
 

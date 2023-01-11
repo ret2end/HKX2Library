@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,20 +13,18 @@ namespace HKX2
     // m_boneWeights m_class: hkbBoneWeightArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkbPoweredRagdollControlsModifier : hkbModifier
     {
-        public hkbPoweredRagdollControlData m_controlData = new hkbPoweredRagdollControlData();
-        public hkbBoneIndexArray m_bones;
-        public hkbWorldFromModelModeData m_worldFromModelModeData = new hkbWorldFromModelModeData();
-        public hkbBoneWeightArray m_boneWeights;
+        public hkbPoweredRagdollControlData m_controlData { set; get; } = new();
+        public hkbBoneIndexArray? m_bones { set; get; } = default;
+        public hkbWorldFromModelModeData m_worldFromModelModeData { set; get; } = new();
+        public hkbBoneWeightArray? m_boneWeights { set; get; } = default;
 
         public override uint Signature => 0x7cb54065;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_controlData = new hkbPoweredRagdollControlData();
             m_controlData.Read(des, br);
             m_bones = des.ReadClassPointer<hkbBoneIndexArray>(br);
-            m_worldFromModelModeData = new hkbWorldFromModelModeData();
             m_worldFromModelModeData.Read(des, br);
             m_boneWeights = des.ReadClassPointer<hkbBoneWeightArray>(br);
             br.Position += 8;

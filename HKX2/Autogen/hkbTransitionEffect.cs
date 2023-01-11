@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_defaultEventMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 74 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbTransitionEffect : hkbGenerator
     {
-        public sbyte m_selfTransitionMode;
-        public sbyte m_eventMode;
-        public sbyte m_defaultEventMode;
+        public sbyte m_selfTransitionMode { set; get; } = default;
+        public sbyte m_eventMode { set; get; } = default;
+        private sbyte m_defaultEventMode { set; get; } = default;
 
         public override uint Signature => 0x945da157;
 
@@ -27,9 +30,9 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteSByte(bw, m_selfTransitionMode);
-            s.WriteSByte(bw, m_eventMode);
-            s.WriteSByte(bw, m_defaultEventMode);
+            bw.WriteSByte(m_selfTransitionMode);
+            bw.WriteSByte(m_eventMode);
+            bw.WriteSByte(m_defaultEventMode);
             bw.Position += 5;
         }
 
@@ -38,7 +41,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_selfTransitionMode = xd.ReadFlag<SelfTransitionMode, sbyte>(xe, nameof(m_selfTransitionMode));
             m_eventMode = xd.ReadFlag<EventMode, sbyte>(xe, nameof(m_eventMode));
-            m_defaultEventMode = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

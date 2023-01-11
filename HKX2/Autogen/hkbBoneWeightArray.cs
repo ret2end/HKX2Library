@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_boneWeights m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbBoneWeightArray : hkbBindable
     {
-        public List<float> m_boneWeights;
+        public IList<float> m_boneWeights { set; get; } = new List<float>();
 
         public override uint Signature => 0xcd902b77;
 

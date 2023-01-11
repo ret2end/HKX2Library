@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -16,14 +17,14 @@ namespace HKX2
     // m_mappingType m_class:  Type.TYPE_ENUM Type.TYPE_INT32 arrSize: 0 offset: 116 flags: FLAGS_NONE enum: MappingType
     public partial class hkaSkeletonMapperData : IHavokObject
     {
-        public hkaSkeleton m_skeletonA;
-        public hkaSkeleton m_skeletonB;
-        public List<hkaSkeletonMapperDataSimpleMapping> m_simpleMappings = new List<hkaSkeletonMapperDataSimpleMapping>();
-        public List<hkaSkeletonMapperDataChainMapping> m_chainMappings = new List<hkaSkeletonMapperDataChainMapping>();
-        public List<short> m_unmappedBones;
-        public Matrix4x4 m_extractedMotionMapping;
-        public bool m_keepUnmappedLocal;
-        public int m_mappingType;
+        public hkaSkeleton? m_skeletonA { set; get; } = default;
+        public hkaSkeleton? m_skeletonB { set; get; } = default;
+        public IList<hkaSkeletonMapperDataSimpleMapping> m_simpleMappings { set; get; } = new List<hkaSkeletonMapperDataSimpleMapping>();
+        public IList<hkaSkeletonMapperDataChainMapping> m_chainMappings { set; get; } = new List<hkaSkeletonMapperDataChainMapping>();
+        public IList<short> m_unmappedBones { set; get; } = new List<short>();
+        public Matrix4x4 m_extractedMotionMapping { set; get; } = default;
+        public bool m_keepUnmappedLocal { set; get; } = default;
+        public int m_mappingType { set; get; } = default;
 
         public virtual uint Signature => 0x95687ea0;
 
@@ -45,13 +46,13 @@ namespace HKX2
         {
             s.WriteClassPointer(bw, m_skeletonA);
             s.WriteClassPointer(bw, m_skeletonB);
-            s.WriteClassArray<hkaSkeletonMapperDataSimpleMapping>(bw, m_simpleMappings);
-            s.WriteClassArray<hkaSkeletonMapperDataChainMapping>(bw, m_chainMappings);
+            s.WriteClassArray(bw, m_simpleMappings);
+            s.WriteClassArray(bw, m_chainMappings);
             s.WriteInt16Array(bw, m_unmappedBones);
             s.WriteQSTransform(bw, m_extractedMotionMapping);
             bw.WriteBoolean(m_keepUnmappedLocal);
             bw.Position += 3;
-            s.WriteInt32(bw, m_mappingType);
+            bw.WriteInt32(m_mappingType);
             bw.Position += 8;
         }
 

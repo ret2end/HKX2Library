@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_variableIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbRealVariableSequencedData : hkbSequencedData
     {
-        public List<hkbRealVariableSequencedDataSample> m_samples = new List<hkbRealVariableSequencedDataSample>();
-        public int m_variableIndex;
+        public IList<hkbRealVariableSequencedDataSample> m_samples { set; get; } = new List<hkbRealVariableSequencedDataSample>();
+        public int m_variableIndex { set; get; } = default;
 
         public override uint Signature => 0xe2862d02;
 
@@ -25,7 +27,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbRealVariableSequencedDataSample>(bw, m_samples);
+            s.WriteClassArray(bw, m_samples);
             bw.WriteInt32(m_variableIndex);
             bw.Position += 4;
         }

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkbEventRaisedInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public string m_eventName;
-        public bool m_raisedBySdk;
-        public int m_senderId;
-        public int m_padding;
+        public ulong m_characterId { set; get; } = default;
+        public string m_eventName { set; get; } = "";
+        public bool m_raisedBySdk { set; get; } = default;
+        public int m_senderId { set; get; } = default;
+        public int m_padding { set; get; } = default;
 
         public override uint Signature => 0xc02da3;
 

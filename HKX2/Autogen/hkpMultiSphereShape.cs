@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,7 +11,7 @@ namespace HKX2
     // m_spheres m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 8 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpMultiSphereShape : hkpSphereRepShape
     {
-        public int m_numSpheres;
+        public int m_numSpheres { set; get; } = default;
         public Vector4[] m_spheres = new Vector4[8];
 
         public override uint Signature => 0x61a590fc;

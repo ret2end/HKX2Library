@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_convexPieceSingleTriangles m_class:  Type.TYPE_ARRAY Type.TYPE_UINT32 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpConvexPieceStreamData : hkReferencedObject
     {
-        public List<uint> m_convexPieceStream;
-        public List<uint> m_convexPieceOffsets;
-        public List<uint> m_convexPieceSingleTriangles;
+        public IList<uint> m_convexPieceStream { set; get; } = new List<uint>();
+        public IList<uint> m_convexPieceOffsets { set; get; } = new List<uint>();
+        public IList<uint> m_convexPieceSingleTriangles { set; get; } = new List<uint>();
 
         public override uint Signature => 0xa5bd1d6e;
 

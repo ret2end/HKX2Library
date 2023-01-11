@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,13 +16,13 @@ namespace HKX2
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkbSetBehaviorCommand : hkReferencedObject
     {
-        public ulong m_characterId;
-        public hkbBehaviorGraph m_behavior;
-        public hkbGenerator m_rootGenerator;
-        public List<hkbBehaviorGraph> m_referencedBehaviors = new List<hkbBehaviorGraph>();
-        public int m_startStateIndex;
-        public bool m_randomizeSimulation;
-        public int m_padding;
+        public ulong m_characterId { set; get; } = default;
+        public hkbBehaviorGraph? m_behavior { set; get; } = default;
+        public hkbGenerator? m_rootGenerator { set; get; } = default;
+        public IList<hkbBehaviorGraph> m_referencedBehaviors { set; get; } = new List<hkbBehaviorGraph>();
+        public int m_startStateIndex { set; get; } = default;
+        public bool m_randomizeSimulation { set; get; } = default;
+        public int m_padding { set; get; } = default;
 
         public override uint Signature => 0xe18b74b9;
 
@@ -44,7 +46,7 @@ namespace HKX2
             bw.WriteUInt64(m_characterId);
             s.WriteClassPointer(bw, m_behavior);
             s.WriteClassPointer(bw, m_rootGenerator);
-            s.WriteClassPointerArray<hkbBehaviorGraph>(bw, m_referencedBehaviors);
+            s.WriteClassPointerArray(bw, m_referencedBehaviors);
             bw.WriteInt32(m_startStateIndex);
             bw.WriteBoolean(m_randomizeSimulation);
             bw.Position += 3;

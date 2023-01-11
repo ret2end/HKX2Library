@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_initialSteeringAxisInB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 352 flags: FLAGS_NONE enum: 
     public partial class hkpWheelConstraintData : hkpConstraintData
     {
-        public hkpWheelConstraintDataAtoms m_atoms = new hkpWheelConstraintDataAtoms();
-        public Vector4 m_initialAxleInB;
-        public Vector4 m_initialSteeringAxisInB;
+        public hkpWheelConstraintDataAtoms m_atoms { set; get; } = new();
+        public Vector4 m_initialAxleInB { set; get; } = default;
+        public Vector4 m_initialSteeringAxisInB { set; get; } = default;
 
         public override uint Signature => 0xb4c46671;
 
@@ -20,7 +22,6 @@ namespace HKX2
         {
             base.Read(des, br);
             br.Position += 8;
-            m_atoms = new hkpWheelConstraintDataAtoms();
             m_atoms.Read(des, br);
             m_initialAxleInB = br.ReadVector4();
             m_initialSteeringAxisInB = br.ReadVector4();

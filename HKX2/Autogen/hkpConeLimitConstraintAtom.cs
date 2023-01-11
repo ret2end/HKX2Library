@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,14 +17,14 @@ namespace HKX2
     // m_angularLimitsTauFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpConeLimitConstraintAtom : hkpConstraintAtom
     {
-        public byte m_isEnabled;
-        public byte m_twistAxisInA;
-        public byte m_refAxisInB;
-        public byte m_angleMeasurementMode;
-        public byte m_memOffsetToAngleOffset;
-        public float m_minAngle;
-        public float m_maxAngle;
-        public float m_angularLimitsTauFactor;
+        public byte m_isEnabled { set; get; } = default;
+        public byte m_twistAxisInA { set; get; } = default;
+        public byte m_refAxisInB { set; get; } = default;
+        public byte m_angleMeasurementMode { set; get; } = default;
+        public byte m_memOffsetToAngleOffset { set; get; } = default;
+        public float m_minAngle { set; get; } = default;
+        public float m_maxAngle { set; get; } = default;
+        public float m_angularLimitsTauFactor { set; get; } = default;
 
         public override uint Signature => 0xf19443c8;
 
@@ -45,7 +48,7 @@ namespace HKX2
             bw.WriteByte(m_isEnabled);
             bw.WriteByte(m_twistAxisInA);
             bw.WriteByte(m_refAxisInB);
-            s.WriteByte(bw, m_angleMeasurementMode);
+            bw.WriteByte(m_angleMeasurementMode);
             bw.WriteByte(m_memOffsetToAngleOffset);
             bw.Position += 1;
             bw.WriteSingle(m_minAngle);

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_attributeValue m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkbAttributeModifierAssignment : IHavokObject
     {
-        public int m_attributeIndex;
-        public float m_attributeValue;
+        public int m_attributeIndex { set; get; } = default;
+        public float m_attributeValue { set; get; } = default;
 
         public virtual uint Signature => 0x48b8ad52;
 

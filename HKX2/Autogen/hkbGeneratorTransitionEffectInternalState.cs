@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,16 +19,16 @@ namespace HKX2
     // m_stage m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 37 flags: FLAGS_NONE enum: Stage
     public partial class hkbGeneratorTransitionEffectInternalState : hkReferencedObject
     {
-        public float m_timeInTransition;
-        public float m_duration;
-        public float m_effectiveBlendInDuration;
-        public float m_effectiveBlendOutDuration;
-        public sbyte m_toGeneratorState;
-        public bool m_echoTransitionGenerator;
-        public bool m_echoToGenerator;
-        public bool m_justActivated;
-        public bool m_updateActiveNodes;
-        public sbyte m_stage;
+        public float m_timeInTransition { set; get; } = default;
+        public float m_duration { set; get; } = default;
+        public float m_effectiveBlendInDuration { set; get; } = default;
+        public float m_effectiveBlendOutDuration { set; get; } = default;
+        public sbyte m_toGeneratorState { set; get; } = default;
+        public bool m_echoTransitionGenerator { set; get; } = default;
+        public bool m_echoToGenerator { set; get; } = default;
+        public bool m_justActivated { set; get; } = default;
+        public bool m_updateActiveNodes { set; get; } = default;
+        public sbyte m_stage { set; get; } = default;
 
         public override uint Signature => 0xd6692b5d;
 
@@ -52,12 +55,12 @@ namespace HKX2
             bw.WriteSingle(m_duration);
             bw.WriteSingle(m_effectiveBlendInDuration);
             bw.WriteSingle(m_effectiveBlendOutDuration);
-            s.WriteSByte(bw, m_toGeneratorState);
+            bw.WriteSByte(m_toGeneratorState);
             bw.WriteBoolean(m_echoTransitionGenerator);
             bw.WriteBoolean(m_echoToGenerator);
             bw.WriteBoolean(m_justActivated);
             bw.WriteBoolean(m_updateActiveNodes);
-            s.WriteSByte(bw, m_stage);
+            bw.WriteSByte(m_stage);
             bw.Position += 2;
         }
 

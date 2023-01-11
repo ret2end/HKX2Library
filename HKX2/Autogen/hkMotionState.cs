@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -18,23 +19,22 @@ namespace HKX2
     // m_deactivationClass m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 172 flags: FLAGS_NONE enum: 
     public partial class hkMotionState : IHavokObject
     {
-        public Matrix4x4 m_transform;
-        public hkSweptTransform m_sweptTransform = new hkSweptTransform();
-        public Vector4 m_deltaAngle;
-        public float m_objectRadius;
-        public Half m_linearDamping;
-        public Half m_angularDamping;
-        public Half m_timeFactor;
-        public byte m_maxLinearVelocity;
-        public byte m_maxAngularVelocity;
-        public byte m_deactivationClass;
+        public Matrix4x4 m_transform { set; get; } = default;
+        public hkSweptTransform m_sweptTransform { set; get; } = new();
+        public Vector4 m_deltaAngle { set; get; } = default;
+        public float m_objectRadius { set; get; } = default;
+        public Half m_linearDamping { set; get; } = default;
+        public Half m_angularDamping { set; get; } = default;
+        public Half m_timeFactor { set; get; } = default;
+        public byte m_maxLinearVelocity { set; get; } = default;
+        public byte m_maxAngularVelocity { set; get; } = default;
+        public byte m_deactivationClass { set; get; } = default;
 
         public virtual uint Signature => 0x5797386e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             m_transform = des.ReadTransform(br);
-            m_sweptTransform = new hkSweptTransform();
             m_sweptTransform.Read(des, br);
             m_deltaAngle = br.ReadVector4();
             m_objectRadius = br.ReadSingle();

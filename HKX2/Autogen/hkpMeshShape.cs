@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -15,12 +16,12 @@ namespace HKX2
     // m_pad m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 3 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpMeshShape : hkpShapeCollection
     {
-        public Vector4 m_scaling;
-        public int m_numBitsForSubpartIndex;
-        public List<hkpMeshShapeSubpart> m_subparts = new List<hkpMeshShapeSubpart>();
-        public List<ushort> m_weldingInfo;
-        public byte m_weldingType;
-        public float m_radius;
+        public Vector4 m_scaling { set; get; } = default;
+        public int m_numBitsForSubpartIndex { set; get; } = default;
+        public IList<hkpMeshShapeSubpart> m_subparts { set; get; } = new List<hkpMeshShapeSubpart>();
+        public IList<ushort> m_weldingInfo { set; get; } = new List<ushort>();
+        public byte m_weldingType { set; get; } = default;
+        public float m_radius { set; get; } = default;
         public int[] m_pad = new int[3];
 
         public override uint Signature => 0x3bf12c0f;
@@ -46,9 +47,9 @@ namespace HKX2
             bw.WriteVector4(m_scaling);
             bw.WriteInt32(m_numBitsForSubpartIndex);
             bw.Position += 4;
-            s.WriteClassArray<hkpMeshShapeSubpart>(bw, m_subparts);
+            s.WriteClassArray(bw, m_subparts);
             s.WriteUInt16Array(bw, m_weldingInfo);
-            s.WriteByte(bw, m_weldingType);
+            bw.WriteByte(m_weldingType);
             bw.Position += 3;
             bw.WriteSingle(m_radius);
             s.WriteInt32CStyleArray(bw, m_pad);

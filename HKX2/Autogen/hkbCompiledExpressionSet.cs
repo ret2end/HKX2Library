@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_numExpressions m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbCompiledExpressionSet : hkReferencedObject
     {
-        public List<hkbCompiledExpressionSetToken> m_rpn = new List<hkbCompiledExpressionSetToken>();
-        public List<int> m_expressionToRpnIndex;
-        public sbyte m_numExpressions;
+        public IList<hkbCompiledExpressionSetToken> m_rpn { set; get; } = new List<hkbCompiledExpressionSetToken>();
+        public IList<int> m_expressionToRpnIndex { set; get; } = new List<int>();
+        public sbyte m_numExpressions { set; get; } = default;
 
         public override uint Signature => 0x3a7d76cc;
 
@@ -28,7 +30,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbCompiledExpressionSetToken>(bw, m_rpn);
+            s.WriteClassArray(bw, m_rpn);
             s.WriteInt32Array(bw, m_expressionToRpnIndex);
             bw.WriteSByte(m_numExpressions);
             bw.Position += 7;

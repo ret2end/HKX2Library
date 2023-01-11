@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_subTracks m_class: hkpSerializedSubTrack1nInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpSerializedTrack1nInfo : IHavokObject
     {
-        public List<hkpAgent1nSector> m_sectors = new List<hkpAgent1nSector>();
-        public List<hkpSerializedSubTrack1nInfo> m_subTracks = new List<hkpSerializedSubTrack1nInfo>();
+        public IList<hkpAgent1nSector> m_sectors { set; get; } = new List<hkpAgent1nSector>();
+        public IList<hkpSerializedSubTrack1nInfo> m_subTracks { set; get; } = new List<hkpSerializedSubTrack1nInfo>();
 
         public virtual uint Signature => 0xf12d48d9;
 
@@ -22,8 +24,8 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteClassPointerArray<hkpAgent1nSector>(bw, m_sectors);
-            s.WriteClassPointerArray<hkpSerializedSubTrack1nInfo>(bw, m_subTracks);
+            s.WriteClassPointerArray(bw, m_sectors);
+            s.WriteClassPointerArray(bw, m_subTracks);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

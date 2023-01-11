@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +15,12 @@ namespace HKX2
     // m_allowedPenetrationDepth m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     public partial class hkpCollidable : hkpCdBody
     {
-        public sbyte m_ownerOffset;
-        public byte m_forceCollideOntoPpu;
-        public ushort m_shapeSizeOnSpu;
-        public hkpTypedBroadPhaseHandle m_broadPhaseHandle = new hkpTypedBroadPhaseHandle();
-        public hkpCollidableBoundingVolumeData m_boundingVolumeData = new hkpCollidableBoundingVolumeData();
-        public float m_allowedPenetrationDepth;
+        private sbyte m_ownerOffset { set; get; } = default;
+        public byte m_forceCollideOntoPpu { set; get; } = default;
+        private ushort m_shapeSizeOnSpu { set; get; } = default;
+        public hkpTypedBroadPhaseHandle m_broadPhaseHandle { set; get; } = new();
+        public hkpCollidableBoundingVolumeData m_boundingVolumeData { set; get; } = new();
+        public float m_allowedPenetrationDepth { set; get; } = default;
 
         public override uint Signature => 0x9a0e42a5;
 
@@ -27,9 +30,7 @@ namespace HKX2
             m_ownerOffset = br.ReadSByte();
             m_forceCollideOntoPpu = br.ReadByte();
             m_shapeSizeOnSpu = br.ReadUInt16();
-            m_broadPhaseHandle = new hkpTypedBroadPhaseHandle();
             m_broadPhaseHandle.Read(des, br);
-            m_boundingVolumeData = new hkpCollidableBoundingVolumeData();
             m_boundingVolumeData.Read(des, br);
             m_allowedPenetrationDepth = br.ReadSingle();
             br.Position += 4;
@@ -50,11 +51,8 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_ownerOffset = default;
             m_forceCollideOntoPpu = xd.ReadByte(xe, nameof(m_forceCollideOntoPpu));
-            m_shapeSizeOnSpu = default;
             m_broadPhaseHandle = xd.ReadClass<hkpTypedBroadPhaseHandle>(xe, nameof(m_broadPhaseHandle));
-            m_boundingVolumeData = new hkpCollidableBoundingVolumeData();
             m_allowedPenetrationDepth = xd.ReadSingle(xe, nameof(m_allowedPenetrationDepth));
         }
 

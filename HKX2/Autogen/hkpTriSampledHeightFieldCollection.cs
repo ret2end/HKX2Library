@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_triangleExtrusion m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpTriSampledHeightFieldCollection : hkpShapeCollection
     {
-        public hkpSampledHeightFieldShape m_heightfield;
-        public int m_childSize;
-        public float m_radius;
-        public List<ushort> m_weldingInfo;
-        public Vector4 m_triangleExtrusion;
+        public hkpSampledHeightFieldShape? m_heightfield { set; get; } = default;
+        private int m_childSize { set; get; } = default;
+        public float m_radius { set; get; } = default;
+        public IList<ushort> m_weldingInfo { set; get; } = new List<ushort>();
+        public Vector4 m_triangleExtrusion { set; get; } = default;
 
         public override uint Signature => 0xc291ddde;
 
@@ -45,7 +46,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_heightfield = xd.ReadClassPointer<hkpSampledHeightFieldShape>(xe, nameof(m_heightfield));
-            m_childSize = default;
             m_radius = xd.ReadSingle(xe, nameof(m_radius));
             m_weldingInfo = xd.ReadUInt16Array(xe, nameof(m_weldingInfo));
             m_triangleExtrusion = xd.ReadVector4(xe, nameof(m_triangleExtrusion));

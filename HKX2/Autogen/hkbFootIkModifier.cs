@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -30,35 +31,34 @@ namespace HKX2
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 240 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbFootIkModifier : hkbModifier
     {
-        public hkbFootIkGains m_gains = new hkbFootIkGains();
-        public List<hkbFootIkModifierLeg> m_legs = new List<hkbFootIkModifierLeg>();
-        public float m_raycastDistanceUp;
-        public float m_raycastDistanceDown;
-        public float m_originalGroundHeightMS;
-        public float m_errorOut;
-        public Vector4 m_errorOutTranslation;
-        public Quaternion m_alignWithGroundRotation;
-        public float m_verticalOffset;
-        public uint m_collisionFilterInfo;
-        public float m_forwardAlignFraction;
-        public float m_sidewaysAlignFraction;
-        public float m_sidewaysSampleWidth;
-        public bool m_useTrackData;
-        public bool m_lockFeetWhenPlanted;
-        public bool m_useCharacterUpVector;
-        public sbyte m_alignMode;
-        public List<hkbFootIkModifierInternalLegData> m_internalLegData = new List<hkbFootIkModifierInternalLegData>();
-        public float m_prevIsFootIkEnabled;
-        public bool m_isSetUp;
-        public bool m_isGroundPositionValid;
-        public float m_timeStep;
+        public hkbFootIkGains m_gains { set; get; } = new();
+        public IList<hkbFootIkModifierLeg> m_legs { set; get; } = new List<hkbFootIkModifierLeg>();
+        public float m_raycastDistanceUp { set; get; } = default;
+        public float m_raycastDistanceDown { set; get; } = default;
+        public float m_originalGroundHeightMS { set; get; } = default;
+        public float m_errorOut { set; get; } = default;
+        public Vector4 m_errorOutTranslation { set; get; } = default;
+        public Quaternion m_alignWithGroundRotation { set; get; } = default;
+        public float m_verticalOffset { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public float m_forwardAlignFraction { set; get; } = default;
+        public float m_sidewaysAlignFraction { set; get; } = default;
+        public float m_sidewaysSampleWidth { set; get; } = default;
+        public bool m_useTrackData { set; get; } = default;
+        public bool m_lockFeetWhenPlanted { set; get; } = default;
+        public bool m_useCharacterUpVector { set; get; } = default;
+        public sbyte m_alignMode { set; get; } = default;
+        public IList<hkbFootIkModifierInternalLegData> m_internalLegData { set; get; } = new List<hkbFootIkModifierInternalLegData>();
+        private float m_prevIsFootIkEnabled { set; get; } = default;
+        private bool m_isSetUp { set; get; } = default;
+        private bool m_isGroundPositionValid { set; get; } = default;
+        private float m_timeStep { set; get; } = default;
 
         public override uint Signature => 0xed8966c0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_gains = new hkbFootIkGains();
             m_gains.Read(des, br);
             m_legs = des.ReadClassArray<hkbFootIkModifierLeg>(br);
             m_raycastDistanceUp = br.ReadSingle();
@@ -89,7 +89,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             m_gains.Write(s, bw);
-            s.WriteClassArray<hkbFootIkModifierLeg>(bw, m_legs);
+            s.WriteClassArray(bw, m_legs);
             bw.WriteSingle(m_raycastDistanceUp);
             bw.WriteSingle(m_raycastDistanceDown);
             bw.WriteSingle(m_originalGroundHeightMS);
@@ -104,8 +104,8 @@ namespace HKX2
             bw.WriteBoolean(m_useTrackData);
             bw.WriteBoolean(m_lockFeetWhenPlanted);
             bw.WriteBoolean(m_useCharacterUpVector);
-            s.WriteSByte(bw, m_alignMode);
-            s.WriteClassArray<hkbFootIkModifierInternalLegData>(bw, m_internalLegData);
+            bw.WriteSByte(m_alignMode);
+            s.WriteClassArray(bw, m_internalLegData);
             bw.WriteSingle(m_prevIsFootIkEnabled);
             bw.WriteBoolean(m_isSetUp);
             bw.WriteBoolean(m_isGroundPositionValid);
@@ -134,11 +134,6 @@ namespace HKX2
             m_lockFeetWhenPlanted = xd.ReadBoolean(xe, nameof(m_lockFeetWhenPlanted));
             m_useCharacterUpVector = xd.ReadBoolean(xe, nameof(m_useCharacterUpVector));
             m_alignMode = xd.ReadFlag<AlignMode, sbyte>(xe, nameof(m_alignMode));
-            m_internalLegData = new List<hkbFootIkModifierInternalLegData>();
-            m_prevIsFootIkEnabled = default;
-            m_isSetUp = default;
-            m_isGroundPositionValid = default;
-            m_timeStep = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

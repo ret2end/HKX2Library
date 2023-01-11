@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_factorB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpMassChangerModifierConstraintAtom : hkpModifierConstraintAtom
     {
-        public Vector4 m_factorA;
-        public Vector4 m_factorB;
+        public Vector4 m_factorA { set; get; } = default;
+        public Vector4 m_factorB { set; get; } = default;
 
         public override uint Signature => 0xb6b28240;
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_ragdollRigidBodies m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSRagdollContactListenerModifier : hkbModifier
     {
-        public hkbEventProperty m_contactEvent = new hkbEventProperty();
-        public hkbBoneIndexArray m_bones;
-        public bool m_throwEvent;
-        public List<dynamic> m_ragdollRigidBodies = new List<dynamic>();
+        public hkbEventProperty m_contactEvent { set; get; } = new();
+        public hkbBoneIndexArray? m_bones { set; get; } = default;
+        private bool m_throwEvent { set; get; } = default;
+        public IList<object> m_ragdollRigidBodies { set; get; } = new List<object>();
 
         public override uint Signature => 0x8003d8ce;
 
@@ -22,7 +24,6 @@ namespace HKX2
         {
             base.Read(des, br);
             br.Position += 8;
-            m_contactEvent = new hkbEventProperty();
             m_contactEvent.Read(des, br);
             m_bones = des.ReadClassPointer<hkbBoneIndexArray>(br);
             m_throwEvent = br.ReadBoolean();
@@ -46,8 +47,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_contactEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_contactEvent));
             m_bones = xd.ReadClassPointer<hkbBoneIndexArray>(xe, nameof(m_bones));
-            m_throwEvent = default;
-            m_ragdollRigidBodies = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

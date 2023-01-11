@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -21,20 +23,20 @@ namespace HKX2
     // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 200 flags: FLAGS_NONE enum: 
     public partial class hkaFootstepAnalysisInfo : hkReferencedObject
     {
-        public string m_name;
-        public string m_nameStrike;
-        public string m_nameLift;
-        public string m_nameLock;
-        public string m_nameUnlock;
-        public List<float> m_minPos;
-        public List<float> m_maxPos;
-        public List<float> m_minVel;
-        public List<float> m_maxVel;
-        public List<float> m_allBonesDown;
-        public List<float> m_anyBonesDown;
-        public float m_posTol;
-        public float m_velTol;
-        public float m_duration;
+        public string m_name { set; get; } = "";
+        public string m_nameStrike { set; get; } = "";
+        public string m_nameLift { set; get; } = "";
+        public string m_nameLock { set; get; } = "";
+        public string m_nameUnlock { set; get; } = "";
+        public IList<float> m_minPos { set; get; } = new List<float>();
+        public IList<float> m_maxPos { set; get; } = new List<float>();
+        public IList<float> m_minVel { set; get; } = new List<float>();
+        public IList<float> m_maxVel { set; get; } = new List<float>();
+        public IList<float> m_allBonesDown { set; get; } = new List<float>();
+        public IList<float> m_anyBonesDown { set; get; } = new List<float>();
+        public float m_posTol { set; get; } = default;
+        public float m_velTol { set; get; } = default;
+        public float m_duration { set; get; } = default;
 
         public override uint Signature => 0x824faf75;
 

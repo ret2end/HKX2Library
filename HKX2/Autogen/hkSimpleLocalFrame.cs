@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkSimpleLocalFrame : hkLocalFrame
     {
-        public Matrix4x4 m_transform;
-        public List<hkLocalFrame> m_children = new List<hkLocalFrame>();
-        public hkLocalFrame m_parentFrame;
-        public hkLocalFrameGroup m_group;
-        public string m_name;
+        public Matrix4x4 m_transform { set; get; } = default;
+        public IList<hkLocalFrame> m_children { set; get; } = new List<hkLocalFrame>();
+        public hkLocalFrame? m_parentFrame { set; get; } = default;
+        public hkLocalFrameGroup? m_group { set; get; } = default;
+        public string m_name { set; get; } = "";
 
         public override uint Signature => 0xe758f63c;
 
@@ -36,7 +37,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteTransform(bw, m_transform);
-            s.WriteClassPointerArray<hkLocalFrame>(bw, m_children);
+            s.WriteClassPointerArray(bw, m_children);
             s.WriteClassPointer(bw, m_parentFrame);
             s.WriteClassPointer(bw, m_group);
             s.WriteStringPointer(bw, m_name);

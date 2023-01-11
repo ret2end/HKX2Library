@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,12 +15,12 @@ namespace HKX2
     // m_destructionWorld m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpProjectileGun : hkpFirstPersonGun
     {
-        public int m_maxProjectiles;
-        public float m_reloadTime;
-        public float m_reload;
-        public List<dynamic> m_projectiles = new List<dynamic>();
-        public dynamic m_world;
-        public dynamic m_destructionWorld;
+        public int m_maxProjectiles { set; get; } = default;
+        public float m_reloadTime { set; get; } = default;
+        private float m_reload { set; get; } = default;
+        public IList<object> m_projectiles { set; get; } = new List<object>();
+        private object? m_world { set; get; } = default;
+        private object? m_destructionWorld { set; get; } = default;
 
         public override uint Signature => 0xb4f30148;
 
@@ -51,10 +53,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_maxProjectiles = xd.ReadInt32(xe, nameof(m_maxProjectiles));
             m_reloadTime = xd.ReadSingle(xe, nameof(m_reloadTime));
-            m_reload = default;
-            m_projectiles = default;
-            m_world = default;
-            m_destructionWorld = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

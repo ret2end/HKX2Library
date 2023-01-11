@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -35,33 +36,33 @@ namespace HKX2
     // m_pingPongBackward m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 262 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbClipGenerator : hkbGenerator
     {
-        public string m_animationName;
-        public hkbClipTriggerArray m_triggers;
-        public float m_cropStartAmountLocalTime;
-        public float m_cropEndAmountLocalTime;
-        public float m_startTime;
-        public float m_playbackSpeed;
-        public float m_enforcedDuration;
-        public float m_userControlledTimeFraction;
-        public short m_animationBindingIndex;
-        public sbyte m_mode;
-        public sbyte m_flags;
-        public List<dynamic> m_animDatas;
-        public dynamic m_animationControl;
-        public dynamic m_originalTriggers;
-        public dynamic m_mapperData;
-        public dynamic m_binding;
-        public dynamic m_mirroredAnimation;
-        public Matrix4x4 m_extractedMotion;
-        public List<dynamic> m_echos;
-        public float m_localTime;
-        public float m_time;
-        public float m_previousUserControlledTimeFraction;
-        public int m_bufferSize;
-        public int m_echoBufferSize;
-        public bool m_atEnd;
-        public bool m_ignoreStartTime;
-        public bool m_pingPongBackward;
+        public string m_animationName { set; get; } = "";
+        public hkbClipTriggerArray? m_triggers { set; get; } = default;
+        public float m_cropStartAmountLocalTime { set; get; } = default;
+        public float m_cropEndAmountLocalTime { set; get; } = default;
+        public float m_startTime { set; get; } = default;
+        public float m_playbackSpeed { set; get; } = default;
+        public float m_enforcedDuration { set; get; } = default;
+        public float m_userControlledTimeFraction { set; get; } = default;
+        public short m_animationBindingIndex { set; get; } = default;
+        public sbyte m_mode { set; get; } = default;
+        public sbyte m_flags { set; get; } = default;
+        public IList<object> m_animDatas { set; get; } = new List<object>();
+        private object? m_animationControl { set; get; } = default;
+        private object? m_originalTriggers { set; get; } = default;
+        private object? m_mapperData { set; get; } = default;
+        private object? m_binding { set; get; } = default;
+        private object? m_mirroredAnimation { set; get; } = default;
+        private Matrix4x4 m_extractedMotion { set; get; } = default;
+        public IList<object> m_echos { set; get; } = new List<object>();
+        private float m_localTime { set; get; } = default;
+        private float m_time { set; get; } = default;
+        private float m_previousUserControlledTimeFraction { set; get; } = default;
+        private int m_bufferSize { set; get; } = default;
+        private int m_echoBufferSize { set; get; } = default;
+        private bool m_atEnd { set; get; } = default;
+        private bool m_ignoreStartTime { set; get; } = default;
+        private bool m_pingPongBackward { set; get; } = default;
 
         public override uint Signature => 0x333b85b9;
 
@@ -111,7 +112,7 @@ namespace HKX2
             bw.WriteSingle(m_enforcedDuration);
             bw.WriteSingle(m_userControlledTimeFraction);
             bw.WriteInt16(m_animationBindingIndex);
-            s.WriteSByte(bw, m_mode);
+            bw.WriteSByte(m_mode);
             bw.WriteSByte(m_flags);
             bw.Position += 4;
             s.WriteVoidArray(bw);
@@ -147,22 +148,6 @@ namespace HKX2
             m_animationBindingIndex = xd.ReadInt16(xe, nameof(m_animationBindingIndex));
             m_mode = xd.ReadFlag<PlaybackMode, sbyte>(xe, nameof(m_mode));
             m_flags = xd.ReadSByte(xe, nameof(m_flags));
-            m_animDatas = default;
-            m_animationControl = default;
-            m_originalTriggers = default;
-            m_mapperData = default;
-            m_binding = default;
-            m_mirroredAnimation = default;
-            m_extractedMotion = default;
-            m_echos = default;
-            m_localTime = default;
-            m_time = default;
-            m_previousUserControlledTimeFraction = default;
-            m_bufferSize = default;
-            m_echoBufferSize = default;
-            m_atEnd = default;
-            m_ignoreStartTime = default;
-            m_pingPongBackward = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

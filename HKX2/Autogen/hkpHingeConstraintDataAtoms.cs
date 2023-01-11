@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,22 +13,18 @@ namespace HKX2
     // m_ballSocket m_class: hkpBallSocketConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 164 flags: FLAGS_NONE enum: 
     public partial class hkpHingeConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
-        public hkpSetupStabilizationAtom m_setupStabilization = new hkpSetupStabilizationAtom();
-        public hkp2dAngConstraintAtom m_2dAng = new hkp2dAngConstraintAtom();
-        public hkpBallSocketConstraintAtom m_ballSocket = new hkpBallSocketConstraintAtom();
+        public hkpSetLocalTransformsConstraintAtom m_transforms { set; get; } = new();
+        public hkpSetupStabilizationAtom m_setupStabilization { set; get; } = new();
+        public hkp2dAngConstraintAtom m_2dAng { set; get; } = new();
+        public hkpBallSocketConstraintAtom m_ballSocket { set; get; } = new();
 
         public virtual uint Signature => 0x6958371c;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_transforms = new hkpSetLocalTransformsConstraintAtom();
             m_transforms.Read(des, br);
-            m_setupStabilization = new hkpSetupStabilizationAtom();
             m_setupStabilization.Read(des, br);
-            m_2dAng = new hkp2dAngConstraintAtom();
             m_2dAng.Read(des, br);
-            m_ballSocket = new hkpBallSocketConstraintAtom();
             m_ballSocket.Read(des, br);
             br.Position += 12;
         }

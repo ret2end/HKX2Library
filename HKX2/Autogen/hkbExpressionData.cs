@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +15,12 @@ namespace HKX2
     // m_wasTrueInPreviousFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 18 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbExpressionData : IHavokObject
     {
-        public string m_expression;
-        public int m_assignmentVariableIndex;
-        public int m_assignmentEventIndex;
-        public sbyte m_eventMode;
-        public bool m_raisedEvent;
-        public bool m_wasTrueInPreviousFrame;
+        public string m_expression { set; get; } = "";
+        public int m_assignmentVariableIndex { set; get; } = default;
+        public int m_assignmentEventIndex { set; get; } = default;
+        public sbyte m_eventMode { set; get; } = default;
+        private bool m_raisedEvent { set; get; } = default;
+        private bool m_wasTrueInPreviousFrame { set; get; } = default;
 
         public virtual uint Signature => 0x6740042a;
 
@@ -37,7 +40,7 @@ namespace HKX2
             s.WriteStringPointer(bw, m_expression);
             bw.WriteInt32(m_assignmentVariableIndex);
             bw.WriteInt32(m_assignmentEventIndex);
-            s.WriteSByte(bw, m_eventMode);
+            bw.WriteSByte(m_eventMode);
             bw.WriteBoolean(m_raisedEvent);
             bw.WriteBoolean(m_wasTrueInPreviousFrame);
             bw.Position += 5;
@@ -49,8 +52,6 @@ namespace HKX2
             m_assignmentVariableIndex = xd.ReadInt32(xe, nameof(m_assignmentVariableIndex));
             m_assignmentEventIndex = xd.ReadInt32(xe, nameof(m_assignmentEventIndex));
             m_eventMode = xd.ReadFlag<ExpressionEventMode, sbyte>(xe, nameof(m_eventMode));
-            m_raisedEvent = default;
-            m_wasTrueInPreviousFrame = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

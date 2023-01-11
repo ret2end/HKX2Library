@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,18 +21,18 @@ namespace HKX2
     // m_snapMaxAngularDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
     public partial class hkaKeyFrameHierarchyUtilityControlData : IHavokObject
     {
-        public float m_hierarchyGain;
-        public float m_velocityDamping;
-        public float m_accelerationGain;
-        public float m_velocityGain;
-        public float m_positionGain;
-        public float m_positionMaxLinearVelocity;
-        public float m_positionMaxAngularVelocity;
-        public float m_snapGain;
-        public float m_snapMaxLinearVelocity;
-        public float m_snapMaxAngularVelocity;
-        public float m_snapMaxLinearDistance;
-        public float m_snapMaxAngularDistance;
+        public float m_hierarchyGain { set; get; } = default;
+        public float m_velocityDamping { set; get; } = default;
+        public float m_accelerationGain { set; get; } = default;
+        public float m_velocityGain { set; get; } = default;
+        public float m_positionGain { set; get; } = default;
+        public float m_positionMaxLinearVelocity { set; get; } = default;
+        public float m_positionMaxAngularVelocity { set; get; } = default;
+        public float m_snapGain { set; get; } = default;
+        public float m_snapMaxLinearVelocity { set; get; } = default;
+        public float m_snapMaxAngularVelocity { set; get; } = default;
+        public float m_snapMaxLinearDistance { set; get; } = default;
+        public float m_snapMaxAngularDistance { set; get; } = default;
 
         public virtual uint Signature => 0xa3d0ac71;
 

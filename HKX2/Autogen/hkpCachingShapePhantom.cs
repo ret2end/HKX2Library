@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_orderDirty m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 432 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpCachingShapePhantom : hkpShapePhantom
     {
-        public List<dynamic> m_collisionDetails;
-        public bool m_orderDirty;
+        public IList<object> m_collisionDetails { set; get; } = new List<object>();
+        private bool m_orderDirty { set; get; } = default;
 
         public override uint Signature => 0xcf227f58;
 
@@ -33,8 +35,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_collisionDetails = default;
-            m_orderDirty = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

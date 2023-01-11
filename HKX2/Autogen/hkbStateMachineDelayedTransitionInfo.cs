@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,16 +13,15 @@ namespace HKX2
     // m_wasInAbutRangeLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 21 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineDelayedTransitionInfo : IHavokObject
     {
-        public hkbStateMachineProspectiveTransitionInfo m_delayedTransition = new hkbStateMachineProspectiveTransitionInfo();
-        public float m_timeDelayed;
-        public bool m_isDelayedTransitionReturnToPreviousState;
-        public bool m_wasInAbutRangeLastFrame;
+        public hkbStateMachineProspectiveTransitionInfo m_delayedTransition { set; get; } = new();
+        public float m_timeDelayed { set; get; } = default;
+        public bool m_isDelayedTransitionReturnToPreviousState { set; get; } = default;
+        public bool m_wasInAbutRangeLastFrame { set; get; } = default;
 
         public virtual uint Signature => 0x26d5499;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_delayedTransition = new hkbStateMachineProspectiveTransitionInfo();
             m_delayedTransition.Read(des, br);
             m_timeDelayed = br.ReadSingle();
             m_isDelayedTransitionReturnToPreviousState = br.ReadBoolean();

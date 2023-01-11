@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,16 +11,14 @@ namespace HKX2
     // m_lin m_class: hkpLinConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
     public partial class hkpPointToPlaneConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
-        public hkpLinConstraintAtom m_lin = new hkpLinConstraintAtom();
+        public hkpSetLocalTransformsConstraintAtom m_transforms { set; get; } = new();
+        public hkpLinConstraintAtom m_lin { set; get; } = new();
 
         public virtual uint Signature => 0x749bc260;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_transforms = new hkpSetLocalTransformsConstraintAtom();
             m_transforms.Read(des, br);
-            m_lin = new hkpLinConstraintAtom();
             m_lin.Read(des, br);
             br.Position += 12;
         }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,11 +15,11 @@ namespace HKX2
     // m_data m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 5 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkpSimpleContactConstraintDataInfo : IHavokObject
     {
-        public ushort m_flags;
-        public ushort m_index;
-        public float m_internalData0;
-        public Half m_rollingFrictionMultiplier;
-        public Half m_internalData1;
+        public ushort m_flags { set; get; } = default;
+        public ushort m_index { set; get; } = default;
+        public float m_internalData0 { set; get; } = default;
+        public Half m_rollingFrictionMultiplier { set; get; } = default;
+        public Half m_internalData1 { set; get; } = default;
         public uint[] m_data = new uint[5];
 
         public virtual uint Signature => 0xb59d1734;

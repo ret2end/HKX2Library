@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,14 +17,14 @@ namespace HKX2
     // m_characterPropertyIdMap m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacterSetup : hkReferencedObject
     {
-        public List<hkaSkeletonMapper> m_retargetingSkeletonMappers = new List<hkaSkeletonMapper>();
-        public hkaSkeleton m_animationSkeleton;
-        public hkaSkeletonMapper m_ragdollToAnimationSkeletonMapper;
-        public hkaSkeletonMapper m_animationToRagdollSkeletonMapper;
-        public dynamic m_animationBindingSet;
-        public hkbCharacterData m_data;
-        public dynamic m_mirroredSkeleton;
-        public dynamic m_characterPropertyIdMap;
+        public IList<hkaSkeletonMapper> m_retargetingSkeletonMappers { set; get; } = new List<hkaSkeletonMapper>();
+        public hkaSkeleton? m_animationSkeleton { set; get; } = default;
+        public hkaSkeletonMapper? m_ragdollToAnimationSkeletonMapper { set; get; } = default;
+        public hkaSkeletonMapper? m_animationToRagdollSkeletonMapper { set; get; } = default;
+        private object? m_animationBindingSet { set; get; } = default;
+        public hkbCharacterData? m_data { set; get; } = default;
+        private object? m_mirroredSkeleton { set; get; } = default;
+        private object? m_characterPropertyIdMap { set; get; } = default;
 
         public override uint Signature => 0xe5a2a413;
 
@@ -42,7 +44,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkaSkeletonMapper>(bw, m_retargetingSkeletonMappers);
+            s.WriteClassPointerArray(bw, m_retargetingSkeletonMappers);
             s.WriteClassPointer(bw, m_animationSkeleton);
             s.WriteClassPointer(bw, m_ragdollToAnimationSkeletonMapper);
             s.WriteClassPointer(bw, m_animationToRagdollSkeletonMapper);
@@ -59,10 +61,7 @@ namespace HKX2
             m_animationSkeleton = xd.ReadClassPointer<hkaSkeleton>(xe, nameof(m_animationSkeleton));
             m_ragdollToAnimationSkeletonMapper = xd.ReadClassPointer<hkaSkeletonMapper>(xe, nameof(m_ragdollToAnimationSkeletonMapper));
             m_animationToRagdollSkeletonMapper = xd.ReadClassPointer<hkaSkeletonMapper>(xe, nameof(m_animationToRagdollSkeletonMapper));
-            m_animationBindingSet = default;
             m_data = xd.ReadClassPointer<hkbCharacterData>(xe, nameof(m_data));
-            m_mirroredSkeleton = default;
-            m_characterPropertyIdMap = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

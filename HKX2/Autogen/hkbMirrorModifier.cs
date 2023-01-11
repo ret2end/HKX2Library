@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_isAdditive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbMirrorModifier : hkbModifier
     {
-        public bool m_isAdditive;
+        public bool m_isAdditive { set; get; } = default;
 
         public override uint Signature => 0xa9a271ea;
 

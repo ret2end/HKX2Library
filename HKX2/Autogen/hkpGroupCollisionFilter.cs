@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +11,7 @@ namespace HKX2
     // m_collisionGroups m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 32 offset: 76 flags: FLAGS_NONE enum: 
     public partial class hkpGroupCollisionFilter : hkpCollisionFilter
     {
-        public bool m_noGroupCollisionEnabled;
+        public bool m_noGroupCollisionEnabled { set; get; } = default;
         public uint[] m_collisionGroups = new uint[32];
 
         public override uint Signature => 0x5cc01561;

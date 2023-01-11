@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_UINT32 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: FlagValues
     public partial class hkClassEnum : IHavokObject
     {
-        public string m_name;
-        public dynamic m_items;
-        public hkCustomAttributes m_attributes;
-        public uint m_flags;
+        public string m_name { set; get; } = "";
+        public object? m_items { set; get; } = default;
+        private hkCustomAttributes? m_attributes { set; get; } = default;
+        public uint m_flags { set; get; } = default;
 
         public virtual uint Signature => 0x8a3609cf;
 
@@ -40,7 +42,6 @@ namespace HKX2
         {
             m_name = xd.ReadString(xe, nameof(m_name));
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
-            m_attributes = default;
             m_flags = xd.ReadFlag<FlagValues, uint>(xe, nameof(m_flags));
         }
 

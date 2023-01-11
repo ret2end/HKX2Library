@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_secondsElapsed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSTimerModifier : hkbModifier
     {
-        public float m_alarmTimeSeconds;
-        public hkbEventProperty m_alarmEvent = new hkbEventProperty();
-        public bool m_resetAlarm;
-        public float m_secondsElapsed;
+        public float m_alarmTimeSeconds { set; get; } = default;
+        public hkbEventProperty m_alarmEvent { set; get; } = new();
+        public bool m_resetAlarm { set; get; } = default;
+        private float m_secondsElapsed { set; get; } = default;
 
         public override uint Signature => 0x531f3292;
 
@@ -22,7 +25,6 @@ namespace HKX2
             base.Read(des, br);
             m_alarmTimeSeconds = br.ReadSingle();
             br.Position += 4;
-            m_alarmEvent = new hkbEventProperty();
             m_alarmEvent.Read(des, br);
             m_resetAlarm = br.ReadBoolean();
             br.Position += 3;
@@ -46,7 +48,6 @@ namespace HKX2
             m_alarmTimeSeconds = xd.ReadSingle(xe, nameof(m_alarmTimeSeconds));
             m_alarmEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_alarmEvent));
             m_resetAlarm = xd.ReadBoolean(xe, nameof(m_resetAlarm));
-            m_secondsElapsed = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

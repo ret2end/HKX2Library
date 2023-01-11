@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,11 +14,11 @@ namespace HKX2
     // m_w m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
     public partial class BSDecomposeVectorModifier : hkbModifier
     {
-        public Vector4 m_vector;
-        public float m_x;
-        public float m_y;
-        public float m_z;
-        public float m_w;
+        public Vector4 m_vector { set; get; } = default;
+        public float m_x { set; get; } = default;
+        public float m_y { set; get; } = default;
+        public float m_z { set; get; } = default;
+        public float m_w { set; get; } = default;
 
         public override uint Signature => 0x31f6b8b6;
 

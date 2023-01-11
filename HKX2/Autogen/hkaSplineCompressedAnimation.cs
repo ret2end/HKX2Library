@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -20,19 +22,19 @@ namespace HKX2
     // m_endian m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 168 flags: FLAGS_NONE enum: 
     public partial class hkaSplineCompressedAnimation : hkaAnimation
     {
-        public int m_numFrames;
-        public int m_numBlocks;
-        public int m_maxFramesPerBlock;
-        public int m_maskAndQuantizationSize;
-        public float m_blockDuration;
-        public float m_blockInverseDuration;
-        public float m_frameDuration;
-        public List<uint> m_blockOffsets;
-        public List<uint> m_floatBlockOffsets;
-        public List<uint> m_transformOffsets;
-        public List<uint> m_floatOffsets;
-        public List<byte> m_data;
-        public int m_endian;
+        public int m_numFrames { set; get; } = default;
+        public int m_numBlocks { set; get; } = default;
+        public int m_maxFramesPerBlock { set; get; } = default;
+        public int m_maskAndQuantizationSize { set; get; } = default;
+        public float m_blockDuration { set; get; } = default;
+        public float m_blockInverseDuration { set; get; } = default;
+        public float m_frameDuration { set; get; } = default;
+        public IList<uint> m_blockOffsets { set; get; } = new List<uint>();
+        public IList<uint> m_floatBlockOffsets { set; get; } = new List<uint>();
+        public IList<uint> m_transformOffsets { set; get; } = new List<uint>();
+        public IList<uint> m_floatOffsets { set; get; } = new List<uint>();
+        public IList<byte> m_data { set; get; } = new List<byte>();
+        public int m_endian { set; get; } = default;
 
         public override uint Signature => 0x792ee0bb;
 

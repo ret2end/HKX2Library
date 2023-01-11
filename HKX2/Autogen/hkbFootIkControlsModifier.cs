@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -12,17 +13,16 @@ namespace HKX2
     // m_alignWithGroundRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 160 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkControlsModifier : hkbModifier
     {
-        public hkbFootIkControlData m_controlData = new hkbFootIkControlData();
-        public List<hkbFootIkControlsModifierLeg> m_legs = new List<hkbFootIkControlsModifierLeg>();
-        public Vector4 m_errorOutTranslation;
-        public Quaternion m_alignWithGroundRotation;
+        public hkbFootIkControlData m_controlData { set; get; } = new();
+        public IList<hkbFootIkControlsModifierLeg> m_legs { set; get; } = new List<hkbFootIkControlsModifierLeg>();
+        public Vector4 m_errorOutTranslation { set; get; } = default;
+        public Quaternion m_alignWithGroundRotation { set; get; } = default;
 
         public override uint Signature => 0xe5b6f544;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_controlData = new hkbFootIkControlData();
             m_controlData.Read(des, br);
             m_legs = des.ReadClassArray<hkbFootIkControlsModifierLeg>(br);
             m_errorOutTranslation = br.ReadVector4();
@@ -33,7 +33,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             m_controlData.Write(s, bw);
-            s.WriteClassArray<hkbFootIkControlsModifierLeg>(bw, m_legs);
+            s.WriteClassArray(bw, m_legs);
             bw.WriteVector4(m_errorOutTranslation);
             s.WriteQuaternion(bw, m_alignWithGroundRotation);
         }

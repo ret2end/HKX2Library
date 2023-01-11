@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -27,25 +28,25 @@ namespace HKX2
     // m_pSkeletonMemory m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 208 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSLookAtModifier : hkbModifier
     {
-        public bool m_lookAtTarget;
-        public List<BSLookAtModifierBoneData> m_bones = new List<BSLookAtModifierBoneData>();
-        public List<BSLookAtModifierBoneData> m_eyeBones = new List<BSLookAtModifierBoneData>();
-        public float m_limitAngleDegrees;
-        public float m_limitAngleThresholdDegrees;
-        public bool m_continueLookOutsideOfLimit;
-        public float m_onGain;
-        public float m_offGain;
-        public bool m_useBoneGains;
-        public Vector4 m_targetLocation;
-        public bool m_targetOutsideLimits;
-        public hkbEventProperty m_targetOutOfLimitEvent = new hkbEventProperty();
-        public bool m_lookAtCamera;
-        public float m_lookAtCameraX;
-        public float m_lookAtCameraY;
-        public float m_lookAtCameraZ;
-        public float m_timeStep;
-        public bool m_ballBonesValid;
-        public dynamic m_pSkeletonMemory;
+        public bool m_lookAtTarget { set; get; } = default;
+        public IList<BSLookAtModifierBoneData> m_bones { set; get; } = new List<BSLookAtModifierBoneData>();
+        public IList<BSLookAtModifierBoneData> m_eyeBones { set; get; } = new List<BSLookAtModifierBoneData>();
+        public float m_limitAngleDegrees { set; get; } = default;
+        public float m_limitAngleThresholdDegrees { set; get; } = default;
+        public bool m_continueLookOutsideOfLimit { set; get; } = default;
+        public float m_onGain { set; get; } = default;
+        public float m_offGain { set; get; } = default;
+        public bool m_useBoneGains { set; get; } = default;
+        public Vector4 m_targetLocation { set; get; } = default;
+        public bool m_targetOutsideLimits { set; get; } = default;
+        public hkbEventProperty m_targetOutOfLimitEvent { set; get; } = new();
+        public bool m_lookAtCamera { set; get; } = default;
+        public float m_lookAtCameraX { set; get; } = default;
+        public float m_lookAtCameraY { set; get; } = default;
+        public float m_lookAtCameraZ { set; get; } = default;
+        private float m_timeStep { set; get; } = default;
+        private bool m_ballBonesValid { set; get; } = default;
+        private object? m_pSkeletonMemory { set; get; } = default;
 
         public override uint Signature => 0xd756fc25;
 
@@ -67,7 +68,6 @@ namespace HKX2
             m_targetLocation = br.ReadVector4();
             m_targetOutsideLimits = br.ReadBoolean();
             br.Position += 7;
-            m_targetOutOfLimitEvent = new hkbEventProperty();
             m_targetOutOfLimitEvent.Read(des, br);
             m_lookAtCamera = br.ReadBoolean();
             br.Position += 3;
@@ -86,8 +86,8 @@ namespace HKX2
             base.Write(s, bw);
             bw.WriteBoolean(m_lookAtTarget);
             bw.Position += 7;
-            s.WriteClassArray<BSLookAtModifierBoneData>(bw, m_bones);
-            s.WriteClassArray<BSLookAtModifierBoneData>(bw, m_eyeBones);
+            s.WriteClassArray(bw, m_bones);
+            s.WriteClassArray(bw, m_eyeBones);
             bw.WriteSingle(m_limitAngleDegrees);
             bw.WriteSingle(m_limitAngleThresholdDegrees);
             bw.WriteBoolean(m_continueLookOutsideOfLimit);
@@ -131,9 +131,6 @@ namespace HKX2
             m_lookAtCameraX = xd.ReadSingle(xe, nameof(m_lookAtCameraX));
             m_lookAtCameraY = xd.ReadSingle(xe, nameof(m_lookAtCameraY));
             m_lookAtCameraZ = xd.ReadSingle(xe, nameof(m_lookAtCameraZ));
-            m_timeStep = default;
-            m_ballBonesValid = default;
-            m_pSkeletonMemory = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -31,29 +32,29 @@ namespace HKX2
     // m_scaling m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 288 flags: FLAGS_NONE enum: 
     public partial class hkpCompressedMeshShape : hkpShapeCollection
     {
-        public int m_bitsPerIndex;
-        public int m_bitsPerWIndex;
-        public int m_wIndexMask;
-        public int m_indexMask;
-        public float m_radius;
-        public byte m_weldingType;
-        public byte m_materialType;
-        public List<uint> m_materials;
-        public List<ushort> m_materials16;
-        public List<byte> m_materials8;
-        public List<Matrix4x4> m_transforms;
-        public List<Vector4> m_bigVertices;
-        public List<hkpCompressedMeshShapeBigTriangle> m_bigTriangles = new List<hkpCompressedMeshShapeBigTriangle>();
-        public List<hkpCompressedMeshShapeChunk> m_chunks = new List<hkpCompressedMeshShapeChunk>();
-        public List<hkpCompressedMeshShapeConvexPiece> m_convexPieces = new List<hkpCompressedMeshShapeConvexPiece>();
-        public float m_error;
-        public hkAabb m_bounds = new hkAabb();
-        public uint m_defaultCollisionFilterInfo;
-        public dynamic m_meshMaterials;
-        public ushort m_materialStriding;
-        public ushort m_numMaterials;
-        public List<hkpNamedMeshMaterial> m_namedMaterials = new List<hkpNamedMeshMaterial>();
-        public Vector4 m_scaling;
+        public int m_bitsPerIndex { set; get; } = default;
+        public int m_bitsPerWIndex { set; get; } = default;
+        public int m_wIndexMask { set; get; } = default;
+        public int m_indexMask { set; get; } = default;
+        public float m_radius { set; get; } = default;
+        public byte m_weldingType { set; get; } = default;
+        public byte m_materialType { set; get; } = default;
+        public IList<uint> m_materials { set; get; } = new List<uint>();
+        public IList<ushort> m_materials16 { set; get; } = new List<ushort>();
+        public IList<byte> m_materials8 { set; get; } = new List<byte>();
+        public IList<Matrix4x4> m_transforms { set; get; } = new List<Matrix4x4>();
+        public IList<Vector4> m_bigVertices { set; get; } = new List<Vector4>();
+        public IList<hkpCompressedMeshShapeBigTriangle> m_bigTriangles { set; get; } = new List<hkpCompressedMeshShapeBigTriangle>();
+        public IList<hkpCompressedMeshShapeChunk> m_chunks { set; get; } = new List<hkpCompressedMeshShapeChunk>();
+        public IList<hkpCompressedMeshShapeConvexPiece> m_convexPieces { set; get; } = new List<hkpCompressedMeshShapeConvexPiece>();
+        public float m_error { set; get; } = default;
+        public hkAabb m_bounds { set; get; } = new();
+        public uint m_defaultCollisionFilterInfo { set; get; } = default;
+        private object? m_meshMaterials { set; get; } = default;
+        public ushort m_materialStriding { set; get; } = default;
+        public ushort m_numMaterials { set; get; } = default;
+        public IList<hkpNamedMeshMaterial> m_namedMaterials { set; get; } = new List<hkpNamedMeshMaterial>();
+        public Vector4 m_scaling { set; get; } = default;
 
         public override uint Signature => 0xe3d1dba;
 
@@ -78,7 +79,6 @@ namespace HKX2
             m_convexPieces = des.ReadClassArray<hkpCompressedMeshShapeConvexPiece>(br);
             m_error = br.ReadSingle();
             br.Position += 4;
-            m_bounds = new hkAabb();
             m_bounds.Read(des, br);
             m_defaultCollisionFilterInfo = br.ReadUInt32();
             br.Position += 4;
@@ -99,17 +99,17 @@ namespace HKX2
             bw.WriteInt32(m_wIndexMask);
             bw.WriteInt32(m_indexMask);
             bw.WriteSingle(m_radius);
-            s.WriteByte(bw, m_weldingType);
-            s.WriteByte(bw, m_materialType);
+            bw.WriteByte(m_weldingType);
+            bw.WriteByte(m_materialType);
             bw.Position += 2;
             s.WriteUInt32Array(bw, m_materials);
             s.WriteUInt16Array(bw, m_materials16);
             s.WriteByteArray(bw, m_materials8);
             s.WriteQSTransformArray(bw, m_transforms);
             s.WriteVector4Array(bw, m_bigVertices);
-            s.WriteClassArray<hkpCompressedMeshShapeBigTriangle>(bw, m_bigTriangles);
-            s.WriteClassArray<hkpCompressedMeshShapeChunk>(bw, m_chunks);
-            s.WriteClassArray<hkpCompressedMeshShapeConvexPiece>(bw, m_convexPieces);
+            s.WriteClassArray(bw, m_bigTriangles);
+            s.WriteClassArray(bw, m_chunks);
+            s.WriteClassArray(bw, m_convexPieces);
             bw.WriteSingle(m_error);
             bw.Position += 4;
             m_bounds.Write(s, bw);
@@ -119,7 +119,7 @@ namespace HKX2
             bw.WriteUInt16(m_materialStriding);
             bw.WriteUInt16(m_numMaterials);
             bw.Position += 4;
-            s.WriteClassArray<hkpNamedMeshMaterial>(bw, m_namedMaterials);
+            s.WriteClassArray(bw, m_namedMaterials);
             bw.Position += 8;
             bw.WriteVector4(m_scaling);
         }
@@ -145,7 +145,6 @@ namespace HKX2
             m_error = xd.ReadSingle(xe, nameof(m_error));
             m_bounds = xd.ReadClass<hkAabb>(xe, nameof(m_bounds));
             m_defaultCollisionFilterInfo = xd.ReadUInt32(xe, nameof(m_defaultCollisionFilterInfo));
-            m_meshMaterials = default;
             m_materialStriding = xd.ReadUInt16(xe, nameof(m_materialStriding));
             m_numMaterials = xd.ReadUInt16(xe, nameof(m_numMaterials));
             m_namedMaterials = xd.ReadClassArray<hkpNamedMeshMaterial>(xe, nameof(m_namedMaterials));

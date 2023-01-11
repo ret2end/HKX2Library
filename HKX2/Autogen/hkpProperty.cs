@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_value m_class: hkpPropertyValue Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpProperty : IHavokObject
     {
-        public uint m_key;
-        public uint m_alignmentPadding;
-        public hkpPropertyValue m_value = new hkpPropertyValue();
+        public uint m_key { set; get; } = default;
+        public uint m_alignmentPadding { set; get; } = default;
+        public hkpPropertyValue m_value { set; get; } = new();
 
         public virtual uint Signature => 0x9ce308e9;
 
@@ -19,7 +22,6 @@ namespace HKX2
         {
             m_key = br.ReadUInt32();
             m_alignmentPadding = br.ReadUInt32();
-            m_value = new hkpPropertyValue();
             m_value.Read(des, br);
         }
 

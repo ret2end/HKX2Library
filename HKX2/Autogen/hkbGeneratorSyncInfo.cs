@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,13 +18,13 @@ namespace HKX2
     public partial class hkbGeneratorSyncInfo : IHavokObject
     {
         public hkbGeneratorSyncInfoSyncPoint[] m_syncPoints = new hkbGeneratorSyncInfoSyncPoint[8];
-        public float m_baseFrequency;
-        public float m_localTime;
-        public float m_playbackSpeed;
-        public sbyte m_numSyncPoints;
-        public bool m_isCyclic;
-        public bool m_isMirrored;
-        public bool m_isAdditive;
+        public float m_baseFrequency { set; get; } = default;
+        public float m_localTime { set; get; } = default;
+        public float m_playbackSpeed { set; get; } = default;
+        public sbyte m_numSyncPoints { set; get; } = default;
+        public bool m_isCyclic { set; get; } = default;
+        public bool m_isMirrored { set; get; } = default;
+        public bool m_isAdditive { set; get; } = default;
 
         public virtual uint Signature => 0xa3c341f8;
 

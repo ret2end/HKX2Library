@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,22 +13,18 @@ namespace HKX2
     // m_planesLimit m_class: hkpConeLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
     public partial class hkpRagdollLimitsDataAtoms : IHavokObject
     {
-        public hkpSetLocalRotationsConstraintAtom m_rotations = new hkpSetLocalRotationsConstraintAtom();
-        public hkpTwistLimitConstraintAtom m_twistLimit = new hkpTwistLimitConstraintAtom();
-        public hkpConeLimitConstraintAtom m_coneLimit = new hkpConeLimitConstraintAtom();
-        public hkpConeLimitConstraintAtom m_planesLimit = new hkpConeLimitConstraintAtom();
+        public hkpSetLocalRotationsConstraintAtom m_rotations { set; get; } = new();
+        public hkpTwistLimitConstraintAtom m_twistLimit { set; get; } = new();
+        public hkpConeLimitConstraintAtom m_coneLimit { set; get; } = new();
+        public hkpConeLimitConstraintAtom m_planesLimit { set; get; } = new();
 
         public virtual uint Signature => 0x82b894c3;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_rotations = new hkpSetLocalRotationsConstraintAtom();
             m_rotations.Read(des, br);
-            m_twistLimit = new hkpTwistLimitConstraintAtom();
             m_twistLimit.Read(des, br);
-            m_coneLimit = new hkpConeLimitConstraintAtom();
             m_coneLimit.Read(des, br);
-            m_planesLimit = new hkpConeLimitConstraintAtom();
             m_planesLimit.Read(des, br);
             br.Position += 4;
         }

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,16 +19,16 @@ namespace HKX2
     // m_animationCache m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 72 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbContext : IHavokObject
     {
-        public dynamic m_character;
-        public dynamic m_behavior;
-        public dynamic m_nodeToIndexMap;
-        public dynamic m_eventQueue;
-        public dynamic m_sharedEventQueue;
-        public hkbGeneratorOutputListener m_generatorOutputListener;
-        public bool m_eventTriggeredTransition;
-        public dynamic m_world;
-        public dynamic m_attachmentManager;
-        public dynamic m_animationCache;
+        private object? m_character { set; get; } = default;
+        private object? m_behavior { set; get; } = default;
+        private object? m_nodeToIndexMap { set; get; } = default;
+        private object? m_eventQueue { set; get; } = default;
+        private object? m_sharedEventQueue { set; get; } = default;
+        public hkbGeneratorOutputListener? m_generatorOutputListener { set; get; } = default;
+        private bool m_eventTriggeredTransition { set; get; } = default;
+        private object? m_world { set; get; } = default;
+        private object? m_attachmentManager { set; get; } = default;
+        private object? m_animationCache { set; get; } = default;
 
         public virtual uint Signature => 0xe0c4d4a7;
 
@@ -61,16 +64,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_character = default;
-            m_behavior = default;
-            m_nodeToIndexMap = default;
-            m_eventQueue = default;
-            m_sharedEventQueue = default;
             m_generatorOutputListener = xd.ReadClassPointer<hkbGeneratorOutputListener>(xe, nameof(m_generatorOutputListener));
-            m_eventTriggeredTransition = default;
-            m_world = default;
-            m_attachmentManager = default;
-            m_animationCache = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

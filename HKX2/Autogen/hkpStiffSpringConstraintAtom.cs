@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_length m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkpStiffSpringConstraintAtom : hkpConstraintAtom
     {
-        public float m_length;
+        public float m_length { set; get; } = default;
 
         public override uint Signature => 0x6c128096;
 

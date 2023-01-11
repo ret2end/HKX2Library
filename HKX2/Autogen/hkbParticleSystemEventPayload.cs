@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,12 +15,12 @@ namespace HKX2
     // m_speed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     public partial class hkbParticleSystemEventPayload : hkbEventPayload
     {
-        public byte m_type;
-        public short m_emitBoneIndex;
-        public Vector4 m_offset;
-        public Vector4 m_direction;
-        public int m_numParticles;
-        public float m_speed;
+        public byte m_type { set; get; } = default;
+        public short m_emitBoneIndex { set; get; } = default;
+        public Vector4 m_offset { set; get; } = default;
+        public Vector4 m_direction { set; get; } = default;
+        public int m_numParticles { set; get; } = default;
+        public float m_speed { set; get; } = default;
 
         public override uint Signature => 0x9df46cd6;
 
@@ -39,7 +41,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.Position += 1;
             bw.WriteInt16(m_emitBoneIndex);
             bw.Position += 12;

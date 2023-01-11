@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_iPriority m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
     public partial class BSiStateTaggingGenerator : hkbGenerator
     {
-        public hkbGenerator m_pDefaultGenerator;
-        public int m_iStateToSetAs;
-        public int m_iPriority;
+        public hkbGenerator? m_pDefaultGenerator { set; get; } = default;
+        public int m_iStateToSetAs { set; get; } = default;
+        public int m_iPriority { set; get; } = default;
 
         public override uint Signature => 0xf0826fc1;
 

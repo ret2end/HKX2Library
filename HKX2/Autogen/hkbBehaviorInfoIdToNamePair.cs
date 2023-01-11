@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_id m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 18 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorInfoIdToNamePair : IHavokObject
     {
-        public string m_behaviorName;
-        public string m_nodeName;
-        public byte m_toolType;
-        public short m_id;
+        public string m_behaviorName { set; get; } = "";
+        public string m_nodeName { set; get; } = "";
+        public byte m_toolType { set; get; } = default;
+        public short m_id { set; get; } = default;
 
         public virtual uint Signature => 0x35a0439a;
 
@@ -31,7 +34,7 @@ namespace HKX2
         {
             s.WriteStringPointer(bw, m_behaviorName);
             s.WriteStringPointer(bw, m_nodeName);
-            s.WriteByte(bw, m_toolType);
+            bw.WriteByte(m_toolType);
             bw.Position += 1;
             bw.WriteInt16(m_id);
             bw.Position += 4;

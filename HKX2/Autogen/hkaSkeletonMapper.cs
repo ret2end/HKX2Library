@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,14 +10,13 @@ namespace HKX2
     // m_mapping m_class: hkaSkeletonMapperData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkaSkeletonMapper : hkReferencedObject
     {
-        public hkaSkeletonMapperData m_mapping = new hkaSkeletonMapperData();
+        public hkaSkeletonMapperData m_mapping { set; get; } = new();
 
         public override uint Signature => 0x12df42a5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_mapping = new hkaSkeletonMapperData();
             m_mapping.Read(des, br);
         }
 

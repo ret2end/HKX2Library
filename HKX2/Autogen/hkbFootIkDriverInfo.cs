@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,18 +21,18 @@ namespace HKX2
     // m_isQuadrupedNarrow m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 66 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkDriverInfo : hkReferencedObject
     {
-        public List<hkbFootIkDriverInfoLeg> m_legs = new List<hkbFootIkDriverInfoLeg>();
-        public float m_raycastDistanceUp;
-        public float m_raycastDistanceDown;
-        public float m_originalGroundHeightMS;
-        public float m_verticalOffset;
-        public uint m_collisionFilterInfo;
-        public float m_forwardAlignFraction;
-        public float m_sidewaysAlignFraction;
-        public float m_sidewaysSampleWidth;
-        public bool m_lockFeetWhenPlanted;
-        public bool m_useCharacterUpVector;
-        public bool m_isQuadrupedNarrow;
+        public IList<hkbFootIkDriverInfoLeg> m_legs { set; get; } = new List<hkbFootIkDriverInfoLeg>();
+        public float m_raycastDistanceUp { set; get; } = default;
+        public float m_raycastDistanceDown { set; get; } = default;
+        public float m_originalGroundHeightMS { set; get; } = default;
+        public float m_verticalOffset { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public float m_forwardAlignFraction { set; get; } = default;
+        public float m_sidewaysAlignFraction { set; get; } = default;
+        public float m_sidewaysSampleWidth { set; get; } = default;
+        public bool m_lockFeetWhenPlanted { set; get; } = default;
+        public bool m_useCharacterUpVector { set; get; } = default;
+        public bool m_isQuadrupedNarrow { set; get; } = default;
 
         public override uint Signature => 0xc6a09dbf;
 
@@ -55,7 +57,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbFootIkDriverInfoLeg>(bw, m_legs);
+            s.WriteClassArray(bw, m_legs);
             bw.WriteSingle(m_raycastDistanceUp);
             bw.WriteSingle(m_raycastDistanceDown);
             bw.WriteSingle(m_originalGroundHeightMS);

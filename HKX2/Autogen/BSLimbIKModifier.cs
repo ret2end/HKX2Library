@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +18,15 @@ namespace HKX2
     // m_pSkeletonMemory m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSLimbIKModifier : hkbModifier
     {
-        public float m_limitAngleDegrees;
-        public float m_currentAngle;
-        public short m_startBoneIndex;
-        public short m_endBoneIndex;
-        public float m_gain;
-        public float m_boneRadius;
-        public float m_castOffset;
-        public float m_timeStep;
-        public dynamic m_pSkeletonMemory;
+        public float m_limitAngleDegrees { set; get; } = default;
+        private float m_currentAngle { set; get; } = default;
+        public short m_startBoneIndex { set; get; } = default;
+        public short m_endBoneIndex { set; get; } = default;
+        public float m_gain { set; get; } = default;
+        public float m_boneRadius { set; get; } = default;
+        public float m_castOffset { set; get; } = default;
+        private float m_timeStep { set; get; } = default;
+        private object? m_pSkeletonMemory { set; get; } = default;
 
         public override uint Signature => 0x8ea971e5;
 
@@ -61,14 +64,11 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_limitAngleDegrees = xd.ReadSingle(xe, nameof(m_limitAngleDegrees));
-            m_currentAngle = default;
             m_startBoneIndex = xd.ReadInt16(xe, nameof(m_startBoneIndex));
             m_endBoneIndex = xd.ReadInt16(xe, nameof(m_endBoneIndex));
             m_gain = xd.ReadSingle(xe, nameof(m_gain));
             m_boneRadius = xd.ReadSingle(xe, nameof(m_boneRadius));
             m_castOffset = xd.ReadSingle(xe, nameof(m_castOffset));
-            m_timeStep = default;
-            m_pSkeletonMemory = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

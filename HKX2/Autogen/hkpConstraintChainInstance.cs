@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_action m_class: hkpConstraintChainInstanceAction Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkpConstraintChainInstance : hkpConstraintInstance
     {
-        public List<hkpEntity> m_chainedEntities = new List<hkpEntity>();
-        public hkpConstraintChainInstanceAction m_action;
+        public IList<hkpEntity> m_chainedEntities { set; get; } = new List<hkpEntity>();
+        public hkpConstraintChainInstanceAction? m_action { set; get; } = default;
 
         public override uint Signature => 0x7a490753;
 
@@ -24,7 +26,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpEntity>(bw, m_chainedEntities);
+            s.WriteClassPointerArray(bw, m_chainedEntities);
             s.WriteClassPointer(bw, m_action);
         }
 

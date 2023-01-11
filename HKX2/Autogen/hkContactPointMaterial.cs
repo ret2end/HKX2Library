@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 11 flags: FLAGS_NONE enum: 
     public partial class hkContactPointMaterial : IHavokObject
     {
-        public ulong m_userData;
-        public byte m_friction;
-        public byte m_restitution;
-        public byte m_maxImpulse;
-        public byte m_flags;
+        public ulong m_userData { set; get; } = default;
+        public byte m_friction { set; get; } = default;
+        public byte m_restitution { set; get; } = default;
+        public byte m_maxImpulse { set; get; } = default;
+        public byte m_flags { set; get; } = default;
 
         public virtual uint Signature => 0x4e32287c;
 

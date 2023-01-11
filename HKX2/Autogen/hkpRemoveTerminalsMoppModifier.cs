@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_tempShapesToRemove m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpRemoveTerminalsMoppModifier : hkReferencedObject
     {
-        public List<uint> m_removeInfo;
-        public dynamic m_tempShapesToRemove;
+        public IList<uint> m_removeInfo { set; get; } = new List<uint>();
+        private object? m_tempShapesToRemove { set; get; } = default;
 
         public override uint Signature => 0x91367f03;
 
@@ -34,7 +36,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_removeInfo = xd.ReadUInt32Array(xe, nameof(m_removeInfo));
-            m_tempShapesToRemove = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,11 +14,11 @@ namespace HKX2
     // m_blendHint m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: BlendHint
     public partial class hkaAnimationBinding : hkReferencedObject
     {
-        public string m_originalSkeletonName;
-        public hkaAnimation m_animation;
-        public List<short> m_transformTrackToBoneIndices;
-        public List<short> m_floatTrackToFloatSlotIndices;
-        public sbyte m_blendHint;
+        public string m_originalSkeletonName { set; get; } = "";
+        public hkaAnimation? m_animation { set; get; } = default;
+        public IList<short> m_transformTrackToBoneIndices { set; get; } = new List<short>();
+        public IList<short> m_floatTrackToFloatSlotIndices { set; get; } = new List<short>();
+        public sbyte m_blendHint { set; get; } = default;
 
         public override uint Signature => 0x66eac971;
 
@@ -38,7 +40,7 @@ namespace HKX2
             s.WriteClassPointer(bw, m_animation);
             s.WriteInt16Array(bw, m_transformTrackToBoneIndices);
             s.WriteInt16Array(bw, m_floatTrackToFloatSlotIndices);
-            s.WriteSByte(bw, m_blendHint);
+            bw.WriteSByte(m_blendHint);
             bw.Position += 7;
         }
 

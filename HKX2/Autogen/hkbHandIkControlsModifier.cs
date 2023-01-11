@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_hands m_class: hkbHandIkControlsModifierHand Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbHandIkControlsModifier : hkbModifier
     {
-        public List<hkbHandIkControlsModifierHand> m_hands = new List<hkbHandIkControlsModifierHand>();
+        public IList<hkbHandIkControlsModifierHand> m_hands { set; get; } = new List<hkbHandIkControlsModifierHand>();
 
         public override uint Signature => 0x9f0488bb;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbHandIkControlsModifierHand>(bw, m_hands);
+            s.WriteClassArray(bw, m_hands);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

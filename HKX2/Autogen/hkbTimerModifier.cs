@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_secondsElapsed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbTimerModifier : hkbModifier
     {
-        public float m_alarmTimeSeconds;
-        public hkbEventProperty m_alarmEvent = new hkbEventProperty();
-        public float m_secondsElapsed;
+        public float m_alarmTimeSeconds { set; get; } = default;
+        public hkbEventProperty m_alarmEvent { set; get; } = new();
+        private float m_secondsElapsed { set; get; } = default;
 
         public override uint Signature => 0x338b4879;
 
@@ -20,7 +23,6 @@ namespace HKX2
             base.Read(des, br);
             m_alarmTimeSeconds = br.ReadSingle();
             br.Position += 4;
-            m_alarmEvent = new hkbEventProperty();
             m_alarmEvent.Read(des, br);
             m_secondsElapsed = br.ReadSingle();
             br.Position += 4;
@@ -41,7 +43,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_alarmTimeSeconds = xd.ReadSingle(xe, nameof(m_alarmTimeSeconds));
             m_alarmEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_alarmEvent));
-            m_secondsElapsed = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

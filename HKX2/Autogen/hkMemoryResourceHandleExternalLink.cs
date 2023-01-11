@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_externalId m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkMemoryResourceHandleExternalLink : IHavokObject
     {
-        public string m_memberName;
-        public string m_externalId;
+        public string m_memberName { set; get; } = "";
+        public string m_externalId { set; get; } = "";
 
         public virtual uint Signature => 0x3144d17c;
 

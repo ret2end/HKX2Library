@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_entityB m_class: hkpEntity Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class hkpBinaryAction : hkpAction
     {
-        public hkpEntity m_entityA;
-        public hkpEntity m_entityB;
+        public hkpEntity? m_entityA { set; get; } = default;
+        public hkpEntity? m_entityB { set; get; } = default;
 
         public override uint Signature => 0xc00f3403;
 

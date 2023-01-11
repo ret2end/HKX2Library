@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_value m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkxAttribute : IHavokObject
     {
-        public string m_name;
-        public hkReferencedObject m_value;
+        public string m_name { set; get; } = "";
+        public hkReferencedObject? m_value { set; get; } = default;
 
         public virtual uint Signature => 0x7375cae3;
 

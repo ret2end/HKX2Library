@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_computedOutput m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkbComputeDirectionModifierInternalState : hkReferencedObject
     {
-        public Vector4 m_pointOut;
-        public float m_groundAngleOut;
-        public float m_upAngleOut;
-        public bool m_computedOutput;
+        public Vector4 m_pointOut { set; get; } = default;
+        public float m_groundAngleOut { set; get; } = default;
+        public float m_upAngleOut { set; get; } = default;
+        public bool m_computedOutput { set; get; } = default;
 
         public override uint Signature => 0x6ac054d7;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,14 +21,14 @@ namespace HKX2
     {
         public uint[] m_min = new uint[3];
         public byte[] m_expansionMin = new byte[3];
-        public byte m_expansionShift;
+        public byte m_expansionShift { set; get; } = default;
         public uint[] m_max = new uint[3];
         public byte[] m_expansionMax = new byte[3];
-        public byte m_padding;
-        public ushort m_numChildShapeAabbs;
-        public ushort m_capacityChildShapeAabbs;
-        public dynamic m_childShapeAabbs;
-        public dynamic m_childShapeKeys;
+        public byte m_padding { set; get; } = default;
+        private ushort m_numChildShapeAabbs { set; get; } = default;
+        private ushort m_capacityChildShapeAabbs { set; get; } = default;
+        private object? m_childShapeAabbs { set; get; } = default;
+        private object? m_childShapeKeys { set; get; } = default;
 
         public virtual uint Signature => 0xb5f0e6b1;
 
@@ -67,10 +70,6 @@ namespace HKX2
             m_max = xd.ReadUInt32CStyleArray(xe, nameof(m_max), 3);
             m_expansionMax = xd.ReadByteCStyleArray(xe, nameof(m_expansionMax), 3);
             m_padding = xd.ReadByte(xe, nameof(m_padding));
-            m_numChildShapeAabbs = default;
-            m_capacityChildShapeAabbs = default;
-            m_childShapeAabbs = default;
-            m_childShapeKeys = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

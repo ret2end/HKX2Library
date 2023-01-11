@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_setRotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 113 flags: FLAGS_NONE enum: 
     public partial class hkbSetWorldFromModelModifier : hkbModifier
     {
-        public Vector4 m_translation;
-        public Quaternion m_rotation;
-        public bool m_setTranslation;
-        public bool m_setRotation;
+        public Vector4 m_translation { set; get; } = default;
+        public Quaternion m_rotation { set; get; } = default;
+        public bool m_setTranslation { set; get; } = default;
+        public bool m_setRotation { set; get; } = default;
 
         public override uint Signature => 0xafcfa211;
 

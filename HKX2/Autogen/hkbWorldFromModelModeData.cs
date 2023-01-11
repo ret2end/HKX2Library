@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_mode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 6 flags: FLAGS_NONE enum: WorldFromModelMode
     public partial class hkbWorldFromModelModeData : IHavokObject
     {
-        public short m_poseMatchingBone0;
-        public short m_poseMatchingBone1;
-        public short m_poseMatchingBone2;
-        public sbyte m_mode;
+        public short m_poseMatchingBone0 { set; get; } = default;
+        public short m_poseMatchingBone1 { set; get; } = default;
+        public short m_poseMatchingBone2 { set; get; } = default;
+        public sbyte m_mode { set; get; } = default;
 
         public virtual uint Signature => 0xa3af8783;
 
@@ -31,7 +34,7 @@ namespace HKX2
             bw.WriteInt16(m_poseMatchingBone0);
             bw.WriteInt16(m_poseMatchingBone1);
             bw.WriteInt16(m_poseMatchingBone2);
-            s.WriteSByte(bw, m_mode);
+            bw.WriteSByte(m_mode);
             bw.Position += 1;
         }
 

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -23,22 +25,22 @@ namespace HKX2
     // m_vdbColor m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
     public partial class hkpCharacterRigidBodyCinfo : hkpCharacterControllerCinfo
     {
-        public uint m_collisionFilterInfo;
-        public hkpShape m_shape;
-        public Vector4 m_position;
-        public Quaternion m_rotation;
-        public float m_mass;
-        public float m_friction;
-        public float m_maxLinearVelocity;
-        public float m_allowedPenetrationDepth;
-        public Vector4 m_up;
-        public float m_maxSlope;
-        public float m_maxForce;
-        public float m_unweldingHeightOffsetFactor;
-        public float m_maxSpeedForSimplexSolver;
-        public float m_supportDistance;
-        public float m_hardSupportDistance;
-        public int m_vdbColor;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public hkpShape? m_shape { set; get; } = default;
+        public Vector4 m_position { set; get; } = default;
+        public Quaternion m_rotation { set; get; } = default;
+        public float m_mass { set; get; } = default;
+        public float m_friction { set; get; } = default;
+        public float m_maxLinearVelocity { set; get; } = default;
+        public float m_allowedPenetrationDepth { set; get; } = default;
+        public Vector4 m_up { set; get; } = default;
+        public float m_maxSlope { set; get; } = default;
+        public float m_maxForce { set; get; } = default;
+        public float m_unweldingHeightOffsetFactor { set; get; } = default;
+        public float m_maxSpeedForSimplexSolver { set; get; } = default;
+        public float m_supportDistance { set; get; } = default;
+        public float m_hardSupportDistance { set; get; } = default;
+        public int m_vdbColor { set; get; } = default;
 
         public override uint Signature => 0x892f441;
 

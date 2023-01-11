@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     public partial class hkpReorientAction : hkpUnaryAction
     {
-        public Vector4 m_rotationAxis;
-        public Vector4 m_upAxis;
-        public float m_strength;
-        public float m_damping;
+        public Vector4 m_rotationAxis { set; get; } = default;
+        public Vector4 m_upAxis { set; get; } = default;
+        public float m_strength { set; get; } = default;
+        public float m_damping { set; get; } = default;
 
         public override uint Signature => 0x2dc0ec6a;
 

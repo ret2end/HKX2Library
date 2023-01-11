@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_originalFilename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkxTextureFile : hkReferencedObject
     {
-        public string m_filename;
-        public string m_name;
-        public string m_originalFilename;
+        public string m_filename { set; get; } = "";
+        public string m_name { set; get; } = "";
+        public string m_originalFilename { set; get; } = "";
 
         public override uint Signature => 0x1e289259;
 

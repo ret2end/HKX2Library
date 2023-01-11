@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_value m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     public partial class hkxMaterialProperty : IHavokObject
     {
-        public uint m_key;
-        public uint m_value;
+        public uint m_key { set; get; } = default;
+        public uint m_value { set; get; } = default;
 
         public virtual uint Signature => 0xd295234d;
 

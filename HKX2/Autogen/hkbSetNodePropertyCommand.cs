@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
     public partial class hkbSetNodePropertyCommand : hkReferencedObject
     {
-        public ulong m_characterId;
-        public string m_nodeName;
-        public string m_propertyName;
-        public hkbVariableValue m_propertyValue = new hkbVariableValue();
-        public int m_padding;
+        public ulong m_characterId { set; get; } = default;
+        public string m_nodeName { set; get; } = "";
+        public string m_propertyName { set; get; } = "";
+        public hkbVariableValue m_propertyValue { set; get; } = new();
+        public int m_padding { set; get; } = default;
 
         public override uint Signature => 0xc5160b64;
 
@@ -25,7 +28,6 @@ namespace HKX2
             m_characterId = br.ReadUInt64();
             m_nodeName = des.ReadStringPointer(br);
             m_propertyName = des.ReadStringPointer(br);
-            m_propertyValue = new hkbVariableValue();
             m_propertyValue.Read(des, br);
             m_padding = br.ReadInt32();
         }

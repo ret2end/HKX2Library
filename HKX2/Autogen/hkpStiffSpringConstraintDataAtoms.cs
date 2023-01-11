@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,16 +11,14 @@ namespace HKX2
     // m_spring m_class: hkpStiffSpringConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpStiffSpringConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTranslationsConstraintAtom m_pivots = new hkpSetLocalTranslationsConstraintAtom();
-        public hkpStiffSpringConstraintAtom m_spring = new hkpStiffSpringConstraintAtom();
+        public hkpSetLocalTranslationsConstraintAtom m_pivots { set; get; } = new();
+        public hkpStiffSpringConstraintAtom m_spring { set; get; } = new();
 
         public virtual uint Signature => 0x207eb376;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_pivots = new hkpSetLocalTranslationsConstraintAtom();
             m_pivots.Read(des, br);
-            m_spring = new hkpStiffSpringConstraintAtom();
             m_spring.Read(des, br);
             br.Position += 8;
         }

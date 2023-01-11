@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_conditionString m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbStringCondition : hkbCondition
     {
-        public string m_conditionString;
+        public string m_conditionString { set; get; } = "";
 
         public override uint Signature => 0x5ab50487;
 

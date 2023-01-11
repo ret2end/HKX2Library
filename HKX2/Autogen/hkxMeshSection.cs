@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_userChannels m_class: hkReferencedObject Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkxMeshSection : hkReferencedObject
     {
-        public hkxVertexBuffer m_vertexBuffer;
-        public List<hkxIndexBuffer> m_indexBuffers = new List<hkxIndexBuffer>();
-        public hkxMaterial m_material;
-        public List<hkReferencedObject> m_userChannels = new List<hkReferencedObject>();
+        public hkxVertexBuffer? m_vertexBuffer { set; get; } = default;
+        public IList<hkxIndexBuffer> m_indexBuffers { set; get; } = new List<hkxIndexBuffer>();
+        public hkxMaterial? m_material { set; get; } = default;
+        public IList<hkReferencedObject> m_userChannels { set; get; } = new List<hkReferencedObject>();
 
         public override uint Signature => 0xe2286cf8;
 
@@ -31,9 +33,9 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteClassPointer(bw, m_vertexBuffer);
-            s.WriteClassPointerArray<hkxIndexBuffer>(bw, m_indexBuffers);
+            s.WriteClassPointerArray(bw, m_indexBuffers);
             s.WriteClassPointer(bw, m_material);
-            s.WriteClassPointerArray<hkReferencedObject>(bw, m_userChannels);
+            s.WriteClassPointerArray(bw, m_userChannels);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

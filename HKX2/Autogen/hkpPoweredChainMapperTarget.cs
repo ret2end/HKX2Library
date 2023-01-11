@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_infoIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpPoweredChainMapperTarget : IHavokObject
     {
-        public hkpPoweredChainData m_chain;
-        public int m_infoIndex;
+        public hkpPoweredChainData? m_chain { set; get; } = default;
+        public int m_infoIndex { set; get; } = default;
 
         public virtual uint Signature => 0xf651c74d;
 

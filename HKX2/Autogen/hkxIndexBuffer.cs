@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,11 +14,11 @@ namespace HKX2
     // m_length m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
     public partial class hkxIndexBuffer : hkReferencedObject
     {
-        public sbyte m_indexType;
-        public List<ushort> m_indices16;
-        public List<uint> m_indices32;
-        public uint m_vertexBaseOffset;
-        public uint m_length;
+        public sbyte m_indexType { set; get; } = default;
+        public IList<ushort> m_indices16 { set; get; } = new List<ushort>();
+        public IList<uint> m_indices32 { set; get; } = new List<uint>();
+        public uint m_vertexBaseOffset { set; get; } = default;
+        public uint m_length { set; get; } = default;
 
         public override uint Signature => 0xc12c8197;
 
@@ -34,7 +36,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteSByte(bw, m_indexType);
+            bw.WriteSByte(m_indexType);
             bw.Position += 7;
             s.WriteUInt16Array(bw, m_indices16);
             s.WriteUInt32Array(bw, m_indices32);

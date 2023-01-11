@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_rigidSkins m_class:  Type.TYPE_ARRAY Type.TYPE_UINT64 arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkbCharacterSkinInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public List<ulong> m_deformableSkins;
-        public List<ulong> m_rigidSkins;
+        public ulong m_characterId { set; get; } = default;
+        public IList<ulong> m_deformableSkins { set; get; } = new List<ulong>();
+        public IList<ulong> m_rigidSkins { set; get; } = new List<ulong>();
 
         public override uint Signature => 0x180d900d;
 

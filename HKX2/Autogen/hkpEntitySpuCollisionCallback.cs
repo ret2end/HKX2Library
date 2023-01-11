@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_userFilter m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 11 flags: FLAGS_NONE enum: 
     public partial class hkpEntitySpuCollisionCallback : IHavokObject
     {
-        public dynamic m_util;
-        public ushort m_capacity;
-        public byte m_eventFilter;
-        public byte m_userFilter;
+        private object? m_util { set; get; } = default;
+        private ushort m_capacity { set; get; } = default;
+        public byte m_eventFilter { set; get; } = default;
+        public byte m_userFilter { set; get; } = default;
 
         public virtual uint Signature => 0x81147f05;
 
@@ -37,8 +40,6 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_util = default;
-            m_capacity = default;
             m_eventFilter = xd.ReadByte(xe, nameof(m_eventFilter));
             m_userFilter = xd.ReadByte(xe, nameof(m_userFilter));
         }

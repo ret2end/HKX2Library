@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_className m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkxMeshUserChannelInfo : hkxAttributeHolder
     {
-        public string m_name;
-        public string m_className;
+        public string m_name { set; get; } = "";
+        public string m_className { set; get; } = "";
 
         public override uint Signature => 0x270724a5;
 

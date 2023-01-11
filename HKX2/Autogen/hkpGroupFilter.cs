@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,7 +12,7 @@ namespace HKX2
     // m_pad256 m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 4 offset: 208 flags: FLAGS_NONE enum: 
     public partial class hkpGroupFilter : hkpCollisionFilter
     {
-        public int m_nextFreeSystemGroup;
+        public int m_nextFreeSystemGroup { set; get; } = default;
         public uint[] m_collisionLookupTable = new uint[32];
         public Vector4[] m_pad256 = new Vector4[4];
 

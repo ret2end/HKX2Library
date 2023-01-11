@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,16 +11,14 @@ namespace HKX2
     // m_entityListeners m_class: hkpEntitySmallArraySerializeOverrideType Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpEntityExtendedListeners : IHavokObject
     {
-        public hkpEntitySmallArraySerializeOverrideType m_activationListeners = new hkpEntitySmallArraySerializeOverrideType();
-        public hkpEntitySmallArraySerializeOverrideType m_entityListeners = new hkpEntitySmallArraySerializeOverrideType();
+        public hkpEntitySmallArraySerializeOverrideType m_activationListeners { set; get; } = new();
+        public hkpEntitySmallArraySerializeOverrideType m_entityListeners { set; get; } = new();
 
         public virtual uint Signature => 0xf557023c;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_activationListeners = new hkpEntitySmallArraySerializeOverrideType();
             m_activationListeners.Read(des, br);
-            m_entityListeners = new hkpEntitySmallArraySerializeOverrideType();
             m_entityListeners.Read(des, br);
         }
 
@@ -29,8 +30,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_activationListeners = new hkpEntitySmallArraySerializeOverrideType();
-            m_entityListeners = new hkpEntitySmallArraySerializeOverrideType();
+
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

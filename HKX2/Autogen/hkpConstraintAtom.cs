@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT16 arrSize: 0 offset: 0 flags: FLAGS_NONE enum: AtomType
     public partial class hkpConstraintAtom : IHavokObject
     {
-        public ushort m_type;
+        public ushort m_type { set; get; } = default;
 
         public virtual uint Signature => 0x59d67ef6;
 
@@ -18,7 +21,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteUInt16(bw, m_type);
+            bw.WriteUInt16(m_type);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

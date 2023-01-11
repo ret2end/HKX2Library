@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_triggerEvent m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     public partial class BSDistTriggerModifier : hkbModifier
     {
-        public Vector4 m_targetPosition;
-        public float m_distance;
-        public float m_distanceTrigger;
-        public hkbEventProperty m_triggerEvent = new hkbEventProperty();
+        public Vector4 m_targetPosition { set; get; } = default;
+        public float m_distance { set; get; } = default;
+        public float m_distanceTrigger { set; get; } = default;
+        public hkbEventProperty m_triggerEvent { set; get; } = new();
 
         public override uint Signature => 0xb34d2bbd;
 
@@ -24,7 +26,6 @@ namespace HKX2
             m_targetPosition = br.ReadVector4();
             m_distance = br.ReadSingle();
             m_distanceTrigger = br.ReadSingle();
-            m_triggerEvent = new hkbEventProperty();
             m_triggerEvent.Read(des, br);
             br.Position += 8;
         }

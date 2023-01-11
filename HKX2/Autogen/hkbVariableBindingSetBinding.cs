@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,17 +20,17 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_INT8 arrSize: 0 offset: 36 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbVariableBindingSetBinding : IHavokObject
     {
-        public string m_memberPath;
-        public dynamic m_memberClass;
-        public int m_offsetInObjectPlusOne;
-        public int m_offsetInArrayPlusOne;
-        public int m_rootVariableIndex;
-        public int m_variableIndex;
-        public sbyte m_bitIndex;
-        public sbyte m_bindingType;
-        public byte m_memberType;
-        public sbyte m_variableType;
-        public sbyte m_flags;
+        public string m_memberPath { set; get; } = "";
+        private object? m_memberClass { set; get; } = default;
+        private int m_offsetInObjectPlusOne { set; get; } = default;
+        private int m_offsetInArrayPlusOne { set; get; } = default;
+        private int m_rootVariableIndex { set; get; } = default;
+        public int m_variableIndex { set; get; } = default;
+        public sbyte m_bitIndex { set; get; } = default;
+        public sbyte m_bindingType { set; get; } = default;
+        private byte m_memberType { set; get; } = default;
+        private sbyte m_variableType { set; get; } = default;
+        private sbyte m_flags { set; get; } = default;
 
         public virtual uint Signature => 0x4d592f72;
 
@@ -56,8 +59,8 @@ namespace HKX2
             bw.WriteInt32(m_rootVariableIndex);
             bw.WriteInt32(m_variableIndex);
             bw.WriteSByte(m_bitIndex);
-            s.WriteSByte(bw, m_bindingType);
-            s.WriteByte(bw, m_memberType);
+            bw.WriteSByte(m_bindingType);
+            bw.WriteByte(m_memberType);
             bw.WriteSByte(m_variableType);
             bw.WriteSByte(m_flags);
             bw.Position += 3;
@@ -66,16 +69,9 @@ namespace HKX2
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
             m_memberPath = xd.ReadString(xe, nameof(m_memberPath));
-            m_memberClass = default;
-            m_offsetInObjectPlusOne = default;
-            m_offsetInArrayPlusOne = default;
-            m_rootVariableIndex = default;
             m_variableIndex = xd.ReadInt32(xe, nameof(m_variableIndex));
             m_bitIndex = xd.ReadSByte(xe, nameof(m_bitIndex));
             m_bindingType = xd.ReadFlag<BindingType, sbyte>(xe, nameof(m_bindingType));
-            m_memberType = default;
-            m_variableType = default;
-            m_flags = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

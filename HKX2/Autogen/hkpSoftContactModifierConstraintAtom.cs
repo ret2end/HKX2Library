@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_maxAcceleration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
     public partial class hkpSoftContactModifierConstraintAtom : hkpModifierConstraintAtom
     {
-        public float m_tau;
-        public float m_maxAcceleration;
+        public float m_tau { set; get; } = default;
+        public float m_maxAcceleration { set; get; } = default;
 
         public override uint Signature => 0xecb34e27;
 

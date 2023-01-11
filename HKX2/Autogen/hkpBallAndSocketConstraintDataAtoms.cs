@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,19 +12,16 @@ namespace HKX2
     // m_ballSocket m_class: hkpBallSocketConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpBallAndSocketConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTranslationsConstraintAtom m_pivots = new hkpSetLocalTranslationsConstraintAtom();
-        public hkpSetupStabilizationAtom m_setupStabilization = new hkpSetupStabilizationAtom();
-        public hkpBallSocketConstraintAtom m_ballSocket = new hkpBallSocketConstraintAtom();
+        public hkpSetLocalTranslationsConstraintAtom m_pivots { set; get; } = new();
+        public hkpSetupStabilizationAtom m_setupStabilization { set; get; } = new();
+        public hkpBallSocketConstraintAtom m_ballSocket { set; get; } = new();
 
         public virtual uint Signature => 0xc73dcaf9;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_pivots = new hkpSetLocalTranslationsConstraintAtom();
             m_pivots.Read(des, br);
-            m_setupStabilization = new hkpSetupStabilizationAtom();
             m_setupStabilization.Read(des, br);
-            m_ballSocket = new hkpBallSocketConstraintAtom();
             m_ballSocket.Read(des, br);
         }
 

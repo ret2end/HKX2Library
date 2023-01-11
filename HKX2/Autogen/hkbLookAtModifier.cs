@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -27,26 +29,26 @@ namespace HKX2
     // m_lookAtWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 224 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbLookAtModifier : hkbModifier
     {
-        public Vector4 m_targetWS;
-        public Vector4 m_headForwardLS;
-        public Vector4 m_neckForwardLS;
-        public Vector4 m_neckRightLS;
-        public Vector4 m_eyePositionHS;
-        public float m_newTargetGain;
-        public float m_onGain;
-        public float m_offGain;
-        public float m_limitAngleDegrees;
-        public float m_limitAngleLeft;
-        public float m_limitAngleRight;
-        public float m_limitAngleUp;
-        public float m_limitAngleDown;
-        public short m_headIndex;
-        public short m_neckIndex;
-        public bool m_isOn;
-        public bool m_individualLimitsOn;
-        public bool m_isTargetInsideLimitCone;
-        public Vector4 m_lookAtLastTargetWS;
-        public float m_lookAtWeight;
+        public Vector4 m_targetWS { set; get; } = default;
+        public Vector4 m_headForwardLS { set; get; } = default;
+        public Vector4 m_neckForwardLS { set; get; } = default;
+        public Vector4 m_neckRightLS { set; get; } = default;
+        public Vector4 m_eyePositionHS { set; get; } = default;
+        public float m_newTargetGain { set; get; } = default;
+        public float m_onGain { set; get; } = default;
+        public float m_offGain { set; get; } = default;
+        public float m_limitAngleDegrees { set; get; } = default;
+        public float m_limitAngleLeft { set; get; } = default;
+        public float m_limitAngleRight { set; get; } = default;
+        public float m_limitAngleUp { set; get; } = default;
+        public float m_limitAngleDown { set; get; } = default;
+        public short m_headIndex { set; get; } = default;
+        public short m_neckIndex { set; get; } = default;
+        public bool m_isOn { set; get; } = default;
+        public bool m_individualLimitsOn { set; get; } = default;
+        public bool m_isTargetInsideLimitCone { set; get; } = default;
+        private Vector4 m_lookAtLastTargetWS { set; get; } = default;
+        private float m_lookAtWeight { set; get; } = default;
 
         public override uint Signature => 0x3d28e066;
 
@@ -125,8 +127,6 @@ namespace HKX2
             m_isOn = xd.ReadBoolean(xe, nameof(m_isOn));
             m_individualLimitsOn = xd.ReadBoolean(xe, nameof(m_individualLimitsOn));
             m_isTargetInsideLimitCone = xd.ReadBoolean(xe, nameof(m_isTargetInsideLimitCone));
-            m_lookAtLastTargetWS = default;
-            m_lookAtWeight = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

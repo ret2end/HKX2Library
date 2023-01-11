@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_translation m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkQTransform : IHavokObject
     {
-        public Quaternion m_rotation;
-        public Vector4 m_translation;
+        public Quaternion m_rotation { set; get; } = default;
+        public Vector4 m_translation { set; get; } = default;
 
         public virtual uint Signature => 0x471a21ee;
 

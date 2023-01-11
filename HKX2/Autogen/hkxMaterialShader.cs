@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,12 +15,12 @@ namespace HKX2
     // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class hkxMaterialShader : hkReferencedObject
     {
-        public string m_name;
-        public byte m_type;
-        public string m_vertexEntryName;
-        public string m_geomEntryName;
-        public string m_pixelEntryName;
-        public List<byte> m_data;
+        public string m_name { set; get; } = "";
+        public byte m_type { set; get; } = default;
+        public string m_vertexEntryName { set; get; } = "";
+        public string m_geomEntryName { set; get; } = "";
+        public string m_pixelEntryName { set; get; } = "";
+        public IList<byte> m_data { set; get; } = new List<byte>();
 
         public override uint Signature => 0x28515eff;
 
@@ -38,7 +40,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.Position += 7;
             s.WriteStringPointer(bw, m_vertexEntryName);
             s.WriteStringPointer(bw, m_geomEntryName);

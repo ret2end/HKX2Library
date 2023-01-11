@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkxNodeSelectionSet : hkxAttributeHolder
     {
-        public List<hkxNode> m_selectedNodes = new List<hkxNode>();
-        public string m_name;
+        public IList<hkxNode> m_selectedNodes { set; get; } = new List<hkxNode>();
+        public string m_name { set; get; } = "";
 
         public override uint Signature => 0xd753fc4d;
 
@@ -24,7 +26,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkxNode>(bw, m_selectedNodes);
+            s.WriteClassPointerArray(bw, m_selectedNodes);
             s.WriteStringPointer(bw, m_name);
         }
 

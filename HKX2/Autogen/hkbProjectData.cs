@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_defaultEventMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 40 flags: FLAGS_NONE enum: EventMode
     public partial class hkbProjectData : hkReferencedObject
     {
-        public Vector4 m_worldUpWS;
-        public hkbProjectStringData m_stringData;
-        public sbyte m_defaultEventMode;
+        public Vector4 m_worldUpWS { set; get; } = default;
+        public hkbProjectStringData? m_stringData { set; get; } = default;
+        public sbyte m_defaultEventMode { set; get; } = default;
 
         public override uint Signature => 0x13a39ba7;
 
@@ -30,7 +32,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.WriteVector4(m_worldUpWS);
             s.WriteClassPointer(bw, m_stringData);
-            s.WriteSByte(bw, m_defaultEventMode);
+            bw.WriteSByte(m_defaultEventMode);
             bw.Position += 7;
         }
 

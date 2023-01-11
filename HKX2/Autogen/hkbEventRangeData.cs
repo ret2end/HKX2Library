@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_eventMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 24 flags: FLAGS_NONE enum: EventRangeMode
     public partial class hkbEventRangeData : IHavokObject
     {
-        public float m_upperBound;
-        public hkbEventProperty m_event = new hkbEventProperty();
-        public sbyte m_eventMode;
+        public float m_upperBound { set; get; } = default;
+        public hkbEventProperty m_event { set; get; } = new();
+        public sbyte m_eventMode { set; get; } = default;
 
         public virtual uint Signature => 0x6cb92c76;
 
@@ -19,7 +22,6 @@ namespace HKX2
         {
             m_upperBound = br.ReadSingle();
             br.Position += 4;
-            m_event = new hkbEventProperty();
             m_event.Read(des, br);
             m_eventMode = br.ReadSByte();
             br.Position += 7;
@@ -30,7 +32,7 @@ namespace HKX2
             bw.WriteSingle(m_upperBound);
             bw.Position += 4;
             m_event.Write(s, bw);
-            s.WriteSByte(bw, m_eventMode);
+            bw.WriteSByte(m_eventMode);
             bw.Position += 7;
         }
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_worldFromModelWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     public partial class hkbBlenderGeneratorChild : hkbBindable
     {
-        public hkbGenerator m_generator;
-        public hkbBoneWeightArray m_boneWeights;
-        public float m_weight;
-        public float m_worldFromModelWeight;
+        public hkbGenerator? m_generator { set; get; } = default;
+        public hkbBoneWeightArray? m_boneWeights { set; get; } = default;
+        public float m_weight { set; get; } = default;
+        public float m_worldFromModelWeight { set; get; } = default;
 
         public override uint Signature => 0xe2b384b0;
 

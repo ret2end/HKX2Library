@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_constraintData m_class: hkpConstraintData Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: NOT_OWNED|FLAGS_NONE enum: 
     public partial class hkpBridgeConstraintAtom : hkpConstraintAtom
     {
-        public dynamic m_buildJacobianFunc;
-        public hkpConstraintData m_constraintData;
+        private object? m_buildJacobianFunc { set; get; } = default;
+        public hkpConstraintData? m_constraintData { set; get; } = default;
 
         public override uint Signature => 0x87a4f31b;
 
@@ -32,7 +35,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_buildJacobianFunc = default;
             m_constraintData = xd.ReadClassPointer<hkpConstraintData>(xe, nameof(m_constraintData));
         }
 

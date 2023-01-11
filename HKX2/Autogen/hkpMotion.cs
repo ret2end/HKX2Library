@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -20,18 +21,18 @@ namespace HKX2
     // m_gravityFactor m_class:  Type.TYPE_HALF Type.TYPE_VOID arrSize: 0 offset: 306 flags: FLAGS_NONE enum: 
     public partial class hkpMotion : hkReferencedObject
     {
-        public byte m_type;
-        public byte m_deactivationIntegrateCounter;
+        public byte m_type { set; get; } = default;
+        public byte m_deactivationIntegrateCounter { set; get; } = default;
         public ushort[] m_deactivationNumInactiveFrames = new ushort[2];
-        public hkMotionState m_motionState = new hkMotionState();
-        public Vector4 m_inertiaAndMassInv;
-        public Vector4 m_linearVelocity;
-        public Vector4 m_angularVelocity;
+        public hkMotionState m_motionState { set; get; } = new();
+        public Vector4 m_inertiaAndMassInv { set; get; } = default;
+        public Vector4 m_linearVelocity { set; get; } = default;
+        public Vector4 m_angularVelocity { set; get; } = default;
         public Vector4[] m_deactivationRefPosition = new Vector4[2];
         public uint[] m_deactivationRefOrientation = new uint[2];
-        public hkpMaxSizeMotion m_savedMotion;
-        public ushort m_savedQualityTypeIndex;
-        public Half m_gravityFactor;
+        public hkpMaxSizeMotion? m_savedMotion { set; get; } = default;
+        public ushort m_savedQualityTypeIndex { set; get; } = default;
+        public Half m_gravityFactor { set; get; } = default;
 
         public override uint Signature => 0x98aadb4f;
 
@@ -42,7 +43,6 @@ namespace HKX2
             m_deactivationIntegrateCounter = br.ReadByte();
             m_deactivationNumInactiveFrames = des.ReadUInt16CStyleArray(br, 2);
             br.Position += 10;
-            m_motionState = new hkMotionState();
             m_motionState.Read(des, br);
             m_inertiaAndMassInv = br.ReadVector4();
             m_linearVelocity = br.ReadVector4();
@@ -58,7 +58,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.WriteByte(m_deactivationIntegrateCounter);
             s.WriteUInt16CStyleArray(bw, m_deactivationNumInactiveFrames);
             bw.Position += 10;

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_speedOut m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
     public partial class BSSpeedSamplerModifier : hkbModifier
     {
-        public int m_state;
-        public float m_direction;
-        public float m_goalSpeed;
-        public float m_speedOut;
+        public int m_state { set; get; } = default;
+        public float m_direction { set; get; } = default;
+        public float m_goalSpeed { set; get; } = default;
+        public float m_speedOut { set; get; } = default;
 
         public override uint Signature => 0xd297fda9;
 

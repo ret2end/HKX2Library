@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,18 +14,17 @@ namespace HKX2
     // m_cfm m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     public partial class hkpStiffSpringChainData : hkpConstraintChainData
     {
-        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
-        public List<hkpStiffSpringChainDataConstraintInfo> m_infos = new List<hkpStiffSpringChainDataConstraintInfo>();
-        public float m_tau;
-        public float m_damping;
-        public float m_cfm;
+        public hkpBridgeAtoms m_atoms { set; get; } = new();
+        public IList<hkpStiffSpringChainDataConstraintInfo> m_infos { set; get; } = new List<hkpStiffSpringChainDataConstraintInfo>();
+        public float m_tau { set; get; } = default;
+        public float m_damping { set; get; } = default;
+        public float m_cfm { set; get; } = default;
 
         public override uint Signature => 0xf170356b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_atoms = new hkpBridgeAtoms();
             m_atoms.Read(des, br);
             m_infos = des.ReadClassArray<hkpStiffSpringChainDataConstraintInfo>(br);
             m_tau = br.ReadSingle();
@@ -36,7 +37,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             m_atoms.Write(s, bw);
-            s.WriteClassArray<hkpStiffSpringChainDataConstraintInfo>(bw, m_infos);
+            s.WriteClassArray(bw, m_infos);
             bw.WriteSingle(m_tau);
             bw.WriteSingle(m_damping);
             bw.WriteSingle(m_cfm);

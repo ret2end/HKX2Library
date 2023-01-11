@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,13 +16,13 @@ namespace HKX2
     // m_motor m_class: hkpConstraintMotor Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpAngMotorConstraintAtom : hkpConstraintAtom
     {
-        public bool m_isEnabled;
-        public byte m_motorAxis;
-        public short m_initializedOffset;
-        public short m_previousTargetAngleOffset;
-        public short m_correspondingAngLimitSolverResultOffset;
-        public float m_targetAngle;
-        public hkpConstraintMotor m_motor;
+        public bool m_isEnabled { set; get; } = default;
+        public byte m_motorAxis { set; get; } = default;
+        public short m_initializedOffset { set; get; } = default;
+        public short m_previousTargetAngleOffset { set; get; } = default;
+        public short m_correspondingAngLimitSolverResultOffset { set; get; } = default;
+        public float m_targetAngle { set; get; } = default;
+        public hkpConstraintMotor? m_motor { set; get; } = default;
 
         public override uint Signature => 0x81f087ff;
 

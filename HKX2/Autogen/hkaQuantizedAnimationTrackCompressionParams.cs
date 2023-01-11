@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_floatingTolerance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkaQuantizedAnimationTrackCompressionParams : IHavokObject
     {
-        public float m_rotationTolerance;
-        public float m_translationTolerance;
-        public float m_scaleTolerance;
-        public float m_floatingTolerance;
+        public float m_rotationTolerance { set; get; } = default;
+        public float m_translationTolerance { set; get; } = default;
+        public float m_scaleTolerance { set; get; } = default;
+        public float m_floatingTolerance { set; get; } = default;
 
         public virtual uint Signature => 0xf7d64649;
 

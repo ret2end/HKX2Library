@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_internalExpressionsData m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbEvaluateExpressionModifier : hkbModifier
     {
-        public hkbExpressionDataArray m_expressions;
-        public dynamic m_compiledExpressionSet;
-        public List<dynamic> m_internalExpressionsData;
+        public hkbExpressionDataArray? m_expressions { set; get; } = default;
+        private object? m_compiledExpressionSet { set; get; } = default;
+        public IList<object> m_internalExpressionsData { set; get; } = new List<object>();
 
         public override uint Signature => 0xf900f6be;
 
@@ -36,8 +38,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_expressions = xd.ReadClassPointer<hkbExpressionDataArray>(xe, nameof(m_expressions));
-            m_compiledExpressionSet = default;
-            m_internalExpressionsData = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

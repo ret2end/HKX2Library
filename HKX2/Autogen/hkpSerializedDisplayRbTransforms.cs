@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_transforms m_class: hkpSerializedDisplayRbTransformsDisplayTransformPair Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpSerializedDisplayRbTransforms : hkReferencedObject
     {
-        public List<hkpSerializedDisplayRbTransformsDisplayTransformPair> m_transforms = new List<hkpSerializedDisplayRbTransformsDisplayTransformPair>();
+        public IList<hkpSerializedDisplayRbTransformsDisplayTransformPair> m_transforms { set; get; } = new List<hkpSerializedDisplayRbTransformsDisplayTransformPair>();
 
         public override uint Signature => 0xc18650ac;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkpSerializedDisplayRbTransformsDisplayTransformPair>(bw, m_transforms);
+            s.WriteClassArray(bw, m_transforms);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

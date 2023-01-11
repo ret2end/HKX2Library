@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT32 arrSize: 0 offset: 24 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpShape : hkReferencedObject
     {
-        public ulong m_userData;
-        public uint m_type;
+        public ulong m_userData { set; get; } = default;
+        private uint m_type { set; get; } = default;
 
         public override uint Signature => 0x666490a1;
 
@@ -25,7 +28,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             bw.WriteUInt64(m_userData);
-            s.WriteUInt32(bw, m_type);
+            bw.WriteUInt32(m_type);
             bw.Position += 4;
         }
 
@@ -33,7 +36,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_userData = xd.ReadUInt64(xe, nameof(m_userData));
-            m_type = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

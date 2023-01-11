@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_entities m_class: hkpEntity Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpArrayAction : hkpAction
     {
-        public List<hkpEntity> m_entities = new List<hkpEntity>();
+        public IList<hkpEntity> m_entities { set; get; } = new List<hkpEntity>();
 
         public override uint Signature => 0x674bcd2d;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpEntity>(bw, m_entities);
+            s.WriteClassPointerArray(bw, m_entities);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

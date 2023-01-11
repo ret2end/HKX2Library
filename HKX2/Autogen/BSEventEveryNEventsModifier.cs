@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,22 +16,20 @@ namespace HKX2
     // m_calculatedNumberOfEventsBeforeSend m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSEventEveryNEventsModifier : hkbModifier
     {
-        public hkbEventProperty m_eventToCheckFor = new hkbEventProperty();
-        public hkbEventProperty m_eventToSend = new hkbEventProperty();
-        public sbyte m_numberOfEventsBeforeSend;
-        public sbyte m_minimumNumberOfEventsBeforeSend;
-        public bool m_randomizeNumberOfEvents;
-        public int m_numberOfEventsSeen;
-        public sbyte m_calculatedNumberOfEventsBeforeSend;
+        public hkbEventProperty m_eventToCheckFor { set; get; } = new();
+        public hkbEventProperty m_eventToSend { set; get; } = new();
+        public sbyte m_numberOfEventsBeforeSend { set; get; } = default;
+        public sbyte m_minimumNumberOfEventsBeforeSend { set; get; } = default;
+        public bool m_randomizeNumberOfEvents { set; get; } = default;
+        private int m_numberOfEventsSeen { set; get; } = default;
+        private sbyte m_calculatedNumberOfEventsBeforeSend { set; get; } = default;
 
         public override uint Signature => 0x6030970c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_eventToCheckFor = new hkbEventProperty();
             m_eventToCheckFor.Read(des, br);
-            m_eventToSend = new hkbEventProperty();
             m_eventToSend.Read(des, br);
             m_numberOfEventsBeforeSend = br.ReadSByte();
             m_minimumNumberOfEventsBeforeSend = br.ReadSByte();
@@ -61,8 +62,6 @@ namespace HKX2
             m_numberOfEventsBeforeSend = xd.ReadSByte(xe, nameof(m_numberOfEventsBeforeSend));
             m_minimumNumberOfEventsBeforeSend = xd.ReadSByte(xe, nameof(m_minimumNumberOfEventsBeforeSend));
             m_randomizeNumberOfEvents = xd.ReadBoolean(xe, nameof(m_randomizeNumberOfEvents));
-            m_numberOfEventsSeen = default;
-            m_calculatedNumberOfEventsBeforeSend = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

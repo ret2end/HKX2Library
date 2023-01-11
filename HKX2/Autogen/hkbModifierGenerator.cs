@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_generator m_class: hkbGenerator Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbModifierGenerator : hkbGenerator
     {
-        public hkbModifier m_modifier;
-        public hkbGenerator m_generator;
+        public hkbModifier? m_modifier { set; get; } = default;
+        public hkbGenerator? m_generator { set; get; } = default;
 
         public override uint Signature => 0x1f81fae6;
 

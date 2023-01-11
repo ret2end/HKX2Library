@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,31 +16,24 @@ namespace HKX2
     // m_linLimit m_class: hkpLinLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 188 flags: FLAGS_NONE enum: 
     public partial class hkpPrismaticConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_transforms = new hkpSetLocalTransformsConstraintAtom();
-        public hkpLinMotorConstraintAtom m_motor = new hkpLinMotorConstraintAtom();
-        public hkpLinFrictionConstraintAtom m_friction = new hkpLinFrictionConstraintAtom();
-        public hkpAngConstraintAtom m_ang = new hkpAngConstraintAtom();
-        public hkpLinConstraintAtom m_lin0 = new hkpLinConstraintAtom();
-        public hkpLinConstraintAtom m_lin1 = new hkpLinConstraintAtom();
-        public hkpLinLimitConstraintAtom m_linLimit = new hkpLinLimitConstraintAtom();
+        public hkpSetLocalTransformsConstraintAtom m_transforms { set; get; } = new();
+        public hkpLinMotorConstraintAtom m_motor { set; get; } = new();
+        public hkpLinFrictionConstraintAtom m_friction { set; get; } = new();
+        public hkpAngConstraintAtom m_ang { set; get; } = new();
+        public hkpLinConstraintAtom m_lin0 { set; get; } = new();
+        public hkpLinConstraintAtom m_lin1 { set; get; } = new();
+        public hkpLinLimitConstraintAtom m_linLimit { set; get; } = new();
 
         public virtual uint Signature => 0x7f516137;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_transforms = new hkpSetLocalTransformsConstraintAtom();
             m_transforms.Read(des, br);
-            m_motor = new hkpLinMotorConstraintAtom();
             m_motor.Read(des, br);
-            m_friction = new hkpLinFrictionConstraintAtom();
             m_friction.Read(des, br);
-            m_ang = new hkpAngConstraintAtom();
             m_ang.Read(des, br);
-            m_lin0 = new hkpLinConstraintAtom();
             m_lin0.Read(des, br);
-            m_lin1 = new hkpLinConstraintAtom();
             m_lin1.Read(des, br);
-            m_linLimit = new hkpLinLimitConstraintAtom();
             m_linLimit.Read(des, br);
             br.Position += 8;
         }

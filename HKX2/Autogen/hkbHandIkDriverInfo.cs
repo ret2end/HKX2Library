@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_fadeInOutCurve m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: BlendCurve
     public partial class hkbHandIkDriverInfo : hkReferencedObject
     {
-        public List<hkbHandIkDriverInfoHand> m_hands = new List<hkbHandIkDriverInfoHand>();
-        public sbyte m_fadeInOutCurve;
+        public IList<hkbHandIkDriverInfoHand> m_hands { set; get; } = new List<hkbHandIkDriverInfoHand>();
+        public sbyte m_fadeInOutCurve { set; get; } = default;
 
         public override uint Signature => 0xc299090a;
 
@@ -25,8 +27,8 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbHandIkDriverInfoHand>(bw, m_hands);
-            s.WriteSByte(bw, m_fadeInOutCurve);
+            s.WriteClassArray(bw, m_hands);
+            bw.WriteSByte(m_fadeInOutCurve);
             bw.Position += 7;
         }
 

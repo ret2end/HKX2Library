@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: MotorType
     public partial class hkpConstraintMotor : hkReferencedObject
     {
-        public sbyte m_type;
+        public sbyte m_type { set; get; } = default;
 
         public override uint Signature => 0x6a44c317;
 
@@ -21,7 +24,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteSByte(bw, m_type);
+            bw.WriteSByte(m_type);
             bw.Position += 7;
         }
 

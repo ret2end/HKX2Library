@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_translationB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpSetLocalTranslationsConstraintAtom : hkpConstraintAtom
     {
-        public Vector4 m_translationA;
-        public Vector4 m_translationB;
+        public Vector4 m_translationA { set; get; } = default;
+        public Vector4 m_translationB { set; get; } = default;
 
         public override uint Signature => 0x5cbfcf4a;
 

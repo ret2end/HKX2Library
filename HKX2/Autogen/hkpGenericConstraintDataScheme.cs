@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,17 +14,16 @@ namespace HKX2
     // m_motors m_class: hkpConstraintMotor Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpGenericConstraintDataScheme : IHavokObject
     {
-        public hkpGenericConstraintDataSchemeConstraintInfo m_info = new hkpGenericConstraintDataSchemeConstraintInfo();
-        public List<Vector4> m_data;
-        public List<int> m_commands;
-        public List<dynamic> m_modifiers = new List<dynamic>();
-        public List<hkpConstraintMotor> m_motors = new List<hkpConstraintMotor>();
+        public hkpGenericConstraintDataSchemeConstraintInfo m_info { set; get; } = new();
+        public IList<Vector4> m_data { set; get; } = new List<Vector4>();
+        public IList<int> m_commands { set; get; } = new List<int>();
+        public IList<object> m_modifiers { set; get; } = new List<object>();
+        public IList<hkpConstraintMotor> m_motors { set; get; } = new List<hkpConstraintMotor>();
 
         public virtual uint Signature => 0x11fd6f6c;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_info = new hkpGenericConstraintDataSchemeConstraintInfo();
             m_info.Read(des, br);
             m_data = des.ReadVector4Array(br);
             m_commands = des.ReadInt32Array(br);
@@ -37,15 +37,13 @@ namespace HKX2
             s.WriteVector4Array(bw, m_data);
             s.WriteInt32Array(bw, m_commands);
             s.WriteVoidArray(bw);
-            s.WriteClassPointerArray<hkpConstraintMotor>(bw, m_motors);
+            s.WriteClassPointerArray(bw, m_motors);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_info = new hkpGenericConstraintDataSchemeConstraintInfo();
             m_data = xd.ReadVector4Array(xe, nameof(m_data));
             m_commands = xd.ReadInt32Array(xe, nameof(m_commands));
-            m_modifiers = default;
             m_motors = xd.ReadClassPointerArray<hkpConstraintMotor>(xe, nameof(m_motors));
         }
 

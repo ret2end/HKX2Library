@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_value m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkxEnvironmentVariable : IHavokObject
     {
-        public string m_name;
-        public string m_value;
+        public string m_name { set; get; } = "";
+        public string m_value { set; get; } = "";
 
         public virtual uint Signature => 0xa6815115;
 

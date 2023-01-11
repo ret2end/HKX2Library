@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,12 +15,12 @@ namespace HKX2
     // m_perpendicular2 m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkpCylinderShape : hkpConvexShape
     {
-        public float m_cylRadius;
-        public float m_cylBaseRadiusFactorForHeightFieldCollisions;
-        public Vector4 m_vertexA;
-        public Vector4 m_vertexB;
-        public Vector4 m_perpendicular1;
-        public Vector4 m_perpendicular2;
+        public float m_cylRadius { set; get; } = default;
+        public float m_cylBaseRadiusFactorForHeightFieldCollisions { set; get; } = default;
+        public Vector4 m_vertexA { set; get; } = default;
+        public Vector4 m_vertexB { set; get; } = default;
+        public Vector4 m_perpendicular1 { set; get; } = default;
+        public Vector4 m_perpendicular2 { set; get; } = default;
 
         public override uint Signature => 0x3e463c3a;
 

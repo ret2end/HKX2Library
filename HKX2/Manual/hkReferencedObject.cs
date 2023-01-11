@@ -10,8 +10,8 @@ namespace HKX2
     public partial class hkReferencedObject : hkBaseObject
     {
 
-        public ushort m_memSizeAndFlags;
-        public short m_referenceCount;
+        public ushort m_memSizeAndFlags { set; get; } = default;
+        public short m_referenceCount { set; get; } = default;
 
         public override uint Signature => 0x3b1c1113;
 

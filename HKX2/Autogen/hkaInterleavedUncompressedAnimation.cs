@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -10,8 +11,8 @@ namespace HKX2
     // m_floats m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     public partial class hkaInterleavedUncompressedAnimation : hkaAnimation
     {
-        public List<Matrix4x4> m_transforms;
-        public List<float> m_floats;
+        public IList<Matrix4x4> m_transforms { set; get; } = new List<Matrix4x4>();
+        public IList<float> m_floats { set; get; } = new List<float>();
 
         public override uint Signature => 0x930af031;
 

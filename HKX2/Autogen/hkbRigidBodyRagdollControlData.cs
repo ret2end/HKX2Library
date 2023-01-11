@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,14 +11,13 @@ namespace HKX2
     // m_durationToBlend m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkbRigidBodyRagdollControlData : IHavokObject
     {
-        public hkaKeyFrameHierarchyUtilityControlData m_keyFrameHierarchyControlData = new hkaKeyFrameHierarchyUtilityControlData();
-        public float m_durationToBlend;
+        public hkaKeyFrameHierarchyUtilityControlData m_keyFrameHierarchyControlData { set; get; } = new();
+        public float m_durationToBlend { set; get; } = default;
 
         public virtual uint Signature => 0x1e0bc068;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_keyFrameHierarchyControlData = new hkaKeyFrameHierarchyUtilityControlData();
             m_keyFrameHierarchyControlData.Read(des, br);
             m_durationToBlend = br.ReadSingle();
             br.Position += 12;

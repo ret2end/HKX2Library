@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_currentGeneratorIndex m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 89 flags: FLAGS_NONE enum: 
     public partial class hkbManualSelectorGenerator : hkbGenerator
     {
-        public List<hkbGenerator> m_generators = new List<hkbGenerator>();
-        public sbyte m_selectedGeneratorIndex;
-        public sbyte m_currentGeneratorIndex;
+        public IList<hkbGenerator> m_generators { set; get; } = new List<hkbGenerator>();
+        public sbyte m_selectedGeneratorIndex { set; get; } = default;
+        public sbyte m_currentGeneratorIndex { set; get; } = default;
 
         public override uint Signature => 0xd932fab8;
 
@@ -28,7 +30,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkbGenerator>(bw, m_generators);
+            s.WriteClassPointerArray(bw, m_generators);
             bw.WriteSByte(m_selectedGeneratorIndex);
             bw.WriteSByte(m_currentGeneratorIndex);
             bw.Position += 6;

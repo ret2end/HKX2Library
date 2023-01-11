@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_numConstrainedAxes m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags: FLAGS_NONE enum: 
     public partial class hkpAngConstraintAtom : hkpConstraintAtom
     {
-        public byte m_firstConstrainedAxis;
-        public byte m_numConstrainedAxes;
+        public byte m_firstConstrainedAxis { set; get; } = default;
+        public byte m_numConstrainedAxes { set; get; } = default;
 
         public override uint Signature => 0x35bb3cd0;
 

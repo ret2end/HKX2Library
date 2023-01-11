@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,12 +15,12 @@ namespace HKX2
     // m_global m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 49 flags: FLAGS_NONE enum: 
     public partial class hkbSetWordVariableCommand : hkReferencedObject
     {
-        public Vector4 m_quadValue;
-        public ulong m_characterId;
-        public int m_variableId;
-        public hkbVariableValue m_value = new hkbVariableValue();
-        public byte m_type;
-        public bool m_global;
+        public Vector4 m_quadValue { set; get; } = default;
+        public ulong m_characterId { set; get; } = default;
+        public int m_variableId { set; get; } = default;
+        public hkbVariableValue m_value { set; get; } = new();
+        public byte m_type { set; get; } = default;
+        public bool m_global { set; get; } = default;
 
         public override uint Signature => 0xf3ae5fca;
 
@@ -28,7 +30,6 @@ namespace HKX2
             m_quadValue = br.ReadVector4();
             m_characterId = br.ReadUInt64();
             m_variableId = br.ReadInt32();
-            m_value = new hkbVariableValue();
             m_value.Read(des, br);
             m_type = br.ReadByte();
             m_global = br.ReadBoolean();
@@ -42,7 +43,7 @@ namespace HKX2
             bw.WriteUInt64(m_characterId);
             bw.WriteInt32(m_variableId);
             m_value.Write(s, bw);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.WriteBoolean(m_global);
             bw.Position += 14;
         }

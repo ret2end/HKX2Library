@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +13,9 @@ namespace HKX2
     // m_padding m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 12 offset: 61 flags: FLAGS_NONE enum: 
     public partial class hkpTriSampledHeightFieldBvTreeShape : hkpBvTreeShape
     {
-        public hkpSingleShapeContainer m_childContainer = new hkpSingleShapeContainer();
-        public int m_childSize;
-        public bool m_wantAabbRejectionTest;
+        public hkpSingleShapeContainer m_childContainer { set; get; } = new();
+        private int m_childSize { set; get; } = default;
+        public bool m_wantAabbRejectionTest { set; get; } = default;
         public byte[] m_padding = new byte[12];
 
         public override uint Signature => 0x58e1e585;
@@ -20,7 +23,6 @@ namespace HKX2
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_childContainer = new hkpSingleShapeContainer();
             m_childContainer.Read(des, br);
             m_childSize = br.ReadInt32();
             m_wantAabbRejectionTest = br.ReadBoolean();
@@ -42,7 +44,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_childContainer = xd.ReadClass<hkpSingleShapeContainer>(xe, nameof(m_childContainer));
-            m_childSize = default;
             m_wantAabbRejectionTest = xd.ReadBoolean(xe, nameof(m_wantAabbRejectionTest));
             m_padding = xd.ReadByteCStyleArray(xe, nameof(m_padding), 12);
         }

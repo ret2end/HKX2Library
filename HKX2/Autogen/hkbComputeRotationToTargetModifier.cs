@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,13 +16,13 @@ namespace HKX2
     // m_resultIsDelta m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
     public partial class hkbComputeRotationToTargetModifier : hkbModifier
     {
-        public Quaternion m_rotationOut;
-        public Vector4 m_targetPosition;
-        public Vector4 m_currentPosition;
-        public Quaternion m_currentRotation;
-        public Vector4 m_localAxisOfRotation;
-        public Vector4 m_localFacingDirection;
-        public bool m_resultIsDelta;
+        public Quaternion m_rotationOut { set; get; } = default;
+        public Vector4 m_targetPosition { set; get; } = default;
+        public Vector4 m_currentPosition { set; get; } = default;
+        public Quaternion m_currentRotation { set; get; } = default;
+        public Vector4 m_localAxisOfRotation { set; get; } = default;
+        public Vector4 m_localFacingDirection { set; get; } = default;
+        public bool m_resultIsDelta { set; get; } = default;
 
         public override uint Signature => 0x47665f1c;
 

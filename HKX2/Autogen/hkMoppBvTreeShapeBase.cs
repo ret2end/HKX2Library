@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_codeInfoCopy m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkMoppBvTreeShapeBase : hkpBvTreeShape
     {
-        public hkpMoppCode m_code;
-        public dynamic m_moppData;
-        public uint m_moppDataSize;
-        public Vector4 m_codeInfoCopy;
+        public hkpMoppCode? m_code { set; get; } = default;
+        private object? m_moppData { set; get; } = default;
+        private uint m_moppDataSize { set; get; } = default;
+        private Vector4 m_codeInfoCopy { set; get; } = default;
 
         public override uint Signature => 0x7c338c66;
 
@@ -42,9 +44,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_code = xd.ReadClassPointer<hkpMoppCode>(xe, nameof(m_code));
-            m_moppData = default;
-            m_moppDataSize = default;
-            m_codeInfoCopy = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

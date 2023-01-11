@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,13 +16,13 @@ namespace HKX2
     // m_isReturnToPreviousState m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineActiveTransitionInfo : IHavokObject
     {
-        public dynamic m_transitionEffect;
-        public hkbNodeInternalStateInfo m_transitionEffectInternalStateInfo;
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReference = new hkbStateMachineTransitionInfoReference();
-        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE = new hkbStateMachineTransitionInfoReference();
-        public int m_fromStateId;
-        public int m_toStateId;
-        public bool m_isReturnToPreviousState;
+        private object? m_transitionEffect { set; get; } = default;
+        public hkbNodeInternalStateInfo? m_transitionEffectInternalStateInfo { set; get; } = default;
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReference { set; get; } = new();
+        public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE { set; get; } = new();
+        public int m_fromStateId { set; get; } = default;
+        public int m_toStateId { set; get; } = default;
+        public bool m_isReturnToPreviousState { set; get; } = default;
 
         public virtual uint Signature => 0xbb90d54f;
 
@@ -27,9 +30,7 @@ namespace HKX2
         {
             des.ReadEmptyPointer(br);
             m_transitionEffectInternalStateInfo = des.ReadClassPointer<hkbNodeInternalStateInfo>(br);
-            m_transitionInfoReference = new hkbStateMachineTransitionInfoReference();
             m_transitionInfoReference.Read(des, br);
-            m_transitionInfoReferenceForTE = new hkbStateMachineTransitionInfoReference();
             m_transitionInfoReferenceForTE.Read(des, br);
             m_fromStateId = br.ReadInt32();
             m_toStateId = br.ReadInt32();
@@ -51,7 +52,6 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_transitionEffect = default;
             m_transitionEffectInternalStateInfo = xd.ReadClassPointer<hkbNodeInternalStateInfo>(xe, nameof(m_transitionEffectInternalStateInfo));
             m_transitionInfoReference = xd.ReadClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReference));
             m_transitionInfoReferenceForTE = xd.ReadClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReferenceForTE));

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_bvTreeType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: BvTreeType
     public partial class hkpBvTreeShape : hkpShape
     {
-        public byte m_bvTreeType;
+        public byte m_bvTreeType { set; get; } = default;
 
         public override uint Signature => 0xa823d623;
 
@@ -21,7 +24,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_bvTreeType);
+            bw.WriteByte(m_bvTreeType);
             bw.Position += 7;
         }
 

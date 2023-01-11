@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,12 +15,12 @@ namespace HKX2
     // m_endAFromBTransform m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkaSkeletonMapperDataChainMapping : IHavokObject
     {
-        public short m_startBoneA;
-        public short m_endBoneA;
-        public short m_startBoneB;
-        public short m_endBoneB;
-        public Matrix4x4 m_startAFromBTransform;
-        public Matrix4x4 m_endAFromBTransform;
+        public short m_startBoneA { set; get; } = default;
+        public short m_endBoneA { set; get; } = default;
+        public short m_startBoneB { set; get; } = default;
+        public short m_endBoneB { set; get; } = default;
+        public Matrix4x4 m_startAFromBTransform { set; get; } = default;
+        public Matrix4x4 m_endAFromBTransform { set; get; } = default;
 
         public virtual uint Signature => 0xa528f7cf;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_data m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkpPropertyValue : IHavokObject
     {
-        public ulong m_data;
+        public ulong m_data { set; get; } = default;
 
         public virtual uint Signature => 0xc75925aa;
 

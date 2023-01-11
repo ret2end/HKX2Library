@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_aabbHalfExtents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpPlaneShape : hkpHeightFieldShape
     {
-        public Vector4 m_plane;
-        public Vector4 m_aabbCenter;
-        public Vector4 m_aabbHalfExtents;
+        public Vector4 m_plane { set; get; } = default;
+        public Vector4 m_aabbCenter { set; get; } = default;
+        public Vector4 m_aabbHalfExtents { set; get; } = default;
 
         public override uint Signature => 0xc36bbd30;
 

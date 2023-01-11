@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,13 +16,13 @@ namespace HKX2
     // m_extrusion m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkpTriangleShape : hkpConvexShape
     {
-        public ushort m_weldingInfo;
-        public byte m_weldingType;
-        public byte m_isExtruded;
-        public Vector4 m_vertexA;
-        public Vector4 m_vertexB;
-        public Vector4 m_vertexC;
-        public Vector4 m_extrusion;
+        public ushort m_weldingInfo { set; get; } = default;
+        public byte m_weldingType { set; get; } = default;
+        public byte m_isExtruded { set; get; } = default;
+        public Vector4 m_vertexA { set; get; } = default;
+        public Vector4 m_vertexB { set; get; } = default;
+        public Vector4 m_vertexC { set; get; } = default;
+        public Vector4 m_extrusion { set; get; } = default;
 
         public override uint Signature => 0x95ad1a25;
 
@@ -41,7 +43,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             bw.WriteUInt16(m_weldingInfo);
-            s.WriteByte(bw, m_weldingType);
+            bw.WriteByte(m_weldingType);
             bw.WriteByte(m_isExtruded);
             bw.Position += 4;
             bw.WriteVector4(m_vertexA);

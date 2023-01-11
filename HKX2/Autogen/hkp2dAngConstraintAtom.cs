@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_freeRotationAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
     public partial class hkp2dAngConstraintAtom : hkpConstraintAtom
     {
-        public byte m_freeRotationAxis;
+        public byte m_freeRotationAxis { set; get; } = default;
 
         public override uint Signature => 0xdcdb8b8b;
 

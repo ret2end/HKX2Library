@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -20,19 +22,19 @@ namespace HKX2
     // m_ankleIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkDriverInfoLeg : IHavokObject
     {
-        public Quaternion m_prevAnkleRotLS;
-        public Vector4 m_kneeAxisLS;
-        public Vector4 m_footEndLS;
-        public float m_footPlantedAnkleHeightMS;
-        public float m_footRaisedAnkleHeightMS;
-        public float m_maxAnkleHeightMS;
-        public float m_minAnkleHeightMS;
-        public float m_maxKneeAngleDegrees;
-        public float m_minKneeAngleDegrees;
-        public float m_maxAnkleAngleDegrees;
-        public short m_hipIndex;
-        public short m_kneeIndex;
-        public short m_ankleIndex;
+        private Quaternion m_prevAnkleRotLS { set; get; } = default;
+        public Vector4 m_kneeAxisLS { set; get; } = default;
+        public Vector4 m_footEndLS { set; get; } = default;
+        public float m_footPlantedAnkleHeightMS { set; get; } = default;
+        public float m_footRaisedAnkleHeightMS { set; get; } = default;
+        public float m_maxAnkleHeightMS { set; get; } = default;
+        public float m_minAnkleHeightMS { set; get; } = default;
+        public float m_maxKneeAngleDegrees { set; get; } = default;
+        public float m_minKneeAngleDegrees { set; get; } = default;
+        public float m_maxAnkleAngleDegrees { set; get; } = default;
+        public short m_hipIndex { set; get; } = default;
+        public short m_kneeIndex { set; get; } = default;
+        public short m_ankleIndex { set; get; } = default;
 
         public virtual uint Signature => 0x224b18d1;
 
@@ -74,7 +76,6 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_prevAnkleRotLS = default;
             m_kneeAxisLS = xd.ReadVector4(xe, nameof(m_kneeAxisLS));
             m_footEndLS = xd.ReadVector4(xe, nameof(m_footEndLS));
             m_footPlantedAnkleHeightMS = xd.ReadSingle(xe, nameof(m_footPlantedAnkleHeightMS));

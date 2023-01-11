@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,25 +28,25 @@ namespace HKX2
     // m_isOriginalAnkleTransformMSSet m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkModifierLeg : IHavokObject
     {
-        public Matrix4x4 m_originalAnkleTransformMS;
-        public Quaternion m_prevAnkleRotLS;
-        public Vector4 m_kneeAxisLS;
-        public Vector4 m_footEndLS;
-        public hkbEventProperty m_ungroundedEvent = new hkbEventProperty();
-        public float m_footPlantedAnkleHeightMS;
-        public float m_footRaisedAnkleHeightMS;
-        public float m_maxAnkleHeightMS;
-        public float m_minAnkleHeightMS;
-        public float m_maxKneeAngleDegrees;
-        public float m_minKneeAngleDegrees;
-        public float m_verticalError;
-        public float m_maxAnkleAngleDegrees;
-        public short m_hipIndex;
-        public short m_kneeIndex;
-        public short m_ankleIndex;
-        public bool m_hitSomething;
-        public bool m_isPlantedMS;
-        public bool m_isOriginalAnkleTransformMSSet;
+        public Matrix4x4 m_originalAnkleTransformMS { set; get; } = default;
+        private Quaternion m_prevAnkleRotLS { set; get; } = default;
+        public Vector4 m_kneeAxisLS { set; get; } = default;
+        public Vector4 m_footEndLS { set; get; } = default;
+        public hkbEventProperty m_ungroundedEvent { set; get; } = new();
+        public float m_footPlantedAnkleHeightMS { set; get; } = default;
+        public float m_footRaisedAnkleHeightMS { set; get; } = default;
+        public float m_maxAnkleHeightMS { set; get; } = default;
+        public float m_minAnkleHeightMS { set; get; } = default;
+        public float m_maxKneeAngleDegrees { set; get; } = default;
+        public float m_minKneeAngleDegrees { set; get; } = default;
+        public float m_verticalError { set; get; } = default;
+        public float m_maxAnkleAngleDegrees { set; get; } = default;
+        public short m_hipIndex { set; get; } = default;
+        public short m_kneeIndex { set; get; } = default;
+        public short m_ankleIndex { set; get; } = default;
+        public bool m_hitSomething { set; get; } = default;
+        public bool m_isPlantedMS { set; get; } = default;
+        public bool m_isOriginalAnkleTransformMSSet { set; get; } = default;
 
         public virtual uint Signature => 0x9f3e3a04;
 
@@ -54,7 +56,6 @@ namespace HKX2
             m_prevAnkleRotLS = des.ReadQuaternion(br);
             m_kneeAxisLS = br.ReadVector4();
             m_footEndLS = br.ReadVector4();
-            m_ungroundedEvent = new hkbEventProperty();
             m_ungroundedEvent.Read(des, br);
             m_footPlantedAnkleHeightMS = br.ReadSingle();
             m_footRaisedAnkleHeightMS = br.ReadSingle();
@@ -100,7 +101,6 @@ namespace HKX2
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
             m_originalAnkleTransformMS = xd.ReadQSTransform(xe, nameof(m_originalAnkleTransformMS));
-            m_prevAnkleRotLS = default;
             m_kneeAxisLS = xd.ReadVector4(xe, nameof(m_kneeAxisLS));
             m_footEndLS = xd.ReadVector4(xe, nameof(m_footEndLS));
             m_ungroundedEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_ungroundedEvent));

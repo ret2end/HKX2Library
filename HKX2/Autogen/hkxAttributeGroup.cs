@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_attributes m_class: hkxAttribute Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkxAttributeGroup : IHavokObject
     {
-        public string m_name;
-        public List<hkxAttribute> m_attributes = new List<hkxAttribute>();
+        public string m_name { set; get; } = "";
+        public IList<hkxAttribute> m_attributes { set; get; } = new List<hkxAttribute>();
 
         public virtual uint Signature => 0x345ca95d;
 
@@ -23,7 +25,7 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             s.WriteStringPointer(bw, m_name);
-            s.WriteClassArray<hkxAttribute>(bw, m_attributes);
+            s.WriteClassArray(bw, m_attributes);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

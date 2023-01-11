@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_rigidAttachmentTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkbCharacterSteppedInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public float m_deltaTime;
-        public Matrix4x4 m_worldFromModel;
-        public List<Matrix4x4> m_poseModelSpace;
-        public List<Matrix4x4> m_rigidAttachmentTransforms;
+        public ulong m_characterId { set; get; } = default;
+        public float m_deltaTime { set; get; } = default;
+        public Matrix4x4 m_worldFromModel { set; get; } = default;
+        public IList<Matrix4x4> m_poseModelSpace { set; get; } = new List<Matrix4x4>();
+        public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = new List<Matrix4x4>();
 
         public override uint Signature => 0x2eda84f8;
 

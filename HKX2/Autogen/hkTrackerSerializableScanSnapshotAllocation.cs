@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_traceId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkTrackerSerializableScanSnapshotAllocation : IHavokObject
     {
-        public ulong m_start;
-        public ulong m_size;
-        public int m_traceId;
+        public ulong m_start { set; get; } = default;
+        public ulong m_size { set; get; } = default;
+        public int m_traceId { set; get; } = default;
 
         public virtual uint Signature => 0x9ab3a6ac;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_parent m_class: hkpCdBody Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 24 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpCdBody : IHavokObject
     {
-        public hkpShape m_shape;
-        public uint m_shapeKey;
-        public dynamic m_motion;
-        public hkpCdBody m_parent;
+        public hkpShape? m_shape { set; get; } = default;
+        public uint m_shapeKey { set; get; } = default;
+        private object? m_motion { set; get; } = default;
+        private hkpCdBody? m_parent { set; get; } = default;
 
         public virtual uint Signature => 0x54a4b841;
 
@@ -39,8 +42,6 @@ namespace HKX2
         {
             m_shape = xd.ReadClassPointer<hkpShape>(xe, nameof(m_shape));
             m_shapeKey = xd.ReadUInt32(xe, nameof(m_shapeKey));
-            m_motion = default;
-            m_parent = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

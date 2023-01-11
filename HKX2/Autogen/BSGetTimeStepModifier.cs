@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class BSGetTimeStepModifier : hkbModifier
     {
-        public float m_timeStep;
+        public float m_timeStep { set; get; } = default;
 
         public override uint Signature => 0xbda33bfe;
 

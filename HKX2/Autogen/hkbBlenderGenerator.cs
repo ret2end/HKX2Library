@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -23,22 +25,22 @@ namespace HKX2
     // m_doSubtractiveBlend m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbBlenderGenerator : hkbGenerator
     {
-        public float m_referencePoseWeightThreshold;
-        public float m_blendParameter;
-        public float m_minCyclicBlendParameter;
-        public float m_maxCyclicBlendParameter;
-        public short m_indexOfSyncMasterChild;
-        public short m_flags;
-        public bool m_subtractLastChild;
-        public List<hkbBlenderGeneratorChild> m_children = new List<hkbBlenderGeneratorChild>();
-        public List<dynamic> m_childrenInternalStates;
-        public List<dynamic> m_sortedChildren;
-        public float m_endIntervalWeight;
-        public int m_numActiveChildren;
-        public short m_beginIntervalIndex;
-        public short m_endIntervalIndex;
-        public bool m_initSync;
-        public bool m_doSubtractiveBlend;
+        public float m_referencePoseWeightThreshold { set; get; } = default;
+        public float m_blendParameter { set; get; } = default;
+        public float m_minCyclicBlendParameter { set; get; } = default;
+        public float m_maxCyclicBlendParameter { set; get; } = default;
+        public short m_indexOfSyncMasterChild { set; get; } = default;
+        public short m_flags { set; get; } = default;
+        public bool m_subtractLastChild { set; get; } = default;
+        public IList<hkbBlenderGeneratorChild> m_children { set; get; } = new List<hkbBlenderGeneratorChild>();
+        public IList<object> m_childrenInternalStates { set; get; } = new List<object>();
+        public IList<object> m_sortedChildren { set; get; } = new List<object>();
+        private float m_endIntervalWeight { set; get; } = default;
+        private int m_numActiveChildren { set; get; } = default;
+        private short m_beginIntervalIndex { set; get; } = default;
+        private short m_endIntervalIndex { set; get; } = default;
+        private bool m_initSync { set; get; } = default;
+        private bool m_doSubtractiveBlend { set; get; } = default;
 
         public override uint Signature => 0x22df7147;
 
@@ -76,7 +78,7 @@ namespace HKX2
             bw.WriteInt16(m_flags);
             bw.WriteBoolean(m_subtractLastChild);
             bw.Position += 3;
-            s.WriteClassPointerArray<hkbBlenderGeneratorChild>(bw, m_children);
+            s.WriteClassPointerArray(bw, m_children);
             s.WriteVoidArray(bw);
             s.WriteVoidArray(bw);
             bw.WriteSingle(m_endIntervalWeight);
@@ -99,14 +101,6 @@ namespace HKX2
             m_flags = xd.ReadInt16(xe, nameof(m_flags));
             m_subtractLastChild = xd.ReadBoolean(xe, nameof(m_subtractLastChild));
             m_children = xd.ReadClassPointerArray<hkbBlenderGeneratorChild>(xe, nameof(m_children));
-            m_childrenInternalStates = default;
-            m_sortedChildren = default;
-            m_endIntervalWeight = default;
-            m_numActiveChildren = default;
-            m_beginIntervalIndex = default;
-            m_endIntervalIndex = default;
-            m_initSync = default;
-            m_doSubtractiveBlend = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

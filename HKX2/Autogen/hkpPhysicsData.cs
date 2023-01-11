@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_systems m_class: hkpPhysicsSystem Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkpPhysicsData : hkReferencedObject
     {
-        public hkpWorldCinfo m_worldCinfo;
-        public List<hkpPhysicsSystem> m_systems = new List<hkpPhysicsSystem>();
+        public hkpWorldCinfo? m_worldCinfo { set; get; } = default;
+        public IList<hkpPhysicsSystem> m_systems { set; get; } = new List<hkpPhysicsSystem>();
 
         public override uint Signature => 0xc2a461e4;
 
@@ -25,7 +27,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteClassPointer(bw, m_worldCinfo);
-            s.WriteClassPointerArray<hkpPhysicsSystem>(bw, m_systems);
+            s.WriteClassPointerArray(bw, m_systems);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

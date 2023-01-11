@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_myStateListener m_class: BSIStateManagerModifierBSIStateManagerStateListener Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSIStateManagerModifier : hkbModifier
     {
-        public int m_iStateVar;
-        public List<BSIStateManagerModifierBSiStateData> m_stateData = new List<BSIStateManagerModifierBSiStateData>();
-        public BSIStateManagerModifierBSIStateManagerStateListener m_myStateListener = new BSIStateManagerModifierBSIStateManagerStateListener();
+        public int m_iStateVar { set; get; } = default;
+        public IList<BSIStateManagerModifierBSiStateData> m_stateData { set; get; } = new List<BSIStateManagerModifierBSiStateData>();
+        public BSIStateManagerModifierBSIStateManagerStateListener m_myStateListener { set; get; } = new();
 
         public override uint Signature => 0x6cb24f2e;
 
@@ -22,7 +24,6 @@ namespace HKX2
             m_iStateVar = br.ReadInt32();
             br.Position += 4;
             m_stateData = des.ReadClassArray<BSIStateManagerModifierBSiStateData>(br);
-            m_myStateListener = new BSIStateManagerModifierBSIStateManagerStateListener();
             m_myStateListener.Read(des, br);
         }
 
@@ -31,7 +32,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.WriteInt32(m_iStateVar);
             bw.Position += 4;
-            s.WriteClassArray<BSIStateManagerModifierBSiStateData>(bw, m_stateData);
+            s.WriteClassArray(bw, m_stateData);
             m_myStateListener.Write(s, bw);
         }
 
@@ -40,7 +41,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_iStateVar = xd.ReadInt32(xe, nameof(m_iStateVar));
             m_stateData = xd.ReadClassArray<BSIStateManagerModifierBSiStateData>(xe, nameof(m_stateData));
-            m_myStateListener = new BSIStateManagerModifierBSIStateManagerStateListener();
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

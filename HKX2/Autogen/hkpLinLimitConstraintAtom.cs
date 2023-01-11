@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_max m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpLinLimitConstraintAtom : hkpConstraintAtom
     {
-        public byte m_axisIndex;
-        public float m_min;
-        public float m_max;
+        public byte m_axisIndex { set; get; } = default;
+        public float m_min { set; get; } = default;
+        public float m_max { set; get; } = default;
 
         public override uint Signature => 0xa44d1b07;
 

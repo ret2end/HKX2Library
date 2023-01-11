@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_variableValueSet m_class: hkbVariableValueSet Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorGraphInternalState : hkReferencedObject
     {
-        public List<hkbNodeInternalStateInfo> m_nodeInternalStateInfos = new List<hkbNodeInternalStateInfo>();
-        public hkbVariableValueSet m_variableValueSet;
+        public IList<hkbNodeInternalStateInfo> m_nodeInternalStateInfos { set; get; } = new List<hkbNodeInternalStateInfo>();
+        public hkbVariableValueSet? m_variableValueSet { set; get; } = default;
 
         public override uint Signature => 0x8699b6eb;
 
@@ -24,7 +26,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkbNodeInternalStateInfo>(bw, m_nodeInternalStateInfos);
+            s.WriteClassPointerArray(bw, m_nodeInternalStateInfos);
             s.WriteClassPointer(bw, m_variableValueSet);
         }
 

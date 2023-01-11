@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -19,18 +21,18 @@ namespace HKX2
     // m_smoothlyChangingHandles m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 228 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbEvaluateHandleModifier : hkbModifier
     {
-        public hkbHandle m_handle;
-        public Vector4 m_handlePositionOut;
-        public Quaternion m_handleRotationOut;
-        public bool m_isValidOut;
-        public float m_extrapolationTimeStep;
-        public float m_handleChangeSpeed;
-        public sbyte m_handleChangeMode;
-        public hkbHandle m_oldHandle = new hkbHandle();
-        public Vector4 m_oldHandlePosition;
-        public Quaternion m_oldHandleRotation;
-        public float m_timeSinceLastModify;
-        public bool m_smoothlyChangingHandles;
+        public hkbHandle? m_handle { set; get; } = default;
+        public Vector4 m_handlePositionOut { set; get; } = default;
+        public Quaternion m_handleRotationOut { set; get; } = default;
+        public bool m_isValidOut { set; get; } = default;
+        public float m_extrapolationTimeStep { set; get; } = default;
+        public float m_handleChangeSpeed { set; get; } = default;
+        public sbyte m_handleChangeMode { set; get; } = default;
+        public hkbHandle m_oldHandle { set; get; } = new();
+        private Vector4 m_oldHandlePosition { set; get; } = default;
+        private Quaternion m_oldHandleRotation { set; get; } = default;
+        private float m_timeSinceLastModify { set; get; } = default;
+        private bool m_smoothlyChangingHandles { set; get; } = default;
 
         public override uint Signature => 0x79757102;
 
@@ -47,7 +49,6 @@ namespace HKX2
             m_handleChangeSpeed = br.ReadSingle();
             m_handleChangeMode = br.ReadSByte();
             br.Position += 3;
-            m_oldHandle = new hkbHandle();
             m_oldHandle.Read(des, br);
             m_oldHandlePosition = br.ReadVector4();
             m_oldHandleRotation = des.ReadQuaternion(br);
@@ -67,7 +68,7 @@ namespace HKX2
             bw.Position += 3;
             bw.WriteSingle(m_extrapolationTimeStep);
             bw.WriteSingle(m_handleChangeSpeed);
-            s.WriteSByte(bw, m_handleChangeMode);
+            bw.WriteSByte(m_handleChangeMode);
             bw.Position += 3;
             m_oldHandle.Write(s, bw);
             bw.WriteVector4(m_oldHandlePosition);
@@ -87,11 +88,6 @@ namespace HKX2
             m_extrapolationTimeStep = xd.ReadSingle(xe, nameof(m_extrapolationTimeStep));
             m_handleChangeSpeed = xd.ReadSingle(xe, nameof(m_handleChangeSpeed));
             m_handleChangeMode = xd.ReadFlag<HandleChangeMode, sbyte>(xe, nameof(m_handleChangeMode));
-            m_oldHandle = new hkbHandle();
-            m_oldHandlePosition = default;
-            m_oldHandleRotation = default;
-            m_timeSinceLastModify = default;
-            m_smoothlyChangingHandles = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

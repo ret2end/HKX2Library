@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_isTargetInsideLimitCone m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     public partial class hkbLookAtModifierInternalState : hkReferencedObject
     {
-        public Vector4 m_lookAtLastTargetWS;
-        public float m_lookAtWeight;
-        public bool m_isTargetInsideLimitCone;
+        public Vector4 m_lookAtLastTargetWS { set; get; } = default;
+        public float m_lookAtWeight { set; get; } = default;
+        public bool m_isTargetInsideLimitCone { set; get; } = default;
 
         public override uint Signature => 0xa14caba6;
 

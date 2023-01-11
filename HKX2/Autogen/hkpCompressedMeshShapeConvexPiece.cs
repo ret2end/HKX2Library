@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -14,12 +15,12 @@ namespace HKX2
     // m_transformIndex m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 66 flags: FLAGS_NONE enum: 
     public partial class hkpCompressedMeshShapeConvexPiece : IHavokObject
     {
-        public Vector4 m_offset;
-        public List<ushort> m_vertices;
-        public List<byte> m_faceVertices;
-        public List<ushort> m_faceOffsets;
-        public ushort m_reference;
-        public ushort m_transformIndex;
+        public Vector4 m_offset { set; get; } = default;
+        public IList<ushort> m_vertices { set; get; } = new List<ushort>();
+        public IList<byte> m_faceVertices { set; get; } = new List<byte>();
+        public IList<ushort> m_faceOffsets { set; get; } = new List<ushort>();
+        public ushort m_reference { set; get; } = default;
+        public ushort m_transformIndex { set; get; } = default;
 
         public virtual uint Signature => 0x385bb842;
 

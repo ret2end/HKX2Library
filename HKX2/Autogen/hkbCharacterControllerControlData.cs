@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,11 +14,11 @@ namespace HKX2
     // m_maxHorizontalSeparation m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     public partial class hkbCharacterControllerControlData : IHavokObject
     {
-        public Vector4 m_desiredVelocity;
-        public float m_verticalGain;
-        public float m_horizontalCatchUpGain;
-        public float m_maxVerticalSeparation;
-        public float m_maxHorizontalSeparation;
+        public Vector4 m_desiredVelocity { set; get; } = default;
+        public float m_verticalGain { set; get; } = default;
+        public float m_horizontalCatchUpGain { set; get; } = default;
+        public float m_maxVerticalSeparation { set; get; } = default;
+        public float m_maxHorizontalSeparation { set; get; } = default;
 
         public virtual uint Signature => 0x5b6c03d9;
 

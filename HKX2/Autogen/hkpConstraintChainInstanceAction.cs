@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_constraintInstance m_class: hkpConstraintChainInstance Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags: NOT_OWNED|FLAGS_NONE enum: 
     public partial class hkpConstraintChainInstanceAction : hkpAction
     {
-        public hkpConstraintChainInstance m_constraintInstance;
+        public hkpConstraintChainInstance? m_constraintInstance { set; get; } = default;
 
         public override uint Signature => 0xc3971189;
 

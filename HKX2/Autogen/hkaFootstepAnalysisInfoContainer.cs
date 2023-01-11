@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_previewInfo m_class: hkaFootstepAnalysisInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkaFootstepAnalysisInfoContainer : hkReferencedObject
     {
-        public List<hkaFootstepAnalysisInfo> m_previewInfo = new List<hkaFootstepAnalysisInfo>();
+        public IList<hkaFootstepAnalysisInfo> m_previewInfo { set; get; } = new List<hkaFootstepAnalysisInfo>();
 
         public override uint Signature => 0x1d81207c;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkaFootstepAnalysisInfo>(bw, m_previewInfo);
+            s.WriteClassPointerArray(bw, m_previewInfo);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

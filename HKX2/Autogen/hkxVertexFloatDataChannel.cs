@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_dimensions m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: VertexFloatDimensions
     public partial class hkxVertexFloatDataChannel : hkReferencedObject
     {
-        public List<float> m_perVertexFloats;
-        public byte m_dimensions;
+        public IList<float> m_perVertexFloats { set; get; } = new List<float>();
+        public byte m_dimensions { set; get; } = default;
 
         public override uint Signature => 0xbeeb397c;
 
@@ -26,7 +28,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteSingleArray(bw, m_perVertexFloats);
-            s.WriteByte(bw, m_dimensions);
+            bw.WriteByte(m_dimensions);
             bw.Position += 7;
         }
 

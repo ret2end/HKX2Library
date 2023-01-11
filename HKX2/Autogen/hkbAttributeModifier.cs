@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_assignments m_class: hkbAttributeModifierAssignment Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbAttributeModifier : hkbModifier
     {
-        public List<hkbAttributeModifierAssignment> m_assignments = new List<hkbAttributeModifierAssignment>();
+        public IList<hkbAttributeModifierAssignment> m_assignments { set; get; } = new List<hkbAttributeModifierAssignment>();
 
         public override uint Signature => 0x1245d97d;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbAttributeModifierAssignment>(bw, m_assignments);
+            s.WriteClassArray(bw, m_assignments);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,11 +14,11 @@ namespace HKX2
     // m_targetPassed m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSPassByTargetTriggerModifier : hkbModifier
     {
-        public Vector4 m_targetPosition;
-        public float m_radius;
-        public Vector4 m_movementDirection;
-        public hkbEventProperty m_triggerEvent = new hkbEventProperty();
-        public bool m_targetPassed;
+        public Vector4 m_targetPosition { set; get; } = default;
+        public float m_radius { set; get; } = default;
+        public Vector4 m_movementDirection { set; get; } = default;
+        public hkbEventProperty m_triggerEvent { set; get; } = new();
+        private bool m_targetPassed { set; get; } = default;
 
         public override uint Signature => 0x703d7b66;
 
@@ -27,7 +29,6 @@ namespace HKX2
             m_radius = br.ReadSingle();
             br.Position += 12;
             m_movementDirection = br.ReadVector4();
-            m_triggerEvent = new hkbEventProperty();
             m_triggerEvent.Read(des, br);
             m_targetPassed = br.ReadBoolean();
             br.Position += 15;
@@ -52,7 +53,6 @@ namespace HKX2
             m_radius = xd.ReadSingle(xe, nameof(m_radius));
             m_movementDirection = xd.ReadVector4(xe, nameof(m_movementDirection));
             m_triggerEvent = xd.ReadClass<hkbEventProperty>(xe, nameof(m_triggerEvent));
-            m_targetPassed = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

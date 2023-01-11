@@ -10,7 +10,8 @@ namespace HKX2
     public partial class hkRootLevelContainer : IHavokObject
     {
 
-        public List<hkRootLevelContainerNamedVariant> m_namedVariants;
+        public List<hkRootLevelContainerNamedVariant> m_namedVariants { get; set; } = new();
+        public List<string> m_test { get; set; } = new();
 
         public uint Signature => 0x2772c11e;
 
@@ -21,7 +22,7 @@ namespace HKX2
 
         public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteClassArray<hkRootLevelContainerNamedVariant>(bw, m_namedVariants);
+            s.WriteClassArray(bw, m_namedVariants);
         }
 
         public void ReadXml(XmlDeserializer xd, XElement xe)

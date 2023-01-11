@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_nodeId m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     public partial class hkbSetLocalTimeOfClipGeneratorCommand : hkReferencedObject
     {
-        public ulong m_characterId;
-        public float m_localTime;
-        public short m_nodeId;
+        public ulong m_characterId { set; get; } = default;
+        public float m_localTime { set; get; } = default;
+        public short m_nodeId { set; get; } = default;
 
         public override uint Signature => 0xfab12b45;
 

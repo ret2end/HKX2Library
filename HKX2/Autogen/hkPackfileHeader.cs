@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,16 +22,16 @@ namespace HKX2
     public partial class hkPackfileHeader : IHavokObject
     {
         public int[] m_magic = new int[2];
-        public int m_userTag;
-        public int m_fileVersion;
+        public int m_userTag { set; get; } = default;
+        public int m_fileVersion { set; get; } = default;
         public byte[] m_layoutRules = new byte[4];
-        public int m_numSections;
-        public int m_contentsSectionIndex;
-        public int m_contentsSectionOffset;
-        public int m_contentsClassNameSectionIndex;
-        public int m_contentsClassNameSectionOffset;
-        public string m_contentsVersion;
-        public int m_flags;
+        public int m_numSections { set; get; } = default;
+        public int m_contentsSectionIndex { set; get; } = default;
+        public int m_contentsSectionOffset { set; get; } = default;
+        public int m_contentsClassNameSectionIndex { set; get; } = default;
+        public int m_contentsClassNameSectionOffset { set; get; } = default;
+        public string m_contentsVersion { set; get; } = "";
+        public int m_flags { set; get; } = default;
         public int[] m_pad = new int[1];
 
         public virtual uint Signature => 0x79f9ffda;

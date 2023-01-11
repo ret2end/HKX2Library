@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -15,13 +16,13 @@ namespace HKX2
     // m_selected m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     public partial class hkxNode : hkxAttributeHolder
     {
-        public string m_name;
-        public hkReferencedObject m_object;
-        public List<Matrix4x4> m_keyFrames;
-        public List<hkxNode> m_children = new List<hkxNode>();
-        public List<hkxNodeAnnotationData> m_annotations = new List<hkxNodeAnnotationData>();
-        public string m_userProperties;
-        public bool m_selected;
+        public string m_name { set; get; } = "";
+        public hkReferencedObject? m_object { set; get; } = default;
+        public IList<Matrix4x4> m_keyFrames { set; get; } = new List<Matrix4x4>();
+        public IList<hkxNode> m_children { set; get; } = new List<hkxNode>();
+        public IList<hkxNodeAnnotationData> m_annotations { set; get; } = new List<hkxNodeAnnotationData>();
+        public string m_userProperties { set; get; } = "";
+        public bool m_selected { set; get; } = default;
 
         public override uint Signature => 0x5a218502;
 
@@ -44,8 +45,8 @@ namespace HKX2
             s.WriteStringPointer(bw, m_name);
             s.WriteClassPointer(bw, m_object);
             s.WriteMatrix4Array(bw, m_keyFrames);
-            s.WriteClassPointerArray<hkxNode>(bw, m_children);
-            s.WriteClassArray<hkxNodeAnnotationData>(bw, m_annotations);
+            s.WriteClassPointerArray(bw, m_children);
+            s.WriteClassArray(bw, m_annotations);
             s.WriteStringPointer(bw, m_userProperties);
             bw.WriteBoolean(m_selected);
             bw.Position += 7;

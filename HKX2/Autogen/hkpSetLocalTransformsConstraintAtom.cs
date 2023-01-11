@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_transformB m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpSetLocalTransformsConstraintAtom : hkpConstraintAtom
     {
-        public Matrix4x4 m_transformA;
-        public Matrix4x4 m_transformB;
+        public Matrix4x4 m_transformA { set; get; } = default;
+        public Matrix4x4 m_transformB { set; get; } = default;
 
         public override uint Signature => 0x6e2a5198;
 

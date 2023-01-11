@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_material m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkGeometryTriangle : IHavokObject
     {
-        public int m_a;
-        public int m_b;
-        public int m_c;
-        public int m_material;
+        public int m_a { set; get; } = default;
+        public int m_b { set; get; } = default;
+        public int m_c { set; get; } = default;
+        public int m_material { set; get; } = default;
 
         public virtual uint Signature => 0x9687513b;
 

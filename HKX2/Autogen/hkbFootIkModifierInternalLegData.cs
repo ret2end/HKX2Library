@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,8 +11,8 @@ namespace HKX2
     // m_footIkSolver m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbFootIkModifierInternalLegData : IHavokObject
     {
-        public Vector4 m_groundPosition;
-        public dynamic m_footIkSolver;
+        public Vector4 m_groundPosition { set; get; } = default;
+        private object? m_footIkSolver { set; get; } = default;
 
         public virtual uint Signature => 0xe5ca3677;
 
@@ -31,7 +33,6 @@ namespace HKX2
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
             m_groundPosition = xd.ReadVector4(xe, nameof(m_groundPosition));
-            m_footIkSolver = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_areBindablesCached m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbBindable : hkReferencedObject
     {
-        public hkbVariableBindingSet m_variableBindingSet;
-        public List<dynamic> m_cachedBindables;
-        public bool m_areBindablesCached;
+        public hkbVariableBindingSet? m_variableBindingSet { set; get; } = default;
+        public IList<object> m_cachedBindables { set; get; } = new List<object>();
+        private bool m_areBindablesCached { set; get; } = default;
 
         public override uint Signature => 0x2c1432d7;
 
@@ -38,8 +40,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_variableBindingSet = xd.ReadClassPointer<hkbVariableBindingSet>(xe, nameof(m_variableBindingSet));
-            m_cachedBindables = default;
-            m_areBindablesCached = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

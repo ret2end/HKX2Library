@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_userData2 m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor
     {
-        public dynamic m_callbackFunc;
-        public uint m_callbackType;
-        public ulong m_userData0;
-        public ulong m_userData1;
-        public ulong m_userData2;
+        private object? m_callbackFunc { set; get; } = default;
+        public uint m_callbackType { set; get; } = default;
+        public ulong m_userData0 { set; get; } = default;
+        public ulong m_userData1 { set; get; } = default;
+        public ulong m_userData2 { set; get; } = default;
 
         public override uint Signature => 0xafcd79ad;
 
@@ -34,7 +37,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteVoidPointer(bw);
-            s.WriteUInt32(bw, m_callbackType);
+            bw.WriteUInt32(m_callbackType);
             bw.Position += 4;
             bw.WriteUInt64(m_userData0);
             bw.WriteUInt64(m_userData1);
@@ -44,7 +47,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_callbackFunc = default;
             m_callbackType = xd.ReadFlag<CallbackType, uint>(xe, nameof(m_callbackType));
             m_userData0 = xd.ReadUInt64(xe, nameof(m_userData0));
             m_userData1 = xd.ReadUInt64(xe, nameof(m_userData1));

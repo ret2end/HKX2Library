@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_selfTransitionNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbAuxiliaryNodeInfo : hkReferencedObject
     {
-        public byte m_type;
-        public byte m_depth;
-        public string m_referenceBehaviorName;
-        public List<string> m_selfTransitionNames;
+        public byte m_type { set; get; } = default;
+        public byte m_depth { set; get; } = default;
+        public string m_referenceBehaviorName { set; get; } = "";
+        public IList<string> m_selfTransitionNames { set; get; } = new List<string>();
 
         public override uint Signature => 0xca0888ca;
 
@@ -31,7 +33,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.WriteByte(m_depth);
             bw.Position += 6;
             s.WriteStringPointer(bw, m_referenceBehaviorName);

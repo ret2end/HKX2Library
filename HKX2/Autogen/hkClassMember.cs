@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +18,15 @@ namespace HKX2
     // m_attributes m_class: hkCustomAttributes Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkClassMember : IHavokObject
     {
-        public string m_name;
-        public hkClass m_class;
-        public hkClassEnum m_enum;
-        public byte m_type;
-        public byte m_subtype;
-        public short m_cArraySize;
-        public ushort m_flags;
-        public ushort m_offset;
-        public hkCustomAttributes m_attributes;
+        public string m_name { set; get; } = "";
+        public hkClass? m_class { set; get; } = default;
+        public hkClassEnum? m_enum { set; get; } = default;
+        public byte m_type { set; get; } = default;
+        public byte m_subtype { set; get; } = default;
+        public short m_cArraySize { set; get; } = default;
+        public ushort m_flags { set; get; } = default;
+        public ushort m_offset { set; get; } = default;
+        private hkCustomAttributes? m_attributes { set; get; } = default;
 
         public virtual uint Signature => 0x5c7ea4c2;
 
@@ -45,8 +48,8 @@ namespace HKX2
             s.WriteCStringPointer(bw, m_name);
             s.WriteClassPointer(bw, m_class);
             s.WriteClassPointer(bw, m_enum);
-            s.WriteByte(bw, m_type);
-            s.WriteByte(bw, m_subtype);
+            bw.WriteByte(m_type);
+            bw.WriteByte(m_subtype);
             bw.WriteInt16(m_cArraySize);
             bw.WriteUInt16(m_flags);
             bw.WriteUInt16(m_offset);
@@ -63,7 +66,6 @@ namespace HKX2
             m_cArraySize = xd.ReadInt16(xe, nameof(m_cArraySize));
             m_flags = xd.ReadFlag<FlagValues, ushort>(xe, nameof(m_flags));
             m_offset = xd.ReadUInt16(xe, nameof(m_offset));
-            m_attributes = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

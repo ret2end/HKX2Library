@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_INT16 arrSize: 0 offset: 2 flags: FLAGS_NONE enum: RoleFlags
     public partial class hkbRoleAttribute : IHavokObject
     {
-        public short m_role;
-        public short m_flags;
+        public short m_role { set; get; } = default;
+        public short m_flags { set; get; } = default;
 
         public virtual uint Signature => 0x3eb2e082;
 
@@ -21,7 +24,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteInt16(bw, m_role);
+            bw.WriteInt16(m_role);
             bw.WriteInt16(m_flags);
         }
 

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_shaders m_class: hkxMaterialShader Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxMaterialShaderSet : hkReferencedObject
     {
-        public List<hkxMaterialShader> m_shaders = new List<hkxMaterialShader>();
+        public IList<hkxMaterialShader> m_shaders { set; get; } = new List<hkxMaterialShader>();
 
         public override uint Signature => 0x154650f3;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkxMaterialShader>(bw, m_shaders);
+            s.WriteClassPointerArray(bw, m_shaders);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

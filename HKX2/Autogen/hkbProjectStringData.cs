@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,15 +18,15 @@ namespace HKX2
     // m_rootPath m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbProjectStringData : hkReferencedObject
     {
-        public List<string> m_animationFilenames;
-        public List<string> m_behaviorFilenames;
-        public List<string> m_characterFilenames;
-        public List<string> m_eventNames;
-        public string m_animationPath;
-        public string m_behaviorPath;
-        public string m_characterPath;
-        public string m_fullPathToSource;
-        public string m_rootPath;
+        public IList<string> m_animationFilenames { set; get; } = new List<string>();
+        public IList<string> m_behaviorFilenames { set; get; } = new List<string>();
+        public IList<string> m_characterFilenames { set; get; } = new List<string>();
+        public IList<string> m_eventNames { set; get; } = new List<string>();
+        public string m_animationPath { set; get; } = "";
+        public string m_behaviorPath { set; get; } = "";
+        public string m_characterPath { set; get; } = "";
+        public string m_fullPathToSource { set; get; } = "";
+        public string m_rootPath { set; get; } = "";
 
         public override uint Signature => 0x76ad60a;
 
@@ -67,7 +69,6 @@ namespace HKX2
             m_behaviorPath = xd.ReadString(xe, nameof(m_behaviorPath));
             m_characterPath = xd.ReadString(xe, nameof(m_characterPath));
             m_fullPathToSource = xd.ReadString(xe, nameof(m_fullPathToSource));
-            m_rootPath = null;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

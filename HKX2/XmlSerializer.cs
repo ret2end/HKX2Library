@@ -306,16 +306,15 @@ namespace HKX2
             return hkparam;
         }
 
-        public XElement WriteFlag<TEnum, V>(XElement xe, string paramName, V value) where TEnum : Enum where V : IBinaryInteger<V>
+        public XElement WriteFlag<TEnum, TValue>(XElement xe, string paramName, TValue value) where TEnum : Enum where TValue : IBinaryInteger<TValue>
         {
-
-            return WriteParam(xe, paramName, value.ToSerlializedFlag<TEnum, V>());
+            return WriteParam(xe, paramName, value.ToFlagString<TEnum, TValue>());
         }
 
-        public XElement WriteEnum<TEnum, V>(XElement xe, string paramName, V value) where TEnum : Enum where V : IBinaryInteger<V>
+        public XElement WriteEnum<TEnum, TValue>(XElement xe, string paramName, TValue value) where TEnum : Enum where TValue : IBinaryInteger<TValue>
         {
 
-            return WriteParam(xe, paramName, value.ToSerlializedEnum<TEnum, V>());
+            return WriteParam(xe, paramName, value.ToEnumName<TEnum, TValue>());
         }
 
     }

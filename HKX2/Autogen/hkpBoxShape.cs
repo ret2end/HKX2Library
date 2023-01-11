@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,7 +10,7 @@ namespace HKX2
     // m_halfExtents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpBoxShape : hkpConvexShape
     {
-        public Vector4 m_halfExtents;
+        public Vector4 m_halfExtents { set; get; } = default;
 
         public override uint Signature => 0x3444d2d5;
 

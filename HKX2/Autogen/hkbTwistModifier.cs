@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -17,15 +18,15 @@ namespace HKX2
     // m_parentBoneIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 128 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbTwistModifier : hkbModifier
     {
-        public Vector4 m_axisOfRotation;
-        public float m_twistAngle;
-        public short m_startBoneIndex;
-        public short m_endBoneIndex;
-        public sbyte m_setAngleMethod;
-        public sbyte m_rotationAxisCoordinates;
-        public bool m_isAdditive;
-        public List<dynamic> m_boneChainIndices;
-        public List<dynamic> m_parentBoneIndices;
+        public Vector4 m_axisOfRotation { set; get; } = default;
+        public float m_twistAngle { set; get; } = default;
+        public short m_startBoneIndex { set; get; } = default;
+        public short m_endBoneIndex { set; get; } = default;
+        public sbyte m_setAngleMethod { set; get; } = default;
+        public sbyte m_rotationAxisCoordinates { set; get; } = default;
+        public bool m_isAdditive { set; get; } = default;
+        public IList<object> m_boneChainIndices { set; get; } = new List<object>();
+        public IList<object> m_parentBoneIndices { set; get; } = new List<object>();
 
         public override uint Signature => 0xb6b76b32;
 
@@ -51,8 +52,8 @@ namespace HKX2
             bw.WriteSingle(m_twistAngle);
             bw.WriteInt16(m_startBoneIndex);
             bw.WriteInt16(m_endBoneIndex);
-            s.WriteSByte(bw, m_setAngleMethod);
-            s.WriteSByte(bw, m_rotationAxisCoordinates);
+            bw.WriteSByte(m_setAngleMethod);
+            bw.WriteSByte(m_rotationAxisCoordinates);
             bw.WriteBoolean(m_isAdditive);
             bw.Position += 5;
             s.WriteVoidArray(bw);
@@ -69,8 +70,6 @@ namespace HKX2
             m_setAngleMethod = xd.ReadFlag<SetAngleMethod, sbyte>(xe, nameof(m_setAngleMethod));
             m_rotationAxisCoordinates = xd.ReadFlag<RotationAxisCoordinates, sbyte>(xe, nameof(m_rotationAxisCoordinates));
             m_isAdditive = xd.ReadBoolean(xe, nameof(m_isAdditive));
-            m_boneChainIndices = default;
-            m_parentBoneIndices = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

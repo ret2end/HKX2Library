@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -9,7 +10,7 @@ namespace HKX2
     // m_perVertexVectors m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxVertexVectorDataChannel : hkReferencedObject
     {
-        public List<Vector4> m_perVertexVectors;
+        public IList<Vector4> m_perVertexVectors { set; get; } = new List<Vector4>();
 
         public override uint Signature => 0x2ea63179;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpLinSoftConstraintAtom : hkpConstraintAtom
     {
-        public byte m_axisIndex;
-        public float m_tau;
-        public float m_damping;
+        public byte m_axisIndex { set; get; } = default;
+        public float m_tau { set; get; } = default;
+        public float m_damping { set; get; } = default;
 
         public override uint Signature => 0x52b27d69;
 

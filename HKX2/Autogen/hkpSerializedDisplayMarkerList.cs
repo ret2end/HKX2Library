@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_markers m_class: hkpSerializedDisplayMarker Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkpSerializedDisplayMarkerList : hkReferencedObject
     {
-        public List<hkpSerializedDisplayMarker> m_markers = new List<hkpSerializedDisplayMarker>();
+        public IList<hkpSerializedDisplayMarker> m_markers { set; get; } = new List<hkpSerializedDisplayMarker>();
 
         public override uint Signature => 0x54785c77;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpSerializedDisplayMarker>(bw, m_markers);
+            s.WriteClassPointerArray(bw, m_markers);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

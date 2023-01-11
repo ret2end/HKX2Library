@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,31 +16,24 @@ namespace HKX2
     // m_2dAng m_class: hkp2dAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 288 flags: FLAGS_NONE enum: 
     public partial class hkpWheelConstraintDataAtoms : IHavokObject
     {
-        public hkpSetLocalTransformsConstraintAtom m_suspensionBase = new hkpSetLocalTransformsConstraintAtom();
-        public hkpLinLimitConstraintAtom m_lin0Limit = new hkpLinLimitConstraintAtom();
-        public hkpLinSoftConstraintAtom m_lin0Soft = new hkpLinSoftConstraintAtom();
-        public hkpLinConstraintAtom m_lin1 = new hkpLinConstraintAtom();
-        public hkpLinConstraintAtom m_lin2 = new hkpLinConstraintAtom();
-        public hkpSetLocalRotationsConstraintAtom m_steeringBase = new hkpSetLocalRotationsConstraintAtom();
-        public hkp2dAngConstraintAtom m_2dAng = new hkp2dAngConstraintAtom();
+        public hkpSetLocalTransformsConstraintAtom m_suspensionBase { set; get; } = new();
+        public hkpLinLimitConstraintAtom m_lin0Limit { set; get; } = new();
+        public hkpLinSoftConstraintAtom m_lin0Soft { set; get; } = new();
+        public hkpLinConstraintAtom m_lin1 { set; get; } = new();
+        public hkpLinConstraintAtom m_lin2 { set; get; } = new();
+        public hkpSetLocalRotationsConstraintAtom m_steeringBase { set; get; } = new();
+        public hkp2dAngConstraintAtom m_2dAng { set; get; } = new();
 
         public virtual uint Signature => 0x1188cbe1;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_suspensionBase = new hkpSetLocalTransformsConstraintAtom();
             m_suspensionBase.Read(des, br);
-            m_lin0Limit = new hkpLinLimitConstraintAtom();
             m_lin0Limit.Read(des, br);
-            m_lin0Soft = new hkpLinSoftConstraintAtom();
             m_lin0Soft.Read(des, br);
-            m_lin1 = new hkpLinConstraintAtom();
             m_lin1.Read(des, br);
-            m_lin2 = new hkpLinConstraintAtom();
             m_lin2.Read(des, br);
-            m_steeringBase = new hkpSetLocalRotationsConstraintAtom();
             m_steeringBase.Read(des, br);
-            m_2dAng = new hkp2dAngConstraintAtom();
             m_2dAng.Read(des, br);
             br.Position += 12;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -10,8 +11,8 @@ namespace HKX2
     // m_bonePairMap m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkbMirroredSkeletonInfo : hkReferencedObject
     {
-        public Vector4 m_mirrorAxis;
-        public List<short> m_bonePairMap;
+        public Vector4 m_mirrorAxis { set; get; } = default;
+        public IList<short> m_bonePairMap { set; get; } = new List<short>();
 
         public override uint Signature => 0xc6c2da4f;
 

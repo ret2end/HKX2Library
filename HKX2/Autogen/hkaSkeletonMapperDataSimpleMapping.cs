@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_aFromBTransform m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkaSkeletonMapperDataSimpleMapping : IHavokObject
     {
-        public short m_boneA;
-        public short m_boneB;
-        public Matrix4x4 m_aFromBTransform;
+        public short m_boneA { set; get; } = default;
+        public short m_boneB { set; get; } = default;
+        public Matrix4x4 m_aFromBTransform { set; get; } = default;
 
         public virtual uint Signature => 0x3405deca;
 

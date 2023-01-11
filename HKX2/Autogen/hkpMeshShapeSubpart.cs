@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -21,21 +24,21 @@ namespace HKX2
     // m_triangleOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     public partial class hkpMeshShapeSubpart : IHavokObject
     {
-        public dynamic m_vertexBase;
-        public int m_vertexStriding;
-        public int m_numVertices;
-        public dynamic m_indexBase;
-        public sbyte m_stridingType;
-        public sbyte m_materialIndexStridingType;
-        public int m_indexStriding;
-        public int m_flipAlternateTriangles;
-        public int m_numTriangles;
-        public dynamic m_materialIndexBase;
-        public int m_materialIndexStriding;
-        public dynamic m_materialBase;
-        public int m_materialStriding;
-        public int m_numMaterials;
-        public int m_triangleOffset;
+        private object? m_vertexBase { set; get; } = default;
+        public int m_vertexStriding { set; get; } = default;
+        public int m_numVertices { set; get; } = default;
+        private object? m_indexBase { set; get; } = default;
+        public sbyte m_stridingType { set; get; } = default;
+        public sbyte m_materialIndexStridingType { set; get; } = default;
+        public int m_indexStriding { set; get; } = default;
+        public int m_flipAlternateTriangles { set; get; } = default;
+        public int m_numTriangles { set; get; } = default;
+        private object? m_materialIndexBase { set; get; } = default;
+        public int m_materialIndexStriding { set; get; } = default;
+        private object? m_materialBase { set; get; } = default;
+        public int m_materialStriding { set; get; } = default;
+        public int m_numMaterials { set; get; } = default;
+        public int m_triangleOffset { set; get; } = default;
 
         public virtual uint Signature => 0x27336e5d;
 
@@ -67,8 +70,8 @@ namespace HKX2
             bw.WriteInt32(m_vertexStriding);
             bw.WriteInt32(m_numVertices);
             s.WriteVoidPointer(bw);
-            s.WriteSByte(bw, m_stridingType);
-            s.WriteSByte(bw, m_materialIndexStridingType);
+            bw.WriteSByte(m_stridingType);
+            bw.WriteSByte(m_materialIndexStridingType);
             bw.Position += 2;
             bw.WriteInt32(m_indexStriding);
             bw.WriteInt32(m_flipAlternateTriangles);
@@ -85,18 +88,14 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_vertexBase = default;
             m_vertexStriding = xd.ReadInt32(xe, nameof(m_vertexStriding));
             m_numVertices = xd.ReadInt32(xe, nameof(m_numVertices));
-            m_indexBase = default;
             m_stridingType = xd.ReadFlag<MeshShapeIndexStridingType, sbyte>(xe, nameof(m_stridingType));
             m_materialIndexStridingType = xd.ReadFlag<MeshShapeMaterialIndexStridingType, sbyte>(xe, nameof(m_materialIndexStridingType));
             m_indexStriding = xd.ReadInt32(xe, nameof(m_indexStriding));
             m_flipAlternateTriangles = xd.ReadInt32(xe, nameof(m_flipAlternateTriangles));
             m_numTriangles = xd.ReadInt32(xe, nameof(m_numTriangles));
-            m_materialIndexBase = default;
             m_materialIndexStriding = xd.ReadInt32(xe, nameof(m_materialIndexStriding));
-            m_materialBase = default;
             m_materialStriding = xd.ReadInt32(xe, nameof(m_materialStriding));
             m_numMaterials = xd.ReadInt32(xe, nameof(m_numMaterials));
             m_triangleOffset = xd.ReadInt32(xe, nameof(m_triangleOffset));

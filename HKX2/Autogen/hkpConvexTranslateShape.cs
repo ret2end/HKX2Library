@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,7 +10,7 @@ namespace HKX2
     // m_translation m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpConvexTranslateShape : hkpConvexTransformShapeBase
     {
-        public Vector4 m_translation;
+        public Vector4 m_translation { set; get; } = default;
 
         public override uint Signature => 0x5ba0a5f7;
 

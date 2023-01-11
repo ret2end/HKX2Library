@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,17 +13,16 @@ namespace HKX2
     // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpTransformShape : hkpShape
     {
-        public hkpSingleShapeContainer m_childShape = new hkpSingleShapeContainer();
-        public int m_childShapeSize;
-        public Quaternion m_rotation;
-        public Matrix4x4 m_transform;
+        public hkpSingleShapeContainer m_childShape { set; get; } = new();
+        private int m_childShapeSize { set; get; } = default;
+        public Quaternion m_rotation { set; get; } = default;
+        public Matrix4x4 m_transform { set; get; } = default;
 
         public override uint Signature => 0x787ef513;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_childShape = new hkpSingleShapeContainer();
             m_childShape.Read(des, br);
             m_childShapeSize = br.ReadInt32();
             br.Position += 12;
@@ -43,7 +44,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_childShape = xd.ReadClass<hkpSingleShapeContainer>(xe, nameof(m_childShape));
-            m_childShapeSize = default;
             m_rotation = xd.ReadQuaternion(xe, nameof(m_rotation));
             m_transform = xd.ReadTransform(xe, nameof(m_transform));
         }

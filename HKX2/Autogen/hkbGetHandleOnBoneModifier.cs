@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_animationBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 98 flags: FLAGS_NONE enum: 
     public partial class hkbGetHandleOnBoneModifier : hkbModifier
     {
-        public hkbHandle m_handleOut;
-        public string m_localFrameName;
-        public short m_ragdollBoneIndex;
-        public short m_animationBoneIndex;
+        public hkbHandle? m_handleOut { set; get; } = default;
+        public string m_localFrameName { set; get; } = "";
+        public short m_ragdollBoneIndex { set; get; } = default;
+        public short m_animationBoneIndex { set; get; } = default;
 
         public override uint Signature => 0x50c34a17;
 

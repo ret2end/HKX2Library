@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,7 +10,7 @@ namespace HKX2
     // m_position m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkpMountedBallGun : hkpBallGun
     {
-        public Vector4 m_position;
+        public Vector4 m_position { set; get; } = default;
 
         public override uint Signature => 0x6791ffce;
 

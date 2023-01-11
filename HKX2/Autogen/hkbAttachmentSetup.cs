@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,14 +17,14 @@ namespace HKX2
     // m_attachmentType m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 44 flags: FLAGS_NONE enum: AttachmentType
     public partial class hkbAttachmentSetup : hkReferencedObject
     {
-        public float m_blendInTime;
-        public float m_moveAttacherFraction;
-        public float m_gain;
-        public float m_extrapolationTimeStep;
-        public float m_fixUpGain;
-        public float m_maxLinearDistance;
-        public float m_maxAngularDistance;
-        public sbyte m_attachmentType;
+        public float m_blendInTime { set; get; } = default;
+        public float m_moveAttacherFraction { set; get; } = default;
+        public float m_gain { set; get; } = default;
+        public float m_extrapolationTimeStep { set; get; } = default;
+        public float m_fixUpGain { set; get; } = default;
+        public float m_maxLinearDistance { set; get; } = default;
+        public float m_maxAngularDistance { set; get; } = default;
+        public sbyte m_attachmentType { set; get; } = default;
 
         public override uint Signature => 0x774632b;
 
@@ -49,7 +52,7 @@ namespace HKX2
             bw.WriteSingle(m_fixUpGain);
             bw.WriteSingle(m_maxLinearDistance);
             bw.WriteSingle(m_maxAngularDistance);
-            s.WriteSByte(bw, m_attachmentType);
+            bw.WriteSByte(m_attachmentType);
             bw.Position += 3;
         }
 

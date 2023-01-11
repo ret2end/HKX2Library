@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_operator m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 5 flags: FLAGS_NONE enum: Operator
     public partial class hkbCompiledExpressionSetToken : IHavokObject
     {
-        public float m_data;
-        public sbyte m_type;
-        public sbyte m_operator;
+        public float m_data { set; get; } = default;
+        public sbyte m_type { set; get; } = default;
+        public sbyte m_operator { set; get; } = default;
 
         public virtual uint Signature => 0xc6aaccc8;
 
@@ -26,8 +29,8 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             bw.WriteSingle(m_data);
-            s.WriteSByte(bw, m_type);
-            s.WriteSByte(bw, m_operator);
+            bw.WriteSByte(m_type);
+            bw.WriteSByte(m_operator);
             bw.Position += 2;
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -13,11 +14,11 @@ namespace HKX2
     // m_childShapes m_class: hkpConvexShape Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     public partial class hkpConvexListShape : hkpConvexShape
     {
-        public float m_minDistanceToUseConvexHullForGetClosestPoints;
-        public Vector4 m_aabbHalfExtents;
-        public Vector4 m_aabbCenter;
-        public bool m_useCachedAabb;
-        public List<hkpConvexShape> m_childShapes = new List<hkpConvexShape>();
+        public float m_minDistanceToUseConvexHullForGetClosestPoints { set; get; } = default;
+        public Vector4 m_aabbHalfExtents { set; get; } = default;
+        public Vector4 m_aabbCenter { set; get; } = default;
+        public bool m_useCachedAabb { set; get; } = default;
+        public IList<hkpConvexShape> m_childShapes { set; get; } = new List<hkpConvexShape>();
 
         public override uint Signature => 0x450b26e8;
 
@@ -45,7 +46,7 @@ namespace HKX2
             bw.WriteVector4(m_aabbCenter);
             bw.WriteBoolean(m_useCachedAabb);
             bw.Position += 7;
-            s.WriteClassPointerArray<hkpConvexShape>(bw, m_childShapes);
+            s.WriteClassPointerArray(bw, m_childShapes);
             bw.Position += 8;
         }
 

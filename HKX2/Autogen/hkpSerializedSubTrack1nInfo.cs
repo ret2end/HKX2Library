@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_offsetInSector m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     public partial class hkpSerializedSubTrack1nInfo : hkpSerializedTrack1nInfo
     {
-        public int m_sectorIndex;
-        public int m_offsetInSector;
+        public int m_sectorIndex { set; get; } = default;
+        public int m_offsetInSector { set; get; } = default;
 
         public override uint Signature => 0x10155a;
 

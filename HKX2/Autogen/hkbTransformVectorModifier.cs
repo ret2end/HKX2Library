@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -15,14 +17,14 @@ namespace HKX2
     // m_computeOnModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 147 flags: FLAGS_NONE enum: 
     public partial class hkbTransformVectorModifier : hkbModifier
     {
-        public Quaternion m_rotation;
-        public Vector4 m_translation;
-        public Vector4 m_vectorIn;
-        public Vector4 m_vectorOut;
-        public bool m_rotateOnly;
-        public bool m_inverse;
-        public bool m_computeOnActivate;
-        public bool m_computeOnModify;
+        public Quaternion m_rotation { set; get; } = default;
+        public Vector4 m_translation { set; get; } = default;
+        public Vector4 m_vectorIn { set; get; } = default;
+        public Vector4 m_vectorOut { set; get; } = default;
+        public bool m_rotateOnly { set; get; } = default;
+        public bool m_inverse { set; get; } = default;
+        public bool m_computeOnActivate { set; get; } = default;
+        public bool m_computeOnModify { set; get; } = default;
 
         public override uint Signature => 0xf93e0e24;
 

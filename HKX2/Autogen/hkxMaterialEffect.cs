@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkxMaterialEffect : hkReferencedObject
     {
-        public string m_name;
-        public byte m_type;
-        public List<byte> m_data;
+        public string m_name { set; get; } = "";
+        public byte m_type { set; get; } = default;
+        public IList<byte> m_data { set; get; } = new List<byte>();
 
         public override uint Signature => 0x1d39f925;
 
@@ -29,7 +31,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.Position += 7;
             s.WriteByteArray(bw, m_data);
         }

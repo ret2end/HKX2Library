@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbNamedEventPayload : hkbEventPayload
     {
-        public string m_name;
+        public string m_name { set; get; } = "";
 
         public override uint Signature => 0x65bdd3a0;
 

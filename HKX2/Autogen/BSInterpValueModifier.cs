@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSInterpValueModifier : hkbModifier
     {
-        public float m_source;
-        public float m_target;
-        public float m_result;
-        public float m_gain;
-        public float m_timeStep;
+        public float m_source { set; get; } = default;
+        public float m_target { set; get; } = default;
+        public float m_result { set; get; } = default;
+        public float m_gain { set; get; } = default;
+        private float m_timeStep { set; get; } = default;
 
         public override uint Signature => 0x29adc802;
 
@@ -48,7 +51,6 @@ namespace HKX2
             m_target = xd.ReadSingle(xe, nameof(m_target));
             m_result = xd.ReadSingle(xe, nameof(m_result));
             m_gain = xd.ReadSingle(xe, nameof(m_gain));
-            m_timeStep = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

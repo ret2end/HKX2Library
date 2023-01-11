@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -16,14 +17,14 @@ namespace HKX2
     // m_connectivity m_class: hkpConvexVerticesConnectivity Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 136 flags: FLAGS_NONE enum: 
     public partial class hkpConvexVerticesShape : hkpConvexShape
     {
-        public Vector4 m_aabbHalfExtents;
-        public Vector4 m_aabbCenter;
-        public List<hkpConvexVerticesShapeFourVectors> m_rotatedVertices = new List<hkpConvexVerticesShapeFourVectors>();
-        public int m_numVertices;
-        public dynamic m_externalObject;
-        public dynamic m_getFaceNormals;
-        public List<Vector4> m_planeEquations;
-        public hkpConvexVerticesConnectivity m_connectivity;
+        public Vector4 m_aabbHalfExtents { set; get; } = default;
+        public Vector4 m_aabbCenter { set; get; } = default;
+        public IList<hkpConvexVerticesShapeFourVectors> m_rotatedVertices { set; get; } = new List<hkpConvexVerticesShapeFourVectors>();
+        public int m_numVertices { set; get; } = default;
+        private object? m_externalObject { set; get; } = default;
+        private object? m_getFaceNormals { set; get; } = default;
+        public IList<Vector4> m_planeEquations { set; get; } = new List<Vector4>();
+        public hkpConvexVerticesConnectivity? m_connectivity { set; get; } = default;
 
         public override uint Signature => 0x28726ad8;
 
@@ -48,7 +49,7 @@ namespace HKX2
             bw.Position += 8;
             bw.WriteVector4(m_aabbHalfExtents);
             bw.WriteVector4(m_aabbCenter);
-            s.WriteClassArray<hkpConvexVerticesShapeFourVectors>(bw, m_rotatedVertices);
+            s.WriteClassArray(bw, m_rotatedVertices);
             bw.WriteInt32(m_numVertices);
             bw.Position += 4;
             s.WriteVoidPointer(bw);
@@ -64,8 +65,6 @@ namespace HKX2
             m_aabbCenter = xd.ReadVector4(xe, nameof(m_aabbCenter));
             m_rotatedVertices = xd.ReadClassArray<hkpConvexVerticesShapeFourVectors>(xe, nameof(m_rotatedVertices));
             m_numVertices = xd.ReadInt32(xe, nameof(m_numVertices));
-            m_externalObject = default;
-            m_getFaceNormals = default;
             m_planeEquations = xd.ReadVector4Array(xe, nameof(m_planeEquations));
             m_connectivity = xd.ReadClassPointer<hkpConvexVerticesConnectivity>(xe, nameof(m_connectivity));
         }

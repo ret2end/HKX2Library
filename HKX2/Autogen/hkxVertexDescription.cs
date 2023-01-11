@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_decls m_class: hkxVertexDescriptionElementDecl Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     public partial class hkxVertexDescription : IHavokObject
     {
-        public List<hkxVertexDescriptionElementDecl> m_decls = new List<hkxVertexDescriptionElementDecl>();
+        public IList<hkxVertexDescriptionElementDecl> m_decls { set; get; } = new List<hkxVertexDescriptionElementDecl>();
 
         public virtual uint Signature => 0x2df6313d;
 
@@ -19,7 +21,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteClassArray<hkxVertexDescriptionElementDecl>(bw, m_decls);
+            s.WriteClassArray(bw, m_decls);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

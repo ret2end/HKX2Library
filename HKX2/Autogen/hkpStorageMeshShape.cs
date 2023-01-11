@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_storage m_class: hkpStorageMeshShapeSubpartStorage Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     public partial class hkpStorageMeshShape : hkpMeshShape
     {
-        public List<hkpStorageMeshShapeSubpartStorage> m_storage = new List<hkpStorageMeshShapeSubpartStorage>();
+        public IList<hkpStorageMeshShapeSubpartStorage> m_storage { set; get; } = new List<hkpStorageMeshShapeSubpartStorage>();
 
         public override uint Signature => 0xbefd8b39;
 
@@ -21,7 +23,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpStorageMeshShapeSubpartStorage>(bw, m_storage);
+            s.WriteClassPointerArray(bw, m_storage);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_relativeDirection m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkbRegisteredGenerator : hkbBindable
     {
-        public hkbGenerator m_generator;
-        public Vector4 m_relativePosition;
-        public Vector4 m_relativeDirection;
+        public hkbGenerator? m_generator { set; get; } = default;
+        public Vector4 m_relativePosition { set; get; } = default;
+        public Vector4 m_relativeDirection { set; get; } = default;
 
         public override uint Signature => 0x58b1d082;
 

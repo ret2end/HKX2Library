@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,11 +14,11 @@ namespace HKX2
     // m_centerOfMassLocal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkSweptTransform : IHavokObject
     {
-        public Vector4 m_centerOfMass0;
-        public Vector4 m_centerOfMass1;
-        public Quaternion m_rotation0;
-        public Quaternion m_rotation1;
-        public Vector4 m_centerOfMassLocal;
+        public Vector4 m_centerOfMass0 { set; get; } = default;
+        public Vector4 m_centerOfMass1 { set; get; } = default;
+        public Quaternion m_rotation0 { set; get; } = default;
+        public Quaternion m_rotation1 { set; get; } = default;
+        public Vector4 m_centerOfMassLocal { set; get; } = default;
 
         public virtual uint Signature => 0xb4e5770;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -32,30 +33,30 @@ namespace HKX2
     // m_boneChainIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 208 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSDirectAtModifier : hkbModifier
     {
-        public bool m_directAtTarget;
-        public short m_sourceBoneIndex;
-        public short m_startBoneIndex;
-        public short m_endBoneIndex;
-        public float m_limitHeadingDegrees;
-        public float m_limitPitchDegrees;
-        public float m_offsetHeadingDegrees;
-        public float m_offsetPitchDegrees;
-        public float m_onGain;
-        public float m_offGain;
-        public Vector4 m_targetLocation;
-        public uint m_userInfo;
-        public bool m_directAtCamera;
-        public float m_directAtCameraX;
-        public float m_directAtCameraY;
-        public float m_directAtCameraZ;
-        public bool m_active;
-        public float m_currentHeadingOffset;
-        public float m_currentPitchOffset;
-        public float m_timeStep;
-        public dynamic m_pSkeletonMemory;
-        public bool m_hasTarget;
-        public Vector4 m_directAtTargetLocation;
-        public List<dynamic> m_boneChainIndices;
+        public bool m_directAtTarget { set; get; } = default;
+        public short m_sourceBoneIndex { set; get; } = default;
+        public short m_startBoneIndex { set; get; } = default;
+        public short m_endBoneIndex { set; get; } = default;
+        public float m_limitHeadingDegrees { set; get; } = default;
+        public float m_limitPitchDegrees { set; get; } = default;
+        public float m_offsetHeadingDegrees { set; get; } = default;
+        public float m_offsetPitchDegrees { set; get; } = default;
+        public float m_onGain { set; get; } = default;
+        public float m_offGain { set; get; } = default;
+        public Vector4 m_targetLocation { set; get; } = default;
+        public uint m_userInfo { set; get; } = default;
+        public bool m_directAtCamera { set; get; } = default;
+        public float m_directAtCameraX { set; get; } = default;
+        public float m_directAtCameraY { set; get; } = default;
+        public float m_directAtCameraZ { set; get; } = default;
+        public bool m_active { set; get; } = default;
+        public float m_currentHeadingOffset { set; get; } = default;
+        public float m_currentPitchOffset { set; get; } = default;
+        private float m_timeStep { set; get; } = default;
+        private object? m_pSkeletonMemory { set; get; } = default;
+        private bool m_hasTarget { set; get; } = default;
+        private Vector4 m_directAtTargetLocation { set; get; } = default;
+        public IList<object> m_boneChainIndices { set; get; } = new List<object>();
 
         public override uint Signature => 0x19a005c0;
 
@@ -149,11 +150,6 @@ namespace HKX2
             m_active = xd.ReadBoolean(xe, nameof(m_active));
             m_currentHeadingOffset = xd.ReadSingle(xe, nameof(m_currentHeadingOffset));
             m_currentPitchOffset = xd.ReadSingle(xe, nameof(m_currentPitchOffset));
-            m_timeStep = default;
-            m_pSkeletonMemory = default;
-            m_hasTarget = default;
-            m_directAtTargetLocation = default;
-            m_boneChainIndices = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_syncNextFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 1 flags: FLAGS_NONE enum: 
     public partial class hkbBlenderGeneratorChildInternalState : IHavokObject
     {
-        public bool m_isActive;
-        public bool m_syncNextFrame;
+        public bool m_isActive { set; get; } = default;
+        public bool m_syncNextFrame { set; get; } = default;
 
         public virtual uint Signature => 0xff7327c0;
 

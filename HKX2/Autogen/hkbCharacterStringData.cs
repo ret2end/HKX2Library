@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -20,19 +22,19 @@ namespace HKX2
     // m_behaviorFilename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 184 flags: FLAGS_NONE enum: 
     public partial class hkbCharacterStringData : hkReferencedObject
     {
-        public List<string> m_deformableSkinNames;
-        public List<string> m_rigidSkinNames;
-        public List<string> m_animationNames;
-        public List<string> m_animationFilenames;
-        public List<string> m_characterPropertyNames;
-        public List<string> m_retargetingSkeletonMapperFilenames;
-        public List<string> m_lodNames;
-        public List<string> m_mirroredSyncPointSubstringsA;
-        public List<string> m_mirroredSyncPointSubstringsB;
-        public string m_name;
-        public string m_rigName;
-        public string m_ragdollName;
-        public string m_behaviorFilename;
+        public IList<string> m_deformableSkinNames { set; get; } = new List<string>();
+        public IList<string> m_rigidSkinNames { set; get; } = new List<string>();
+        public IList<string> m_animationNames { set; get; } = new List<string>();
+        public IList<string> m_animationFilenames { set; get; } = new List<string>();
+        public IList<string> m_characterPropertyNames { set; get; } = new List<string>();
+        public IList<string> m_retargetingSkeletonMapperFilenames { set; get; } = new List<string>();
+        public IList<string> m_lodNames { set; get; } = new List<string>();
+        public IList<string> m_mirroredSyncPointSubstringsA { set; get; } = new List<string>();
+        public IList<string> m_mirroredSyncPointSubstringsB { set; get; } = new List<string>();
+        public string m_name { set; get; } = "";
+        public string m_rigName { set; get; } = "";
+        public string m_ragdollName { set; get; } = "";
+        public string m_behaviorFilename { set; get; } = "";
 
         public override uint Signature => 0x655b42bc;
 

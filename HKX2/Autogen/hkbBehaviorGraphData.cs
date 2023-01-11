@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,14 +17,14 @@ namespace HKX2
     // m_stringData m_class: hkbBehaviorGraphStringData Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorGraphData : hkReferencedObject
     {
-        public List<float> m_attributeDefaults;
-        public List<hkbVariableInfo> m_variableInfos = new List<hkbVariableInfo>();
-        public List<hkbVariableInfo> m_characterPropertyInfos = new List<hkbVariableInfo>();
-        public List<hkbEventInfo> m_eventInfos = new List<hkbEventInfo>();
-        public List<hkbVariableValue> m_wordMinVariableValues = new List<hkbVariableValue>();
-        public List<hkbVariableValue> m_wordMaxVariableValues = new List<hkbVariableValue>();
-        public hkbVariableValueSet m_variableInitialValues;
-        public hkbBehaviorGraphStringData m_stringData;
+        public IList<float> m_attributeDefaults { set; get; } = new List<float>();
+        public IList<hkbVariableInfo> m_variableInfos { set; get; } = new List<hkbVariableInfo>();
+        public IList<hkbVariableInfo> m_characterPropertyInfos { set; get; } = new List<hkbVariableInfo>();
+        public IList<hkbEventInfo> m_eventInfos { set; get; } = new List<hkbEventInfo>();
+        public IList<hkbVariableValue> m_wordMinVariableValues { set; get; } = new List<hkbVariableValue>();
+        public IList<hkbVariableValue> m_wordMaxVariableValues { set; get; } = new List<hkbVariableValue>();
+        public hkbVariableValueSet? m_variableInitialValues { set; get; } = default;
+        public hkbBehaviorGraphStringData? m_stringData { set; get; } = default;
 
         public override uint Signature => 0x95aca5d;
 
@@ -43,11 +45,11 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteSingleArray(bw, m_attributeDefaults);
-            s.WriteClassArray<hkbVariableInfo>(bw, m_variableInfos);
-            s.WriteClassArray<hkbVariableInfo>(bw, m_characterPropertyInfos);
-            s.WriteClassArray<hkbEventInfo>(bw, m_eventInfos);
-            s.WriteClassArray<hkbVariableValue>(bw, m_wordMinVariableValues);
-            s.WriteClassArray<hkbVariableValue>(bw, m_wordMaxVariableValues);
+            s.WriteClassArray(bw, m_variableInfos);
+            s.WriteClassArray(bw, m_characterPropertyInfos);
+            s.WriteClassArray(bw, m_eventInfos);
+            s.WriteClassArray(bw, m_wordMinVariableValues);
+            s.WriteClassArray(bw, m_wordMaxVariableValues);
             s.WriteClassPointer(bw, m_variableInitialValues);
             s.WriteClassPointer(bw, m_stringData);
         }

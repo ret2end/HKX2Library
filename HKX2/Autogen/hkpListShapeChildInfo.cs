@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_numChildShapes m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpListShapeChildInfo : IHavokObject
     {
-        public hkpShape m_shape;
-        public uint m_collisionFilterInfo;
-        public int m_shapeSize;
-        public int m_numChildShapes;
+        public hkpShape? m_shape { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        private int m_shapeSize { set; get; } = default;
+        private int m_numChildShapes { set; get; } = default;
 
         public virtual uint Signature => 0x80df0f90;
 
@@ -39,8 +42,6 @@ namespace HKX2
         {
             m_shape = xd.ReadClassPointer<hkpShape>(xe, nameof(m_shape));
             m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
-            m_shapeSize = default;
-            m_numChildShapes = default;
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

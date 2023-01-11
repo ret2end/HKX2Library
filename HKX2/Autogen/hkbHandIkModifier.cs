@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_internalHandData m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbHandIkModifier : hkbModifier
     {
-        public List<hkbHandIkModifierHand> m_hands = new List<hkbHandIkModifierHand>();
-        public sbyte m_fadeInOutCurve;
-        public List<dynamic> m_internalHandData;
+        public IList<hkbHandIkModifierHand> m_hands { set; get; } = new List<hkbHandIkModifierHand>();
+        public sbyte m_fadeInOutCurve { set; get; } = default;
+        public IList<object> m_internalHandData { set; get; } = new List<object>();
 
         public override uint Signature => 0xef8bc2f7;
 
@@ -28,8 +30,8 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbHandIkModifierHand>(bw, m_hands);
-            s.WriteSByte(bw, m_fadeInOutCurve);
+            s.WriteClassArray(bw, m_hands);
+            bw.WriteSByte(m_fadeInOutCurve);
             bw.Position += 7;
             s.WriteVoidArray(bw);
         }
@@ -39,7 +41,6 @@ namespace HKX2
             base.ReadXml(xd, xe);
             m_hands = xd.ReadClassArray<hkbHandIkModifierHand>(xe, nameof(m_hands));
             m_fadeInOutCurve = xd.ReadFlag<BlendCurve, sbyte>(xe, nameof(m_fadeInOutCurve));
-            m_internalHandData = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

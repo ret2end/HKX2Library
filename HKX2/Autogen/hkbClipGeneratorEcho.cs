@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_dwdt m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkbClipGeneratorEcho : IHavokObject
     {
-        public float m_offsetLocalTime;
-        public float m_weight;
-        public float m_dwdt;
+        public float m_offsetLocalTime { set; get; } = default;
+        public float m_weight { set; get; } = default;
+        public float m_dwdt { set; get; } = default;
 
         public virtual uint Signature => 0x750edf40;
 

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
     public partial class hkpAngularDashpotAction : hkpBinaryAction
     {
-        public Quaternion m_rotation;
-        public float m_strength;
-        public float m_damping;
+        public Quaternion m_rotation { set; get; } = default;
+        public float m_strength { set; get; } = default;
+        public float m_damping { set; get; } = default;
 
         public override uint Signature => 0x35f4c487;
 

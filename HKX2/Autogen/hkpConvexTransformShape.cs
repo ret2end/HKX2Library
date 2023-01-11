@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,7 +10,7 @@ namespace HKX2
     // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpConvexTransformShape : hkpConvexTransformShapeBase
     {
-        public Matrix4x4 m_transform;
+        public Matrix4x4 m_transform { set; get; } = default;
 
         public override uint Signature => 0xae3e5017;
 

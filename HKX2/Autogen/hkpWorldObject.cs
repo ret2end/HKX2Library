@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,13 +16,13 @@ namespace HKX2
     // m_treeData m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 200 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpWorldObject : hkReferencedObject
     {
-        public dynamic m_world;
-        public ulong m_userData;
-        public hkpLinkedCollidable m_collidable = new hkpLinkedCollidable();
-        public hkMultiThreadCheck m_multiThreadCheck = new hkMultiThreadCheck();
-        public string m_name;
-        public List<hkpProperty> m_properties = new List<hkpProperty>();
-        public dynamic m_treeData;
+        private object? m_world { set; get; } = default;
+        public ulong m_userData { set; get; } = default;
+        public hkpLinkedCollidable m_collidable { set; get; } = new();
+        public hkMultiThreadCheck m_multiThreadCheck { set; get; } = new();
+        public string m_name { set; get; } = "";
+        public IList<hkpProperty> m_properties { set; get; } = new List<hkpProperty>();
+        private object? m_treeData { set; get; } = default;
 
         public override uint Signature => 0x49fb6f2e;
 
@@ -29,9 +31,7 @@ namespace HKX2
             base.Read(des, br);
             des.ReadEmptyPointer(br);
             m_userData = br.ReadUInt64();
-            m_collidable = new hkpLinkedCollidable();
             m_collidable.Read(des, br);
-            m_multiThreadCheck = new hkMultiThreadCheck();
             m_multiThreadCheck.Read(des, br);
             br.Position += 4;
             m_name = des.ReadStringPointer(br);
@@ -48,20 +48,18 @@ namespace HKX2
             m_multiThreadCheck.Write(s, bw);
             bw.Position += 4;
             s.WriteStringPointer(bw, m_name);
-            s.WriteClassArray<hkpProperty>(bw, m_properties);
+            s.WriteClassArray(bw, m_properties);
             s.WriteVoidPointer(bw);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_world = default;
             m_userData = xd.ReadUInt64(xe, nameof(m_userData));
             m_collidable = xd.ReadClass<hkpLinkedCollidable>(xe, nameof(m_collidable));
             m_multiThreadCheck = xd.ReadClass<hkMultiThreadCheck>(xe, nameof(m_multiThreadCheck));
             m_name = xd.ReadString(xe, nameof(m_name));
             m_properties = xd.ReadClassArray<hkpProperty>(xe, nameof(m_properties));
-            m_treeData = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

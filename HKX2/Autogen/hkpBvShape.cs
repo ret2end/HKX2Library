@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_childShape m_class: hkpSingleShapeContainer Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkpBvShape : hkpShape
     {
-        public hkpShape m_boundingVolumeShape;
-        public hkpSingleShapeContainer m_childShape = new hkpSingleShapeContainer();
+        public hkpShape? m_boundingVolumeShape { set; get; } = default;
+        public hkpSingleShapeContainer m_childShape { set; get; } = new();
 
         public override uint Signature => 0x286eb64c;
 
@@ -17,7 +20,6 @@ namespace HKX2
         {
             base.Read(des, br);
             m_boundingVolumeShape = des.ReadClassPointer<hkpShape>(br);
-            m_childShape = new hkpSingleShapeContainer();
             m_childShape.Read(des, br);
         }
 

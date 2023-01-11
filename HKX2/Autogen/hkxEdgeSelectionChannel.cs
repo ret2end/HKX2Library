@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_selectedEdges m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkxEdgeSelectionChannel : hkReferencedObject
     {
-        public List<int> m_selectedEdges;
+        public IList<int> m_selectedEdges { set; get; } = new List<int>();
 
         public override uint Signature => 0x9ad32a5e;
 

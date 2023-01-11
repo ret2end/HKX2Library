@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,20 +16,19 @@ namespace HKX2
     // m_isCloseToGround m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbDetectCloseToGroundModifier : hkbModifier
     {
-        public hkbEventProperty m_closeToGroundEvent = new hkbEventProperty();
-        public float m_closeToGroundHeight;
-        public float m_raycastDistanceDown;
-        public uint m_collisionFilterInfo;
-        public short m_boneIndex;
-        public short m_animBoneIndex;
-        public bool m_isCloseToGround;
+        public hkbEventProperty m_closeToGroundEvent { set; get; } = new();
+        public float m_closeToGroundHeight { set; get; } = default;
+        public float m_raycastDistanceDown { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
+        public short m_boneIndex { set; get; } = default;
+        public short m_animBoneIndex { set; get; } = default;
+        private bool m_isCloseToGround { set; get; } = default;
 
         public override uint Signature => 0x981687b2;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_closeToGroundEvent = new hkbEventProperty();
             m_closeToGroundEvent.Read(des, br);
             m_closeToGroundHeight = br.ReadSingle();
             m_raycastDistanceDown = br.ReadSingle();
@@ -59,7 +61,6 @@ namespace HKX2
             m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
             m_boneIndex = xd.ReadInt16(xe, nameof(m_boneIndex));
             m_animBoneIndex = xd.ReadInt16(xe, nameof(m_animBoneIndex));
-            m_isCloseToGround = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

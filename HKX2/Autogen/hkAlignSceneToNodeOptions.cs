@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +18,15 @@ namespace HKX2
     // m_nodeName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkAlignSceneToNodeOptions : hkReferencedObject
     {
-        public bool m_invert;
-        public bool m_transformPositionX;
-        public bool m_transformPositionY;
-        public bool m_transformPositionZ;
-        public bool m_transformRotation;
-        public bool m_transformScale;
-        public bool m_transformSkew;
-        public int m_keyframe;
-        public string m_nodeName;
+        public bool m_invert { set; get; } = default;
+        public bool m_transformPositionX { set; get; } = default;
+        public bool m_transformPositionY { set; get; } = default;
+        public bool m_transformPositionZ { set; get; } = default;
+        public bool m_transformRotation { set; get; } = default;
+        public bool m_transformScale { set; get; } = default;
+        public bool m_transformSkew { set; get; } = default;
+        public int m_keyframe { set; get; } = default;
+        public string m_nodeName { set; get; } = "";
 
         public override uint Signature => 0x207cb01;
 

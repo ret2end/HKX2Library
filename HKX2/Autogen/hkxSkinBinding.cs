@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -12,10 +13,10 @@ namespace HKX2
     // m_initSkinTransform m_class:  Type.TYPE_MATRIX4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkxSkinBinding : hkReferencedObject
     {
-        public hkxMesh m_mesh;
-        public List<string> m_nodeNames;
-        public List<Matrix4x4> m_bindPose;
-        public Matrix4x4 m_initSkinTransform;
+        public hkxMesh? m_mesh { set; get; } = default;
+        public IList<string> m_nodeNames { set; get; } = new List<string>();
+        public IList<Matrix4x4> m_bindPose { set; get; } = new List<Matrix4x4>();
+        public Matrix4x4 m_initSkinTransform { set; get; } = default;
 
         public override uint Signature => 0x5a93f338;
 

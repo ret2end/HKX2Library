@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_wasActiveInPreviousFrame m_class:  Type.TYPE_ARRAY Type.TYPE_BOOL arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbEventsFromRangeModifierInternalState : hkReferencedObject
     {
-        public List<bool> m_wasActiveInPreviousFrame;
+        public IList<bool> m_wasActiveInPreviousFrame { set; get; } = new List<bool>();
 
         public override uint Signature => 0xcc47b48d;
 

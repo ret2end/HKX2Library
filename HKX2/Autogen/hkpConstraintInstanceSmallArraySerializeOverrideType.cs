@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_capacityAndFlags m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 10 flags: FLAGS_NONE enum: 
     public partial class hkpConstraintInstanceSmallArraySerializeOverrideType : IHavokObject
     {
-        public dynamic m_data;
-        public ushort m_size;
-        public ushort m_capacityAndFlags;
+        private object? m_data { set; get; } = default;
+        public ushort m_size { set; get; } = default;
+        public ushort m_capacityAndFlags { set; get; } = default;
 
         public virtual uint Signature => 0xee3c2aec;
 
@@ -33,7 +36,6 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_data = default;
             m_size = xd.ReadUInt16(xe, nameof(m_size));
             m_capacityAndFlags = xd.ReadUInt16(xe, nameof(m_capacityAndFlags));
         }

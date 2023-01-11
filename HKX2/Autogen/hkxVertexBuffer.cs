@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,17 +11,15 @@ namespace HKX2
     // m_desc m_class: hkxVertexDescription Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
     public partial class hkxVertexBuffer : hkReferencedObject
     {
-        public hkxVertexBufferVertexData m_data = new hkxVertexBufferVertexData();
-        public hkxVertexDescription m_desc = new hkxVertexDescription();
+        public hkxVertexBufferVertexData m_data { set; get; } = new();
+        public hkxVertexDescription m_desc { set; get; } = new();
 
         public override uint Signature => 0x4ab10615;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_data = new hkxVertexBufferVertexData();
             m_data.Read(des, br);
-            m_desc = new hkxVertexDescription();
             m_desc.Read(des, br);
         }
 

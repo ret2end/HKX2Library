@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_annotations m_class: hkaAnnotationTrackAnnotation Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkaAnnotationTrack : IHavokObject
     {
-        public string m_trackName;
-        public List<hkaAnnotationTrackAnnotation> m_annotations = new List<hkaAnnotationTrackAnnotation>();
+        public string m_trackName { set; get; } = "";
+        public IList<hkaAnnotationTrackAnnotation> m_annotations { set; get; } = new List<hkaAnnotationTrackAnnotation>();
 
         public virtual uint Signature => 0xd4114fdd;
 
@@ -23,7 +25,7 @@ namespace HKX2
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             s.WriteStringPointer(bw, m_trackName);
-            s.WriteClassArray<hkaAnnotationTrackAnnotation>(bw, m_annotations);
+            s.WriteClassArray(bw, m_annotations);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

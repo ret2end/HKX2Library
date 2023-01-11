@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -21,20 +23,20 @@ namespace HKX2
     // m_localFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     public partial class hkbHandIkModifierHand : IHavokObject
     {
-        public Vector4 m_elbowAxisLS;
-        public Vector4 m_backHandNormalLS;
-        public Vector4 m_handOffsetLS;
-        public Quaternion m_handOrienationOffsetLS;
-        public float m_maxElbowAngleDegrees;
-        public float m_minElbowAngleDegrees;
-        public short m_shoulderIndex;
-        public short m_shoulderSiblingIndex;
-        public short m_elbowIndex;
-        public short m_elbowSiblingIndex;
-        public short m_wristIndex;
-        public bool m_enforceEndPosition;
-        public bool m_enforceEndRotation;
-        public string m_localFrameName;
+        public Vector4 m_elbowAxisLS { set; get; } = default;
+        public Vector4 m_backHandNormalLS { set; get; } = default;
+        public Vector4 m_handOffsetLS { set; get; } = default;
+        public Quaternion m_handOrienationOffsetLS { set; get; } = default;
+        public float m_maxElbowAngleDegrees { set; get; } = default;
+        public float m_minElbowAngleDegrees { set; get; } = default;
+        public short m_shoulderIndex { set; get; } = default;
+        public short m_shoulderSiblingIndex { set; get; } = default;
+        public short m_elbowIndex { set; get; } = default;
+        public short m_elbowSiblingIndex { set; get; } = default;
+        public short m_wristIndex { set; get; } = default;
+        public bool m_enforceEndPosition { set; get; } = default;
+        public bool m_enforceEndRotation { set; get; } = default;
+        public string m_localFrameName { set; get; } = "";
 
         public virtual uint Signature => 0x14dfe1dd;
 

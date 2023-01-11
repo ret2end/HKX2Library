@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,10 +17,10 @@ namespace HKX2
     {
         public uint[] m_min = new uint[3];
         public byte[] m_expansionMin = new byte[3];
-        public byte m_expansionShift;
+        public byte m_expansionShift { set; get; } = default;
         public uint[] m_max = new uint[3];
         public byte[] m_expansionMax = new byte[3];
-        public byte m_shapeKeyByte;
+        public byte m_shapeKeyByte { set; get; } = default;
 
         public virtual uint Signature => 0x11e7c11;
 

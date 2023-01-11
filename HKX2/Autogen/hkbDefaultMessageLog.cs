@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
 
     public partial class hkbDefaultMessageLog : IHavokObject
     {
-        public byte[] unk0 = new byte[1];
+        private byte[] unk0 = new byte[1];
 
         public virtual uint Signature => 0x7bd5c66f;
 

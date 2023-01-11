@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_ChildrenA m_class: BSBoneSwitchGeneratorBoneData Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     public partial class BSBoneSwitchGenerator : hkbGenerator
     {
-        public hkbGenerator m_pDefaultGenerator;
-        public List<BSBoneSwitchGeneratorBoneData> m_ChildrenA = new List<BSBoneSwitchGeneratorBoneData>();
+        public hkbGenerator? m_pDefaultGenerator { set; get; } = default;
+        public IList<BSBoneSwitchGeneratorBoneData> m_ChildrenA { set; get; } = new List<BSBoneSwitchGeneratorBoneData>();
 
         public override uint Signature => 0xf33d3eea;
 
@@ -28,7 +30,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.Position += 8;
             s.WriteClassPointer(bw, m_pDefaultGenerator);
-            s.WriteClassPointerArray<BSBoneSwitchGeneratorBoneData>(bw, m_ChildrenA);
+            s.WriteClassPointerArray(bw, m_ChildrenA);
             bw.Position += 8;
         }
 

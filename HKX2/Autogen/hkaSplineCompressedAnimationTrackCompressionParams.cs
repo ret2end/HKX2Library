@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,18 +21,18 @@ namespace HKX2
     // m_floatQuantizationType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 27 flags: FLAGS_NONE enum: ScalarQuantization
     public partial class hkaSplineCompressedAnimationTrackCompressionParams : IHavokObject
     {
-        public float m_rotationTolerance;
-        public float m_translationTolerance;
-        public float m_scaleTolerance;
-        public float m_floatingTolerance;
-        public ushort m_rotationDegree;
-        public ushort m_translationDegree;
-        public ushort m_scaleDegree;
-        public ushort m_floatingDegree;
-        public byte m_rotationQuantizationType;
-        public byte m_translationQuantizationType;
-        public byte m_scaleQuantizationType;
-        public byte m_floatQuantizationType;
+        public float m_rotationTolerance { set; get; } = default;
+        public float m_translationTolerance { set; get; } = default;
+        public float m_scaleTolerance { set; get; } = default;
+        public float m_floatingTolerance { set; get; } = default;
+        public ushort m_rotationDegree { set; get; } = default;
+        public ushort m_translationDegree { set; get; } = default;
+        public ushort m_scaleDegree { set; get; } = default;
+        public ushort m_floatingDegree { set; get; } = default;
+        public byte m_rotationQuantizationType { set; get; } = default;
+        public byte m_translationQuantizationType { set; get; } = default;
+        public byte m_scaleQuantizationType { set; get; } = default;
+        public byte m_floatQuantizationType { set; get; } = default;
 
         public virtual uint Signature => 0x42e878d3;
 
@@ -59,10 +62,10 @@ namespace HKX2
             bw.WriteUInt16(m_translationDegree);
             bw.WriteUInt16(m_scaleDegree);
             bw.WriteUInt16(m_floatingDegree);
-            s.WriteByte(bw, m_rotationQuantizationType);
-            s.WriteByte(bw, m_translationQuantizationType);
-            s.WriteByte(bw, m_scaleQuantizationType);
-            s.WriteByte(bw, m_floatQuantizationType);
+            bw.WriteByte(m_rotationQuantizationType);
+            bw.WriteByte(m_translationQuantizationType);
+            bw.WriteByte(m_scaleQuantizationType);
+            bw.WriteByte(m_floatQuantizationType);
         }
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,12 +15,12 @@ namespace HKX2
     // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
     public partial class hkbSequenceInternalState : hkReferencedObject
     {
-        public List<int> m_nextSampleEvents;
-        public List<int> m_nextSampleReals;
-        public List<int> m_nextSampleBools;
-        public List<int> m_nextSampleInts;
-        public float m_time;
-        public bool m_isEnabled;
+        public IList<int> m_nextSampleEvents { set; get; } = new List<int>();
+        public IList<int> m_nextSampleReals { set; get; } = new List<int>();
+        public IList<int> m_nextSampleBools { set; get; } = new List<int>();
+        public IList<int> m_nextSampleInts { set; get; } = new List<int>();
+        public float m_time { set; get; } = default;
+        public bool m_isEnabled { set; get; } = default;
 
         public override uint Signature => 0x419b9a05;
 

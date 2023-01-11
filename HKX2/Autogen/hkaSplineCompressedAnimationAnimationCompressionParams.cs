@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_enableSampleSingleTracks m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
     public partial class hkaSplineCompressedAnimationAnimationCompressionParams : IHavokObject
     {
-        public ushort m_maxFramesPerBlock;
-        public bool m_enableSampleSingleTracks;
+        public ushort m_maxFramesPerBlock { set; get; } = default;
+        public bool m_enableSampleSingleTracks { set; get; } = default;
 
         public virtual uint Signature => 0xde830789;
 

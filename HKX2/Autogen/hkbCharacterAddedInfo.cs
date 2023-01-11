@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -15,13 +16,13 @@ namespace HKX2
     // m_poseModelSpace m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkbCharacterAddedInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public string m_instanceName;
-        public string m_templateName;
-        public string m_fullPathToProject;
-        public hkaSkeleton m_skeleton;
-        public Matrix4x4 m_worldFromModel;
-        public List<Matrix4x4> m_poseModelSpace;
+        public ulong m_characterId { set; get; } = default;
+        public string m_instanceName { set; get; } = "";
+        public string m_templateName { set; get; } = "";
+        public string m_fullPathToProject { set; get; } = "";
+        public hkaSkeleton? m_skeleton { set; get; } = default;
+        public Matrix4x4 m_worldFromModel { set; get; } = default;
+        public IList<Matrix4x4> m_poseModelSpace { set; get; } = new List<Matrix4x4>();
 
         public override uint Signature => 0x3544e182;
 

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,18 +14,17 @@ namespace HKX2
     // m_isPlantedMS m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 37 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkControlsModifierLeg : IHavokObject
     {
-        public Vector4 m_groundPosition;
-        public hkbEventProperty m_ungroundedEvent = new hkbEventProperty();
-        public float m_verticalError;
-        public bool m_hitSomething;
-        public bool m_isPlantedMS;
+        public Vector4 m_groundPosition { set; get; } = default;
+        public hkbEventProperty m_ungroundedEvent { set; get; } = new();
+        public float m_verticalError { set; get; } = default;
+        public bool m_hitSomething { set; get; } = default;
+        public bool m_isPlantedMS { set; get; } = default;
 
         public virtual uint Signature => 0x9e17091a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             m_groundPosition = br.ReadVector4();
-            m_ungroundedEvent = new hkbEventProperty();
             m_ungroundedEvent.Read(des, br);
             m_verticalError = br.ReadSingle();
             m_hitSomething = br.ReadBoolean();

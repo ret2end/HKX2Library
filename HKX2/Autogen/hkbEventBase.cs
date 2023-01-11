@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_payload m_class: hkbEventPayload Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkbEventBase : IHavokObject
     {
-        public int m_id;
-        public hkbEventPayload m_payload;
+        public int m_id { set; get; } = default;
+        public hkbEventPayload? m_payload { set; get; } = default;
 
         public virtual uint Signature => 0x76bddb31;
 

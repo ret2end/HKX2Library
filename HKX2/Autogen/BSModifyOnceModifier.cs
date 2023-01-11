@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,8 +11,8 @@ namespace HKX2
     // m_pOnDeactivateModifier m_class: hkbModifier Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 96 flags: ALIGN_16|FLAGS_NONE enum: 
     public partial class BSModifyOnceModifier : hkbModifier
     {
-        public hkbModifier m_pOnActivateModifier;
-        public hkbModifier m_pOnDeactivateModifier;
+        public hkbModifier? m_pOnActivateModifier { set; get; } = default;
+        public hkbModifier? m_pOnDeactivateModifier { set; get; } = default;
 
         public override uint Signature => 0x1e20a97a;
 

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_string m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     public partial class hkbTestStateChooser : hkbStateChooser
     {
-        public int m_int;
-        public float m_real;
-        public string m_string;
+        public int m_int { set; get; } = default;
+        public float m_real { set; get; } = default;
+        public string m_string { set; get; } = "";
 
         public override uint Signature => 0xc0fcc436;
 

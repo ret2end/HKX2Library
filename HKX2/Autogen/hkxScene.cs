@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -21,19 +22,19 @@ namespace HKX2
     // m_appliedTransform m_class:  Type.TYPE_MATRIX3 Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
     public partial class hkxScene : hkReferencedObject
     {
-        public string m_modeller;
-        public string m_asset;
-        public float m_sceneLength;
-        public hkxNode m_rootNode;
-        public List<hkxNodeSelectionSet> m_selectionSets = new List<hkxNodeSelectionSet>();
-        public List<hkxCamera> m_cameras = new List<hkxCamera>();
-        public List<hkxLight> m_lights = new List<hkxLight>();
-        public List<hkxMesh> m_meshes = new List<hkxMesh>();
-        public List<hkxMaterial> m_materials = new List<hkxMaterial>();
-        public List<hkxTextureInplace> m_inplaceTextures = new List<hkxTextureInplace>();
-        public List<hkxTextureFile> m_externalTextures = new List<hkxTextureFile>();
-        public List<hkxSkinBinding> m_skinBindings = new List<hkxSkinBinding>();
-        public Matrix4x4 m_appliedTransform;
+        public string m_modeller { set; get; } = "";
+        public string m_asset { set; get; } = "";
+        public float m_sceneLength { set; get; } = default;
+        public hkxNode? m_rootNode { set; get; } = default;
+        public IList<hkxNodeSelectionSet> m_selectionSets { set; get; } = new List<hkxNodeSelectionSet>();
+        public IList<hkxCamera> m_cameras { set; get; } = new List<hkxCamera>();
+        public IList<hkxLight> m_lights { set; get; } = new List<hkxLight>();
+        public IList<hkxMesh> m_meshes { set; get; } = new List<hkxMesh>();
+        public IList<hkxMaterial> m_materials { set; get; } = new List<hkxMaterial>();
+        public IList<hkxTextureInplace> m_inplaceTextures { set; get; } = new List<hkxTextureInplace>();
+        public IList<hkxTextureFile> m_externalTextures { set; get; } = new List<hkxTextureFile>();
+        public IList<hkxSkinBinding> m_skinBindings { set; get; } = new List<hkxSkinBinding>();
+        public Matrix4x4 m_appliedTransform { set; get; } = default;
 
         public override uint Signature => 0x5f673ddd;
 
@@ -64,14 +65,14 @@ namespace HKX2
             bw.WriteSingle(m_sceneLength);
             bw.Position += 4;
             s.WriteClassPointer(bw, m_rootNode);
-            s.WriteClassPointerArray<hkxNodeSelectionSet>(bw, m_selectionSets);
-            s.WriteClassPointerArray<hkxCamera>(bw, m_cameras);
-            s.WriteClassPointerArray<hkxLight>(bw, m_lights);
-            s.WriteClassPointerArray<hkxMesh>(bw, m_meshes);
-            s.WriteClassPointerArray<hkxMaterial>(bw, m_materials);
-            s.WriteClassPointerArray<hkxTextureInplace>(bw, m_inplaceTextures);
-            s.WriteClassPointerArray<hkxTextureFile>(bw, m_externalTextures);
-            s.WriteClassPointerArray<hkxSkinBinding>(bw, m_skinBindings);
+            s.WriteClassPointerArray(bw, m_selectionSets);
+            s.WriteClassPointerArray(bw, m_cameras);
+            s.WriteClassPointerArray(bw, m_lights);
+            s.WriteClassPointerArray(bw, m_meshes);
+            s.WriteClassPointerArray(bw, m_materials);
+            s.WriteClassPointerArray(bw, m_inplaceTextures);
+            s.WriteClassPointerArray(bw, m_externalTextures);
+            s.WriteClassPointerArray(bw, m_skinBindings);
             s.WriteMatrix3(bw, m_appliedTransform);
         }
 

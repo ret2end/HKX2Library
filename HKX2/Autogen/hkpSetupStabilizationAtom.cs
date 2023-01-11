@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +12,8 @@ namespace HKX2
     // m_padding m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 8 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpSetupStabilizationAtom : hkpConstraintAtom
     {
-        public bool m_enabled;
-        public float m_maxAngle;
+        public bool m_enabled { set; get; } = default;
+        public float m_maxAngle { set; get; } = default;
         public byte[] m_padding = new byte[8];
 
         public override uint Signature => 0xf05d137e;

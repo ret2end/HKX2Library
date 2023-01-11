@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +15,12 @@ namespace HKX2
     // m_numReferences m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkTrackerSerializableScanSnapshotBlock : IHavokObject
     {
-        public int m_typeIndex;
-        public ulong m_start;
-        public ulong m_size;
-        public int m_arraySize;
-        public int m_startReferenceIndex;
-        public int m_numReferences;
+        public int m_typeIndex { set; get; } = default;
+        public ulong m_start { set; get; } = default;
+        public ulong m_size { set; get; } = default;
+        public int m_arraySize { set; get; } = default;
+        public int m_startReferenceIndex { set; get; } = default;
+        public int m_numReferences { set; get; } = default;
 
         public virtual uint Signature => 0xe7f23e6d;
 

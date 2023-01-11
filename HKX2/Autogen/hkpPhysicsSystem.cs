@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,13 +16,13 @@ namespace HKX2
     // m_active m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkpPhysicsSystem : hkReferencedObject
     {
-        public List<hkpRigidBody> m_rigidBodies = new List<hkpRigidBody>();
-        public List<hkpConstraintInstance> m_constraints = new List<hkpConstraintInstance>();
-        public List<hkpAction> m_actions = new List<hkpAction>();
-        public List<hkpPhantom> m_phantoms = new List<hkpPhantom>();
-        public string m_name;
-        public ulong m_userData;
-        public bool m_active;
+        public IList<hkpRigidBody> m_rigidBodies { set; get; } = new List<hkpRigidBody>();
+        public IList<hkpConstraintInstance> m_constraints { set; get; } = new List<hkpConstraintInstance>();
+        public IList<hkpAction> m_actions { set; get; } = new List<hkpAction>();
+        public IList<hkpPhantom> m_phantoms { set; get; } = new List<hkpPhantom>();
+        public string m_name { set; get; } = "";
+        public ulong m_userData { set; get; } = default;
+        public bool m_active { set; get; } = default;
 
         public override uint Signature => 0xff724c17;
 
@@ -40,10 +42,10 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpRigidBody>(bw, m_rigidBodies);
-            s.WriteClassPointerArray<hkpConstraintInstance>(bw, m_constraints);
-            s.WriteClassPointerArray<hkpAction>(bw, m_actions);
-            s.WriteClassPointerArray<hkpPhantom>(bw, m_phantoms);
+            s.WriteClassPointerArray(bw, m_rigidBodies);
+            s.WriteClassPointerArray(bw, m_constraints);
+            s.WriteClassPointerArray(bw, m_actions);
+            s.WriteClassPointerArray(bw, m_phantoms);
             s.WriteStringPointer(bw, m_name);
             bw.WriteUInt64(m_userData);
             bw.WriteBoolean(m_active);

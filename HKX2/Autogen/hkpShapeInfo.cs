@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -14,12 +15,12 @@ namespace HKX2
     // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkpShapeInfo : hkReferencedObject
     {
-        public hkpShape m_shape;
-        public bool m_isHierarchicalCompound;
-        public bool m_hkdShapesCollected;
-        public List<string> m_childShapeNames;
-        public List<Matrix4x4> m_childTransforms;
-        public Matrix4x4 m_transform;
+        public hkpShape? m_shape { set; get; } = default;
+        public bool m_isHierarchicalCompound { set; get; } = default;
+        public bool m_hkdShapesCollected { set; get; } = default;
+        public IList<string> m_childShapeNames { set; get; } = new List<string>();
+        public IList<Matrix4x4> m_childTransforms { set; get; } = new List<Matrix4x4>();
+        public Matrix4x4 m_transform { set; get; } = default;
 
         public override uint Signature => 0xea7f1d08;
 

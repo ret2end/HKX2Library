@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,15 +18,15 @@ namespace HKX2
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineStateInfo : hkbBindable
     {
-        public List<hkbStateListener> m_listeners = new List<hkbStateListener>();
-        public hkbStateMachineEventPropertyArray m_enterNotifyEvents;
-        public hkbStateMachineEventPropertyArray m_exitNotifyEvents;
-        public hkbStateMachineTransitionInfoArray m_transitions;
-        public hkbGenerator m_generator;
-        public string m_name;
-        public int m_stateId;
-        public float m_probability;
-        public bool m_enable;
+        public IList<hkbStateListener> m_listeners { set; get; } = new List<hkbStateListener>();
+        public hkbStateMachineEventPropertyArray? m_enterNotifyEvents { set; get; } = default;
+        public hkbStateMachineEventPropertyArray? m_exitNotifyEvents { set; get; } = default;
+        public hkbStateMachineTransitionInfoArray? m_transitions { set; get; } = default;
+        public hkbGenerator? m_generator { set; get; } = default;
+        public string m_name { set; get; } = "";
+        public int m_stateId { set; get; } = default;
+        public float m_probability { set; get; } = default;
+        public bool m_enable { set; get; } = default;
 
         public override uint Signature => 0xed7f9d0;
 
@@ -46,7 +48,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkbStateListener>(bw, m_listeners);
+            s.WriteClassPointerArray(bw, m_listeners);
             s.WriteClassPointer(bw, m_enterNotifyEvents);
             s.WriteClassPointer(bw, m_exitNotifyEvents);
             s.WriteClassPointer(bw, m_transitions);

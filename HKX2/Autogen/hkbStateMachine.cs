@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -35,41 +37,40 @@ namespace HKX2
     // m_sCurrentStateIndexAndEntered m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 258 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbStateMachine : hkbGenerator
     {
-        public hkbEvent m_eventToSendWhenStateOrTransitionChanges = new hkbEvent();
-        public hkbStateChooser m_startStateChooser;
-        public int m_startStateId;
-        public int m_returnToPreviousStateEventId;
-        public int m_randomTransitionEventId;
-        public int m_transitionToNextHigherStateEventId;
-        public int m_transitionToNextLowerStateEventId;
-        public int m_syncVariableIndex;
-        public int m_currentStateId;
-        public bool m_wrapAroundStateId;
-        public sbyte m_maxSimultaneousTransitions;
-        public sbyte m_startStateMode;
-        public sbyte m_selfTransitionMode;
-        public bool m_isActive;
-        public List<hkbStateMachineStateInfo> m_states = new List<hkbStateMachineStateInfo>();
-        public hkbStateMachineTransitionInfoArray m_wildcardTransitions;
-        public dynamic m_stateIdToIndexMap;
-        public List<dynamic> m_activeTransitions;
-        public List<dynamic> m_transitionFlags;
-        public List<dynamic> m_wildcardTransitionFlags;
-        public List<dynamic> m_delayedTransitions;
-        public float m_timeInState;
-        public float m_lastLocalTime;
-        public int m_previousStateId;
-        public int m_nextStartStateIndexOverride;
-        public bool m_stateOrTransitionChanged;
-        public bool m_echoNextUpdate;
-        public ushort m_sCurrentStateIndexAndEntered;
+        public hkbEvent m_eventToSendWhenStateOrTransitionChanges { set; get; } = new();
+        public hkbStateChooser? m_startStateChooser { set; get; } = default;
+        public int m_startStateId { set; get; } = default;
+        public int m_returnToPreviousStateEventId { set; get; } = default;
+        public int m_randomTransitionEventId { set; get; } = default;
+        public int m_transitionToNextHigherStateEventId { set; get; } = default;
+        public int m_transitionToNextLowerStateEventId { set; get; } = default;
+        public int m_syncVariableIndex { set; get; } = default;
+        private int m_currentStateId { set; get; } = default;
+        public bool m_wrapAroundStateId { set; get; } = default;
+        public sbyte m_maxSimultaneousTransitions { set; get; } = default;
+        public sbyte m_startStateMode { set; get; } = default;
+        public sbyte m_selfTransitionMode { set; get; } = default;
+        private bool m_isActive { set; get; } = default;
+        public IList<hkbStateMachineStateInfo> m_states { set; get; } = new List<hkbStateMachineStateInfo>();
+        public hkbStateMachineTransitionInfoArray? m_wildcardTransitions { set; get; } = default;
+        private object? m_stateIdToIndexMap { set; get; } = default;
+        public IList<object> m_activeTransitions { set; get; } = new List<object>();
+        public IList<object> m_transitionFlags { set; get; } = new List<object>();
+        public IList<object> m_wildcardTransitionFlags { set; get; } = new List<object>();
+        public IList<object> m_delayedTransitions { set; get; } = new List<object>();
+        private float m_timeInState { set; get; } = default;
+        private float m_lastLocalTime { set; get; } = default;
+        private int m_previousStateId { set; get; } = default;
+        private int m_nextStartStateIndexOverride { set; get; } = default;
+        private bool m_stateOrTransitionChanged { set; get; } = default;
+        private bool m_echoNextUpdate { set; get; } = default;
+        private ushort m_sCurrentStateIndexAndEntered { set; get; } = default;
 
         public override uint Signature => 0x816c1dcb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_eventToSendWhenStateOrTransitionChanges = new hkbEvent();
             m_eventToSendWhenStateOrTransitionChanges.Read(des, br);
             m_startStateChooser = des.ReadClassPointer<hkbStateChooser>(br);
             m_startStateId = br.ReadInt32();
@@ -116,11 +117,11 @@ namespace HKX2
             bw.WriteInt32(m_currentStateId);
             bw.WriteBoolean(m_wrapAroundStateId);
             bw.WriteSByte(m_maxSimultaneousTransitions);
-            s.WriteSByte(bw, m_startStateMode);
-            s.WriteSByte(bw, m_selfTransitionMode);
+            bw.WriteSByte(m_startStateMode);
+            bw.WriteSByte(m_selfTransitionMode);
             bw.WriteBoolean(m_isActive);
             bw.Position += 7;
-            s.WriteClassPointerArray<hkbStateMachineStateInfo>(bw, m_states);
+            s.WriteClassPointerArray(bw, m_states);
             s.WriteClassPointer(bw, m_wildcardTransitions);
             s.WriteVoidPointer(bw);
             s.WriteVoidArray(bw);
@@ -148,26 +149,12 @@ namespace HKX2
             m_transitionToNextHigherStateEventId = xd.ReadInt32(xe, nameof(m_transitionToNextHigherStateEventId));
             m_transitionToNextLowerStateEventId = xd.ReadInt32(xe, nameof(m_transitionToNextLowerStateEventId));
             m_syncVariableIndex = xd.ReadInt32(xe, nameof(m_syncVariableIndex));
-            m_currentStateId = default;
             m_wrapAroundStateId = xd.ReadBoolean(xe, nameof(m_wrapAroundStateId));
             m_maxSimultaneousTransitions = xd.ReadSByte(xe, nameof(m_maxSimultaneousTransitions));
             m_startStateMode = xd.ReadFlag<StartStateMode, sbyte>(xe, nameof(m_startStateMode));
             m_selfTransitionMode = xd.ReadFlag<StateMachineSelfTransitionMode, sbyte>(xe, nameof(m_selfTransitionMode));
-            m_isActive = default;
             m_states = xd.ReadClassPointerArray<hkbStateMachineStateInfo>(xe, nameof(m_states));
             m_wildcardTransitions = xd.ReadClassPointer<hkbStateMachineTransitionInfoArray>(xe, nameof(m_wildcardTransitions));
-            m_stateIdToIndexMap = default;
-            m_activeTransitions = default;
-            m_transitionFlags = default;
-            m_wildcardTransitionFlags = default;
-            m_delayedTransitions = default;
-            m_timeInState = default;
-            m_lastLocalTime = default;
-            m_previousStateId = default;
-            m_nextStartStateIndexOverride = default;
-            m_stateOrTransitionChanged = default;
-            m_echoNextUpdate = default;
-            m_sCurrentStateIndexAndEntered = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,17 +20,17 @@ namespace HKX2
     // m_bOffsetValid m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 161 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class BSOffsetAnimationGenerator : hkbGenerator
     {
-        public hkbGenerator m_pDefaultGenerator;
-        public hkbGenerator m_pOffsetClipGenerator;
-        public float m_fOffsetVariable;
-        public float m_fOffsetRangeStart;
-        public float m_fOffsetRangeEnd;
-        public List<dynamic> m_BoneOffsetA;
-        public List<dynamic> m_BoneIndexA;
-        public float m_fCurrentPercentage;
-        public uint m_iCurrentFrame;
-        public bool m_bZeroOffset;
-        public bool m_bOffsetValid;
+        public hkbGenerator? m_pDefaultGenerator { set; get; } = default;
+        public hkbGenerator? m_pOffsetClipGenerator { set; get; } = default;
+        public float m_fOffsetVariable { set; get; } = default;
+        public float m_fOffsetRangeStart { set; get; } = default;
+        public float m_fOffsetRangeEnd { set; get; } = default;
+        public IList<object> m_BoneOffsetA { set; get; } = new List<object>();
+        public IList<object> m_BoneIndexA { set; get; } = new List<object>();
+        private float m_fCurrentPercentage { set; get; } = default;
+        private uint m_iCurrentFrame { set; get; } = default;
+        private bool m_bZeroOffset { set; get; } = default;
+        private bool m_bOffsetValid { set; get; } = default;
 
         public override uint Signature => 0xb8571122;
 
@@ -80,12 +82,6 @@ namespace HKX2
             m_fOffsetVariable = xd.ReadSingle(xe, nameof(m_fOffsetVariable));
             m_fOffsetRangeStart = xd.ReadSingle(xe, nameof(m_fOffsetRangeStart));
             m_fOffsetRangeEnd = xd.ReadSingle(xe, nameof(m_fOffsetRangeEnd));
-            m_BoneOffsetA = default;
-            m_BoneIndexA = default;
-            m_fCurrentPercentage = default;
-            m_iCurrentFrame = default;
-            m_bZeroOffset = default;
-            m_bOffsetValid = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

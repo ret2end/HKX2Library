@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,14 +17,14 @@ namespace HKX2
     // m_doSubtractiveBlend m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 61 flags: FLAGS_NONE enum: 
     public partial class hkbBlenderGeneratorInternalState : hkReferencedObject
     {
-        public List<hkbBlenderGeneratorChildInternalState> m_childrenInternalStates = new List<hkbBlenderGeneratorChildInternalState>();
-        public List<short> m_sortedChildren;
-        public float m_endIntervalWeight;
-        public int m_numActiveChildren;
-        public short m_beginIntervalIndex;
-        public short m_endIntervalIndex;
-        public bool m_initSync;
-        public bool m_doSubtractiveBlend;
+        public IList<hkbBlenderGeneratorChildInternalState> m_childrenInternalStates { set; get; } = new List<hkbBlenderGeneratorChildInternalState>();
+        public IList<short> m_sortedChildren { set; get; } = new List<short>();
+        public float m_endIntervalWeight { set; get; } = default;
+        public int m_numActiveChildren { set; get; } = default;
+        public short m_beginIntervalIndex { set; get; } = default;
+        public short m_endIntervalIndex { set; get; } = default;
+        public bool m_initSync { set; get; } = default;
+        public bool m_doSubtractiveBlend { set; get; } = default;
 
         public override uint Signature => 0x84717488;
 
@@ -43,7 +45,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbBlenderGeneratorChildInternalState>(bw, m_childrenInternalStates);
+            s.WriteClassArray(bw, m_childrenInternalStates);
             s.WriteInt16Array(bw, m_sortedChildren);
             bw.WriteSingle(m_endIntervalWeight);
             bw.WriteInt32(m_numActiveChildren);

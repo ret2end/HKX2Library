@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,10 +13,10 @@ namespace HKX2
     // m_active m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     public partial class hkpMotorAction : hkpUnaryAction
     {
-        public Vector4 m_axis;
-        public float m_spinRate;
-        public float m_gain;
-        public bool m_active;
+        public Vector4 m_axis { set; get; } = default;
+        public float m_spinRate { set; get; } = default;
+        public float m_gain { set; get; } = default;
+        public bool m_active { set; get; } = default;
 
         public override uint Signature => 0x8ff131d9;
 

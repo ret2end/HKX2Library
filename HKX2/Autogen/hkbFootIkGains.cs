@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,18 +21,18 @@ namespace HKX2
     // m_ankleOrientationGain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
     public partial class hkbFootIkGains : IHavokObject
     {
-        public float m_onOffGain;
-        public float m_groundAscendingGain;
-        public float m_groundDescendingGain;
-        public float m_footPlantedGain;
-        public float m_footRaisedGain;
-        public float m_footUnlockGain;
-        public float m_worldFromModelFeedbackGain;
-        public float m_errorUpDownBias;
-        public float m_alignWorldFromModelGain;
-        public float m_hipOrientationGain;
-        public float m_maxKneeAngleDifference;
-        public float m_ankleOrientationGain;
+        public float m_onOffGain { set; get; } = default;
+        public float m_groundAscendingGain { set; get; } = default;
+        public float m_groundDescendingGain { set; get; } = default;
+        public float m_footPlantedGain { set; get; } = default;
+        public float m_footRaisedGain { set; get; } = default;
+        public float m_footUnlockGain { set; get; } = default;
+        public float m_worldFromModelFeedbackGain { set; get; } = default;
+        public float m_errorUpDownBias { set; get; } = default;
+        public float m_alignWorldFromModelGain { set; get; } = default;
+        public float m_hipOrientationGain { set; get; } = default;
+        public float m_maxKneeAngleDifference { set; get; } = default;
+        public float m_ankleOrientationGain { set; get; } = default;
 
         public virtual uint Signature => 0xa681b7f0;
 

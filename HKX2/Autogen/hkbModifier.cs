@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +11,7 @@ namespace HKX2
     // m_padModifier m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 3 offset: 73 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbModifier : hkbNode
     {
-        public bool m_enable;
+        public bool m_enable { set; get; } = default;
         public bool[] m_padModifier = new bool[3];
 
         public override uint Signature => 0x96ec5ced;
@@ -33,7 +36,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_enable = xd.ReadBoolean(xe, nameof(m_enable));
-            m_padModifier = new bool[3];
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_softmax m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     public partial class hkRangeInt32Attribute : IHavokObject
     {
-        public int m_absmin;
-        public int m_absmax;
-        public int m_softmin;
-        public int m_softmax;
+        public int m_absmin { set; get; } = default;
+        public int m_absmax { set; get; } = default;
+        public int m_softmin { set; get; } = default;
+        public int m_softmax { set; get; } = default;
 
         public virtual uint Signature => 0x4846be29;
 

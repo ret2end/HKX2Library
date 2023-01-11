@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_children m_class: hkMemoryResourceContainer Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkMemoryResourceContainer : hkResourceContainer
     {
-        public string m_name;
-        public hkMemoryResourceContainer m_parent;
-        public List<hkMemoryResourceHandle> m_resourceHandles = new List<hkMemoryResourceHandle>();
-        public List<hkMemoryResourceContainer> m_children = new List<hkMemoryResourceContainer>();
+        public string m_name { set; get; } = "";
+        private hkMemoryResourceContainer? m_parent { set; get; } = default;
+        public IList<hkMemoryResourceHandle> m_resourceHandles { set; get; } = new List<hkMemoryResourceHandle>();
+        public IList<hkMemoryResourceContainer> m_children { set; get; } = new List<hkMemoryResourceContainer>();
 
         public override uint Signature => 0x4762f92a;
 
@@ -32,15 +34,14 @@ namespace HKX2
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
             s.WriteClassPointer(bw, m_parent);
-            s.WriteClassPointerArray<hkMemoryResourceHandle>(bw, m_resourceHandles);
-            s.WriteClassPointerArray<hkMemoryResourceContainer>(bw, m_children);
+            s.WriteClassPointerArray(bw, m_resourceHandles);
+            s.WriteClassPointerArray(bw, m_children);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
             m_name = xd.ReadString(xe, nameof(m_name));
-            m_parent = default;
             m_resourceHandles = xd.ReadClassPointerArray<hkMemoryResourceHandle>(xe, nameof(m_resourceHandles));
             m_children = xd.ReadClassPointerArray<hkMemoryResourceContainer>(xe, nameof(m_children));
         }

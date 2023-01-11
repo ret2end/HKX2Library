@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_orderDirty m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 432 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpSimpleShapePhantom : hkpShapePhantom
     {
-        public List<hkpSimpleShapePhantomCollisionDetail> m_collisionDetails = new List<hkpSimpleShapePhantomCollisionDetail>();
-        public bool m_orderDirty;
+        public IList<hkpSimpleShapePhantomCollisionDetail> m_collisionDetails { set; get; } = new List<hkpSimpleShapePhantomCollisionDetail>();
+        private bool m_orderDirty { set; get; } = default;
 
         public override uint Signature => 0x32a2a8a8;
 
@@ -25,7 +27,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkpSimpleShapePhantomCollisionDetail>(bw, m_collisionDetails);
+            s.WriteClassArray(bw, m_collisionDetails);
             bw.WriteBoolean(m_orderDirty);
             bw.Position += 15;
         }
@@ -33,8 +35,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_collisionDetails = new List<hkpSimpleShapePhantomCollisionDetail>();
-            m_orderDirty = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

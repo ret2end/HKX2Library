@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,24 +19,22 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_INT16 arrSize: 0 offset: 66 flags: FLAGS_NONE enum: TransitionFlags
     public partial class hkbStateMachineTransitionInfo : IHavokObject
     {
-        public hkbStateMachineTimeInterval m_triggerInterval = new hkbStateMachineTimeInterval();
-        public hkbStateMachineTimeInterval m_initiateInterval = new hkbStateMachineTimeInterval();
-        public hkbTransitionEffect m_transition;
-        public hkbCondition m_condition;
-        public int m_eventId;
-        public int m_toStateId;
-        public int m_fromNestedStateId;
-        public int m_toNestedStateId;
-        public short m_priority;
-        public short m_flags;
+        public hkbStateMachineTimeInterval m_triggerInterval { set; get; } = new();
+        public hkbStateMachineTimeInterval m_initiateInterval { set; get; } = new();
+        public hkbTransitionEffect? m_transition { set; get; } = default;
+        public hkbCondition? m_condition { set; get; } = default;
+        public int m_eventId { set; get; } = default;
+        public int m_toStateId { set; get; } = default;
+        public int m_fromNestedStateId { set; get; } = default;
+        public int m_toNestedStateId { set; get; } = default;
+        public short m_priority { set; get; } = default;
+        public short m_flags { set; get; } = default;
 
         public virtual uint Signature => 0xcdec8025;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_triggerInterval = new hkbStateMachineTimeInterval();
             m_triggerInterval.Read(des, br);
-            m_initiateInterval = new hkbStateMachineTimeInterval();
             m_initiateInterval.Read(des, br);
             m_transition = des.ReadClassPointer<hkbTransitionEffect>(br);
             m_condition = des.ReadClassPointer<hkbCondition>(br);

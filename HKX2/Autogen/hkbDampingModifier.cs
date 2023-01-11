@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -20,19 +22,19 @@ namespace HKX2
     // m_previousError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 180 flags: FLAGS_NONE enum: 
     public partial class hkbDampingModifier : hkbModifier
     {
-        public float m_kP;
-        public float m_kI;
-        public float m_kD;
-        public bool m_enableScalarDamping;
-        public bool m_enableVectorDamping;
-        public float m_rawValue;
-        public float m_dampedValue;
-        public Vector4 m_rawVector;
-        public Vector4 m_dampedVector;
-        public Vector4 m_vecErrorSum;
-        public Vector4 m_vecPreviousError;
-        public float m_errorSum;
-        public float m_previousError;
+        public float m_kP { set; get; } = default;
+        public float m_kI { set; get; } = default;
+        public float m_kD { set; get; } = default;
+        public bool m_enableScalarDamping { set; get; } = default;
+        public bool m_enableVectorDamping { set; get; } = default;
+        public float m_rawValue { set; get; } = default;
+        public float m_dampedValue { set; get; } = default;
+        public Vector4 m_rawVector { set; get; } = default;
+        public Vector4 m_dampedVector { set; get; } = default;
+        public Vector4 m_vecErrorSum { set; get; } = default;
+        public Vector4 m_vecPreviousError { set; get; } = default;
+        public float m_errorSum { set; get; } = default;
+        public float m_previousError { set; get; } = default;
 
         public override uint Signature => 0x9a040f03;
 

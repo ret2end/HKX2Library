@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -18,16 +19,16 @@ namespace HKX2
     // m_pingPongBackward m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 102 flags: FLAGS_NONE enum: 
     public partial class hkbClipGeneratorInternalState : hkReferencedObject
     {
-        public Matrix4x4 m_extractedMotion;
-        public List<hkbClipGeneratorEcho> m_echos = new List<hkbClipGeneratorEcho>();
-        public float m_localTime;
-        public float m_time;
-        public float m_previousUserControlledTimeFraction;
-        public int m_bufferSize;
-        public int m_echoBufferSize;
-        public bool m_atEnd;
-        public bool m_ignoreStartTime;
-        public bool m_pingPongBackward;
+        public Matrix4x4 m_extractedMotion { set; get; } = default;
+        public IList<hkbClipGeneratorEcho> m_echos { set; get; } = new List<hkbClipGeneratorEcho>();
+        public float m_localTime { set; get; } = default;
+        public float m_time { set; get; } = default;
+        public float m_previousUserControlledTimeFraction { set; get; } = default;
+        public int m_bufferSize { set; get; } = default;
+        public int m_echoBufferSize { set; get; } = default;
+        public bool m_atEnd { set; get; } = default;
+        public bool m_ignoreStartTime { set; get; } = default;
+        public bool m_pingPongBackward { set; get; } = default;
 
         public override uint Signature => 0x26ce5bf3;
 
@@ -51,7 +52,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteQSTransform(bw, m_extractedMotion);
-            s.WriteClassArray<hkbClipGeneratorEcho>(bw, m_echos);
+            s.WriteClassArray(bw, m_echos);
             bw.WriteSingle(m_localTime);
             bw.WriteSingle(m_time);
             bw.WriteSingle(m_previousUserControlledTimeFraction);

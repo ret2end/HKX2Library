@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: GizmoType
     public partial class hkGizmoAttribute : IHavokObject
     {
-        public bool m_visible;
-        public string m_label;
-        public sbyte m_type;
+        public bool m_visible { set; get; } = default;
+        public string m_label { set; get; } = "";
+        public sbyte m_type { set; get; } = default;
 
         public virtual uint Signature => 0x23aadfb6;
 
@@ -29,7 +32,7 @@ namespace HKX2
             bw.WriteBoolean(m_visible);
             bw.Position += 7;
             s.WriteCStringPointer(bw, m_label);
-            s.WriteSByte(bw, m_type);
+            bw.WriteSByte(m_type);
             bw.Position += 7;
         }
 

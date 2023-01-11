@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_skeleton m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 72 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbReferencePoseGenerator : hkbGenerator
     {
-        public dynamic m_skeleton;
+        private object? m_skeleton { set; get; } = default;
 
         public override uint Signature => 0x26a5675a;
 
@@ -26,7 +29,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_skeleton = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +10,7 @@ namespace HKX2
     // m_disabledEntities m_class: hkpEntity Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     public partial class hkpDisableEntityCollisionFilter : hkpCollisionFilter
     {
-        public List<hkpEntity> m_disabledEntities = new List<hkpEntity>();
+        public IList<hkpEntity> m_disabledEntities { set; get; } = new List<hkpEntity>();
 
         public override uint Signature => 0xfac3351c;
 
@@ -23,7 +25,7 @@ namespace HKX2
         {
             base.Write(s, bw);
             bw.Position += 8;
-            s.WriteClassPointerArray<hkpEntity>(bw, m_disabledEntities);
+            s.WriteClassPointerArray(bw, m_disabledEntities);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

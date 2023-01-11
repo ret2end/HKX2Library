@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +12,9 @@ namespace HKX2
     // m_strength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class hkpMalleableConstraintData : hkpConstraintData
     {
-        public hkpConstraintData m_constraintData;
-        public hkpBridgeAtoms m_atoms = new hkpBridgeAtoms();
-        public float m_strength;
+        public hkpConstraintData? m_constraintData { set; get; } = default;
+        public hkpBridgeAtoms m_atoms { set; get; } = new();
+        public float m_strength { set; get; } = default;
 
         public override uint Signature => 0x6748b2cf;
 
@@ -19,7 +22,6 @@ namespace HKX2
         {
             base.Read(des, br);
             m_constraintData = des.ReadClassPointer<hkpConstraintData>(br);
-            m_atoms = new hkpBridgeAtoms();
             m_atoms.Read(des, br);
             m_strength = br.ReadSingle();
             br.Position += 4;

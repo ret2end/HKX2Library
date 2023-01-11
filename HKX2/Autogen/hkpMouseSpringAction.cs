@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -16,14 +17,14 @@ namespace HKX2
     // m_applyCallbacks m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpMouseSpringAction : hkpUnaryAction
     {
-        public Vector4 m_positionInRbLocal;
-        public Vector4 m_mousePositionInWorld;
-        public float m_springDamping;
-        public float m_springElasticity;
-        public float m_maxRelativeForce;
-        public float m_objectDamping;
-        public uint m_shapeKey;
-        public List<dynamic> m_applyCallbacks = new List<dynamic>();
+        public Vector4 m_positionInRbLocal { set; get; } = default;
+        public Vector4 m_mousePositionInWorld { set; get; } = default;
+        public float m_springDamping { set; get; } = default;
+        public float m_springElasticity { set; get; } = default;
+        public float m_maxRelativeForce { set; get; } = default;
+        public float m_objectDamping { set; get; } = default;
+        public uint m_shapeKey { set; get; } = default;
+        public IList<object> m_applyCallbacks { set; get; } = new List<object>();
 
         public override uint Signature => 0x6e087fd6;
 
@@ -69,7 +70,6 @@ namespace HKX2
             m_maxRelativeForce = xd.ReadSingle(xe, nameof(m_maxRelativeForce));
             m_objectDamping = xd.ReadSingle(xe, nameof(m_objectDamping));
             m_shapeKey = xd.ReadUInt32(xe, nameof(m_shapeKey));
-            m_applyCallbacks = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

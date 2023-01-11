@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,11 +14,11 @@ namespace HKX2
     // m_activeVariableIds m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     public partial class hkbBehaviorGraphInternalStateInfo : hkReferencedObject
     {
-        public ulong m_characterId;
-        public hkbBehaviorGraphInternalState m_internalState;
-        public List<hkbAuxiliaryNodeInfo> m_auxiliaryNodeInfo = new List<hkbAuxiliaryNodeInfo>();
-        public List<short> m_activeEventIds;
-        public List<short> m_activeVariableIds;
+        public ulong m_characterId { set; get; } = default;
+        public hkbBehaviorGraphInternalState? m_internalState { set; get; } = default;
+        public IList<hkbAuxiliaryNodeInfo> m_auxiliaryNodeInfo { set; get; } = new List<hkbAuxiliaryNodeInfo>();
+        public IList<short> m_activeEventIds { set; get; } = new List<short>();
+        public IList<short> m_activeVariableIds { set; get; } = new List<short>();
 
         public override uint Signature => 0x645f898b;
 
@@ -35,7 +37,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.WriteUInt64(m_characterId);
             s.WriteClassPointer(bw, m_internalState);
-            s.WriteClassPointerArray<hkbAuxiliaryNodeInfo>(bw, m_auxiliaryNodeInfo);
+            s.WriteClassPointerArray(bw, m_auxiliaryNodeInfo);
             s.WriteInt16Array(bw, m_activeEventIds);
             s.WriteInt16Array(bw, m_activeVariableIds);
         }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,9 +12,9 @@ namespace HKX2
     // m_chains m_class: hkpConstraintChainInstance Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     public partial class hkpPoweredChainMapper : hkReferencedObject
     {
-        public List<hkpPoweredChainMapperLinkInfo> m_links = new List<hkpPoweredChainMapperLinkInfo>();
-        public List<hkpPoweredChainMapperTarget> m_targets = new List<hkpPoweredChainMapperTarget>();
-        public List<hkpConstraintChainInstance> m_chains = new List<hkpConstraintChainInstance>();
+        public IList<hkpPoweredChainMapperLinkInfo> m_links { set; get; } = new List<hkpPoweredChainMapperLinkInfo>();
+        public IList<hkpPoweredChainMapperTarget> m_targets { set; get; } = new List<hkpPoweredChainMapperTarget>();
+        public IList<hkpConstraintChainInstance> m_chains { set; get; } = new List<hkpConstraintChainInstance>();
 
         public override uint Signature => 0x7a77ef5;
 
@@ -27,9 +29,9 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkpPoweredChainMapperLinkInfo>(bw, m_links);
-            s.WriteClassArray<hkpPoweredChainMapperTarget>(bw, m_targets);
-            s.WriteClassPointerArray<hkpConstraintChainInstance>(bw, m_chains);
+            s.WriteClassArray(bw, m_links);
+            s.WriteClassArray(bw, m_targets);
+            s.WriteClassPointerArray(bw, m_chains);
         }
 
         public override void ReadXml(XmlDeserializer xd, XElement xe)

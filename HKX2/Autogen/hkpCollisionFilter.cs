@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,7 +13,7 @@ namespace HKX2
     public partial class hkpCollisionFilter : hkReferencedObject
     {
         public uint[] m_prepad = new uint[2];
-        public uint m_type;
+        public uint m_type { set; get; } = default;
         public uint[] m_postpad = new uint[3];
 
         public override uint Signature => 0x60960336;
@@ -29,7 +32,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.Position += 32;
             s.WriteUInt32CStyleArray(bw, m_prepad);
-            s.WriteUInt32(bw, m_type);
+            bw.WriteUInt32(m_type);
             s.WriteUInt32CStyleArray(bw, m_postpad);
         }
 

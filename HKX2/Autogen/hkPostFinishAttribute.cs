@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +10,7 @@ namespace HKX2
     // m_postFinishFunction m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 0 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkPostFinishAttribute : IHavokObject
     {
-        public dynamic m_postFinishFunction;
+        private object? m_postFinishFunction { set; get; } = default;
 
         public virtual uint Signature => 0x903abb2c;
 
@@ -23,7 +26,7 @@ namespace HKX2
 
         public virtual void ReadXml(XmlDeserializer xd, XElement xe)
         {
-            m_postFinishFunction = default;
+
         }
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)

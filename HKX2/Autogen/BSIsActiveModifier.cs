@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,16 +19,16 @@ namespace HKX2
     // m_bInvertActive4 m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 89 flags: FLAGS_NONE enum: 
     public partial class BSIsActiveModifier : hkbModifier
     {
-        public bool m_bIsActive0;
-        public bool m_bInvertActive0;
-        public bool m_bIsActive1;
-        public bool m_bInvertActive1;
-        public bool m_bIsActive2;
-        public bool m_bInvertActive2;
-        public bool m_bIsActive3;
-        public bool m_bInvertActive3;
-        public bool m_bIsActive4;
-        public bool m_bInvertActive4;
+        public bool m_bIsActive0 { set; get; } = default;
+        public bool m_bInvertActive0 { set; get; } = default;
+        public bool m_bIsActive1 { set; get; } = default;
+        public bool m_bInvertActive1 { set; get; } = default;
+        public bool m_bIsActive2 { set; get; } = default;
+        public bool m_bInvertActive2 { set; get; } = default;
+        public bool m_bIsActive3 { set; get; } = default;
+        public bool m_bInvertActive3 { set; get; } = default;
+        public bool m_bIsActive4 { set; get; } = default;
+        public bool m_bInvertActive4 { set; get; } = default;
 
         public override uint Signature => 0xb0fde45a;
 

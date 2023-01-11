@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,7 +10,7 @@ namespace HKX2
     // m_vectorOut m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbTransformVectorModifierInternalState : hkReferencedObject
     {
-        public Vector4 m_vectorOut;
+        public Vector4 m_vectorOut { set; get; } = default;
 
         public override uint Signature => 0x5ca91c99;
 

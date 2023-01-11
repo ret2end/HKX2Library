@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -17,15 +18,15 @@ namespace HKX2
     // m_properties m_class: hkxMaterialProperty Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
     public partial class hkxMaterial : hkxAttributeHolder
     {
-        public string m_name;
-        public List<hkxMaterialTextureStage> m_stages = new List<hkxMaterialTextureStage>();
-        public Vector4 m_diffuseColor;
-        public Vector4 m_ambientColor;
-        public Vector4 m_specularColor;
-        public Vector4 m_emissiveColor;
-        public List<hkxMaterial> m_subMaterials = new List<hkxMaterial>();
-        public hkReferencedObject m_extraData;
-        public List<hkxMaterialProperty> m_properties = new List<hkxMaterialProperty>();
+        public string m_name { set; get; } = "";
+        public IList<hkxMaterialTextureStage> m_stages { set; get; } = new List<hkxMaterialTextureStage>();
+        public Vector4 m_diffuseColor { set; get; } = default;
+        public Vector4 m_ambientColor { set; get; } = default;
+        public Vector4 m_specularColor { set; get; } = default;
+        public Vector4 m_emissiveColor { set; get; } = default;
+        public IList<hkxMaterial> m_subMaterials { set; get; } = new List<hkxMaterial>();
+        public hkReferencedObject? m_extraData { set; get; } = default;
+        public IList<hkxMaterialProperty> m_properties { set; get; } = new List<hkxMaterialProperty>();
 
         public override uint Signature => 0x2954537a;
 
@@ -49,15 +50,15 @@ namespace HKX2
         {
             base.Write(s, bw);
             s.WriteStringPointer(bw, m_name);
-            s.WriteClassArray<hkxMaterialTextureStage>(bw, m_stages);
+            s.WriteClassArray(bw, m_stages);
             bw.Position += 8;
             bw.WriteVector4(m_diffuseColor);
             bw.WriteVector4(m_ambientColor);
             bw.WriteVector4(m_specularColor);
             bw.WriteVector4(m_emissiveColor);
-            s.WriteClassPointerArray<hkxMaterial>(bw, m_subMaterials);
+            s.WriteClassPointerArray(bw, m_subMaterials);
             s.WriteClassPointer(bw, m_extraData);
-            s.WriteClassArray<hkxMaterialProperty>(bw, m_properties);
+            s.WriteClassArray(bw, m_properties);
             bw.Position += 8;
         }
 

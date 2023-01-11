@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +12,9 @@ namespace HKX2
     // m_rigidBodyFromDisplayObjectTransform m_class:  Type.TYPE_MATRIX4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpDisplayBindingDataRigidBody : hkReferencedObject
     {
-        public hkpRigidBody m_rigidBody;
-        public hkReferencedObject m_displayObjectPtr;
-        public Matrix4x4 m_rigidBodyFromDisplayObjectTransform;
+        public hkpRigidBody? m_rigidBody { set; get; } = default;
+        public hkReferencedObject? m_displayObjectPtr { set; get; } = default;
+        public Matrix4x4 m_rigidBodyFromDisplayObjectTransform { set; get; } = default;
 
         public override uint Signature => 0xfe16e2a3;
 

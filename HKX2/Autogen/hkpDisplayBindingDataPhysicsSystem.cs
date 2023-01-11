@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,8 +11,8 @@ namespace HKX2
     // m_system m_class: hkpPhysicsSystem Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     public partial class hkpDisplayBindingDataPhysicsSystem : hkReferencedObject
     {
-        public List<hkpDisplayBindingDataRigidBody> m_bindings = new List<hkpDisplayBindingDataRigidBody>();
-        public hkpPhysicsSystem m_system;
+        public IList<hkpDisplayBindingDataRigidBody> m_bindings { set; get; } = new List<hkpDisplayBindingDataRigidBody>();
+        public hkpPhysicsSystem? m_system { set; get; } = default;
 
         public override uint Signature => 0xc8ae86a7;
 
@@ -24,7 +26,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkpDisplayBindingDataRigidBody>(bw, m_bindings);
+            s.WriteClassPointerArray(bw, m_bindings);
             s.WriteClassPointer(bw, m_system);
         }
 

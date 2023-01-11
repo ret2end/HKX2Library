@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_restitution m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpMaterial : IHavokObject
     {
-        public sbyte m_responseType;
-        public Half m_rollingFrictionMultiplier;
-        public float m_friction;
-        public float m_restitution;
+        public sbyte m_responseType { set; get; } = default;
+        public Half m_rollingFrictionMultiplier { set; get; } = default;
+        public float m_friction { set; get; } = default;
+        public float m_restitution { set; get; } = default;
 
         public virtual uint Signature => 0x33be6570;
 
@@ -29,7 +31,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteSByte(bw, m_responseType);
+            bw.WriteSByte(m_responseType);
             bw.Position += 1;
             bw.WriteHalf(m_rollingFrictionMultiplier);
             bw.WriteSingle(m_friction);

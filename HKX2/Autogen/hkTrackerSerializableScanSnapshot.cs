@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,13 +16,13 @@ namespace HKX2
     // m_traceParents m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     public partial class hkTrackerSerializableScanSnapshot : hkReferencedObject
     {
-        public List<hkTrackerSerializableScanSnapshotAllocation> m_allocations = new List<hkTrackerSerializableScanSnapshotAllocation>();
-        public List<hkTrackerSerializableScanSnapshotBlock> m_blocks = new List<hkTrackerSerializableScanSnapshotBlock>();
-        public List<int> m_refs;
-        public List<byte> m_typeNames;
-        public List<byte> m_traceText;
-        public List<ulong> m_traceAddrs;
-        public List<int> m_traceParents;
+        public IList<hkTrackerSerializableScanSnapshotAllocation> m_allocations { set; get; } = new List<hkTrackerSerializableScanSnapshotAllocation>();
+        public IList<hkTrackerSerializableScanSnapshotBlock> m_blocks { set; get; } = new List<hkTrackerSerializableScanSnapshotBlock>();
+        public IList<int> m_refs { set; get; } = new List<int>();
+        public IList<byte> m_typeNames { set; get; } = new List<byte>();
+        public IList<byte> m_traceText { set; get; } = new List<byte>();
+        public IList<ulong> m_traceAddrs { set; get; } = new List<ulong>();
+        public IList<int> m_traceParents { set; get; } = new List<int>();
 
         public override uint Signature => 0x875af1d9;
 
@@ -39,8 +41,8 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkTrackerSerializableScanSnapshotAllocation>(bw, m_allocations);
-            s.WriteClassArray<hkTrackerSerializableScanSnapshotBlock>(bw, m_blocks);
+            s.WriteClassArray(bw, m_allocations);
+            s.WriteClassArray(bw, m_blocks);
             s.WriteInt32Array(bw, m_refs);
             s.WriteByteArray(bw, m_typeNames);
             s.WriteByteArray(bw, m_traceText);

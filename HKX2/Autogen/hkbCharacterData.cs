@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -22,27 +23,26 @@ namespace HKX2
     // m_numFloatSlots m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 174 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbCharacterData : hkReferencedObject
     {
-        public hkbCharacterDataCharacterControllerInfo m_characterControllerInfo = new hkbCharacterDataCharacterControllerInfo();
-        public Vector4 m_modelUpMS;
-        public Vector4 m_modelForwardMS;
-        public Vector4 m_modelRightMS;
-        public List<hkbVariableInfo> m_characterPropertyInfos = new List<hkbVariableInfo>();
-        public List<int> m_numBonesPerLod;
-        public hkbVariableValueSet m_characterPropertyValues;
-        public hkbFootIkDriverInfo m_footIkDriverInfo;
-        public hkbHandIkDriverInfo m_handIkDriverInfo;
-        public hkbCharacterStringData m_stringData;
-        public hkbMirroredSkeletonInfo m_mirroredSkeletonInfo;
-        public float m_scale;
-        public short m_numHands;
-        public short m_numFloatSlots;
+        public hkbCharacterDataCharacterControllerInfo m_characterControllerInfo { set; get; } = new();
+        public Vector4 m_modelUpMS { set; get; } = default;
+        public Vector4 m_modelForwardMS { set; get; } = default;
+        public Vector4 m_modelRightMS { set; get; } = default;
+        public IList<hkbVariableInfo> m_characterPropertyInfos { set; get; } = new List<hkbVariableInfo>();
+        public IList<int> m_numBonesPerLod { set; get; } = new List<int>();
+        public hkbVariableValueSet? m_characterPropertyValues { set; get; } = default;
+        public hkbFootIkDriverInfo? m_footIkDriverInfo { set; get; } = default;
+        public hkbHandIkDriverInfo? m_handIkDriverInfo { set; get; } = default;
+        public hkbCharacterStringData? m_stringData { set; get; } = default;
+        public hkbMirroredSkeletonInfo? m_mirroredSkeletonInfo { set; get; } = default;
+        public float m_scale { set; get; } = default;
+        private short m_numHands { set; get; } = default;
+        private short m_numFloatSlots { set; get; } = default;
 
         public override uint Signature => 0x300d6808;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_characterControllerInfo = new hkbCharacterDataCharacterControllerInfo();
             m_characterControllerInfo.Read(des, br);
             br.Position += 8;
             m_modelUpMS = br.ReadVector4();
@@ -68,7 +68,7 @@ namespace HKX2
             bw.WriteVector4(m_modelUpMS);
             bw.WriteVector4(m_modelForwardMS);
             bw.WriteVector4(m_modelRightMS);
-            s.WriteClassArray<hkbVariableInfo>(bw, m_characterPropertyInfos);
+            s.WriteClassArray(bw, m_characterPropertyInfos);
             s.WriteInt32Array(bw, m_numBonesPerLod);
             s.WriteClassPointer(bw, m_characterPropertyValues);
             s.WriteClassPointer(bw, m_footIkDriverInfo);
@@ -95,8 +95,6 @@ namespace HKX2
             m_stringData = xd.ReadClassPointer<hkbCharacterStringData>(xe, nameof(m_stringData));
             m_mirroredSkeletonInfo = xd.ReadClassPointer<hkbMirroredSkeletonInfo>(xe, nameof(m_mirroredSkeletonInfo));
             m_scale = xd.ReadSingle(xe, nameof(m_scale));
-            m_numHands = default;
-            m_numFloatSlots = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     public partial class hkpAction : hkReferencedObject
     {
-        public dynamic m_world;
-        public dynamic m_island;
-        public ulong m_userData;
-        public string m_name;
+        private object? m_world { set; get; } = default;
+        private object? m_island { set; get; } = default;
+        public ulong m_userData { set; get; } = default;
+        public string m_name { set; get; } = "";
 
         public override uint Signature => 0xbdf70a51;
 
@@ -38,8 +41,6 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_world = default;
-            m_island = default;
             m_userData = xd.ReadUInt64(xe, nameof(m_userData));
             m_name = xd.ReadString(xe, nameof(m_name));
         }

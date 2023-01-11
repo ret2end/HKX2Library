@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -22,21 +24,21 @@ namespace HKX2
     // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 244 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkbSequence : hkbModifier
     {
-        public List<hkbEventSequencedData> m_eventSequencedData = new List<hkbEventSequencedData>();
-        public List<hkbRealVariableSequencedData> m_realVariableSequencedData = new List<hkbRealVariableSequencedData>();
-        public List<hkbBoolVariableSequencedData> m_boolVariableSequencedData = new List<hkbBoolVariableSequencedData>();
-        public List<hkbIntVariableSequencedData> m_intVariableSequencedData = new List<hkbIntVariableSequencedData>();
-        public int m_enableEventId;
-        public int m_disableEventId;
-        public hkbSequenceStringData m_stringData;
-        public dynamic m_variableIdMap;
-        public dynamic m_eventIdMap;
-        public List<dynamic> m_nextSampleEvents;
-        public List<dynamic> m_nextSampleReals;
-        public List<dynamic> m_nextSampleBools;
-        public List<dynamic> m_nextSampleInts;
-        public float m_time;
-        public bool m_isEnabled;
+        public IList<hkbEventSequencedData> m_eventSequencedData { set; get; } = new List<hkbEventSequencedData>();
+        public IList<hkbRealVariableSequencedData> m_realVariableSequencedData { set; get; } = new List<hkbRealVariableSequencedData>();
+        public IList<hkbBoolVariableSequencedData> m_boolVariableSequencedData { set; get; } = new List<hkbBoolVariableSequencedData>();
+        public IList<hkbIntVariableSequencedData> m_intVariableSequencedData { set; get; } = new List<hkbIntVariableSequencedData>();
+        public int m_enableEventId { set; get; } = default;
+        public int m_disableEventId { set; get; } = default;
+        public hkbSequenceStringData? m_stringData { set; get; } = default;
+        private object? m_variableIdMap { set; get; } = default;
+        private object? m_eventIdMap { set; get; } = default;
+        public IList<object> m_nextSampleEvents { set; get; } = new List<object>();
+        public IList<object> m_nextSampleReals { set; get; } = new List<object>();
+        public IList<object> m_nextSampleBools { set; get; } = new List<object>();
+        public IList<object> m_nextSampleInts { set; get; } = new List<object>();
+        private float m_time { set; get; } = default;
+        private bool m_isEnabled { set; get; } = default;
 
         public override uint Signature => 0x43182ca3;
 
@@ -64,10 +66,10 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassPointerArray<hkbEventSequencedData>(bw, m_eventSequencedData);
-            s.WriteClassPointerArray<hkbRealVariableSequencedData>(bw, m_realVariableSequencedData);
-            s.WriteClassPointerArray<hkbBoolVariableSequencedData>(bw, m_boolVariableSequencedData);
-            s.WriteClassPointerArray<hkbIntVariableSequencedData>(bw, m_intVariableSequencedData);
+            s.WriteClassPointerArray(bw, m_eventSequencedData);
+            s.WriteClassPointerArray(bw, m_realVariableSequencedData);
+            s.WriteClassPointerArray(bw, m_boolVariableSequencedData);
+            s.WriteClassPointerArray(bw, m_intVariableSequencedData);
             bw.WriteInt32(m_enableEventId);
             bw.WriteInt32(m_disableEventId);
             s.WriteClassPointer(bw, m_stringData);
@@ -92,14 +94,6 @@ namespace HKX2
             m_enableEventId = xd.ReadInt32(xe, nameof(m_enableEventId));
             m_disableEventId = xd.ReadInt32(xe, nameof(m_disableEventId));
             m_stringData = xd.ReadClassPointer<hkbSequenceStringData>(xe, nameof(m_stringData));
-            m_variableIdMap = default;
-            m_eventIdMap = default;
-            m_nextSampleEvents = default;
-            m_nextSampleReals = default;
-            m_nextSampleBools = default;
-            m_nextSampleInts = default;
-            m_time = default;
-            m_isEnabled = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

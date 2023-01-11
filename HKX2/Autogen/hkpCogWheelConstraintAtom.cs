@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +15,12 @@ namespace HKX2
     // m_memOffsetToRevolutionCounter m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 15 flags: FLAGS_NONE enum: 
     public partial class hkpCogWheelConstraintAtom : hkpConstraintAtom
     {
-        public float m_cogWheelRadiusA;
-        public float m_cogWheelRadiusB;
-        public bool m_isScrew;
-        public sbyte m_memOffsetToInitialAngleOffset;
-        public sbyte m_memOffsetToPrevAngle;
-        public sbyte m_memOffsetToRevolutionCounter;
+        public float m_cogWheelRadiusA { set; get; } = default;
+        public float m_cogWheelRadiusB { set; get; } = default;
+        public bool m_isScrew { set; get; } = default;
+        public sbyte m_memOffsetToInitialAngleOffset { set; get; } = default;
+        public sbyte m_memOffsetToPrevAngle { set; get; } = default;
+        public sbyte m_memOffsetToRevolutionCounter { set; get; } = default;
 
         public override uint Signature => 0xf2b1f399;
 

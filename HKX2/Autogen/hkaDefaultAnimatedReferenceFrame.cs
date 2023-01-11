@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
@@ -12,10 +13,10 @@ namespace HKX2
     // m_referenceFrameSamples m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     public partial class hkaDefaultAnimatedReferenceFrame : hkaAnimatedReferenceFrame
     {
-        public Vector4 m_up;
-        public Vector4 m_forward;
-        public float m_duration;
-        public List<Vector4> m_referenceFrameSamples;
+        public Vector4 m_up { set; get; } = default;
+        public Vector4 m_forward { set; get; } = default;
+        public float m_duration { set; get; } = default;
+        public IList<Vector4> m_referenceFrameSamples { set; get; } = new List<Vector4>();
 
         public override uint Signature => 0x6d85e445;
 

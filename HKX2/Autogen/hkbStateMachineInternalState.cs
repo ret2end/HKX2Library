@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,17 +20,17 @@ namespace HKX2
     // m_echoNextUpdate m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 101 flags: FLAGS_NONE enum: 
     public partial class hkbStateMachineInternalState : hkReferencedObject
     {
-        public List<hkbStateMachineActiveTransitionInfo> m_activeTransitions = new List<hkbStateMachineActiveTransitionInfo>();
-        public List<byte> m_transitionFlags;
-        public List<byte> m_wildcardTransitionFlags;
-        public List<hkbStateMachineDelayedTransitionInfo> m_delayedTransitions = new List<hkbStateMachineDelayedTransitionInfo>();
-        public float m_timeInState;
-        public float m_lastLocalTime;
-        public int m_currentStateId;
-        public int m_previousStateId;
-        public int m_nextStartStateIndexOverride;
-        public bool m_stateOrTransitionChanged;
-        public bool m_echoNextUpdate;
+        public IList<hkbStateMachineActiveTransitionInfo> m_activeTransitions { set; get; } = new List<hkbStateMachineActiveTransitionInfo>();
+        public IList<byte> m_transitionFlags { set; get; } = new List<byte>();
+        public IList<byte> m_wildcardTransitionFlags { set; get; } = new List<byte>();
+        public IList<hkbStateMachineDelayedTransitionInfo> m_delayedTransitions { set; get; } = new List<hkbStateMachineDelayedTransitionInfo>();
+        public float m_timeInState { set; get; } = default;
+        public float m_lastLocalTime { set; get; } = default;
+        public int m_currentStateId { set; get; } = default;
+        public int m_previousStateId { set; get; } = default;
+        public int m_nextStartStateIndexOverride { set; get; } = default;
+        public bool m_stateOrTransitionChanged { set; get; } = default;
+        public bool m_echoNextUpdate { set; get; } = default;
 
         public override uint Signature => 0xbd1a7502;
 
@@ -52,10 +54,10 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteClassArray<hkbStateMachineActiveTransitionInfo>(bw, m_activeTransitions);
+            s.WriteClassArray(bw, m_activeTransitions);
             s.WriteByteArray(bw, m_transitionFlags);
             s.WriteByteArray(bw, m_wildcardTransitionFlags);
-            s.WriteClassArray<hkbStateMachineDelayedTransitionInfo>(bw, m_delayedTransitions);
+            s.WriteClassArray(bw, m_delayedTransitions);
             bw.WriteSingle(m_timeInState);
             bw.WriteSingle(m_lastLocalTime);
             bw.WriteInt32(m_currentStateId);

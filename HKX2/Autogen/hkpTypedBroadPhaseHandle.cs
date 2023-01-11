@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +13,10 @@ namespace HKX2
     // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     public partial class hkpTypedBroadPhaseHandle : hkpBroadPhaseHandle
     {
-        public sbyte m_type;
-        public sbyte m_ownerOffset;
-        public sbyte m_objectQualityType;
-        public uint m_collisionFilterInfo;
+        public sbyte m_type { set; get; } = default;
+        private sbyte m_ownerOffset { set; get; } = default;
+        public sbyte m_objectQualityType { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; } = default;
 
         public override uint Signature => 0xf4b0f799;
 
@@ -41,7 +44,6 @@ namespace HKX2
         {
             base.ReadXml(xd, xe);
             m_type = xd.ReadSByte(xe, nameof(m_type));
-            m_ownerOffset = default;
             m_objectQualityType = xd.ReadSByte(xe, nameof(m_objectQualityType));
             m_collisionFilterInfo = xd.ReadUInt32(xe, nameof(m_collisionFilterInfo));
         }

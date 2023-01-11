@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +14,11 @@ namespace HKX2
     // m_constantRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     public partial class hkbPoweredRagdollControlData : IHavokObject
     {
-        public float m_maxForce;
-        public float m_tau;
-        public float m_damping;
-        public float m_proportionalRecoveryVelocity;
-        public float m_constantRecoveryVelocity;
+        public float m_maxForce { set; get; } = default;
+        public float m_tau { set; get; } = default;
+        public float m_damping { set; get; } = default;
+        public float m_proportionalRecoveryVelocity { set; get; } = default;
+        public float m_constantRecoveryVelocity { set; get; } = default;
 
         public virtual uint Signature => 0xf5ba21b;
 

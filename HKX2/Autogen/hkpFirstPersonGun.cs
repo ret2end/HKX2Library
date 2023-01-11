@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +13,10 @@ namespace HKX2
     // m_listeners m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     public partial class hkpFirstPersonGun : hkReferencedObject
     {
-        public byte m_type;
-        public string m_name;
-        public byte m_keyboardKey;
-        public List<dynamic> m_listeners = new List<dynamic>();
+        private byte m_type { set; get; } = default;
+        public string m_name { set; get; } = "";
+        public byte m_keyboardKey { set; get; } = default;
+        public IList<object> m_listeners { set; get; } = new List<object>();
 
         public override uint Signature => 0x852ab70b;
 
@@ -32,10 +34,10 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteByte(bw, m_type);
+            bw.WriteByte(m_type);
             bw.Position += 7;
             s.WriteStringPointer(bw, m_name);
-            s.WriteByte(bw, m_keyboardKey);
+            bw.WriteByte(m_keyboardKey);
             bw.Position += 7;
             s.WriteVoidArray(bw);
         }
@@ -43,10 +45,8 @@ namespace HKX2
         public override void ReadXml(XmlDeserializer xd, XElement xe)
         {
             base.ReadXml(xd, xe);
-            m_type = default;
             m_name = xd.ReadString(xe, nameof(m_name));
             m_keyboardKey = xd.ReadFlag<KeyboardKey, byte>(xe, nameof(m_keyboardKey));
-            m_listeners = default;
         }
 
         public override void WriteXml(XmlSerializer xs, XElement xe)

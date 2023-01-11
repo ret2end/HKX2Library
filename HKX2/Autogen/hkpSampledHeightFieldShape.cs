@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,15 +18,15 @@ namespace HKX2
     // m_extents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     public partial class hkpSampledHeightFieldShape : hkpHeightFieldShape
     {
-        public int m_xRes;
-        public int m_zRes;
-        public float m_heightCenter;
-        public bool m_useProjectionBasedHeight;
-        public byte m_heightfieldType;
-        public Vector4 m_intToFloatScale;
-        public Vector4 m_floatToIntScale;
-        public Vector4 m_floatToIntOffsetFloorCorrected;
-        public Vector4 m_extents;
+        public int m_xRes { set; get; } = default;
+        public int m_zRes { set; get; } = default;
+        public float m_heightCenter { set; get; } = default;
+        public bool m_useProjectionBasedHeight { set; get; } = default;
+        public byte m_heightfieldType { set; get; } = default;
+        public Vector4 m_intToFloatScale { set; get; } = default;
+        public Vector4 m_floatToIntScale { set; get; } = default;
+        public Vector4 m_floatToIntOffsetFloorCorrected { set; get; } = default;
+        public Vector4 m_extents { set; get; } = default;
 
         public override uint Signature => 0x11213421;
 
@@ -50,7 +52,7 @@ namespace HKX2
             bw.WriteInt32(m_zRes);
             bw.WriteSingle(m_heightCenter);
             bw.WriteBoolean(m_useProjectionBasedHeight);
-            s.WriteByte(bw, m_heightfieldType);
+            bw.WriteByte(m_heightfieldType);
             bw.Position += 2;
             bw.WriteVector4(m_intToFloatScale);
             bw.WriteVector4(m_floatToIntScale);
