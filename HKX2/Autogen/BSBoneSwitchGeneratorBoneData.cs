@@ -12,7 +12,7 @@ namespace HKX2
         public hkbGenerator? m_pGenerator { set; get; }
         public hkbBoneWeightArray? m_spBoneWeight { set; get; }
 
-        public override uint Signature => 0xc1215be6;
+        public override uint Signature { set; get; } = 0xc1215be6;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -17,7 +17,7 @@ namespace HKX2
         public bool m_setTranslation { set; get; }
         public bool m_setRotation { set; get; }
 
-        public override uint Signature => 0xafcfa211;
+        public override uint Signature { set; get; } = 0xafcfa211;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

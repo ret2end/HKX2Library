@@ -24,7 +24,7 @@ namespace HKX2
         public ushort m_maxNumContactPoints { set; get; }
         public hkpSimpleContactConstraintDataInfo m_info { set; get; } = new();
 
-        public override uint Signature => 0x920df11a;
+        public override uint Signature { set; get; } = 0x920df11a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

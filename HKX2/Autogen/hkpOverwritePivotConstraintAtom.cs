@@ -10,7 +10,7 @@ namespace HKX2
     {
         public byte m_copyToPivotBFromPivotA { set; get; }
 
-        public override uint Signature => 0x1f11b467;
+        public override uint Signature { set; get; } = 0x1f11b467;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

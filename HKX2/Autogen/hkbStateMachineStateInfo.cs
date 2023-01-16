@@ -28,7 +28,7 @@ namespace HKX2
         public float m_probability { set; get; }
         public bool m_enable { set; get; }
 
-        public override uint Signature => 0xed7f9d0;
+        public override uint Signature { set; get; } = 0xed7f9d0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

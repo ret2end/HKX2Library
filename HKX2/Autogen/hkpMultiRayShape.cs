@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkpMultiRayShapeRay> m_rays { set; get; } = Array.Empty<hkpMultiRayShapeRay>();
         public float m_rayPenetrationDistance { set; get; }
 
-        public override uint Signature => 0xea2e7ec9;
+        public override uint Signature { set; get; } = 0xea2e7ec9;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

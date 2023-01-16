@@ -22,7 +22,7 @@ namespace HKX2
         public bool m_removeWhenBroken { set; get; }
         public bool m_revertBackVelocityOnBreak { set; get; }
 
-        public override uint Signature => 0x7d6310c8;
+        public override uint Signature { set; get; } = 0x7d6310c8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

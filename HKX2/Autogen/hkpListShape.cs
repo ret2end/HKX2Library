@@ -23,7 +23,7 @@ namespace HKX2
         public Vector4 m_aabbCenter { set; get; }
         public uint[] m_enabledChildren = new uint[8];
 
-        public override uint Signature => 0xa1937cbd;
+        public override uint Signature { set; get; } = 0xa1937cbd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

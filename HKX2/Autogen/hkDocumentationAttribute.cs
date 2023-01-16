@@ -10,7 +10,7 @@ namespace HKX2
     {
         public string m_docsSectionTag { set; get; } = "";
 
-        public virtual uint Signature => 0x630edd9e;
+        public virtual uint Signature { set; get; } = 0x630edd9e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

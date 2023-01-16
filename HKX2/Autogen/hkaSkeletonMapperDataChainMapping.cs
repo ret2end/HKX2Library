@@ -21,7 +21,7 @@ namespace HKX2
         public Matrix4x4 m_startAFromBTransform { set; get; }
         public Matrix4x4 m_endAFromBTransform { set; get; }
 
-        public virtual uint Signature => 0xa528f7cf;
+        public virtual uint Signature { set; get; } = 0xa528f7cf;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

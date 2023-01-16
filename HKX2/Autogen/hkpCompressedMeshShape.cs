@@ -57,7 +57,7 @@ namespace HKX2
         public IList<hkpNamedMeshMaterial> m_namedMaterials { set; get; } = Array.Empty<hkpNamedMeshMaterial>();
         public Vector4 m_scaling { set; get; }
 
-        public override uint Signature => 0xe3d1dba;
+        public override uint Signature { set; get; } = 0xe3d1dba;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

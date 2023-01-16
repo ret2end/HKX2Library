@@ -17,7 +17,7 @@ namespace HKX2
         public byte m_keyboardKey { set; get; }
         public IList<object> m_listeners { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0x852ab70b;
+        public override uint Signature { set; get; } = 0x852ab70b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

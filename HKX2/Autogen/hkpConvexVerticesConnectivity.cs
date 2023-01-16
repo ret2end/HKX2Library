@@ -14,7 +14,7 @@ namespace HKX2
         public IList<ushort> m_vertexIndices { set; get; } = Array.Empty<ushort>();
         public IList<byte> m_numVerticesPerFace { set; get; } = Array.Empty<byte>();
 
-        public override uint Signature => 0x63d38e9c;
+        public override uint Signature { set; get; } = 0x63d38e9c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

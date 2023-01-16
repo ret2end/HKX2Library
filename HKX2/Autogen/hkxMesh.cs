@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkxMeshSection> m_sections { set; get; } = Array.Empty<hkxMeshSection>();
         public IList<hkxMeshUserChannelInfo> m_userChannelInfos { set; get; } = Array.Empty<hkxMeshUserChannelInfo>();
 
-        public override uint Signature => 0xf2edcc5f;
+        public override uint Signature { set; get; } = 0xf2edcc5f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

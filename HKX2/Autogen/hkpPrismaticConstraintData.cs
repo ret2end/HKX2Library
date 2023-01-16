@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpPrismaticConstraintDataAtoms m_atoms { set; get; } = new();
 
-        public override uint Signature => 0x3996c387;
+        public override uint Signature { set; get; } = 0x3996c387;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

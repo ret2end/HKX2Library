@@ -25,7 +25,7 @@ namespace HKX2
         public Matrix4x4 m_worldFromModel { set; get; }
         public IList<Matrix4x4> m_poseModelSpace { set; get; } = Array.Empty<Matrix4x4>();
 
-        public override uint Signature => 0x3544e182;
+        public override uint Signature { set; get; } = 0x3544e182;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -18,7 +18,7 @@ namespace HKX2
         private sbyte m_cloneState { set; get; }
         public bool[] m_padNode = new bool[1];
 
-        public override uint Signature => 0x6d26f61d;
+        public override uint Signature { set; get; } = 0x6d26f61d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

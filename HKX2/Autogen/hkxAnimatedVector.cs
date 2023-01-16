@@ -15,7 +15,7 @@ namespace HKX2
         public IList<Vector4> m_vectors { set; get; } = Array.Empty<Vector4>();
         public byte m_hint { set; get; }
 
-        public override uint Signature => 0x34b1a197;
+        public override uint Signature { set; get; } = 0x34b1a197;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

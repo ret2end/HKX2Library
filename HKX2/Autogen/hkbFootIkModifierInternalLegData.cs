@@ -13,7 +13,7 @@ namespace HKX2
         public Vector4 m_groundPosition { set; get; }
         private object? m_footIkSolver { set; get; }
 
-        public virtual uint Signature => 0xe5ca3677;
+        public virtual uint Signature { set; get; } = 0xe5ca3677;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

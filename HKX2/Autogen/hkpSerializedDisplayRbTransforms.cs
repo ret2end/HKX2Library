@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkpSerializedDisplayRbTransformsDisplayTransformPair> m_transforms { set; get; } = Array.Empty<hkpSerializedDisplayRbTransformsDisplayTransformPair>();
 
-        public override uint Signature => 0xc18650ac;
+        public override uint Signature { set; get; } = 0xc18650ac;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

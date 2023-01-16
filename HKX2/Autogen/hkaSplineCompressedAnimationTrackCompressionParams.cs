@@ -32,7 +32,7 @@ namespace HKX2
         public byte m_scaleQuantizationType { set; get; }
         public byte m_floatQuantizationType { set; get; }
 
-        public virtual uint Signature => 0x42e878d3;
+        public virtual uint Signature { set; get; } = 0x42e878d3;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

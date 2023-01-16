@@ -39,7 +39,7 @@ namespace HKX2
         private short m_numHands { set; get; }
         private short m_numFloatSlots { set; get; }
 
-        public override uint Signature => 0x300d6808;
+        public override uint Signature { set; get; } = 0x300d6808;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

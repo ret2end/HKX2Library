@@ -16,7 +16,7 @@ namespace HKX2
         public IList<short> m_externalEventIds { set; get; } = Array.Empty<short>();
         public int m_padding { set; get; }
 
-        public override uint Signature => 0x66840004;
+        public override uint Signature { set; get; } = 0x66840004;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

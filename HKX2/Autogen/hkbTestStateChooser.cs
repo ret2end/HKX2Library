@@ -14,7 +14,7 @@ namespace HKX2
         public float m_real { set; get; }
         public string m_string { set; get; } = "";
 
-        public override uint Signature => 0xc0fcc436;
+        public override uint Signature { set; get; } = 0xc0fcc436;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -18,7 +18,7 @@ namespace HKX2
         public IList<string> m_variableNames { set; get; } = Array.Empty<string>();
         public IList<string> m_characterPropertyNames { set; get; } = Array.Empty<string>();
 
-        public override uint Signature => 0xc713064e;
+        public override uint Signature { set; get; } = 0xc713064e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

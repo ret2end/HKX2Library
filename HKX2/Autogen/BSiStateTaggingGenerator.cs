@@ -14,7 +14,7 @@ namespace HKX2
         public int m_iStateToSetAs { set; get; }
         public int m_iPriority { set; get; }
 
-        public override uint Signature => 0xf0826fc1;
+        public override uint Signature { set; get; } = 0xf0826fc1;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

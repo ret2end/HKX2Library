@@ -47,7 +47,7 @@ namespace HKX2
         public bool m_isPlantedMS { set; get; }
         public bool m_isOriginalAnkleTransformMSSet { set; get; }
 
-        public virtual uint Signature => 0x9f3e3a04;
+        public virtual uint Signature { set; get; } = 0x9f3e3a04;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

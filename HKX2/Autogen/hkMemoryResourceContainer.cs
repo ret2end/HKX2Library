@@ -18,7 +18,7 @@ namespace HKX2
         public IList<hkMemoryResourceHandle> m_resourceHandles { set; get; } = Array.Empty<hkMemoryResourceHandle>();
         public IList<hkMemoryResourceContainer> m_children { set; get; } = Array.Empty<hkMemoryResourceContainer>();
 
-        public override uint Signature => 0x4762f92a;
+        public override uint Signature { set; get; } = 0x4762f92a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

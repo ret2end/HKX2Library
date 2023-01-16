@@ -13,7 +13,7 @@ namespace HKX2
         public Quaternion m_rotation { set; get; }
         public Vector4 m_translation { set; get; }
 
-        public virtual uint Signature => 0x471a21ee;
+        public virtual uint Signature { set; get; } = 0x471a21ee;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

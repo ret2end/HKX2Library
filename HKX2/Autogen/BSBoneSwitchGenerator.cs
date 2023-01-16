@@ -14,7 +14,7 @@ namespace HKX2
         public hkbGenerator? m_pDefaultGenerator { set; get; }
         public IList<BSBoneSwitchGeneratorBoneData> m_ChildrenA { set; get; } = Array.Empty<BSBoneSwitchGeneratorBoneData>();
 
-        public override uint Signature => 0xf33d3eea;
+        public override uint Signature { set; get; } = 0xf33d3eea;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

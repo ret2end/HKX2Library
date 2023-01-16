@@ -16,7 +16,7 @@ namespace HKX2
         public IList<ulong> m_deformableSkins { set; get; } = Array.Empty<ulong>();
         public IList<ulong> m_rigidSkins { set; get; } = Array.Empty<ulong>();
 
-        public override uint Signature => 0x180d900d;
+        public override uint Signature { set; get; } = 0x180d900d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

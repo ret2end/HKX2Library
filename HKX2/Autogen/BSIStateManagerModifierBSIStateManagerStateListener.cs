@@ -10,7 +10,7 @@ namespace HKX2
     {
         private object? m_pStateManager { set; get; }
 
-        public override uint Signature => 0x99463586;
+        public override uint Signature { set; get; } = 0x99463586;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

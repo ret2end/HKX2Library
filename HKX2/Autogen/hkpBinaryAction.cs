@@ -12,7 +12,7 @@ namespace HKX2
         public hkpEntity? m_entityA { set; get; }
         public hkpEntity? m_entityB { set; get; }
 
-        public override uint Signature => 0xc00f3403;
+        public override uint Signature { set; get; } = 0xc00f3403;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

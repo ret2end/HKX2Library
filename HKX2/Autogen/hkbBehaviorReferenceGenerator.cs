@@ -12,7 +12,7 @@ namespace HKX2
         public string m_behaviorName { set; get; } = "";
         private object? m_behavior { set; get; }
 
-        public override uint Signature => 0xfcb5423;
+        public override uint Signature { set; get; } = 0xfcb5423;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

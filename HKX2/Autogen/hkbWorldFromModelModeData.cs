@@ -16,7 +16,7 @@ namespace HKX2
         public short m_poseMatchingBone2 { set; get; }
         public sbyte m_mode { set; get; }
 
-        public virtual uint Signature => 0xa3af8783;
+        public virtual uint Signature { set; get; } = 0xa3af8783;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

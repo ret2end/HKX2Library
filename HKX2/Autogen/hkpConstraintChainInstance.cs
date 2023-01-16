@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkpEntity> m_chainedEntities { set; get; } = Array.Empty<hkpEntity>();
         public hkpConstraintChainInstanceAction? m_action { set; get; }
 
-        public override uint Signature => 0x7a490753;
+        public override uint Signature { set; get; } = 0x7a490753;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

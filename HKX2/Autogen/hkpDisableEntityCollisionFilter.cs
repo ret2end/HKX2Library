@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkpEntity> m_disabledEntities { set; get; } = Array.Empty<hkpEntity>();
 
-        public override uint Signature => 0xfac3351c;
+        public override uint Signature { set; get; } = 0xfac3351c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

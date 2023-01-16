@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkxNode> m_selectedNodes { set; get; } = Array.Empty<hkxNode>();
         public string m_name { set; get; } = "";
 
-        public override uint Signature => 0xd753fc4d;
+        public override uint Signature { set; get; } = 0xd753fc4d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

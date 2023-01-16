@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkpSerializedAgentNnEntry> m_contacts { set; get; } = Array.Empty<hkpSerializedAgentNnEntry>();
 
-        public override uint Signature => 0xd0fd4bbe;
+        public override uint Signature { set; get; } = 0xd0fd4bbe;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

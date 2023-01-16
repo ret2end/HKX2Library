@@ -21,7 +21,7 @@ namespace HKX2
         public byte[] m_expansionMax = new byte[3];
         public byte m_shapeKeyByte { set; get; }
 
-        public virtual uint Signature => 0x11e7c11;
+        public virtual uint Signature { set; get; } = 0x11e7c11;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

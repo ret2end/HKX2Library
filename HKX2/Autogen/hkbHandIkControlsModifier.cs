@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbHandIkControlsModifierHand> m_hands { set; get; } = Array.Empty<hkbHandIkControlsModifierHand>();
 
-        public override uint Signature => 0x9f0488bb;
+        public override uint Signature { set; get; } = 0x9f0488bb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

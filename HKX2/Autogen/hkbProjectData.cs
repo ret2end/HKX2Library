@@ -15,7 +15,7 @@ namespace HKX2
         public hkbProjectStringData? m_stringData { set; get; }
         public sbyte m_defaultEventMode { set; get; }
 
-        public override uint Signature => 0x13a39ba7;
+        public override uint Signature { set; get; } = 0x13a39ba7;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

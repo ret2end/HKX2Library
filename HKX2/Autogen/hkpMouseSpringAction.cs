@@ -26,7 +26,7 @@ namespace HKX2
         public uint m_shapeKey { set; get; }
         public IList<object> m_applyCallbacks { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0x6e087fd6;
+        public override uint Signature { set; get; } = 0x6e087fd6;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

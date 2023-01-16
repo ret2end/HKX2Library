@@ -12,7 +12,7 @@ namespace HKX2
         public short m_role { set; get; }
         public short m_flags { set; get; }
 
-        public virtual uint Signature => 0x3eb2e082;
+        public virtual uint Signature { set; get; } = 0x3eb2e082;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

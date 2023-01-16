@@ -15,7 +15,7 @@ namespace HKX2
         public float m_lookAtWeight { set; get; }
         public bool m_isTargetInsideLimitCone { set; get; }
 
-        public override uint Signature => 0xa14caba6;
+        public override uint Signature { set; get; } = 0xa14caba6;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

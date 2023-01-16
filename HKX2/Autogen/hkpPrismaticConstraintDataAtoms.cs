@@ -22,7 +22,7 @@ namespace HKX2
         public hkpLinConstraintAtom m_lin1 { set; get; } = new();
         public hkpLinLimitConstraintAtom m_linLimit { set; get; } = new();
 
-        public virtual uint Signature => 0x7f516137;
+        public virtual uint Signature { set; get; } = 0x7f516137;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

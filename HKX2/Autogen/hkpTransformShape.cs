@@ -17,7 +17,7 @@ namespace HKX2
         public Quaternion m_rotation { set; get; }
         public Matrix4x4 m_transform { set; get; }
 
-        public override uint Signature => 0x787ef513;
+        public override uint Signature { set; get; } = 0x787ef513;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

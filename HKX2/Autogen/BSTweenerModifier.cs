@@ -27,7 +27,7 @@ namespace HKX2
         private Matrix4x4 m_startTransform { set; get; }
         private float m_time { set; get; }
 
-        public override uint Signature => 0xd2d9a04;
+        public override uint Signature { set; get; } = 0xd2d9a04;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

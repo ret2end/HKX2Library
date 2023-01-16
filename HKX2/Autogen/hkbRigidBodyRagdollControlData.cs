@@ -12,7 +12,7 @@ namespace HKX2
         public hkaKeyFrameHierarchyUtilityControlData m_keyFrameHierarchyControlData { set; get; } = new();
         public float m_durationToBlend { set; get; }
 
-        public virtual uint Signature => 0x1e0bc068;
+        public virtual uint Signature { set; get; } = 0x1e0bc068;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
         public bool m_disableWelding { set; get; }
         public byte m_collectionType { set; get; }
 
-        public override uint Signature => 0xe8c3991d;
+        public override uint Signature { set; get; } = 0xe8c3991d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

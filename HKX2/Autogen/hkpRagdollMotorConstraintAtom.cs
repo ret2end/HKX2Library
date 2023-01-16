@@ -20,7 +20,7 @@ namespace HKX2
         public Matrix4x4 m_target_bRca { set; get; }
         public hkpConstraintMotor?[] m_motors = new hkpConstraintMotor?[3];
 
-        public override uint Signature => 0x71013826;
+        public override uint Signature { set; get; } = 0x71013826;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

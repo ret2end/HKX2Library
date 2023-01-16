@@ -12,7 +12,7 @@ namespace HKX2
         public float m_secondsElapsed { set; get; }
         public bool m_isActive { set; get; }
 
-        public override uint Signature => 0x85fb0b80;
+        public override uint Signature { set; get; } = 0x85fb0b80;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

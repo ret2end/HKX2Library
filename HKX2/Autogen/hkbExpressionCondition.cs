@@ -12,7 +12,7 @@ namespace HKX2
         public string m_expression { set; get; } = "";
         private object? m_compiledExpressionSet { set; get; }
 
-        public override uint Signature => 0x1c3c1045;
+        public override uint Signature { set; get; } = 0x1c3c1045;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

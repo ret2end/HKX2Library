@@ -16,7 +16,7 @@ namespace HKX2
         public IList<byte> m_data { set; get; } = Array.Empty<byte>();
         public sbyte m_buildType { set; get; }
 
-        public override uint Signature => 0x924c2661;
+        public override uint Signature { set; get; } = 0x924c2661;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

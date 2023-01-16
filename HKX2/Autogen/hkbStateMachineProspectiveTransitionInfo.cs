@@ -14,7 +14,7 @@ namespace HKX2
         public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE { set; get; } = new();
         public int m_toStateId { set; get; }
 
-        public virtual uint Signature => 0x3ab09a2e;
+        public virtual uint Signature { set; get; } = 0x3ab09a2e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

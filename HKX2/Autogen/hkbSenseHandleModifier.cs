@@ -49,7 +49,7 @@ namespace HKX2
         private float m_timeSinceLastModify { set; get; }
         private int m_rangeIndexForEventToSendNextUpdate { set; get; }
 
-        public override uint Signature => 0x2a064d99;
+        public override uint Signature { set; get; } = 0x2a064d99;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

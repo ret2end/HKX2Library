@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkbRealVariableSequencedDataSample> m_samples { set; get; } = Array.Empty<hkbRealVariableSequencedDataSample>();
         public int m_variableIndex { set; get; }
 
-        public override uint Signature => 0xe2862d02;
+        public override uint Signature { set; get; } = 0xe2862d02;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

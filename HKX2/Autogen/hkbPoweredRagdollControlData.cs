@@ -18,7 +18,7 @@ namespace HKX2
         public float m_proportionalRecoveryVelocity { set; get; }
         public float m_constantRecoveryVelocity { set; get; }
 
-        public virtual uint Signature => 0xf5ba21b;
+        public virtual uint Signature { set; get; } = 0xf5ba21b;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

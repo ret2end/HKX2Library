@@ -14,7 +14,7 @@ namespace HKX2
         public int m_StateID { set; get; }
         public int m_iStateToSetAs { set; get; }
 
-        public virtual uint Signature => 0x6b8a15fc;
+        public virtual uint Signature { set; get; } = 0x6b8a15fc;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

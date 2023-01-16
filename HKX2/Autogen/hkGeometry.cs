@@ -15,7 +15,7 @@ namespace HKX2
         public IList<Vector4> m_vertices { set; get; } = Array.Empty<Vector4>();
         public IList<hkGeometryTriangle> m_triangles { set; get; } = Array.Empty<hkGeometryTriangle>();
 
-        public virtual uint Signature => 0x98dd8bdc;
+        public virtual uint Signature { set; get; } = 0x98dd8bdc;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

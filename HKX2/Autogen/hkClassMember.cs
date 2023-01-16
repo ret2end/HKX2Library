@@ -26,7 +26,7 @@ namespace HKX2
         public ushort m_offset { set; get; }
         private hkCustomAttributes? m_attributes { set; get; }
 
-        public virtual uint Signature => 0x5c7ea4c2;
+        public virtual uint Signature { set; get; } = 0x5c7ea4c2;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

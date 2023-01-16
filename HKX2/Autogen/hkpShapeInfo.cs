@@ -23,7 +23,7 @@ namespace HKX2
         public IList<Matrix4x4> m_childTransforms { set; get; } = Array.Empty<Matrix4x4>();
         public Matrix4x4 m_transform { set; get; }
 
-        public override uint Signature => 0xea7f1d08;
+        public override uint Signature { set; get; } = 0xea7f1d08;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

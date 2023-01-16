@@ -10,7 +10,7 @@ namespace HKX2
     {
         public int m_freeHeapMemoryRequested { set; get; }
 
-        public override uint Signature => 0x77d6b19f;
+        public override uint Signature { set; get; } = 0x77d6b19f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

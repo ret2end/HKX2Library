@@ -16,7 +16,7 @@ namespace HKX2
         public float m_weight { set; get; }
         public float m_worldFromModelWeight { set; get; }
 
-        public override uint Signature => 0xe2b384b0;
+        public override uint Signature { set; get; } = 0xe2b384b0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

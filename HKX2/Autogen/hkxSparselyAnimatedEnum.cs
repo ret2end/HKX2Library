@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkxEnum? m_enum { set; get; }
 
-        public override uint Signature => 0x68a47b64;
+        public override uint Signature { set; get; } = 0x68a47b64;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -17,7 +17,7 @@ namespace HKX2
         public float m_upAngleOut { set; get; }
         public bool m_computedOutput { set; get; }
 
-        public override uint Signature => 0x6ac054d7;
+        public override uint Signature { set; get; } = 0x6ac054d7;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

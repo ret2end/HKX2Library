@@ -33,7 +33,7 @@ namespace HKX2
         private object? m_internal { set; get; }
         private uint m_uid { set; get; }
 
-        public override uint Signature => 0x34eba5f;
+        public override uint Signature { set; get; } = 0x34eba5f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

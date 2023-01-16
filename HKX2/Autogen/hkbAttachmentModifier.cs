@@ -32,7 +32,7 @@ namespace HKX2
         private int m_oldFilterInfo { set; get; }
         private object? m_attachment { set; get; }
 
-        public override uint Signature => 0xcc0aab32;
+        public override uint Signature { set; get; } = 0xcc0aab32;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

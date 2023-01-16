@@ -16,7 +16,7 @@ namespace HKX2
         public int m_c { set; get; }
         public int m_material { set; get; }
 
-        public virtual uint Signature => 0x9687513b;
+        public virtual uint Signature { set; get; } = 0x9687513b;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

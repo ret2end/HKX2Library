@@ -12,7 +12,7 @@ namespace HKX2
         public hkpSetLocalTranslationsConstraintAtom m_pivots { set; get; } = new();
         public hkpStiffSpringConstraintAtom m_spring { set; get; } = new();
 
-        public virtual uint Signature => 0x207eb376;
+        public virtual uint Signature { set; get; } = 0x207eb376;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

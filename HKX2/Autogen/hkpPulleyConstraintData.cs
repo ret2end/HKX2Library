@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpPulleyConstraintDataAtoms m_atoms { set; get; } = new();
 
-        public override uint Signature => 0x972058ed;
+        public override uint Signature { set; get; } = 0x972058ed;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

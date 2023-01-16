@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpCollisionFilter? m_otherFilter { set; get; }
 
-        public override uint Signature => 0x20a447fe;
+        public override uint Signature { set; get; } = 0x20a447fe;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

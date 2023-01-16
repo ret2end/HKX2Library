@@ -23,7 +23,7 @@ namespace HKX2
         private bool m_bDelayedActivate { set; get; }
         private bool m_bLooping { set; get; }
 
-        public override uint Signature => 0xc8df2d77;
+        public override uint Signature { set; get; } = 0xc8df2d77;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

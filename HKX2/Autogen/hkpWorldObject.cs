@@ -24,7 +24,7 @@ namespace HKX2
         public IList<hkpProperty> m_properties { set; get; } = Array.Empty<hkpProperty>();
         private object? m_treeData { set; get; }
 
-        public override uint Signature => 0x49fb6f2e;
+        public override uint Signature { set; get; } = 0x49fb6f2e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

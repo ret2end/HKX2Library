@@ -14,7 +14,7 @@ namespace HKX2
         public byte m_frictionAxis { set; get; }
         public float m_maxFrictionForce { set; get; }
 
-        public override uint Signature => 0x3e94ef7c;
+        public override uint Signature { set; get; } = 0x3e94ef7c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

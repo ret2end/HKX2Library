@@ -13,7 +13,7 @@ namespace HKX2
         public Vector4 m_vertexA { set; get; }
         public Vector4 m_vertexB { set; get; }
 
-        public override uint Signature => 0xdd0b1fd3;
+        public override uint Signature { set; get; } = 0xdd0b1fd3;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

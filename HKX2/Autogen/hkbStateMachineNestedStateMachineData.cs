@@ -12,7 +12,7 @@ namespace HKX2
         private object? m_nestedStateMachine { set; get; }
         private object? m_eventIdMap { set; get; }
 
-        public virtual uint Signature => 0x7358f5da;
+        public virtual uint Signature { set; get; } = 0x7358f5da;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

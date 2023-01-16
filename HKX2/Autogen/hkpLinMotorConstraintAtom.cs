@@ -20,7 +20,7 @@ namespace HKX2
         public float m_targetPosition { set; get; }
         public hkpConstraintMotor? m_motor { set; get; }
 
-        public override uint Signature => 0x10312464;
+        public override uint Signature { set; get; } = 0x10312464;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

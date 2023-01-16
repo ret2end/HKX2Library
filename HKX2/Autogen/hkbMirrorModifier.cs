@@ -10,7 +10,7 @@ namespace HKX2
     {
         public bool m_isAdditive { set; get; }
 
-        public override uint Signature => 0xa9a271ea;
+        public override uint Signature { set; get; } = 0xa9a271ea;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

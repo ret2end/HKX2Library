@@ -28,7 +28,7 @@ namespace HKX2
         public IList<object> m_boneChainIndices { set; get; } = Array.Empty<object>();
         public IList<object> m_parentBoneIndices { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0xb6b76b32;
+        public override uint Signature { set; get; } = 0xb6b76b32;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

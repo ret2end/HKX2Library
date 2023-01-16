@@ -12,7 +12,7 @@ namespace HKX2
         private object? m_buildJacobianFunc { set; get; }
         public hkpConstraintData? m_constraintData { set; get; }
 
-        public override uint Signature => 0x87a4f31b;
+        public override uint Signature { set; get; } = 0x87a4f31b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

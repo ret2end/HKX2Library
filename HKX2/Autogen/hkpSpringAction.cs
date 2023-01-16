@@ -25,7 +25,7 @@ namespace HKX2
         public bool m_onCompression { set; get; }
         public bool m_onExtension { set; get; }
 
-        public override uint Signature => 0x88fc09fa;
+        public override uint Signature { set; get; } = 0x88fc09fa;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

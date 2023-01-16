@@ -16,7 +16,7 @@ namespace HKX2
         public float m_maxDistance { set; get; }
         public bool m_ignoreHandle { set; get; }
 
-        public virtual uint Signature => 0xfb56b692;
+        public virtual uint Signature { set; get; } = 0xfb56b692;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

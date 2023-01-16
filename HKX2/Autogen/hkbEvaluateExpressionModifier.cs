@@ -15,7 +15,7 @@ namespace HKX2
         private object? m_compiledExpressionSet { set; get; }
         public IList<object> m_internalExpressionsData { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0xf900f6be;
+        public override uint Signature { set; get; } = 0xf900f6be;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<bool> m_wasActiveInPreviousFrame { set; get; } = Array.Empty<bool>();
 
-        public override uint Signature => 0xcc47b48d;
+        public override uint Signature { set; get; } = 0xcc47b48d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

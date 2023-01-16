@@ -16,7 +16,7 @@ namespace HKX2
         public bool m_isDelayedTransitionReturnToPreviousState { set; get; }
         public bool m_wasInAbutRangeLastFrame { set; get; }
 
-        public virtual uint Signature => 0x26d5499;
+        public virtual uint Signature { set; get; } = 0x26d5499;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

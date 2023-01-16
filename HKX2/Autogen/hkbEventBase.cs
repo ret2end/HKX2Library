@@ -12,7 +12,7 @@ namespace HKX2
         public int m_id { set; get; }
         public hkbEventPayload? m_payload { set; get; }
 
-        public virtual uint Signature => 0x76bddb31;
+        public virtual uint Signature { set; get; } = 0x76bddb31;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

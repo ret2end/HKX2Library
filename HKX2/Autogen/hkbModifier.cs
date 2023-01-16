@@ -12,7 +12,7 @@ namespace HKX2
         public bool m_enable { set; get; }
         public bool[] m_padModifier = new bool[3];
 
-        public override uint Signature => 0x96ec5ced;
+        public override uint Signature { set; get; } = 0x96ec5ced;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public IList<int> m_ints { set; get; } = Array.Empty<int>();
         public IList<float> m_times { set; get; } = Array.Empty<float>();
 
-        public override uint Signature => 0xca961951;
+        public override uint Signature { set; get; } = 0xca961951;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

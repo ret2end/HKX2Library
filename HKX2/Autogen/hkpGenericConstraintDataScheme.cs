@@ -21,7 +21,7 @@ namespace HKX2
         public IList<object> m_modifiers { set; get; } = Array.Empty<object>();
         public IList<hkpConstraintMotor> m_motors { set; get; } = Array.Empty<hkpConstraintMotor>();
 
-        public virtual uint Signature => 0x11fd6f6c;
+        public virtual uint Signature { set; get; } = 0x11fd6f6c;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

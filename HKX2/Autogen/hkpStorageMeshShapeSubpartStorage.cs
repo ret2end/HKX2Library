@@ -22,7 +22,7 @@ namespace HKX2
         public IList<uint> m_materials { set; get; } = Array.Empty<uint>();
         public IList<ushort> m_materialIndices16 { set; get; } = Array.Empty<ushort>();
 
-        public override uint Signature => 0xbf27438;
+        public override uint Signature { set; get; } = 0xbf27438;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

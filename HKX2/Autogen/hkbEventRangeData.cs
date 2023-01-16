@@ -14,7 +14,7 @@ namespace HKX2
         public hkbEventProperty m_event { set; get; } = new();
         public sbyte m_eventMode { set; get; }
 
-        public virtual uint Signature => 0x6cb92c76;
+        public virtual uint Signature { set; get; } = 0x6cb92c76;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

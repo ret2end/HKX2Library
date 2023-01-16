@@ -21,7 +21,7 @@ namespace HKX2
         public IList<ushort> m_weldingInfo { set; get; } = Array.Empty<ushort>();
         public Vector4 m_triangleExtrusion { set; get; }
 
-        public override uint Signature => 0xc291ddde;
+        public override uint Signature { set; get; } = 0xc291ddde;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

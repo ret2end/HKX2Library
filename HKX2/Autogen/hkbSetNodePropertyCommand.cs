@@ -18,7 +18,7 @@ namespace HKX2
         public hkbVariableValue m_propertyValue { set; get; } = new();
         public int m_padding { set; get; }
 
-        public override uint Signature => 0xc5160b64;
+        public override uint Signature { set; get; } = 0xc5160b64;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

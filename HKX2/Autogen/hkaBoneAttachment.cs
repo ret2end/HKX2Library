@@ -19,7 +19,7 @@ namespace HKX2
         public string m_name { set; get; } = "";
         public short m_boneIndex { set; get; }
 
-        public override uint Signature => 0xa8ccd5cf;
+        public override uint Signature { set; get; } = 0xa8ccd5cf;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

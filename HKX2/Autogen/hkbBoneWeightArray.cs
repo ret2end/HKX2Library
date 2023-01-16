@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<float> m_boneWeights { set; get; } = Array.Empty<float>();
 
-        public override uint Signature => 0xcd902b77;
+        public override uint Signature { set; get; } = 0xcd902b77;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -27,7 +27,7 @@ namespace HKX2
         public IList<Vector4> m_planeEquations { set; get; } = Array.Empty<Vector4>();
         public hkpConvexVerticesConnectivity? m_connectivity { set; get; }
 
-        public override uint Signature => 0x28726ad8;
+        public override uint Signature { set; get; } = 0x28726ad8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

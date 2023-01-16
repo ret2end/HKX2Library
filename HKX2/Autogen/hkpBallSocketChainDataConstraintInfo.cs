@@ -13,7 +13,7 @@ namespace HKX2
         public Vector4 m_pivotInA { set; get; }
         public Vector4 m_pivotInB { set; get; }
 
-        public virtual uint Signature => 0xc9cbedf2;
+        public virtual uint Signature { set; get; } = 0xc9cbedf2;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

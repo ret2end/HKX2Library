@@ -16,7 +16,7 @@ namespace HKX2
         public short m_poseMatchingBone2 { set; get; }
         public bool m_enableComputeWorldFromModel { set; get; }
 
-        public override uint Signature => 0x804dcbab;
+        public override uint Signature { set; get; } = 0x804dcbab;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

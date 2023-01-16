@@ -14,7 +14,7 @@ namespace HKX2
         public IList<uint> m_removeInfo { set; get; } = Array.Empty<uint>();
         private object? m_tempShapesToRemove { set; get; }
 
-        public override uint Signature => 0x91367f03;
+        public override uint Signature { set; get; } = 0x91367f03;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

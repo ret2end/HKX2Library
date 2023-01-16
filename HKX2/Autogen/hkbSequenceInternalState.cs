@@ -22,7 +22,7 @@ namespace HKX2
         public float m_time { set; get; }
         public bool m_isEnabled { set; get; }
 
-        public override uint Signature => 0x419b9a05;
+        public override uint Signature { set; get; } = 0x419b9a05;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

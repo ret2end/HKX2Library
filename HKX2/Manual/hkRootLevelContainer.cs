@@ -14,7 +14,7 @@ namespace HKX2
 
         public IList<hkRootLevelContainerNamedVariant?> m_namedVariants { get; set; } = Array.Empty<hkRootLevelContainerNamedVariant?>();
 
-        public uint Signature => 0x2772c11e;
+        public uint Signature { set; get; } = 0x2772c11e;
 
         public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

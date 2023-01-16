@@ -12,7 +12,7 @@ namespace HKX2
         public hkbRigidBodyRagdollControlData m_controlData { set; get; } = new();
         public hkbBoneIndexArray? m_bones { set; get; }
 
-        public override uint Signature => 0xaa87d1eb;
+        public override uint Signature { set; get; } = 0xaa87d1eb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

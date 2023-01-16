@@ -21,7 +21,7 @@ namespace HKX2
         public IList<Matrix4x4> m_poseModelSpace { set; get; } = Array.Empty<Matrix4x4>();
         public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = Array.Empty<Matrix4x4>();
 
-        public override uint Signature => 0x2eda84f8;
+        public override uint Signature { set; get; } = 0x2eda84f8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

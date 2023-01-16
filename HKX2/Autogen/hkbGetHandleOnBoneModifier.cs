@@ -16,7 +16,7 @@ namespace HKX2
         public short m_ragdollBoneIndex { set; get; }
         public short m_animationBoneIndex { set; get; }
 
-        public override uint Signature => 0x50c34a17;
+        public override uint Signature { set; get; } = 0x50c34a17;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

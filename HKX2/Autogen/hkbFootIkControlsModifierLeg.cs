@@ -19,7 +19,7 @@ namespace HKX2
         public bool m_hitSomething { set; get; }
         public bool m_isPlantedMS { set; get; }
 
-        public virtual uint Signature => 0x9e17091a;
+        public virtual uint Signature { set; get; } = 0x9e17091a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

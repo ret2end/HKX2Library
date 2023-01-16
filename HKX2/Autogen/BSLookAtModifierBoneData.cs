@@ -23,7 +23,7 @@ namespace HKX2
         public bool m_enabled { set; get; }
         private Vector4 m_currentFwdAxisLS { set; get; }
 
-        public virtual uint Signature => 0x29efee59;
+        public virtual uint Signature { set; get; } = 0x29efee59;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

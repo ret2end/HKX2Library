@@ -15,7 +15,7 @@ namespace HKX2
         public IList<object> m_cachedBindables { set; get; } = Array.Empty<object>();
         private bool m_areBindablesCached { set; get; }
 
-        public override uint Signature => 0x2c1432d7;
+        public override uint Signature { set; get; } = 0x2c1432d7;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

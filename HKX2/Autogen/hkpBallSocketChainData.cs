@@ -22,7 +22,7 @@ namespace HKX2
         public float m_cfm { set; get; }
         public float m_maxErrorDistance { set; get; }
 
-        public override uint Signature => 0x102aae9c;
+        public override uint Signature { set; get; } = 0x102aae9c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public IList<uint> m_words { set; get; } = Array.Empty<uint>();
         public int m_numBits { set; get; }
 
-        public virtual uint Signature => 0xda41bd9b;
+        public virtual uint Signature { set; get; } = 0xda41bd9b;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

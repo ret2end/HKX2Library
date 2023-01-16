@@ -13,7 +13,7 @@ namespace HKX2
         public IList<object> m_overlapListeners { set; get; } = Array.Empty<object>();
         public IList<object> m_phantomListeners { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0x9b7e6f86;
+        public override uint Signature { set; get; } = 0x9b7e6f86;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

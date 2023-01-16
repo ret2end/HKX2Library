@@ -33,7 +33,7 @@ namespace HKX2
         public sbyte m_handleChangeMode { set; get; }
         public bool m_fixUp { set; get; }
 
-        public virtual uint Signature => 0xd72b8d17;
+        public virtual uint Signature { set; get; } = 0xd72b8d17;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

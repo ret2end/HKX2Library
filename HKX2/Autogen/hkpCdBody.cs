@@ -16,7 +16,7 @@ namespace HKX2
         private object? m_motion { set; get; }
         private hkpCdBody? m_parent { set; get; }
 
-        public virtual uint Signature => 0x54a4b841;
+        public virtual uint Signature { set; get; } = 0x54a4b841;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

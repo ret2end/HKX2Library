@@ -28,7 +28,7 @@ namespace HKX2
         public string m_fullPathToSource { set; get; } = "";
         public string m_rootPath { set; get; } = "";
 
-        public override uint Signature => 0x76ad60a;
+        public override uint Signature { set; get; } = 0x76ad60a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

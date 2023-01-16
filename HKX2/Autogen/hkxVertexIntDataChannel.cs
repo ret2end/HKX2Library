@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<int> m_perVertexInts { set; get; } = Array.Empty<int>();
 
-        public override uint Signature => 0x5a50e673;
+        public override uint Signature { set; get; } = 0x5a50e673;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

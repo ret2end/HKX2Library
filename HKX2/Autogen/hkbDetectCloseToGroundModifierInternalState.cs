@@ -10,7 +10,7 @@ namespace HKX2
     {
         public bool m_isCloseToGround { set; get; }
 
-        public override uint Signature => 0x7b32d942;
+        public override uint Signature { set; get; } = 0x7b32d942;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

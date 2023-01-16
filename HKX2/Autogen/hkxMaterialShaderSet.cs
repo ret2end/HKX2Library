@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkxMaterialShader> m_shaders { set; get; } = Array.Empty<hkxMaterialShader>();
 
-        public override uint Signature => 0x154650f3;
+        public override uint Signature { set; get; } = 0x154650f3;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

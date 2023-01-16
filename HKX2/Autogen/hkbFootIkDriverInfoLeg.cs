@@ -35,7 +35,7 @@ namespace HKX2
         public short m_kneeIndex { set; get; }
         public short m_ankleIndex { set; get; }
 
-        public virtual uint Signature => 0x224b18d1;
+        public virtual uint Signature { set; get; } = 0x224b18d1;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbClipTrigger> m_triggers { set; get; } = Array.Empty<hkbClipTrigger>();
 
-        public override uint Signature => 0x59c23a0f;
+        public override uint Signature { set; get; } = 0x59c23a0f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -11,7 +11,7 @@ namespace HKX2
     {
         public IList<object> m_collisionEntries { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0xe1a81497;
+        public override uint Signature { set; get; } = 0xe1a81497;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

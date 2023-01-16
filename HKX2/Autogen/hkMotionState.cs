@@ -29,7 +29,7 @@ namespace HKX2
         public byte m_maxAngularVelocity { set; get; }
         public byte m_deactivationClass { set; get; }
 
-        public virtual uint Signature => 0x5797386e;
+        public virtual uint Signature { set; get; } = 0x5797386e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

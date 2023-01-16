@@ -38,7 +38,7 @@ namespace HKX2
         public int m_numMaterials { set; get; }
         public int m_triangleOffset { set; get; }
 
-        public virtual uint Signature => 0x27336e5d;
+        public virtual uint Signature { set; get; } = 0x27336e5d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

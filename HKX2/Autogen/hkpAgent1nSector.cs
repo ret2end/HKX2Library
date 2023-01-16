@@ -19,7 +19,7 @@ namespace HKX2
         public uint m_pad2 { set; get; }
         public byte[] m_data = new byte[496];
 
-        public virtual uint Signature => 0x626e55a;
+        public virtual uint Signature { set; get; } = 0x626e55a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

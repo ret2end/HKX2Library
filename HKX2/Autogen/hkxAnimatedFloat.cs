@@ -14,7 +14,7 @@ namespace HKX2
         public IList<float> m_floats { set; get; } = Array.Empty<float>();
         public byte m_hint { set; get; }
 
-        public override uint Signature => 0xce8b2fbd;
+        public override uint Signature { set; get; } = 0xce8b2fbd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

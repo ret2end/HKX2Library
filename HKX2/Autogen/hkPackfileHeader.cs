@@ -33,7 +33,7 @@ namespace HKX2
         public int m_flags { set; get; }
         public int[] m_pad = new int[1];
 
-        public virtual uint Signature => 0x79f9ffda;
+        public virtual uint Signature { set; get; } = 0x79f9ffda;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

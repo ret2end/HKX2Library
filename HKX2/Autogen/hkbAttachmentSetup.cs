@@ -24,7 +24,7 @@ namespace HKX2
         public float m_maxAngularDistance { set; get; }
         public sbyte m_attachmentType { set; get; }
 
-        public override uint Signature => 0x774632b;
+        public override uint Signature { set; get; } = 0x774632b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

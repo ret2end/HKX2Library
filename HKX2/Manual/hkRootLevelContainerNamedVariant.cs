@@ -16,7 +16,7 @@ namespace HKX2
         public string m_className { set; get; } = "";
         public hkReferencedObject? m_variant { set; get; } = default;
 
-        public uint Signature => 0xb103a2cd;
+        public uint Signature { set; get; } = 0xb103a2cd;
 
         public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

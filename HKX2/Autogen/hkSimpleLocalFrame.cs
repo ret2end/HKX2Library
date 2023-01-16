@@ -21,7 +21,7 @@ namespace HKX2
         public hkLocalFrameGroup? m_group { set; get; }
         public string m_name { set; get; } = "";
 
-        public override uint Signature => 0xe758f63c;
+        public override uint Signature { set; get; } = 0xe758f63c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

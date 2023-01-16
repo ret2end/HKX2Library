@@ -14,7 +14,7 @@ namespace HKX2
         public int m_usageHint { set; get; }
         public int m_tcoordChannel { set; get; }
 
-        public virtual uint Signature => 0xfa6facb2;
+        public virtual uint Signature { set; get; } = 0xfa6facb2;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

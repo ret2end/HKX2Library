@@ -19,7 +19,7 @@ namespace HKX2
         public Vector4 m_errorOutTranslation { set; get; }
         public Quaternion m_alignWithGroundRotation { set; get; }
 
-        public override uint Signature => 0xe5b6f544;
+        public override uint Signature { set; get; } = 0xe5b6f544;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

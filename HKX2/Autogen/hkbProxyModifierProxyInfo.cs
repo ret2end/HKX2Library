@@ -37,7 +37,7 @@ namespace HKX2
         public int m_maxCastIterations { set; get; }
         public bool m_refreshManifoldInCheckSupport { set; get; }
 
-        public virtual uint Signature => 0x39de637e;
+        public virtual uint Signature { set; get; } = 0x39de637e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

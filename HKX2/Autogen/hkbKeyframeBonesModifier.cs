@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkbKeyframeBonesModifierKeyframeInfo> m_keyframeInfo { set; get; } = Array.Empty<hkbKeyframeBonesModifierKeyframeInfo>();
         public hkbBoneIndexArray? m_keyframedBonesList { set; get; }
 
-        public override uint Signature => 0x95f66629;
+        public override uint Signature { set; get; } = 0x95f66629;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

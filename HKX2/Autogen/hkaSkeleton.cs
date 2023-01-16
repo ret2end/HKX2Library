@@ -25,7 +25,7 @@ namespace HKX2
         public IList<string> m_floatSlots { set; get; } = Array.Empty<string>();
         public IList<hkaSkeletonLocalFrameOnBone> m_localFrames { set; get; } = Array.Empty<hkaSkeletonLocalFrameOnBone>();
 
-        public override uint Signature => 0x366e8220;
+        public override uint Signature { set; get; } = 0x366e8220;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

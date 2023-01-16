@@ -17,7 +17,7 @@ namespace HKX2
         public bool m_isInitialVelocityAdded { set; get; }
         public bool m_isTouchingGround { set; get; }
 
-        public override uint Signature => 0xf8dfec0d;
+        public override uint Signature { set; get; } = 0xf8dfec0d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbModifier> m_modifiers { set; get; } = Array.Empty<hkbModifier>();
 
-        public override uint Signature => 0xa4180ca1;
+        public override uint Signature { set; get; } = 0xa4180ca1;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkbNodeInternalStateInfo> m_nodeInternalStateInfos { set; get; } = Array.Empty<hkbNodeInternalStateInfo>();
         public hkbVariableValueSet? m_variableValueSet { set; get; }
 
-        public override uint Signature => 0x8699b6eb;
+        public override uint Signature { set; get; } = 0x8699b6eb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

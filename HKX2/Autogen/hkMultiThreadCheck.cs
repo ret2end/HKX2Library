@@ -16,7 +16,7 @@ namespace HKX2
         private ushort m_markCount { set; get; }
         private ushort m_markBitStack { set; get; }
 
-        public virtual uint Signature => 0x11e4408b;
+        public virtual uint Signature { set; get; } = 0x11e4408b;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

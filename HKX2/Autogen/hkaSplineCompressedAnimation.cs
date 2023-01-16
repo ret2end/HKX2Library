@@ -36,7 +36,7 @@ namespace HKX2
         public IList<byte> m_data { set; get; } = Array.Empty<byte>();
         public int m_endian { set; get; }
 
-        public override uint Signature => 0x792ee0bb;
+        public override uint Signature { set; get; } = 0x792ee0bb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

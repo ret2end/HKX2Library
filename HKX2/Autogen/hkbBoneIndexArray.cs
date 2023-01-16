@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<short> m_boneIndices { set; get; } = Array.Empty<short>();
 
-        public override uint Signature => 0xaa8619;
+        public override uint Signature { set; get; } = 0xaa8619;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

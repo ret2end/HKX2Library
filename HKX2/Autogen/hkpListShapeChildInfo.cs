@@ -16,7 +16,7 @@ namespace HKX2
         private int m_shapeSize { set; get; }
         private int m_numChildShapes { set; get; }
 
-        public virtual uint Signature => 0x80df0f90;
+        public virtual uint Signature { set; get; } = 0x80df0f90;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

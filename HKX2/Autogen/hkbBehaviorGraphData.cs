@@ -26,7 +26,7 @@ namespace HKX2
         public hkbVariableValueSet? m_variableInitialValues { set; get; }
         public hkbBehaviorGraphStringData? m_stringData { set; get; }
 
-        public override uint Signature => 0x95aca5d;
+        public override uint Signature { set; get; } = 0x95aca5d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

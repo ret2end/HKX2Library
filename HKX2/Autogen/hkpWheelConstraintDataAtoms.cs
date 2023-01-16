@@ -22,7 +22,7 @@ namespace HKX2
         public hkpSetLocalRotationsConstraintAtom m_steeringBase { set; get; } = new();
         public hkp2dAngConstraintAtom m_2dAng { set; get; } = new();
 
-        public virtual uint Signature => 0x1188cbe1;
+        public virtual uint Signature { set; get; } = 0x1188cbe1;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

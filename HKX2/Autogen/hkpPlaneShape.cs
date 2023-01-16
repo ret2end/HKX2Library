@@ -15,7 +15,7 @@ namespace HKX2
         public Vector4 m_aabbCenter { set; get; }
         public Vector4 m_aabbHalfExtents { set; get; }
 
-        public override uint Signature => 0xc36bbd30;
+        public override uint Signature { set; get; } = 0xc36bbd30;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

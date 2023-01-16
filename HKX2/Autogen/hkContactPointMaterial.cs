@@ -18,7 +18,7 @@ namespace HKX2
         public byte m_maxImpulse { set; get; }
         public byte m_flags { set; get; }
 
-        public virtual uint Signature => 0x4e32287c;
+        public virtual uint Signature { set; get; } = 0x4e32287c;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -15,7 +15,7 @@ namespace HKX2
         public uint m_type { set; get; }
         public uint[] m_postpad = new uint[3];
 
-        public override uint Signature => 0x60960336;
+        public override uint Signature { set; get; } = 0x60960336;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

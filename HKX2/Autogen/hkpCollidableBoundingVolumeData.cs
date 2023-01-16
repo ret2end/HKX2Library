@@ -29,7 +29,7 @@ namespace HKX2
         private object? m_childShapeAabbs { set; get; }
         private object? m_childShapeKeys { set; get; }
 
-        public virtual uint Signature => 0xb5f0e6b1;
+        public virtual uint Signature { set; get; } = 0xb5f0e6b1;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

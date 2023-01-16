@@ -48,7 +48,7 @@ namespace HKX2
         private bool m_deleteWorldFromModel { set; get; }
         private bool m_deletePoseLocal { set; get; }
 
-        public override uint Signature => 0x3088a5c5;
+        public override uint Signature { set; get; } = 0x3088a5c5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

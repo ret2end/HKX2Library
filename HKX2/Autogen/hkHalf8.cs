@@ -11,7 +11,7 @@ namespace HKX2
     {
         public Half[] m_quad = new Half[8];
 
-        public virtual uint Signature => 0x7684dc80;
+        public virtual uint Signature { set; get; } = 0x7684dc80;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -17,7 +17,7 @@ namespace HKX2
         public Vector4 m_axisOfRotation { set; get; }
         private float m_angle { set; get; }
 
-        public override uint Signature => 0x877ebc0b;
+        public override uint Signature { set; get; } = 0x877ebc0b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -9,7 +9,7 @@ namespace HKX2
 
     public partial class hkBaseObject : IHavokObject, IEquatable<hkBaseObject?>
     {
-        public virtual uint Signature => 0xe0708a00;
+        public virtual uint Signature { set; get; } = 0xe0708a00;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

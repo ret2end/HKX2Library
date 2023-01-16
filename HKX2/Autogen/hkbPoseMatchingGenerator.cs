@@ -45,7 +45,7 @@ namespace HKX2
         private bool m_resetCurrentMatchLocalTime { set; get; }
         private object? m_poseMatchingUtility { set; get; }
 
-        public override uint Signature => 0x29e271b4;
+        public override uint Signature { set; get; } = 0x29e271b4;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

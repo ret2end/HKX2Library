@@ -10,7 +10,7 @@ namespace HKX2
     {
         private byte[] unk0 = new byte[1];
 
-        public virtual uint Signature => 0x7bd5c66f;
+        public virtual uint Signature { set; get; } = 0x7bd5c66f;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

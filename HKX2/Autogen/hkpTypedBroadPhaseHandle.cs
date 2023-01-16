@@ -16,7 +16,7 @@ namespace HKX2
         public sbyte m_objectQualityType { set; get; }
         public uint m_collisionFilterInfo { set; get; }
 
-        public override uint Signature => 0xf4b0f799;
+        public override uint Signature { set; get; } = 0xf4b0f799;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
         public hkbRoleAttribute m_role { set; get; } = new();
         public sbyte m_type { set; get; } = default;
 
-        public virtual uint Signature => 0x9e746ba2;
+        public virtual uint Signature { set; get; } = 0x9e746ba2;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

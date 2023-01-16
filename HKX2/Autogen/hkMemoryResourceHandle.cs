@@ -16,7 +16,7 @@ namespace HKX2
         public string m_name { set; get; } = "";
         public IList<hkMemoryResourceHandleExternalLink> m_references { set; get; } = Array.Empty<hkMemoryResourceHandleExternalLink>();
 
-        public override uint Signature => 0xbffac086;
+        public override uint Signature { set; get; } = 0xbffac086;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

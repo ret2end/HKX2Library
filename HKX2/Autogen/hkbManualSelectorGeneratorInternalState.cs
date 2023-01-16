@@ -10,7 +10,7 @@ namespace HKX2
     {
         public sbyte m_currentGeneratorIndex { set; get; }
 
-        public override uint Signature => 0x492c6137;
+        public override uint Signature { set; get; } = 0x492c6137;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

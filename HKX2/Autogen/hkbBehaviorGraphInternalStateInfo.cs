@@ -20,7 +20,7 @@ namespace HKX2
         public IList<short> m_activeEventIds { set; get; } = Array.Empty<short>();
         public IList<short> m_activeVariableIds { set; get; } = Array.Empty<short>();
 
-        public override uint Signature => 0x645f898b;
+        public override uint Signature { set; get; } = 0x645f898b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

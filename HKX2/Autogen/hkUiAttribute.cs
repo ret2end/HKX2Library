@@ -24,7 +24,7 @@ namespace HKX2
         public bool m_endGroup2 { set; get; }
         public bool m_advanced { set; get; }
 
-        public virtual uint Signature => 0xeb6e96e3;
+        public virtual uint Signature { set; get; } = 0xeb6e96e3;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

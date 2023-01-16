@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkpDisplayBindingDataRigidBody> m_bindings { set; get; } = Array.Empty<hkpDisplayBindingDataRigidBody>();
         public hkpPhysicsSystem? m_system { set; get; }
 
-        public override uint Signature => 0xc8ae86a7;
+        public override uint Signature { set; get; } = 0xc8ae86a7;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

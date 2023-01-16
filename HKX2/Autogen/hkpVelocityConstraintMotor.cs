@@ -14,7 +14,7 @@ namespace HKX2
         public float m_velocityTarget { set; get; }
         public bool m_useVelocityTargetFromConstraintTargets { set; get; }
 
-        public override uint Signature => 0xfca2fcc3;
+        public override uint Signature { set; get; } = 0xfca2fcc3;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

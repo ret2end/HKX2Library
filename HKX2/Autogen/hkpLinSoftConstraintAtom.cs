@@ -14,7 +14,7 @@ namespace HKX2
         public float m_tau { set; get; }
         public float m_damping { set; get; }
 
-        public override uint Signature => 0x52b27d69;
+        public override uint Signature { set; get; } = 0x52b27d69;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

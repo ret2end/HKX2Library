@@ -26,7 +26,7 @@ namespace HKX2
         private object? m_pTransitionEffect { set; get; }
         private sbyte m_currentMode { set; get; }
 
-        public override uint Signature => 0x5119eb06;
+        public override uint Signature { set; get; } = 0x5119eb06;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

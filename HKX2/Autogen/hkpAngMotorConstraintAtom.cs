@@ -22,7 +22,7 @@ namespace HKX2
         public float m_targetAngle { set; get; }
         public hkpConstraintMotor? m_motor { set; get; }
 
-        public override uint Signature => 0x81f087ff;
+        public override uint Signature { set; get; } = 0x81f087ff;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

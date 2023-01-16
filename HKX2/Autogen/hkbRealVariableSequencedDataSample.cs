@@ -12,7 +12,7 @@ namespace HKX2
         public float m_time { set; get; }
         public float m_value { set; get; }
 
-        public virtual uint Signature => 0xbb708bbd;
+        public virtual uint Signature { set; get; } = 0xbb708bbd;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -53,7 +53,7 @@ namespace HKX2
         private hkpEntityExtendedListeners? m_extendedListeners { set; get; }
         public uint m_npData { set; get; }
 
-        public override uint Signature => 0xa03c774b;
+        public override uint Signature { set; get; } = 0xa03c774b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

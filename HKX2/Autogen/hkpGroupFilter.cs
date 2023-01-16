@@ -16,7 +16,7 @@ namespace HKX2
         public uint[] m_collisionLookupTable = new uint[32];
         public Vector4[] m_pad256 = new Vector4[4];
 
-        public override uint Signature => 0x65ee88e4;
+        public override uint Signature { set; get; } = 0x65ee88e4;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public int m_numElems { set; get; }
         public int m_hashMod { set; get; }
 
-        public virtual uint Signature => 0x36195969;
+        public virtual uint Signature { set; get; } = 0x36195969;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

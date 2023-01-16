@@ -10,7 +10,7 @@ namespace HKX2
     {
         public byte m_freeRotationAxis { set; get; }
 
-        public override uint Signature => 0xdcdb8b8b;
+        public override uint Signature { set; get; } = 0xdcdb8b8b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

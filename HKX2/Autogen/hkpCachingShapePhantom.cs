@@ -13,7 +13,7 @@ namespace HKX2
         public IList<object> m_collisionDetails { set; get; } = Array.Empty<object>();
         private bool m_orderDirty { set; get; }
 
-        public override uint Signature => 0xcf227f58;
+        public override uint Signature { set; get; } = 0xcf227f58;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public hkpBridgeAtoms m_atoms { set; get; } = new();
         public float m_strength { set; get; }
 
-        public override uint Signature => 0x6748b2cf;
+        public override uint Signature { set; get; } = 0x6748b2cf;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

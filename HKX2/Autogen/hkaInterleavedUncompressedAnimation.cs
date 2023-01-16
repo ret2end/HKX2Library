@@ -15,7 +15,7 @@ namespace HKX2
         public IList<Matrix4x4> m_transforms { set; get; } = Array.Empty<Matrix4x4>();
         public IList<float> m_floats { set; get; } = Array.Empty<float>();
 
-        public override uint Signature => 0x930af031;
+        public override uint Signature { set; get; } = 0x930af031;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -27,7 +27,7 @@ namespace HKX2
         public bool m_invertRightTransform { set; get; }
         public bool m_invertResult { set; get; }
 
-        public override uint Signature => 0xfd1f0b79;
+        public override uint Signature { set; get; } = 0xfd1f0b79;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

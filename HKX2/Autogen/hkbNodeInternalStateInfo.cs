@@ -18,7 +18,7 @@ namespace HKX2
         public short m_nodeId { set; get; }
         public bool m_hasActivateBeenCalled { set; get; }
 
-        public override uint Signature => 0x7db9971d;
+        public override uint Signature { set; get; } = 0x7db9971d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

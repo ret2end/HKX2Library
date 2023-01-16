@@ -20,7 +20,7 @@ namespace HKX2
         public sbyte m_memOffsetToPrevAngle { set; get; }
         public sbyte m_memOffsetToRevolutionCounter { set; get; }
 
-        public override uint Signature => 0xf2b1f399;
+        public override uint Signature { set; get; } = 0xf2b1f399;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

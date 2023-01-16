@@ -14,7 +14,7 @@ namespace HKX2
         public int m_handIndex { set; get; }
         public bool m_enable { set; get; }
 
-        public virtual uint Signature => 0x9c72e9e3;
+        public virtual uint Signature { set; get; } = 0x9c72e9e3;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

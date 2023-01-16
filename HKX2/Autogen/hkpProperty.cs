@@ -14,7 +14,7 @@ namespace HKX2
         public uint m_alignmentPadding { set; get; }
         public hkpPropertyValue m_value { set; get; } = new();
 
-        public virtual uint Signature => 0x9ce308e9;
+        public virtual uint Signature { set; get; } = 0x9ce308e9;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

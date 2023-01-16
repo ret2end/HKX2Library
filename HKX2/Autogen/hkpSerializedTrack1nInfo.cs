@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkpAgent1nSector> m_sectors { set; get; } = Array.Empty<hkpAgent1nSector>();
         public IList<hkpSerializedSubTrack1nInfo> m_subTracks { set; get; } = Array.Empty<hkpSerializedSubTrack1nInfo>();
 
-        public virtual uint Signature => 0xf12d48d9;
+        public virtual uint Signature { set; get; } = 0xf12d48d9;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

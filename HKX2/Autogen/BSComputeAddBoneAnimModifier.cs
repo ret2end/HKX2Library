@@ -19,7 +19,7 @@ namespace HKX2
         public Vector4 m_scaleLSOut { set; get; }
         private object? m_pSkeletonMemory { set; get; }
 
-        public override uint Signature => 0xa67f8c46;
+        public override uint Signature { set; get; } = 0xa67f8c46;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

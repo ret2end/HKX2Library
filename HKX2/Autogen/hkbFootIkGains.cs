@@ -32,7 +32,7 @@ namespace HKX2
         public float m_maxKneeAngleDifference { set; get; }
         public float m_ankleOrientationGain { set; get; }
 
-        public virtual uint Signature => 0xa681b7f0;
+        public virtual uint Signature { set; get; } = 0xa681b7f0;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -13,7 +13,7 @@ namespace HKX2
         public Vector4 m_position { set; get; }
         public Vector4 m_separatingNormal { set; get; }
 
-        public virtual uint Signature => 0x91d7dd8e;
+        public virtual uint Signature { set; get; } = 0x91d7dd8e;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

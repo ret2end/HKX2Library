@@ -20,7 +20,7 @@ namespace HKX2
         public uint m_vertexBaseOffset { set; get; }
         public uint m_length { set; get; }
 
-        public override uint Signature => 0xc12c8197;
+        public override uint Signature { set; get; } = 0xc12c8197;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

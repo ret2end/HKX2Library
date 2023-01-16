@@ -42,7 +42,7 @@ namespace HKX2
         private bool m_initSync { set; get; }
         private bool m_doSubtractiveBlend { set; get; }
 
-        public override uint Signature => 0x22df7147;
+        public override uint Signature { set; get; } = 0x22df7147;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

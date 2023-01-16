@@ -14,7 +14,7 @@ namespace HKX2
         public byte m_command { set; get; }
         public int m_padding { set; get; }
 
-        public override uint Signature => 0x7a195d1d;
+        public override uint Signature { set; get; } = 0x7a195d1d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

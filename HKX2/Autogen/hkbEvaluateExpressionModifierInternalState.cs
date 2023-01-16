@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbEvaluateExpressionModifierInternalExpressionData> m_internalExpressionsData { set; get; } = Array.Empty<hkbEvaluateExpressionModifierInternalExpressionData>();
 
-        public override uint Signature => 0xb414d58e;
+        public override uint Signature { set; get; } = 0xb414d58e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkpStorageMeshShapeSubpartStorage> m_storage { set; get; } = Array.Empty<hkpStorageMeshShapeSubpartStorage>();
 
-        public override uint Signature => 0xbefd8b39;
+        public override uint Signature { set; get; } = 0xbefd8b39;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

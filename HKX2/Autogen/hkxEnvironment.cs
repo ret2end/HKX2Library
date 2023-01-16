@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkxEnvironmentVariable> m_variables { set; get; } = Array.Empty<hkxEnvironmentVariable>();
 
-        public override uint Signature => 0x41e1aa5;
+        public override uint Signature { set; get; } = 0x41e1aa5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

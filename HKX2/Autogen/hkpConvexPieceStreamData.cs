@@ -16,7 +16,7 @@ namespace HKX2
         public IList<uint> m_convexPieceOffsets { set; get; } = Array.Empty<uint>();
         public IList<uint> m_convexPieceSingleTriangles { set; get; } = Array.Empty<uint>();
 
-        public override uint Signature => 0xa5bd1d6e;
+        public override uint Signature { set; get; } = 0xa5bd1d6e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

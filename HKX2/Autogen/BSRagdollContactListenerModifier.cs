@@ -17,7 +17,7 @@ namespace HKX2
         private bool m_throwEvent { set; get; }
         public IList<object> m_ragdollRigidBodies { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0x8003d8ce;
+        public override uint Signature { set; get; } = 0x8003d8ce;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

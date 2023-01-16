@@ -19,7 +19,7 @@ namespace HKX2
         public float m_maxVerticalSeparation { set; get; }
         public float m_maxHorizontalSeparation { set; get; }
 
-        public virtual uint Signature => 0x5b6c03d9;
+        public virtual uint Signature { set; get; } = 0x5b6c03d9;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

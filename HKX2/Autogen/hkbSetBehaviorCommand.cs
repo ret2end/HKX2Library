@@ -24,7 +24,7 @@ namespace HKX2
         public bool m_randomizeSimulation { set; get; }
         public int m_padding { set; get; }
 
-        public override uint Signature => 0xe18b74b9;
+        public override uint Signature { set; get; } = 0xe18b74b9;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

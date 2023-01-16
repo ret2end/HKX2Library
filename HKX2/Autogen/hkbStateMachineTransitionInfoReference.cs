@@ -14,7 +14,7 @@ namespace HKX2
         public short m_transitionIndex { set; get; }
         public short m_stateMachineId { set; get; }
 
-        public virtual uint Signature => 0x9810c2d0;
+        public virtual uint Signature { set; get; } = 0x9810c2d0;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

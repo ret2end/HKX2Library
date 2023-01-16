@@ -14,7 +14,7 @@ namespace HKX2
         public bool m_global { set; get; }
         public int m_externalId { set; get; }
 
-        public override uint Signature => 0xa0a7bf9c;
+        public override uint Signature { set; get; } = 0xa0a7bf9c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

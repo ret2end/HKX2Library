@@ -18,7 +18,7 @@ namespace HKX2
         public hkxMaterial? m_material { set; get; }
         public IList<hkReferencedObject> m_userChannels { set; get; } = Array.Empty<hkReferencedObject>();
 
-        public override uint Signature => 0xe2286cf8;
+        public override uint Signature { set; get; } = 0xe2286cf8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

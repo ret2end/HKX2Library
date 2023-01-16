@@ -16,7 +16,7 @@ namespace HKX2
         public int m_numSolverResults { set; get; }
         public int m_numSolverElemTemps { set; get; }
 
-        public virtual uint Signature => 0xd6421f19;
+        public virtual uint Signature { set; get; } = 0xd6421f19;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

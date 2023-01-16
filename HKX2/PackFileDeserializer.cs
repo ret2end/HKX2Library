@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HKX2.Utils;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -169,15 +170,14 @@ namespace HKX2
             var f = _dataSection._globalMap[key];
             var klass = ConstructVirtualClass(br, f.Dst);
 
-            // TODO: this assume klass was read on correct block, will
-            if (!klass.GetType().IsAssignableTo(typeof(T)))
-            {
-                if (_ignoreNonFatalError)
-                    return default;
-                throw new Exception($@"Could not convert '{typeof(T)}' to '{klass.GetType()}'. Is source malformed?");
-            }
+            if (klass.GetType().IsAssignableTo(typeof(T)))
+                return (T)klass;
 
-            return (T) klass;
+            if (!_ignoreNonFatalError)
+                throw new Exception($@"Could not convert '{typeof(T)}' to '{klass.GetType()}'. Is source malformed?");
+
+            // TODO: this assume klass was read on correct block
+            return hkDummyBuilder.CreateDummy(klass, typeof(T));
         }
 
         public List<T> ReadClassPointerArray<T>(BinaryReaderEx br) where T : IHavokObject

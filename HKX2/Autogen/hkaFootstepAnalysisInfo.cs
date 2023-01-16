@@ -38,7 +38,7 @@ namespace HKX2
         public float m_velTol { set; get; }
         public float m_duration { set; get; }
 
-        public override uint Signature => 0x824faf75;
+        public override uint Signature { set; get; } = 0x824faf75;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

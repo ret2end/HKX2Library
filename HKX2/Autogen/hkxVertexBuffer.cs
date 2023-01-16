@@ -12,7 +12,7 @@ namespace HKX2
         public hkxVertexBufferVertexData m_data { set; get; } = new();
         public hkxVertexDescription m_desc { set; get; } = new();
 
-        public override uint Signature => 0x4ab10615;
+        public override uint Signature { set; get; } = 0x4ab10615;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

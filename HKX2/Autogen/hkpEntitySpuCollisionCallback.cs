@@ -16,7 +16,7 @@ namespace HKX2
         public byte m_eventFilter { set; get; }
         public byte m_userFilter { set; get; }
 
-        public virtual uint Signature => 0x81147f05;
+        public virtual uint Signature { set; get; } = 0x81147f05;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

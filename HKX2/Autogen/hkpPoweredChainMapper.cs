@@ -16,7 +16,7 @@ namespace HKX2
         public IList<hkpPoweredChainMapperTarget> m_targets { set; get; } = Array.Empty<hkpPoweredChainMapperTarget>();
         public IList<hkpConstraintChainInstance> m_chains { set; get; } = Array.Empty<hkpConstraintChainInstance>();
 
-        public override uint Signature => 0x7a77ef5;
+        public override uint Signature { set; get; } = 0x7a77ef5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

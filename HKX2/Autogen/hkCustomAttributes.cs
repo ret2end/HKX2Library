@@ -10,7 +10,7 @@ namespace HKX2
     {
         public object? m_attributes { set; get; }
 
-        public virtual uint Signature => 0xbff19005;
+        public virtual uint Signature { set; get; } = 0xbff19005;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

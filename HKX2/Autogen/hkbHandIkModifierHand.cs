@@ -37,7 +37,7 @@ namespace HKX2
         public bool m_enforceEndRotation { set; get; }
         public string m_localFrameName { set; get; } = "";
 
-        public virtual uint Signature => 0x14dfe1dd;
+        public virtual uint Signature { set; get; } = 0x14dfe1dd;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

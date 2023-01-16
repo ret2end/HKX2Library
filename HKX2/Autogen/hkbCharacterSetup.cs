@@ -26,7 +26,7 @@ namespace HKX2
         private object? m_mirroredSkeleton { set; get; }
         private object? m_characterPropertyIdMap { set; get; }
 
-        public override uint Signature => 0xe5a2a413;
+        public override uint Signature { set; get; } = 0xe5a2a413;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

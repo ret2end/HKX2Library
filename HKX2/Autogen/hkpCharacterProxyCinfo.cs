@@ -47,7 +47,7 @@ namespace HKX2
         public int m_maxCastIterations { set; get; }
         public bool m_refreshManifoldInCheckSupport { set; get; }
 
-        public override uint Signature => 0x586d97b2;
+        public override uint Signature { set; get; } = 0x586d97b2;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -32,7 +32,7 @@ namespace HKX2
         public float m_snapMaxLinearDistance { set; get; }
         public float m_snapMaxAngularDistance { set; get; }
 
-        public virtual uint Signature => 0xa3d0ac71;
+        public virtual uint Signature { set; get; } = 0xa3d0ac71;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

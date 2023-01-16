@@ -16,7 +16,7 @@ namespace HKX2
         public sbyte m_fadeInOutCurve { set; get; }
         public IList<object> m_internalHandData { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0xef8bc2f7;
+        public override uint Signature { set; get; } = 0xef8bc2f7;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

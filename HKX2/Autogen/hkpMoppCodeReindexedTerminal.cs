@@ -12,7 +12,7 @@ namespace HKX2
         public uint m_origShapeKey { set; get; }
         public uint m_reindexedShapeKey { set; get; }
 
-        public virtual uint Signature => 0x6ed8ac06;
+        public virtual uint Signature { set; get; } = 0x6ed8ac06;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

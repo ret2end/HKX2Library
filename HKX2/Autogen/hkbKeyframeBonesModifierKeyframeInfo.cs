@@ -17,7 +17,7 @@ namespace HKX2
         public short m_boneIndex { set; get; }
         public bool m_isValid { set; get; }
 
-        public virtual uint Signature => 0x72deb7a6;
+        public virtual uint Signature { set; get; } = 0x72deb7a6;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public string m_label { set; get; } = "";
         public sbyte m_type { set; get; }
 
-        public virtual uint Signature => 0x23aadfb6;
+        public virtual uint Signature { set; get; } = 0x23aadfb6;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

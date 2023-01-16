@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<int> m_selectedTriangles { set; get; } = Array.Empty<int>();
 
-        public override uint Signature => 0xa02cfca9;
+        public override uint Signature { set; get; } = 0xa02cfca9;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public ulong m_size { set; get; }
         public int m_traceId { set; get; }
 
-        public virtual uint Signature => 0x9ab3a6ac;
+        public virtual uint Signature { set; get; } = 0x9ab3a6ac;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

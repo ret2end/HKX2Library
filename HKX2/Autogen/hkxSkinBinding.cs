@@ -19,7 +19,7 @@ namespace HKX2
         public IList<Matrix4x4> m_bindPose { set; get; } = Array.Empty<Matrix4x4>();
         public Matrix4x4 m_initSkinTransform { set; get; }
 
-        public override uint Signature => 0x5a93f338;
+        public override uint Signature { set; get; } = 0x5a93f338;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

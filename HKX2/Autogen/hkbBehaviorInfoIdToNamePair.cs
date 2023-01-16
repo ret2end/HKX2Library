@@ -16,7 +16,7 @@ namespace HKX2
         public byte m_toolType { set; get; }
         public short m_id { set; get; }
 
-        public virtual uint Signature => 0x35a0439a;
+        public virtual uint Signature { set; get; } = 0x35a0439a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

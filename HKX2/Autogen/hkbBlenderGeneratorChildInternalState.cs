@@ -12,7 +12,7 @@ namespace HKX2
         public bool m_isActive { set; get; }
         public bool m_syncNextFrame { set; get; }
 
-        public virtual uint Signature => 0xff7327c0;
+        public virtual uint Signature { set; get; } = 0xff7327c0;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

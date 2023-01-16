@@ -11,7 +11,7 @@ namespace HKX2
     {
         public Vector4 m_position { set; get; }
 
-        public override uint Signature => 0x6791ffce;
+        public override uint Signature { set; get; } = 0x6791ffce;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

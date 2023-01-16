@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<short> m_mapping { set; get; } = Array.Empty<short>();
 
-        public virtual uint Signature => 0x48aceb75;
+        public virtual uint Signature { set; get; } = 0x48aceb75;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

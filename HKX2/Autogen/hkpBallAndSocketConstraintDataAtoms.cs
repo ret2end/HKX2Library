@@ -14,7 +14,7 @@ namespace HKX2
         public hkpSetupStabilizationAtom m_setupStabilization { set; get; } = new();
         public hkpBallSocketConstraintAtom m_ballSocket { set; get; } = new();
 
-        public virtual uint Signature => 0xc73dcaf9;
+        public virtual uint Signature { set; get; } = 0xc73dcaf9;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

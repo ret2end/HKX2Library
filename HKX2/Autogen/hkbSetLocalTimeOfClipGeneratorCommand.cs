@@ -14,7 +14,7 @@ namespace HKX2
         public float m_localTime { set; get; }
         public short m_nodeId { set; get; }
 
-        public override uint Signature => 0xfab12b45;
+        public override uint Signature { set; get; } = 0xfab12b45;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

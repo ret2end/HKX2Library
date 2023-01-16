@@ -16,7 +16,7 @@ namespace HKX2
         public uint m_collisionFilterInfo { set; get; }
         public hkpCharacterControllerCinfo? m_characterControllerCinfo { set; get; }
 
-        public virtual uint Signature => 0xa0f415bf;
+        public virtual uint Signature { set; get; } = 0xa0f415bf;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

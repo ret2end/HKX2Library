@@ -15,7 +15,7 @@ namespace HKX2
         public Vector4 m_pivotInB { set; get; }
         public float m_springLength { set; get; }
 
-        public virtual uint Signature => 0xc624a180;
+        public virtual uint Signature { set; get; } = 0xc624a180;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -13,7 +13,7 @@ namespace HKX2
         public ushort[] m_data = new ushort[6];
         public ushort[] m_extras = new ushort[2];
 
-        public virtual uint Signature => 0x1d716a17;
+        public virtual uint Signature { set; get; } = 0x1d716a17;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -23,7 +23,7 @@ namespace HKX2
         public float m_near { set; get; }
         public bool m_leftHanded { set; get; }
 
-        public override uint Signature => 0xe3597b02;
+        public override uint Signature { set; get; } = 0xe3597b02;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

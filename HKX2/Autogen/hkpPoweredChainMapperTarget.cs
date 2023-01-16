@@ -12,7 +12,7 @@ namespace HKX2
         public hkpPoweredChainData? m_chain { set; get; }
         public int m_infoIndex { set; get; }
 
-        public virtual uint Signature => 0xf651c74d;
+        public virtual uint Signature { set; get; } = 0xf651c74d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

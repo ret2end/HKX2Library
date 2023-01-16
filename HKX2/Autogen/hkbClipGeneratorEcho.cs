@@ -14,7 +14,7 @@ namespace HKX2
         public float m_weight { set; get; }
         public float m_dwdt { set; get; }
 
-        public virtual uint Signature => 0x750edf40;
+        public virtual uint Signature { set; get; } = 0x750edf40;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

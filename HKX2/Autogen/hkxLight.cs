@@ -19,7 +19,7 @@ namespace HKX2
         public uint m_color { set; get; }
         public float m_angle { set; get; }
 
-        public override uint Signature => 0x81c86d42;
+        public override uint Signature { set; get; } = 0x81c86d42;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

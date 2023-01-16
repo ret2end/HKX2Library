@@ -23,7 +23,7 @@ namespace HKX2
         public Vector4 m_localFacingDirection { set; get; }
         public bool m_resultIsDelta { set; get; }
 
-        public override uint Signature => 0x47665f1c;
+        public override uint Signature { set; get; } = 0x47665f1c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

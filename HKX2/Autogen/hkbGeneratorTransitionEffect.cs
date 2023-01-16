@@ -40,7 +40,7 @@ namespace HKX2
         private bool m_updateActiveNodes { set; get; }
         private sbyte m_stage { set; get; }
 
-        public override uint Signature => 0x5f771b12;
+        public override uint Signature { set; get; } = 0x5f771b12;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

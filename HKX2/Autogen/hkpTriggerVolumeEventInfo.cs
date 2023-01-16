@@ -14,7 +14,7 @@ namespace HKX2
         public hkpRigidBody? m_body { set; get; }
         public int m_operation { set; get; }
 
-        public virtual uint Signature => 0xeb60f431;
+        public virtual uint Signature { set; get; } = 0xeb60f431;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

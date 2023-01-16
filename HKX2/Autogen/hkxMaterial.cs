@@ -29,7 +29,7 @@ namespace HKX2
         public hkReferencedObject? m_extraData { set; get; }
         public IList<hkxMaterialProperty> m_properties { set; get; } = Array.Empty<hkxMaterialProperty>();
 
-        public override uint Signature => 0x2954537a;
+        public override uint Signature { set; get; } = 0x2954537a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

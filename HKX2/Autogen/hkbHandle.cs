@@ -16,7 +16,7 @@ namespace HKX2
         public hkbCharacter? m_character { set; get; }
         public short m_animationBoneIndex { set; get; }
 
-        public override uint Signature => 0xd8b6401c;
+        public override uint Signature { set; get; } = 0xd8b6401c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public string m_name { set; get; } = "";
         public IList<hkxAttribute> m_attributes { set; get; } = Array.Empty<hkxAttribute>();
 
-        public virtual uint Signature => 0x345ca95d;
+        public virtual uint Signature { set; get; } = 0x345ca95d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

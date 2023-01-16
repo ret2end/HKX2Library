@@ -22,7 +22,7 @@ namespace HKX2
         public hkaAnimatedReferenceFrame? m_extractedMotion { set; get; }
         public IList<hkaAnnotationTrack> m_annotationTracks { set; get; } = Array.Empty<hkaAnnotationTrack>();
 
-        public override uint Signature => 0xa6fa7e88;
+        public override uint Signature { set; get; } = 0xa6fa7e88;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

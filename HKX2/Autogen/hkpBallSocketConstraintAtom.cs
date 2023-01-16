@@ -18,7 +18,7 @@ namespace HKX2
         public float m_maxImpulse { set; get; }
         public float m_inertiaStabilizationFactor { set; get; }
 
-        public override uint Signature => 0xe70e4dfa;
+        public override uint Signature { set; get; } = 0xe70e4dfa;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

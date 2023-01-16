@@ -22,7 +22,7 @@ namespace HKX2
         private int m_numberOfEventsSeen { set; get; }
         private sbyte m_calculatedNumberOfEventsBeforeSend { set; get; }
 
-        public override uint Signature => 0x6030970c;
+        public override uint Signature { set; get; } = 0x6030970c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -4,7 +4,7 @@ namespace HKX2
 {
     public interface IHavokObject
     {
-        public uint Signature { get; }
+        public uint Signature { set; get; }
 
         public void Read(PackFileDeserializer des, BinaryReaderEx br);
 

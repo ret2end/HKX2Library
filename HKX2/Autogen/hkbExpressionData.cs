@@ -20,7 +20,7 @@ namespace HKX2
         private bool m_raisedEvent { set; get; }
         private bool m_wasTrueInPreviousFrame { set; get; }
 
-        public virtual uint Signature => 0x6740042a;
+        public virtual uint Signature { set; get; } = 0x6740042a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

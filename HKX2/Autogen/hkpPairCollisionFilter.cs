@@ -12,7 +12,7 @@ namespace HKX2
         public hkpPairCollisionFilterMapPairFilterKeyOverrideType m_disabledPairs { set; get; } = new();
         public hkpCollisionFilter? m_childFilter { set; get; }
 
-        public override uint Signature => 0x4abc140e;
+        public override uint Signature { set; get; } = 0x4abc140e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

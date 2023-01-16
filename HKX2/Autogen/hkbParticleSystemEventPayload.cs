@@ -21,7 +21,7 @@ namespace HKX2
         public int m_numParticles { set; get; }
         public float m_speed { set; get; }
 
-        public override uint Signature => 0x9df46cd6;
+        public override uint Signature { set; get; } = 0x9df46cd6;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

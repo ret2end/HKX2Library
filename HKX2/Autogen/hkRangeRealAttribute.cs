@@ -16,7 +16,7 @@ namespace HKX2
         public float m_softmin { set; get; }
         public float m_softmax { set; get; }
 
-        public virtual uint Signature => 0x949db24f;
+        public virtual uint Signature { set; get; } = 0x949db24f;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

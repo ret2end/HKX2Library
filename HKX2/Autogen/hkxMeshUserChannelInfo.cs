@@ -12,7 +12,7 @@ namespace HKX2
         public string m_name { set; get; } = "";
         public string m_className { set; get; } = "";
 
-        public override uint Signature => 0x270724a5;
+        public override uint Signature { set; get; } = 0x270724a5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

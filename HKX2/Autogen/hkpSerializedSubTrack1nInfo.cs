@@ -12,7 +12,7 @@ namespace HKX2
         public int m_sectorIndex { set; get; }
         public int m_offsetInSector { set; get; }
 
-        public override uint Signature => 0x10155a;
+        public override uint Signature { set; get; } = 0x10155a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

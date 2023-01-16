@@ -23,7 +23,7 @@ namespace HKX2
         public Vector4 m_bulletOffsetFromCenter { set; get; }
         private object? m_addedBodies { set; get; }
 
-        public override uint Signature => 0x57b06d35;
+        public override uint Signature { set; get; } = 0x57b06d35;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

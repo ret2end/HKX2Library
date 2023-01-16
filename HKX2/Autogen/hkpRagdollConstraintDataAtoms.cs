@@ -24,7 +24,7 @@ namespace HKX2
         public hkpConeLimitConstraintAtom m_planesLimit { set; get; } = new();
         public hkpBallSocketConstraintAtom m_ballSocket { set; get; } = new();
 
-        public virtual uint Signature => 0xeed76b00;
+        public virtual uint Signature { set; get; } = 0xeed76b00;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

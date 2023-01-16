@@ -15,7 +15,7 @@ namespace HKX2
         public IList<Matrix4x4> m_matrices { set; get; } = Array.Empty<Matrix4x4>();
         public byte m_hint { set; get; }
 
-        public override uint Signature => 0x5838e337;
+        public override uint Signature { set; get; } = 0x5838e337;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -10,7 +10,7 @@ namespace HKX2
     {
         public string m_string { set; get; } = "";
 
-        public virtual uint Signature => 0xe9f9578a;
+        public virtual uint Signature { set; get; } = 0xe9f9578a;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

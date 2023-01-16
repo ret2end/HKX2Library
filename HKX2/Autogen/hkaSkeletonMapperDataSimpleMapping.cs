@@ -15,7 +15,7 @@ namespace HKX2
         public short m_boneB { set; get; }
         public Matrix4x4 m_aFromBTransform { set; get; }
 
-        public virtual uint Signature => 0x3405deca;
+        public virtual uint Signature { set; get; } = 0x3405deca;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

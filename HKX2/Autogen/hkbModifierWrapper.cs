@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkbModifier? m_modifier { set; get; }
 
-        public override uint Signature => 0x3697e044;
+        public override uint Signature { set; get; } = 0x3697e044;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -20,7 +20,7 @@ namespace HKX2
         public sbyte m_angularConstrainedDOF { set; get; }
         public Matrix4x4[] m_transform_OS_KS = new Matrix4x4[2];
 
-        public override uint Signature => 0x8e7cb5da;
+        public override uint Signature { set; get; } = 0x8e7cb5da;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

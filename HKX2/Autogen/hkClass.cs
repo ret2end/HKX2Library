@@ -28,7 +28,7 @@ namespace HKX2
         public uint m_flags { set; get; }
         public int m_describedVersion { set; get; }
 
-        public virtual uint Signature => 0x75585ef6;
+        public virtual uint Signature { set; get; } = 0x75585ef6;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

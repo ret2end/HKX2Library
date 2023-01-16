@@ -66,7 +66,7 @@ namespace HKX2
         private bool m_echoNextUpdate { set; get; }
         private ushort m_sCurrentStateIndexAndEntered { set; get; }
 
-        public override uint Signature => 0x816c1dcb;
+        public override uint Signature { set; get; } = 0x816c1dcb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

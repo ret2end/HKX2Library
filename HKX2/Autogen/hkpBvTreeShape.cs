@@ -10,7 +10,7 @@ namespace HKX2
     {
         public byte m_bvTreeType { set; get; }
 
-        public override uint Signature => 0xa823d623;
+        public override uint Signature { set; get; } = 0xa823d623;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

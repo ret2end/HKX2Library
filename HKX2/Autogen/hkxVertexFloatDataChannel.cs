@@ -14,7 +14,7 @@ namespace HKX2
         public IList<float> m_perVertexFloats { set; get; } = Array.Empty<float>();
         public byte m_dimensions { set; get; }
 
-        public override uint Signature => 0xbeeb397c;
+        public override uint Signature { set; get; } = 0xbeeb397c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

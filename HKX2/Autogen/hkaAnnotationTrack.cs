@@ -14,7 +14,7 @@ namespace HKX2
         public string m_trackName { set; get; } = "";
         public IList<hkaAnnotationTrackAnnotation> m_annotations { set; get; } = Array.Empty<hkaAnnotationTrackAnnotation>();
 
-        public virtual uint Signature => 0xd4114fdd;
+        public virtual uint Signature { set; get; } = 0xd4114fdd;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

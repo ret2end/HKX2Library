@@ -23,7 +23,7 @@ namespace HKX2
         public ushort m_reference { set; get; }
         public ushort m_transformIndex { set; get; }
 
-        public virtual uint Signature => 0x385bb842;
+        public virtual uint Signature { set; get; } = 0x385bb842;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

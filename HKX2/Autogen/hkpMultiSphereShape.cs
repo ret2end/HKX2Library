@@ -14,7 +14,7 @@ namespace HKX2
         public int m_numSpheres { set; get; }
         public Vector4[] m_spheres = new Vector4[8];
 
-        public override uint Signature => 0x61a590fc;
+        public override uint Signature { set; get; } = 0x61a590fc;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

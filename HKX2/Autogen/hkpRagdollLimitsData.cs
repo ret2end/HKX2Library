@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpRagdollLimitsDataAtoms m_atoms { set; get; } = new();
 
-        public override uint Signature => 0xcbdb44aa;
+        public override uint Signature { set; get; } = 0xcbdb44aa;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

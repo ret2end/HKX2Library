@@ -14,7 +14,7 @@ namespace HKX2
         public IList<float> m_storage { set; get; } = Array.Empty<float>();
         public bool m_triangleFlip { set; get; }
 
-        public override uint Signature => 0x15ff414b;
+        public override uint Signature { set; get; } = 0x15ff414b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

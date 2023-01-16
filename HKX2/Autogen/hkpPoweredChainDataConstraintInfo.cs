@@ -22,7 +22,7 @@ namespace HKX2
         public hkpConstraintMotor?[] m_motors = new hkpConstraintMotor?[3];
         public bool m_switchBodies { set; get; }
 
-        public virtual uint Signature => 0xf88aee25;
+        public virtual uint Signature { set; get; } = 0xf88aee25;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

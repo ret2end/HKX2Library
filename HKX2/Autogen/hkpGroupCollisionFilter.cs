@@ -13,7 +13,7 @@ namespace HKX2
         public bool m_noGroupCollisionEnabled { set; get; }
         public uint[] m_collisionGroups = new uint[32];
 
-        public override uint Signature => 0x5cc01561;
+        public override uint Signature { set; get; } = 0x5cc01561;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

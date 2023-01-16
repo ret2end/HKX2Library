@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpConstraintChainInstance? m_constraintInstance { set; get; }
 
-        public override uint Signature => 0xc3971189;
+        public override uint Signature { set; get; } = 0xc3971189;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

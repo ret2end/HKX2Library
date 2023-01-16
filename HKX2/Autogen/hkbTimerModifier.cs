@@ -14,7 +14,7 @@ namespace HKX2
         public hkbEventProperty m_alarmEvent { set; get; } = new();
         private float m_secondsElapsed { set; get; }
 
-        public override uint Signature => 0x338b4879;
+        public override uint Signature { set; get; } = 0x338b4879;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

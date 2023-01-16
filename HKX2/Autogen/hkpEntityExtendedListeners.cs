@@ -12,7 +12,7 @@ namespace HKX2
         public hkpEntitySmallArraySerializeOverrideType m_activationListeners { set; get; } = new();
         public hkpEntitySmallArraySerializeOverrideType m_entityListeners { set; get; } = new();
 
-        public virtual uint Signature => 0xf557023c;
+        public virtual uint Signature { set; get; } = 0xf557023c;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

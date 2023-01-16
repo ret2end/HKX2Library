@@ -13,7 +13,7 @@ namespace HKX2
         public IList<hkpSimpleShapePhantomCollisionDetail> m_collisionDetails { set; get; } = Array.Empty<hkpSimpleShapePhantomCollisionDetail>();
         private bool m_orderDirty { set; get; }
 
-        public override uint Signature => 0x32a2a8a8;
+        public override uint Signature { set; get; } = 0x32a2a8a8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

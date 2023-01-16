@@ -14,7 +14,7 @@ namespace HKX2
         public IList<hkbHandIkDriverInfoHand> m_hands { set; get; } = Array.Empty<hkbHandIkDriverInfoHand>();
         public sbyte m_fadeInOutCurve { set; get; }
 
-        public override uint Signature => 0xc299090a;
+        public override uint Signature { set; get; } = 0xc299090a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

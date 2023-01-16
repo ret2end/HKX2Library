@@ -12,7 +12,7 @@ namespace HKX2
         public int m_attributeIndex { set; get; }
         public float m_attributeValue { set; get; }
 
-        public virtual uint Signature => 0x48b8ad52;
+        public virtual uint Signature { set; get; } = 0x48b8ad52;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

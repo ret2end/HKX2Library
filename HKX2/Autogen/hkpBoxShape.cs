@@ -11,7 +11,7 @@ namespace HKX2
     {
         public Vector4 m_halfExtents { set; get; }
 
-        public override uint Signature => 0x3444d2d5;
+        public override uint Signature { set; get; } = 0x3444d2d5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

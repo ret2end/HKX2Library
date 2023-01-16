@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkpCollisionFilter> m_collisionFilters { set; get; } = Array.Empty<hkpCollisionFilter>();
 
-        public override uint Signature => 0x2603bf04;
+        public override uint Signature { set; get; } = 0x2603bf04;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

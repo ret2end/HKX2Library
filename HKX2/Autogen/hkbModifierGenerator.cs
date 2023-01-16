@@ -12,7 +12,7 @@ namespace HKX2
         public hkbModifier? m_modifier { set; get; }
         public hkbGenerator? m_generator { set; get; }
 
-        public override uint Signature => 0x1f81fae6;
+        public override uint Signature { set; get; } = 0x1f81fae6;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

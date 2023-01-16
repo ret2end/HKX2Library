@@ -12,7 +12,7 @@ namespace HKX2
         public float m_tau { set; get; }
         public float m_maxAcceleration { set; get; }
 
-        public override uint Signature => 0xecb34e27;
+        public override uint Signature { set; get; } = 0xecb34e27;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

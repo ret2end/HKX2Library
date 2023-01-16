@@ -16,7 +16,7 @@ namespace HKX2
         private hkCustomAttributes? m_attributes { set; get; }
         public uint m_flags { set; get; }
 
-        public virtual uint Signature => 0x8a3609cf;
+        public virtual uint Signature { set; get; } = 0x8a3609cf;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

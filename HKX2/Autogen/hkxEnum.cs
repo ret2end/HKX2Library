@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkxEnumItem> m_items { set; get; } = Array.Empty<hkxEnumItem>();
 
-        public override uint Signature => 0xc4e1211;
+        public override uint Signature { set; get; } = 0xc4e1211;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

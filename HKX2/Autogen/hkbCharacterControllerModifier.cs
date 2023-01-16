@@ -31,7 +31,7 @@ namespace HKX2
         private float m_timestep { set; get; }
         private bool m_isInitialVelocityAdded { set; get; }
 
-        public override uint Signature => 0xf675d6fb;
+        public override uint Signature { set; get; } = 0xf675d6fb;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

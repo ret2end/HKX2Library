@@ -22,7 +22,7 @@ namespace HKX2
         public string m_pixelEntryName { set; get; } = "";
         public IList<byte> m_data { set; get; } = Array.Empty<byte>();
 
-        public override uint Signature => 0x28515eff;
+        public override uint Signature { set; get; } = 0x28515eff;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

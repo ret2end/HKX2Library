@@ -13,7 +13,7 @@ namespace HKX2
         public Vector4 m_offsetPerSecondMS { set; get; }
         private float m_timeSinceLastModify { set; get; }
 
-        public override uint Signature => 0x8f7492a0;
+        public override uint Signature { set; get; } = 0x8f7492a0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

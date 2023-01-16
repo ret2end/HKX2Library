@@ -16,7 +16,7 @@ namespace HKX2
         public int m_indexOfBindingToEnable { set; get; }
         private bool m_hasOutputBinding { set; get; }
 
-        public override uint Signature => 0x338ad4ff;
+        public override uint Signature { set; get; } = 0x338ad4ff;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -21,7 +21,7 @@ namespace HKX2
         public Half m_internalData1 { set; get; }
         public uint[] m_data = new uint[5];
 
-        public virtual uint Signature => 0xb59d1734;
+        public virtual uint Signature { set; get; } = 0xb59d1734;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -37,7 +37,7 @@ namespace HKX2
         public IList<hkxSkinBinding> m_skinBindings { set; get; } = Array.Empty<hkxSkinBinding>();
         public Matrix4x4 m_appliedTransform { set; get; }
 
-        public override uint Signature => 0x5f673ddd;
+        public override uint Signature { set; get; } = 0x5f673ddd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -28,7 +28,7 @@ namespace HKX2
         private object? m_attachmentManager { set; get; }
         private object? m_animationCache { set; get; }
 
-        public virtual uint Signature => 0xe0c4d4a7;
+        public virtual uint Signature { set; get; } = 0xe0c4d4a7;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

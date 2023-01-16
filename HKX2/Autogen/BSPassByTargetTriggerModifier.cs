@@ -19,7 +19,7 @@ namespace HKX2
         public hkbEventProperty m_triggerEvent { set; get; } = new();
         private bool m_targetPassed { set; get; }
 
-        public override uint Signature => 0x703d7b66;
+        public override uint Signature { set; get; } = 0x703d7b66;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

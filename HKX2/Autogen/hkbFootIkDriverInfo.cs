@@ -34,7 +34,7 @@ namespace HKX2
         public bool m_useCharacterUpVector { set; get; }
         public bool m_isQuadrupedNarrow { set; get; }
 
-        public override uint Signature => 0xc6a09dbf;
+        public override uint Signature { set; get; } = 0xc6a09dbf;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

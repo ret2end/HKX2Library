@@ -14,7 +14,7 @@ namespace HKX2
         public int m_numTargets { set; get; }
         public hkpConstraintInstance? m_limitConstraint { set; get; }
 
-        public virtual uint Signature => 0xcf071a1b;
+        public virtual uint Signature { set; get; } = 0xcf071a1b;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

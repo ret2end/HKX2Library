@@ -14,7 +14,7 @@ namespace HKX2
         public sbyte m_eventMode { set; get; }
         private sbyte m_defaultEventMode { set; get; }
 
-        public override uint Signature => 0x945da157;
+        public override uint Signature { set; get; } = 0x945da157;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

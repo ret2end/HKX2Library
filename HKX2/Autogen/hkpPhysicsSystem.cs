@@ -24,7 +24,7 @@ namespace HKX2
         public ulong m_userData { set; get; }
         public bool m_active { set; get; }
 
-        public override uint Signature => 0xff724c17;
+        public override uint Signature { set; get; } = 0xff724c17;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

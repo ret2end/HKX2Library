@@ -49,7 +49,7 @@ namespace HKX2
         private Vector4 m_lookAtLastTargetWS { set; get; }
         private float m_lookAtWeight { set; get; }
 
-        public override uint Signature => 0x3d28e066;
+        public override uint Signature { set; get; } = 0x3d28e066;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

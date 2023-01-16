@@ -32,7 +32,7 @@ namespace HKX2
         public bool m_stateOrTransitionChanged { set; get; }
         public bool m_echoNextUpdate { set; get; }
 
-        public override uint Signature => 0xbd1a7502;
+        public override uint Signature { set; get; } = 0xbd1a7502;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

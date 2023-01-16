@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkaFootstepAnalysisInfo> m_previewInfo { set; get; } = Array.Empty<hkaFootstepAnalysisInfo>();
 
-        public override uint Signature => 0x1d81207c;
+        public override uint Signature { set; get; } = 0x1d81207c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

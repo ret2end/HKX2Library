@@ -17,7 +17,7 @@ namespace HKX2
         public hkbEventRangeDataArray? m_eventRanges { set; get; }
         public IList<object> m_wasActiveInPreviousFrame { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0xbc561b6e;
+        public override uint Signature { set; get; } = 0xbc561b6e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

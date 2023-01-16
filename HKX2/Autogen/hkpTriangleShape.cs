@@ -23,7 +23,7 @@ namespace HKX2
         public Vector4 m_vertexC { set; get; }
         public Vector4 m_extrusion { set; get; }
 
-        public override uint Signature => 0x95ad1a25;
+        public override uint Signature { set; get; } = 0x95ad1a25;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

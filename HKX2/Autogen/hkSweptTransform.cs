@@ -19,7 +19,7 @@ namespace HKX2
         public Quaternion m_rotation1 { set; get; }
         public Vector4 m_centerOfMassLocal { set; get; }
 
-        public virtual uint Signature => 0xb4e5770;
+        public virtual uint Signature { set; get; } = 0xb4e5770;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

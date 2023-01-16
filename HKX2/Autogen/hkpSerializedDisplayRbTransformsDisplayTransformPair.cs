@@ -13,7 +13,7 @@ namespace HKX2
         public hkpRigidBody? m_rb { set; get; }
         public Matrix4x4 m_localToDisplay { set; get; }
 
-        public virtual uint Signature => 0x94ac5bec;
+        public virtual uint Signature { set; get; } = 0x94ac5bec;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

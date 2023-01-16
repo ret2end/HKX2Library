@@ -24,7 +24,7 @@ namespace HKX2
         public float m_maxAngle { set; get; }
         public float m_angularLimitsTauFactor { set; get; }
 
-        public override uint Signature => 0xf19443c8;
+        public override uint Signature { set; get; } = 0xf19443c8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

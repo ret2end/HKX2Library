@@ -14,7 +14,7 @@ namespace HKX2
         public hkpWorldCinfo? m_worldCinfo { set; get; }
         public IList<hkpPhysicsSystem> m_systems { set; get; } = Array.Empty<hkpPhysicsSystem>();
 
-        public override uint Signature => 0xc2a461e4;
+        public override uint Signature { set; get; } = 0xc2a461e4;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

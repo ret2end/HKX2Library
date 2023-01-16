@@ -64,7 +64,7 @@ namespace HKX2
         private bool m_ignoreStartTime { set; get; }
         private bool m_pingPongBackward { set; get; }
 
-        public override uint Signature => 0x333b85b9;
+        public override uint Signature { set; get; } = 0x333b85b9;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

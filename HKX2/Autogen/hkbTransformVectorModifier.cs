@@ -25,7 +25,7 @@ namespace HKX2
         public bool m_computeOnActivate { set; get; }
         public bool m_computeOnModify { set; get; }
 
-        public override uint Signature => 0xf93e0e24;
+        public override uint Signature { set; get; } = 0xf93e0e24;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

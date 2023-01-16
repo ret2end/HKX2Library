@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkbFootIkGains m_gains { set; get; } = new();
 
-        public virtual uint Signature => 0xa111b704;
+        public virtual uint Signature { set; get; } = 0xa111b704;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

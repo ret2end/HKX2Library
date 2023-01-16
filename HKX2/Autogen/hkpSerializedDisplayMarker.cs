@@ -11,7 +11,7 @@ namespace HKX2
     {
         public Matrix4x4 m_transform { set; get; }
 
-        public override uint Signature => 0xd7c8c54f;
+        public override uint Signature { set; get; } = 0xd7c8c54f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -14,7 +14,7 @@ namespace HKX2
         public ushort m_memSizeAndFlags { set; get; } = default;
         public short m_referenceCount { set; get; } = default;
 
-        public override uint Signature => 0x3b1c1113;
+        public override uint Signature { set; get; } = 0x3b1c1113;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

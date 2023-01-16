@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<uint> m_previewColor { set; get; } = Array.Empty<uint>();
 
-        public override uint Signature => 0x4bc4c3e0;
+        public override uint Signature { set; get; } = 0x4bc4c3e0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

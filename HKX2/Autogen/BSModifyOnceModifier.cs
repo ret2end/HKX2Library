@@ -12,7 +12,7 @@ namespace HKX2
         public hkbModifier? m_pOnActivateModifier { set; get; }
         public hkbModifier? m_pOnDeactivateModifier { set; get; }
 
-        public override uint Signature => 0x1e20a97a;
+        public override uint Signature { set; get; } = 0x1e20a97a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

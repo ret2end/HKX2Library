@@ -16,7 +16,7 @@ namespace HKX2
         public hkbBehaviorGraphData? m_data { set; get; }
         public IList<hkbBehaviorInfoIdToNamePair> m_idToNamePairs { set; get; } = Array.Empty<hkbBehaviorInfoIdToNamePair>();
 
-        public override uint Signature => 0xf7645395;
+        public override uint Signature { set; get; } = 0xf7645395;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -30,7 +30,7 @@ namespace HKX2
         private sbyte m_variableType { set; get; }
         private sbyte m_flags { set; get; }
 
-        public virtual uint Signature => 0x4d592f72;
+        public virtual uint Signature { set; get; } = 0x4d592f72;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

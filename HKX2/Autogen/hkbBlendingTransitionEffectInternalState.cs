@@ -21,7 +21,7 @@ namespace HKX2
         public bool m_applySelfTransition { set; get; }
         public bool m_initializeCharacterPose { set; get; }
 
-        public override uint Signature => 0xb18c70c2;
+        public override uint Signature { set; get; } = 0xb18c70c2;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

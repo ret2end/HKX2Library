@@ -11,7 +11,7 @@ namespace HKX2
     {
         public Vector4 m_pos { set; get; }
 
-        public virtual uint Signature => 0x143dff99;
+        public virtual uint Signature { set; get; } = 0x143dff99;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

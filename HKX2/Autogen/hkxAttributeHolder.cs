@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkxAttributeGroup> m_attributeGroups { set; get; } = Array.Empty<hkxAttributeGroup>();
 
-        public override uint Signature => 0x7468cc44;
+        public override uint Signature { set; get; } = 0x7468cc44;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

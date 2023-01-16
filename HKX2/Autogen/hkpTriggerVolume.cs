@@ -18,7 +18,7 @@ namespace HKX2
         public hkpRigidBody? m_triggerBody { set; get; }
         public uint m_sequenceNumber { set; get; }
 
-        public override uint Signature => 0xa29a8d1a;
+        public override uint Signature { set; get; } = 0xa29a8d1a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

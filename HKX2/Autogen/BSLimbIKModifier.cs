@@ -26,7 +26,7 @@ namespace HKX2
         private float m_timeStep { set; get; }
         private object? m_pSkeletonMemory { set; get; }
 
-        public override uint Signature => 0x8ea971e5;
+        public override uint Signature { set; get; } = 0x8ea971e5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -10,7 +10,7 @@ namespace HKX2
     {
         public float m_length { set; get; }
 
-        public override uint Signature => 0x6c128096;
+        public override uint Signature { set; get; } = 0x6c128096;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

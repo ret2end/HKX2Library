@@ -21,7 +21,7 @@ namespace HKX2
         public IList<hkaMeshBindingMapping> m_mappings { set; get; } = Array.Empty<hkaMeshBindingMapping>();
         public IList<Matrix4x4> m_boneFromSkinMeshTransforms { set; get; } = Array.Empty<Matrix4x4>();
 
-        public override uint Signature => 0x81d9950b;
+        public override uint Signature { set; get; } = 0x81d9950b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

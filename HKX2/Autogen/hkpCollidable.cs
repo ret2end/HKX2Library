@@ -20,7 +20,7 @@ namespace HKX2
         public hkpCollidableBoundingVolumeData m_boundingVolumeData { set; get; } = new();
         public float m_allowedPenetrationDepth { set; get; }
 
-        public override uint Signature => 0x9a0e42a5;
+        public override uint Signature { set; get; } = 0x9a0e42a5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

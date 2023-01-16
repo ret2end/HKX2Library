@@ -11,7 +11,7 @@ namespace HKX2
     {
         public Vector4 m_offset { set; get; }
 
-        public virtual uint Signature => 0xd8fdbb08;
+        public virtual uint Signature { set; get; } = 0xd8fdbb08;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -13,7 +13,7 @@ namespace HKX2
         public Vector4 m_min { set; get; }
         public Vector4 m_max { set; get; }
 
-        public virtual uint Signature => 0x4a948b16;
+        public virtual uint Signature { set; get; } = 0x4a948b16;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

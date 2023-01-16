@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkxVertexDescriptionElementDecl> m_decls { set; get; } = Array.Empty<hkxVertexDescriptionElementDecl>();
 
-        public virtual uint Signature => 0x2df6313d;
+        public virtual uint Signature { set; get; } = 0x2df6313d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

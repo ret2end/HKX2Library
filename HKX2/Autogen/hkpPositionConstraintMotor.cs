@@ -16,7 +16,7 @@ namespace HKX2
         public float m_proportionalRecoveryVelocity { set; get; }
         public float m_constantRecoveryVelocity { set; get; }
 
-        public override uint Signature => 0x748fb303;
+        public override uint Signature { set; get; } = 0x748fb303;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

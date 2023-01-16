@@ -15,7 +15,7 @@ namespace HKX2
         public hkReferencedObject? m_displayObjectPtr { set; get; }
         public Matrix4x4 m_rigidBodyFromDisplayObjectTransform { set; get; }
 
-        public override uint Signature => 0xfe16e2a3;
+        public override uint Signature { set; get; } = 0xfe16e2a3;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

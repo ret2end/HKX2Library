@@ -49,7 +49,7 @@ namespace HKX2
         private bool m_ballBonesValid { set; get; }
         private object? m_pSkeletonMemory { set; get; }
 
-        public override uint Signature => 0xd756fc25;
+        public override uint Signature { set; get; } = 0xd756fc25;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

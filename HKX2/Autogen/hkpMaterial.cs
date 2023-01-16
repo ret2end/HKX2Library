@@ -16,7 +16,7 @@ namespace HKX2
         public float m_friction { set; get; }
         public float m_restitution { set; get; }
 
-        public virtual uint Signature => 0x33be6570;
+        public virtual uint Signature { set; get; } = 0x33be6570;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

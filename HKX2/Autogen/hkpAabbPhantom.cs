@@ -15,7 +15,7 @@ namespace HKX2
         public IList<object> m_overlappingCollidables { set; get; } = Array.Empty<object>();
         private bool m_orderDirty { set; get; }
 
-        public override uint Signature => 0x2c5189dd;
+        public override uint Signature { set; get; } = 0x2c5189dd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

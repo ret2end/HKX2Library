@@ -26,7 +26,7 @@ namespace HKX2
         public int m_keyframe { set; get; }
         public string m_nodeName { set; get; } = "";
 
-        public override uint Signature => 0x207cb01;
+        public override uint Signature { set; get; } = 0x207cb01;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -10,7 +10,7 @@ namespace HKX2
     {
         public sbyte m_type { set; get; }
 
-        public override uint Signature => 0x6a44c317;
+        public override uint Signature { set; get; } = 0x6a44c317;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
         public float m_minForce { set; get; }
         public float m_maxForce { set; get; }
 
-        public override uint Signature => 0x3377b0b0;
+        public override uint Signature { set; get; } = 0x3377b0b0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

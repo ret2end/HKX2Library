@@ -15,7 +15,7 @@ namespace HKX2
         public float m_maxAngle { set; get; }
         public byte[] m_padding = new byte[8];
 
-        public override uint Signature => 0xf05d137e;
+        public override uint Signature { set; get; } = 0xf05d137e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

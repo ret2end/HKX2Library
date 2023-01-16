@@ -18,7 +18,7 @@ namespace HKX2
         public bool m_acyclic { set; get; }
         public bool m_isAnnotation { set; get; }
 
-        public virtual uint Signature => 0x7eb45cea;
+        public virtual uint Signature { set; get; } = 0x7eb45cea;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

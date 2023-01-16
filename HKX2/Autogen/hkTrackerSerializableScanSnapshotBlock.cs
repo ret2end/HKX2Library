@@ -20,7 +20,7 @@ namespace HKX2
         public int m_startReferenceIndex { set; get; }
         public int m_numReferences { set; get; }
 
-        public virtual uint Signature => 0xe7f23e6d;
+        public virtual uint Signature { set; get; } = 0xe7f23e6d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

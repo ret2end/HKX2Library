@@ -32,7 +32,7 @@ namespace HKX2
         private bool m_bSlot2ActivatedLastFrame { set; get; }
         private bool m_bSlot3ActivatedLastFrame { set; get; }
 
-        public override uint Signature => 0x81d0777a;
+        public override uint Signature { set; get; } = 0x81d0777a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

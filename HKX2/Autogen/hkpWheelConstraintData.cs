@@ -15,7 +15,7 @@ namespace HKX2
         public Vector4 m_initialAxleInB { set; get; }
         public Vector4 m_initialSteeringAxisInB { set; get; }
 
-        public override uint Signature => 0xb4c46671;
+        public override uint Signature { set; get; } = 0xb4c46671;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -21,7 +21,7 @@ namespace HKX2
         public IList<Vector4> m_points { set; get; } = Array.Empty<Vector4>();
         public IList<float> m_distance { set; get; } = Array.Empty<float>();
 
-        public override uint Signature => 0xd7b3be03;
+        public override uint Signature { set; get; } = 0xd7b3be03;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

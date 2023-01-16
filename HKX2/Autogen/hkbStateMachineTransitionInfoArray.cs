@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbStateMachineTransitionInfo> m_transitions { set; get; } = Array.Empty<hkbStateMachineTransitionInfo>();
 
-        public override uint Signature => 0xe397b11e;
+        public override uint Signature { set; get; } = 0xe397b11e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -10,7 +10,7 @@ namespace HKX2
     {
         public ulong m_data { set; get; }
 
-        public virtual uint Signature => 0xc75925aa;
+        public virtual uint Signature { set; get; } = 0xc75925aa;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

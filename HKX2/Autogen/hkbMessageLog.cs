@@ -12,7 +12,7 @@ namespace HKX2
         private object? m_messages { set; get; }
         private int m_maxMessages { set; get; }
 
-        public virtual uint Signature => 0x26a196c5;
+        public virtual uint Signature { set; get; } = 0x26a196c5;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

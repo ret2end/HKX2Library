@@ -17,7 +17,7 @@ namespace HKX2
         public bool m_wantAabbRejectionTest { set; get; }
         public byte[] m_padding = new byte[12];
 
-        public override uint Signature => 0x58e1e585;
+        public override uint Signature { set; get; } = 0x58e1e585;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

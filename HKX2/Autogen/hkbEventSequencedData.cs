@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbEventSequencedDataSequencedEvent> m_events { set; get; } = Array.Empty<hkbEventSequencedDataSequencedEvent>();
 
-        public override uint Signature => 0x76798eb8;
+        public override uint Signature { set; get; } = 0x76798eb8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

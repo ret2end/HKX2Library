@@ -16,7 +16,7 @@ namespace HKX2
         public uint m_endian { set; get; }
         private object? m_skeleton { set; get; }
 
-        public override uint Signature => 0x3920f053;
+        public override uint Signature { set; get; } = 0x3920f053;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkpSerializedDisplayMarker> m_markers { set; get; } = Array.Empty<hkpSerializedDisplayMarker>();
 
-        public override uint Signature => 0x54785c77;
+        public override uint Signature { set; get; } = 0x54785c77;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

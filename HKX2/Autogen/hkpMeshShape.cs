@@ -25,7 +25,7 @@ namespace HKX2
         public float m_radius { set; get; }
         public int[] m_pad = new int[3];
 
-        public override uint Signature => 0x3bf12c0f;
+        public override uint Signature { set; get; } = 0x3bf12c0f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

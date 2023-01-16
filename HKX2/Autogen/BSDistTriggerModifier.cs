@@ -17,7 +17,7 @@ namespace HKX2
         public float m_distanceTrigger { set; get; }
         public hkbEventProperty m_triggerEvent { set; get; } = new();
 
-        public override uint Signature => 0xb34d2bbd;
+        public override uint Signature { set; get; } = 0xb34d2bbd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

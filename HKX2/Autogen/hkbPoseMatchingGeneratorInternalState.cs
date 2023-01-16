@@ -18,7 +18,7 @@ namespace HKX2
         public float m_error { set; get; }
         public bool m_resetCurrentMatchLocalTime { set; get; }
 
-        public override uint Signature => 0x552d9dd4;
+        public override uint Signature { set; get; } = 0x552d9dd4;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

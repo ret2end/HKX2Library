@@ -36,7 +36,7 @@ namespace HKX2
         public string m_ragdollName { set; get; } = "";
         public string m_behaviorFilename { set; get; } = "";
 
-        public override uint Signature => 0x655b42bc;
+        public override uint Signature { set; get; } = 0x655b42bc;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -18,7 +18,7 @@ namespace HKX2
         public string m_referenceBehaviorName { set; get; } = "";
         public IList<string> m_selfTransitionNames { set; get; } = Array.Empty<string>();
 
-        public override uint Signature => 0xca0888ca;
+        public override uint Signature { set; get; } = 0xca0888ca;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

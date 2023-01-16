@@ -12,7 +12,7 @@ namespace HKX2
         public hkLocalFrame? m_localFrame { set; get; }
         public int m_boneIndex { set; get; }
 
-        public virtual uint Signature => 0x52e8043;
+        public virtual uint Signature { set; get; } = 0x52e8043;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -185,7 +185,7 @@ namespace HKX2
         public int m_broadPhaseUpdateSize { set; get; }
         private sbyte m_contactPointGeneration { set; get; }
 
-        public override uint Signature => 0xaadcec37;
+        public override uint Signature { set; get; } = 0xaadcec37;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -123,7 +123,7 @@ namespace HKX2
         public float m_frameMarkerPsiSnap { set; get; }
         public bool m_fireCollisionCallbacks { set; get; }
 
-        public override uint Signature => 0xa5255445;
+        public override uint Signature { set; get; } = 0xa5255445;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

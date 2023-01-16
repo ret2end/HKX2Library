@@ -28,7 +28,7 @@ namespace HKX2
         public short m_priority { set; get; }
         public short m_flags { set; get; }
 
-        public virtual uint Signature => 0xcdec8025;
+        public virtual uint Signature { set; get; } = 0xcdec8025;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

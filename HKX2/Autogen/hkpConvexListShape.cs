@@ -21,7 +21,7 @@ namespace HKX2
         public bool m_useCachedAabb { set; get; }
         public IList<hkpConvexShape> m_childShapes { set; get; } = Array.Empty<hkpConvexShape>();
 
-        public override uint Signature => 0x450b26e8;
+        public override uint Signature { set; get; } = 0x450b26e8;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

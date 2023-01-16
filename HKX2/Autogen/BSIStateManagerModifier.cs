@@ -16,7 +16,7 @@ namespace HKX2
         public IList<BSIStateManagerModifierBSiStateData> m_stateData { set; get; } = Array.Empty<BSIStateManagerModifierBSiStateData>();
         public BSIStateManagerModifierBSIStateManagerStateListener m_myStateListener { set; get; } = new();
 
-        public override uint Signature => 0x6cb24f2e;
+        public override uint Signature { set; get; } = 0x6cb24f2e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

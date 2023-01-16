@@ -40,7 +40,7 @@ namespace HKX2
         private float m_time { set; get; }
         private bool m_isEnabled { set; get; }
 
-        public override uint Signature => 0x43182ca3;
+        public override uint Signature { set; get; } = 0x43182ca3;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

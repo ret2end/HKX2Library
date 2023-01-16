@@ -25,7 +25,7 @@ namespace HKX2
         public bool m_isMirrored { set; get; }
         public bool m_isAdditive { set; get; }
 
-        public virtual uint Signature => 0xa3c341f8;
+        public virtual uint Signature { set; get; } = 0xa3c341f8;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

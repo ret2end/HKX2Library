@@ -14,7 +14,7 @@ namespace HKX2
         public ushort m_size { set; get; }
         public ushort m_capacityAndFlags { set; get; }
 
-        public virtual uint Signature => 0xee3c2aec;
+        public virtual uint Signature { set; get; } = 0xee3c2aec;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

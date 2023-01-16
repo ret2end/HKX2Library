@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpBallAndSocketConstraintDataAtoms m_atoms { set; get; } = new();
 
-        public override uint Signature => 0x5a6954d9;
+        public override uint Signature { set; get; } = 0x5a6954d9;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

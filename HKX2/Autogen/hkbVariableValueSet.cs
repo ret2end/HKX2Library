@@ -17,7 +17,7 @@ namespace HKX2
         public IList<Vector4> m_quadVariableValues { set; get; } = Array.Empty<Vector4>();
         public IList<hkReferencedObject> m_variantVariableValues { set; get; } = Array.Empty<hkReferencedObject>();
 
-        public override uint Signature => 0x27812d8d;
+        public override uint Signature { set; get; } = 0x27812d8d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

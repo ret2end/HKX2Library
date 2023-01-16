@@ -15,7 +15,7 @@ namespace HKX2
         public Vector4 m_mirrorAxis { set; get; }
         public IList<short> m_bonePairMap { set; get; } = Array.Empty<short>();
 
-        public override uint Signature => 0xc6c2da4f;
+        public override uint Signature { set; get; } = 0xc6c2da4f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

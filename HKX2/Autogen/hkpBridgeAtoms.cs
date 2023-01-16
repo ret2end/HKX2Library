@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpBridgeConstraintAtom m_bridgeAtom { set; get; } = new();
 
-        public virtual uint Signature => 0xde152a4d;
+        public virtual uint Signature { set; get; } = 0xde152a4d;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

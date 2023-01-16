@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpCollidable? m_collidable { set; get; }
 
-        public virtual uint Signature => 0x98bfa6ce;
+        public virtual uint Signature { set; get; } = 0x98bfa6ce;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

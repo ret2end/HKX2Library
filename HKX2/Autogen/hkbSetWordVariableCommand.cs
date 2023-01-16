@@ -21,7 +21,7 @@ namespace HKX2
         public byte m_type { set; get; }
         public bool m_global { set; get; }
 
-        public override uint Signature => 0xf3ae5fca;
+        public override uint Signature { set; get; } = 0xf3ae5fca;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

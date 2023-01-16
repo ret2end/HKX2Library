@@ -17,7 +17,7 @@ namespace HKX2
         public float m_ropeLength { set; get; }
         public float m_leverageOnBodyB { set; get; }
 
-        public override uint Signature => 0x94a08848;
+        public override uint Signature { set; get; } = 0x94a08848;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

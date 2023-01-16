@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbEventProperty> m_events { set; get; } = Array.Empty<hkbEventProperty>();
 
-        public override uint Signature => 0xb07b4388;
+        public override uint Signature { set; get; } = 0xb07b4388;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

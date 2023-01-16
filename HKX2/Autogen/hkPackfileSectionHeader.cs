@@ -27,7 +27,7 @@ namespace HKX2
         public int m_importsOffset { set; get; }
         public int m_endOffset { set; get; }
 
-        public virtual uint Signature => 0xf2a92154;
+        public virtual uint Signature { set; get; } = 0xf2a92154;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

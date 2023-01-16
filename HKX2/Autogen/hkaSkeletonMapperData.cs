@@ -27,7 +27,7 @@ namespace HKX2
         public bool m_keepUnmappedLocal { set; get; }
         public int m_mappingType { set; get; }
 
-        public virtual uint Signature => 0x95687ea0;
+        public virtual uint Signature { set; get; } = 0x95687ea0;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

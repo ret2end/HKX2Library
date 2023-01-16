@@ -12,7 +12,7 @@ namespace HKX2
     {
         public IList<hkbAttributeModifierAssignment> m_assignments { set; get; } = Array.Empty<hkbAttributeModifierAssignment>();
 
-        public override uint Signature => 0x1245d97d;
+        public override uint Signature { set; get; } = 0x1245d97d;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

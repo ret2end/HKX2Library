@@ -20,7 +20,7 @@ namespace HKX2
         public IList<short> m_floatTrackToFloatSlotIndices { set; get; } = Array.Empty<short>();
         public sbyte m_blendHint { set; get; }
 
-        public override uint Signature => 0x66eac971;
+        public override uint Signature { set; get; } = 0x66eac971;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

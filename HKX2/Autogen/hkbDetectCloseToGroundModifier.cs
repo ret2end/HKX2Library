@@ -22,7 +22,7 @@ namespace HKX2
         public short m_animBoneIndex { set; get; }
         private bool m_isCloseToGround { set; get; }
 
-        public override uint Signature => 0x981687b2;
+        public override uint Signature { set; get; } = 0x981687b2;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

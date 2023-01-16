@@ -21,7 +21,7 @@ namespace HKX2
         public float m_errorSum { set; get; }
         public float m_previousError { set; get; }
 
-        public override uint Signature => 0x508d3b36;
+        public override uint Signature { set; get; } = 0x508d3b36;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

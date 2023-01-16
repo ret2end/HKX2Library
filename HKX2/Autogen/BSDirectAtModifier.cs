@@ -58,7 +58,7 @@ namespace HKX2
         private Vector4 m_directAtTargetLocation { set; get; }
         public IList<object> m_boneChainIndices { set; get; } = Array.Empty<object>();
 
-        public override uint Signature => 0x19a005c0;
+        public override uint Signature { set; get; } = 0x19a005c0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

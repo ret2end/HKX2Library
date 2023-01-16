@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HKX2.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,13 +17,17 @@ namespace HKX2
         private Dictionary<string, IHavokObject> _objectsNameMap;
         private Dictionary<string, XElement> _nameXEleMap;
 
-        public IHavokObject Deserialize(Stream stream, HKXHeader header)
+        private bool _ignoreNonFatalError;
+
+        public IHavokObject Deserialize(Stream stream, HKXHeader header, bool ignoreNonFatalError = false)
         {
             _xdoc = XDocument.Load(stream, LoadOptions.SetLineInfo);
             _header = header;
             _objectsNameMap = new Dictionary<string, IHavokObject>();
 
             _nameXEleMap = new Dictionary<string, XElement>();
+
+            _ignoreNonFatalError = ignoreNonFatalError;
 
             var hksection = _xdoc.Element("hkpackfile")?.Element("hksection");
             if (hksection is null)
@@ -37,7 +42,7 @@ namespace HKX2
 
             var testnode = _nameXEleMap.First(item => item.Value.Attribute("class").Value == "hkRootLevelContainer").Value;
             var rootrefName = testnode.Attribute("name").Value;
-            var testobj = ConstructVirtualClass(testnode);
+            var testobj = ConstructVirtualClass<hkRootLevelContainer>(testnode);
             _objectsNameMap.Add(rootrefName, testobj);
 
             testobj.ReadXml(this, testnode);
@@ -47,7 +52,7 @@ namespace HKX2
             return hkRootLevelContainer;
         }
 
-        private IHavokObject ConstructVirtualClass(XElement xElement)
+        private IHavokObject ConstructVirtualClass<T>(XElement xElement) where T : IHavokObject
         {
             var name = xElement.Attribute("name").Value;
 
@@ -63,7 +68,13 @@ namespace HKX2
             var ret = (IHavokObject)Activator.CreateInstance(hkClass);
             if (ret is null) throw new Exception($@"Failed to Activator.CreateInstance({hkClass})");
 
-            return ret;
+            if (ret.GetType().IsAssignableTo(typeof(T)))
+                return ret;
+
+            if (!_ignoreNonFatalError)
+                throw new Exception($@"Could not convert '{typeof(T)}' to '{ret.GetType()}'. Is source malformed?");
+
+            return hkDummyBuilder.CreateDummy(ret, typeof(T));
         }
         private static XElement? GetPropertyElement(XContainer element, string name)
         {
@@ -149,7 +160,7 @@ namespace HKX2
             if (!_nameXEleMap.TryGetValue(refName, out XElement refEle))
                 throw new Exception($"Reference symbol '{refName}' not found. Make sure it defined somewhere. at Line {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
-            T ret = (T)ConstructVirtualClass(refEle);
+            T ret = (T)ConstructVirtualClass<T>(refEle);
             ret.ReadXml(this, refEle);
             _objectsNameMap.Add(refName, ret);
 
@@ -182,7 +193,7 @@ namespace HKX2
                 if (!_nameXEleMap.TryGetValue(refName, out XElement? refEle))
                     throw new Exception($"Reference symbol '{refName}' not found. Make sure it defined somewhere. at Line {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
-                var ret = (T)ConstructVirtualClass(refEle);
+                var ret = (T)ConstructVirtualClass<T>(refEle);
                 ret.ReadXml(this, refEle);
                 _objectsNameMap.Add(refName, ret);
 
@@ -220,7 +231,7 @@ namespace HKX2
                 if (!_nameXEleMap.TryGetValue(refName, out var refEle))
                     throw new Exception($"Reference symbol '{refName}' not found. Make sure it defined somewhere. at Line {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
-                var ret = (T)ConstructVirtualClass(refEle);
+                var ret = (T)ConstructVirtualClass<T>(refEle);
                 ret.ReadXml(this, refEle);
                 _objectsNameMap.Add(refName, ret);
 

@@ -13,7 +13,7 @@ namespace HKX2
     {
         public IList<Quaternion> m_quaternions { set; get; } = Array.Empty<Quaternion>();
 
-        public override uint Signature => 0xb4f01baa;
+        public override uint Signature { set; get; } = 0xb4f01baa;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

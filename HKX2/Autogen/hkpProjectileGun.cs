@@ -21,7 +21,7 @@ namespace HKX2
         private object? m_world { set; get; }
         private object? m_destructionWorld { set; get; }
 
-        public override uint Signature => 0xb4f30148;
+        public override uint Signature { set; get; } = 0xb4f30148;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

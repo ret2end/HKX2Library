@@ -20,7 +20,7 @@ namespace HKX2
         public IList<hkaBoneAttachment> m_attachments { set; get; } = Array.Empty<hkaBoneAttachment>();
         public IList<hkaMeshBinding> m_skins { set; get; } = Array.Empty<hkaMeshBinding>();
 
-        public override uint Signature => 0x8dc20333;
+        public override uint Signature { set; get; } = 0x8dc20333;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

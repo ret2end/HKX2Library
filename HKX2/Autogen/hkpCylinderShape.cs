@@ -21,7 +21,7 @@ namespace HKX2
         public Vector4 m_perpendicular1 { set; get; }
         public Vector4 m_perpendicular2 { set; get; }
 
-        public override uint Signature => 0x3e463c3a;
+        public override uint Signature { set; get; } = 0x3e463c3a;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

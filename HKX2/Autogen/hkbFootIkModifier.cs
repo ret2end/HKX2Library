@@ -55,7 +55,7 @@ namespace HKX2
         private bool m_isGroundPositionValid { set; get; }
         private float m_timeStep { set; get; }
 
-        public override uint Signature => 0xed8966c0;
+        public override uint Signature { set; get; } = 0xed8966c0;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

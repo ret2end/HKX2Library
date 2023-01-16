@@ -33,7 +33,7 @@ namespace HKX2
         private float m_timeSinceLastModify { set; get; }
         private bool m_smoothlyChangingHandles { set; get; }
 
-        public override uint Signature => 0x79757102;
+        public override uint Signature { set; get; } = 0x79757102;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

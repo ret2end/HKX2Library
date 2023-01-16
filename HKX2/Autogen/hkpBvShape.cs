@@ -12,7 +12,7 @@ namespace HKX2
         public hkpShape? m_boundingVolumeShape { set; get; }
         public hkpSingleShapeContainer m_childShape { set; get; } = new();
 
-        public override uint Signature => 0x286eb64c;
+        public override uint Signature { set; get; } = 0x286eb64c;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

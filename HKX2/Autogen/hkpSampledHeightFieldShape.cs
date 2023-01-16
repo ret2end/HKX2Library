@@ -27,7 +27,7 @@ namespace HKX2
         public Vector4 m_floatToIntOffsetFloorCorrected { set; get; }
         public Vector4 m_extents { set; get; }
 
-        public override uint Signature => 0x11213421;
+        public override uint Signature { set; get; } = 0x11213421;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

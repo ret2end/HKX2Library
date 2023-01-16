@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkaSkeletonMapperData m_mapping { set; get; } = new();
 
-        public override uint Signature => 0x12df42a5;
+        public override uint Signature { set; get; } = 0x12df42a5;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

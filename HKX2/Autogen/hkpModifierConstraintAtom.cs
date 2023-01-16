@@ -17,7 +17,7 @@ namespace HKX2
         public hkpConstraintAtom? m_child { set; get; }
         public uint[] m_pad = new uint[2];
 
-        public override uint Signature => 0xb13fef1f;
+        public override uint Signature { set; get; } = 0xb13fef1f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

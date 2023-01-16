@@ -13,7 +13,7 @@ namespace HKX2
     {
         public IList<Vector4> m_perVertexVectors { set; get; } = Array.Empty<Vector4>();
 
-        public override uint Signature => 0x2ea63179;
+        public override uint Signature { set; get; } = 0x2ea63179;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

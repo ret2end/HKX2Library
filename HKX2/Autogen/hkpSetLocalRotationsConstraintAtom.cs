@@ -13,7 +13,7 @@ namespace HKX2
         public Matrix4x4 m_rotationA { set; get; }
         public Matrix4x4 m_rotationB { set; get; }
 
-        public override uint Signature => 0xf81db8e;
+        public override uint Signature { set; get; } = 0xf81db8e;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

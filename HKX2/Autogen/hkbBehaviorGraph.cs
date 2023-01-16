@@ -69,7 +69,7 @@ namespace HKX2
         private bool m_updateActiveNodes { set; get; }
         private bool m_stateOrTransitionChanged { set; get; }
 
-        public override uint Signature => 0xb1218f86;
+        public override uint Signature { set; get; } = 0xb1218f86;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

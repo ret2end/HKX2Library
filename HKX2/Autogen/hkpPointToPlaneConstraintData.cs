@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpPointToPlaneConstraintDataAtoms m_atoms { set; get; } = new();
 
-        public override uint Signature => 0x65c56e17;
+        public override uint Signature { set; get; } = 0x65c56e17;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

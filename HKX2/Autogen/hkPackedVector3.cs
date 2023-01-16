@@ -11,7 +11,7 @@ namespace HKX2
     {
         public short[] m_values = new short[4];
 
-        public virtual uint Signature => 0x9c16df5b;
+        public virtual uint Signature { set; get; } = 0x9c16df5b;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

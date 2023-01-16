@@ -16,7 +16,7 @@ namespace HKX2
         public hkbWorldFromModelModeData m_worldFromModelModeData { set; get; } = new();
         public hkbBoneWeightArray? m_boneWeights { set; get; }
 
-        public override uint Signature => 0x7cb54065;
+        public override uint Signature { set; get; } = 0x7cb54065;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -22,7 +22,7 @@ namespace HKX2
         public int m_toStateId { set; get; }
         public bool m_isReturnToPreviousState { set; get; }
 
-        public virtual uint Signature => 0xbb90d54f;
+        public virtual uint Signature { set; get; } = 0xbb90d54f;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

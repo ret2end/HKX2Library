@@ -26,7 +26,7 @@ namespace HKX2
         public float m_frameMarkerPsiSnap { set; get; }
         public uint m_previousStepResult { set; get; }
 
-        public override uint Signature => 0x97aba922;
+        public override uint Signature { set; get; } = 0x97aba922;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

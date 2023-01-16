@@ -26,7 +26,7 @@ namespace HKX2
         public Vector4 m_capturedObjectPosition { set; get; }
         public Vector4 m_capturedObjectsOffset { set; get; }
 
-        public override uint Signature => 0x5e2754cd;
+        public override uint Signature { set; get; } = 0x5e2754cd;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

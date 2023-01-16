@@ -12,7 +12,7 @@ namespace HKX2
         public hkpBridgeAtoms m_atoms { set; get; } = new();
         public hkpGenericConstraintDataScheme m_scheme { set; get; } = new();
 
-        public override uint Signature => 0xfa824640;
+        public override uint Signature { set; get; } = 0xfa824640;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -10,7 +10,7 @@ namespace HKX2
     {
         public hkpLimitedHingeConstraintDataAtoms m_atoms { set; get; } = new();
 
-        public override uint Signature => 0x7c15bb6b;
+        public override uint Signature { set; get; } = 0x7c15bb6b;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

@@ -12,7 +12,7 @@ namespace HKX2
         public ushort m_maxFramesPerBlock { set; get; }
         public bool m_enableSampleSingleTracks { set; get; }
 
-        public virtual uint Signature => 0xde830789;
+        public virtual uint Signature { set; get; } = 0xde830789;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

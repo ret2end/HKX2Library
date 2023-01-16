@@ -41,7 +41,7 @@ namespace HKX2
         public float m_hardSupportDistance { set; get; }
         public int m_vdbColor { set; get; }
 
-        public override uint Signature => 0x892f441;
+        public override uint Signature { set; get; } = 0x892f441;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

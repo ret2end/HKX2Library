@@ -34,7 +34,7 @@ namespace HKX2
         public ushort m_savedQualityTypeIndex { set; get; }
         public Half m_gravityFactor { set; get; }
 
-        public override uint Signature => 0x98aadb4f;
+        public override uint Signature { set; get; } = 0x98aadb4f;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {

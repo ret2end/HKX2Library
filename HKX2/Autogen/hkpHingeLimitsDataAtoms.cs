@@ -14,7 +14,7 @@ namespace HKX2
         public hkpAngLimitConstraintAtom m_angLimit { set; get; } = new();
         public hkp2dAngConstraintAtom m_2dAng { set; get; } = new();
 
-        public virtual uint Signature => 0x555876ff;
+        public virtual uint Signature { set; get; } = 0x555876ff;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
