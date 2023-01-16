@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +10,11 @@ namespace HKX2
     // m_rpn m_class: hkbCompiledExpressionSetToken Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_expressionToRpnIndex m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_numExpressions m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkbCompiledExpressionSet : hkReferencedObject
+    public partial class hkbCompiledExpressionSet : hkReferencedObject, IEquatable<hkbCompiledExpressionSet?>
     {
-        public IList<hkbCompiledExpressionSetToken> m_rpn { set; get; } = new List<hkbCompiledExpressionSetToken>();
-        public IList<int> m_expressionToRpnIndex { set; get; } = new List<int>();
-        public sbyte m_numExpressions { set; get; } = default;
+        public IList<hkbCompiledExpressionSetToken> m_rpn { set; get; } = Array.Empty<hkbCompiledExpressionSetToken>();
+        public IList<int> m_expressionToRpnIndex { set; get; } = Array.Empty<int>();
+        public sbyte m_numExpressions { set; get; }
 
         public override uint Signature => 0x3a7d76cc;
 
@@ -47,9 +47,35 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkbCompiledExpressionSetToken>(xe, nameof(m_rpn), m_rpn);
+            xs.WriteClassArray(xe, nameof(m_rpn), m_rpn);
             xs.WriteNumberArray(xe, nameof(m_expressionToRpnIndex), m_expressionToRpnIndex);
             xs.WriteNumber(xe, nameof(m_numExpressions), m_numExpressions);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCompiledExpressionSet);
+        }
+
+        public bool Equals(hkbCompiledExpressionSet? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rpn.SequenceEqual(other.m_rpn) &&
+                   m_expressionToRpnIndex.SequenceEqual(other.m_expressionToRpnIndex) &&
+                   m_numExpressions.Equals(other.m_numExpressions) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rpn.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_expressionToRpnIndex.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_numExpressions);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

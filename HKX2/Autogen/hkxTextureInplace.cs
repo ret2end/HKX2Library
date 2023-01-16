@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,10 +11,10 @@ namespace HKX2
     // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_originalFilename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkxTextureInplace : hkReferencedObject
+    public partial class hkxTextureInplace : hkReferencedObject, IEquatable<hkxTextureInplace?>
     {
         public string m_fileType { set; get; } = "";
-        public IList<byte> m_data { set; get; } = new List<byte>();
+        public IList<byte> m_data { set; get; } = Array.Empty<byte>();
         public string m_name { set; get; } = "";
         public string m_originalFilename { set; get; } = "";
 
@@ -56,6 +56,34 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_data), m_data);
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteString(xe, nameof(m_originalFilename), m_originalFilename);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxTextureInplace);
+        }
+
+        public bool Equals(hkxTextureInplace? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_fileType.SequenceEqual(other.m_fileType) &&
+                   m_data.SequenceEqual(other.m_data) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   (m_originalFilename is null && other.m_originalFilename is null || m_originalFilename == other.m_originalFilename || m_originalFilename is null && other.m_originalFilename == "" || m_originalFilename == "" && other.m_originalFilename is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_fileType.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_name);
+            hashcode.Add(m_originalFilename);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

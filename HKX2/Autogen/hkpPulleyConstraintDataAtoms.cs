@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +7,7 @@ namespace HKX2
 
     // m_translations m_class: hkpSetLocalTranslationsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_pulley m_class: hkpPulleyConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkpPulleyConstraintDataAtoms : IHavokObject
+    public partial class hkpPulleyConstraintDataAtoms : IHavokObject, IEquatable<hkpPulleyConstraintDataAtoms?>
     {
         public hkpSetLocalTranslationsConstraintAtom m_translations { set; get; } = new();
         public hkpPulleyConstraintAtom m_pulley { set; get; } = new();
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteClass<hkpSetLocalTranslationsConstraintAtom>(xe, nameof(m_translations), m_translations);
             xs.WriteClass<hkpPulleyConstraintAtom>(xe, nameof(m_pulley), m_pulley);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPulleyConstraintDataAtoms);
+        }
+
+        public bool Equals(hkpPulleyConstraintDataAtoms? other)
+        {
+            return other is not null &&
+                   ((m_translations is null && other.m_translations is null) || (m_translations is not null && other.m_translations is not null && m_translations.Equals((IHavokObject)other.m_translations))) &&
+                   ((m_pulley is null && other.m_pulley is null) || (m_pulley is not null && other.m_pulley is not null && m_pulley.Equals((IHavokObject)other.m_pulley))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_translations);
+            hashcode.Add(m_pulley);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +11,12 @@ namespace HKX2
     // m_pad1 m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_pad2 m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_data m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 496 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpAgent1nSector : IHavokObject
+    public partial class hkpAgent1nSector : IHavokObject, IEquatable<hkpAgent1nSector?>
     {
-        public uint m_bytesAllocated { set; get; } = default;
-        public uint m_pad0 { set; get; } = default;
-        public uint m_pad1 { set; get; } = default;
-        public uint m_pad2 { set; get; } = default;
+        public uint m_bytesAllocated { set; get; }
+        public uint m_pad0 { set; get; }
+        public uint m_pad1 { set; get; }
+        public uint m_pad2 { set; get; }
         public byte[] m_data = new byte[496];
 
         public virtual uint Signature => 0x626e55a;
@@ -56,6 +55,34 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_pad1), m_pad1);
             xs.WriteNumber(xe, nameof(m_pad2), m_pad2);
             xs.WriteNumberArray(xe, nameof(m_data), m_data);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpAgent1nSector);
+        }
+
+        public bool Equals(hkpAgent1nSector? other)
+        {
+            return other is not null &&
+                   m_bytesAllocated.Equals(other.m_bytesAllocated) &&
+                   m_pad0.Equals(other.m_pad0) &&
+                   m_pad1.Equals(other.m_pad1) &&
+                   m_pad2.Equals(other.m_pad2) &&
+                   m_data.SequenceEqual(other.m_data) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_bytesAllocated);
+            hashcode.Add(m_pad0);
+            hashcode.Add(m_pad1);
+            hashcode.Add(m_pad2);
+            hashcode.Add(m_data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

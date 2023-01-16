@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +12,12 @@ namespace HKX2
     // m_nodeNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_bindPose m_class:  Type.TYPE_ARRAY Type.TYPE_MATRIX4 arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_initSkinTransform m_class:  Type.TYPE_MATRIX4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkxSkinBinding : hkReferencedObject
+    public partial class hkxSkinBinding : hkReferencedObject, IEquatable<hkxSkinBinding?>
     {
-        public hkxMesh? m_mesh { set; get; } = default;
-        public IList<string> m_nodeNames { set; get; } = new List<string>();
-        public IList<Matrix4x4> m_bindPose { set; get; } = new List<Matrix4x4>();
-        public Matrix4x4 m_initSkinTransform { set; get; } = default;
+        public hkxMesh? m_mesh { set; get; }
+        public IList<string> m_nodeNames { set; get; } = Array.Empty<string>();
+        public IList<Matrix4x4> m_bindPose { set; get; } = Array.Empty<Matrix4x4>();
+        public Matrix4x4 m_initSkinTransform { set; get; }
 
         public override uint Signature => 0x5a93f338;
 
@@ -56,6 +57,34 @@ namespace HKX2
             xs.WriteStringArray(xe, nameof(m_nodeNames), m_nodeNames);
             xs.WriteMatrix4Array(xe, nameof(m_bindPose), m_bindPose);
             xs.WriteMatrix4(xe, nameof(m_initSkinTransform), m_initSkinTransform);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxSkinBinding);
+        }
+
+        public bool Equals(hkxSkinBinding? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_mesh is null && other.m_mesh is null) || (m_mesh is not null && other.m_mesh is not null && m_mesh.Equals((IHavokObject)other.m_mesh))) &&
+                   m_nodeNames.SequenceEqual(other.m_nodeNames) &&
+                   m_bindPose.SequenceEqual(other.m_bindPose) &&
+                   m_initSkinTransform.Equals(other.m_initSkinTransform) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_mesh);
+            hashcode.Add(m_nodeNames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_bindPose.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_initSkinTransform);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

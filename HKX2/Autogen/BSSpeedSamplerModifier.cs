@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_direction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
     // m_goalSpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_speedOut m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
-    public partial class BSSpeedSamplerModifier : hkbModifier
+    public partial class BSSpeedSamplerModifier : hkbModifier, IEquatable<BSSpeedSamplerModifier?>
     {
-        public int m_state { set; get; } = default;
-        public float m_direction { set; get; } = default;
-        public float m_goalSpeed { set; get; } = default;
-        public float m_speedOut { set; get; } = default;
+        public int m_state { set; get; }
+        public float m_direction { set; get; }
+        public float m_goalSpeed { set; get; }
+        public float m_speedOut { set; get; }
 
         public override uint Signature => 0xd297fda9;
 
@@ -54,6 +52,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_direction), m_direction);
             xs.WriteFloat(xe, nameof(m_goalSpeed), m_goalSpeed);
             xs.WriteFloat(xe, nameof(m_speedOut), m_speedOut);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSSpeedSamplerModifier);
+        }
+
+        public bool Equals(BSSpeedSamplerModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_state.Equals(other.m_state) &&
+                   m_direction.Equals(other.m_direction) &&
+                   m_goalSpeed.Equals(other.m_goalSpeed) &&
+                   m_speedOut.Equals(other.m_speedOut) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_state);
+            hashcode.Add(m_direction);
+            hashcode.Add(m_goalSpeed);
+            hashcode.Add(m_speedOut);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

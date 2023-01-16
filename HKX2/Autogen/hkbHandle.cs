@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_rigidBody m_class: hkpRigidBody Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_character m_class: hkbCharacter Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_animationBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
-    public partial class hkbHandle : hkReferencedObject
+    public partial class hkbHandle : hkReferencedObject, IEquatable<hkbHandle?>
     {
-        public hkLocalFrame? m_frame { set; get; } = default;
-        public hkpRigidBody? m_rigidBody { set; get; } = default;
-        public hkbCharacter? m_character { set; get; } = default;
-        public short m_animationBoneIndex { set; get; } = default;
+        public hkLocalFrame? m_frame { set; get; }
+        public hkpRigidBody? m_rigidBody { set; get; }
+        public hkbCharacter? m_character { set; get; }
+        public short m_animationBoneIndex { set; get; }
 
         public override uint Signature => 0xd8b6401c;
 
@@ -56,6 +54,34 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_rigidBody), m_rigidBody);
             xs.WriteClassPointer(xe, nameof(m_character), m_character);
             xs.WriteNumber(xe, nameof(m_animationBoneIndex), m_animationBoneIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbHandle);
+        }
+
+        public bool Equals(hkbHandle? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_frame is null && other.m_frame is null) || (m_frame is not null && other.m_frame is not null && m_frame.Equals((IHavokObject)other.m_frame))) &&
+                   ((m_rigidBody is null && other.m_rigidBody is null) || (m_rigidBody is not null && other.m_rigidBody is not null && m_rigidBody.Equals((IHavokObject)other.m_rigidBody))) &&
+                   ((m_character is null && other.m_character is null) || (m_character is not null && other.m_character is not null && m_character.Equals((IHavokObject)other.m_character))) &&
+                   m_animationBoneIndex.Equals(other.m_animationBoneIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_frame);
+            hashcode.Add(m_rigidBody);
+            hashcode.Add(m_character);
+            hashcode.Add(m_animationBoneIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

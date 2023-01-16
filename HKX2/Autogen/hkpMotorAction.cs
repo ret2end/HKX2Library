@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +10,12 @@ namespace HKX2
     // m_spinRate m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_gain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
     // m_active m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
-    public partial class hkpMotorAction : hkpUnaryAction
+    public partial class hkpMotorAction : hkpUnaryAction, IEquatable<hkpMotorAction?>
     {
-        public Vector4 m_axis { set; get; } = default;
-        public float m_spinRate { set; get; } = default;
-        public float m_gain { set; get; } = default;
-        public bool m_active { set; get; } = default;
+        public Vector4 m_axis { set; get; }
+        public float m_spinRate { set; get; }
+        public float m_gain { set; get; }
+        public bool m_active { set; get; }
 
         public override uint Signature => 0x8ff131d9;
 
@@ -58,6 +57,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_spinRate), m_spinRate);
             xs.WriteFloat(xe, nameof(m_gain), m_gain);
             xs.WriteBoolean(xe, nameof(m_active), m_active);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMotorAction);
+        }
+
+        public bool Equals(hkpMotorAction? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_axis.Equals(other.m_axis) &&
+                   m_spinRate.Equals(other.m_spinRate) &&
+                   m_gain.Equals(other.m_gain) &&
+                   m_active.Equals(other.m_active) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_axis);
+            hashcode.Add(m_spinRate);
+            hashcode.Add(m_gain);
+            hashcode.Add(m_active);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

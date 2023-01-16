@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +12,13 @@ namespace HKX2
     // m_tau m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     // m_cfm m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
-    public partial class hkpStiffSpringChainData : hkpConstraintChainData
+    public partial class hkpStiffSpringChainData : hkpConstraintChainData, IEquatable<hkpStiffSpringChainData?>
     {
         public hkpBridgeAtoms m_atoms { set; get; } = new();
-        public IList<hkpStiffSpringChainDataConstraintInfo> m_infos { set; get; } = new List<hkpStiffSpringChainDataConstraintInfo>();
-        public float m_tau { set; get; } = default;
-        public float m_damping { set; get; } = default;
-        public float m_cfm { set; get; } = default;
+        public IList<hkpStiffSpringChainDataConstraintInfo> m_infos { set; get; } = Array.Empty<hkpStiffSpringChainDataConstraintInfo>();
+        public float m_tau { set; get; }
+        public float m_damping { set; get; }
+        public float m_cfm { set; get; }
 
         public override uint Signature => 0xf170356b;
 
@@ -58,10 +58,40 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteClass<hkpBridgeAtoms>(xe, nameof(m_atoms), m_atoms);
-            xs.WriteClassArray<hkpStiffSpringChainDataConstraintInfo>(xe, nameof(m_infos), m_infos);
+            xs.WriteClassArray(xe, nameof(m_infos), m_infos);
             xs.WriteFloat(xe, nameof(m_tau), m_tau);
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
             xs.WriteFloat(xe, nameof(m_cfm), m_cfm);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpStiffSpringChainData);
+        }
+
+        public bool Equals(hkpStiffSpringChainData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_atoms is null && other.m_atoms is null) || (m_atoms is not null && other.m_atoms is not null && m_atoms.Equals((IHavokObject)other.m_atoms))) &&
+                   m_infos.SequenceEqual(other.m_infos) &&
+                   m_tau.Equals(other.m_tau) &&
+                   m_damping.Equals(other.m_damping) &&
+                   m_cfm.Equals(other.m_cfm) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_atoms);
+            hashcode.Add(m_infos.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_tau);
+            hashcode.Add(m_damping);
+            hashcode.Add(m_cfm);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

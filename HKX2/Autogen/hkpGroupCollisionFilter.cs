@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +8,9 @@ namespace HKX2
 
     // m_noGroupCollisionEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_collisionGroups m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 32 offset: 76 flags: FLAGS_NONE enum: 
-    public partial class hkpGroupCollisionFilter : hkpCollisionFilter
+    public partial class hkpGroupCollisionFilter : hkpCollisionFilter, IEquatable<hkpGroupCollisionFilter?>
     {
-        public bool m_noGroupCollisionEnabled { set; get; } = default;
+        public bool m_noGroupCollisionEnabled { set; get; }
         public uint[] m_collisionGroups = new uint[32];
 
         public override uint Signature => 0x5cc01561;
@@ -46,6 +45,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteBoolean(xe, nameof(m_noGroupCollisionEnabled), m_noGroupCollisionEnabled);
             xs.WriteNumberArray(xe, nameof(m_collisionGroups), m_collisionGroups);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpGroupCollisionFilter);
+        }
+
+        public bool Equals(hkpGroupCollisionFilter? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_noGroupCollisionEnabled.Equals(other.m_noGroupCollisionEnabled) &&
+                   m_collisionGroups.SequenceEqual(other.m_collisionGroups) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_noGroupCollisionEnabled);
+            hashcode.Add(m_collisionGroups.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

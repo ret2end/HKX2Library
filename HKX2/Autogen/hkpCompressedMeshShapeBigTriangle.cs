@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +11,14 @@ namespace HKX2
     // m_material m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_weldingInfo m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_transformIndex m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 14 flags: FLAGS_NONE enum: 
-    public partial class hkpCompressedMeshShapeBigTriangle : IHavokObject
+    public partial class hkpCompressedMeshShapeBigTriangle : IHavokObject, IEquatable<hkpCompressedMeshShapeBigTriangle?>
     {
-        public ushort m_a { set; get; } = default;
-        public ushort m_b { set; get; } = default;
-        public ushort m_c { set; get; } = default;
-        public uint m_material { set; get; } = default;
-        public ushort m_weldingInfo { set; get; } = default;
-        public ushort m_transformIndex { set; get; } = default;
+        public ushort m_a { set; get; }
+        public ushort m_b { set; get; }
+        public ushort m_c { set; get; }
+        public uint m_material { set; get; }
+        public ushort m_weldingInfo { set; get; }
+        public ushort m_transformIndex { set; get; }
 
         public virtual uint Signature => 0xcbfc95a4;
 
@@ -64,6 +62,36 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_material), m_material);
             xs.WriteNumber(xe, nameof(m_weldingInfo), m_weldingInfo);
             xs.WriteNumber(xe, nameof(m_transformIndex), m_transformIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCompressedMeshShapeBigTriangle);
+        }
+
+        public bool Equals(hkpCompressedMeshShapeBigTriangle? other)
+        {
+            return other is not null &&
+                   m_a.Equals(other.m_a) &&
+                   m_b.Equals(other.m_b) &&
+                   m_c.Equals(other.m_c) &&
+                   m_material.Equals(other.m_material) &&
+                   m_weldingInfo.Equals(other.m_weldingInfo) &&
+                   m_transformIndex.Equals(other.m_transformIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_a);
+            hashcode.Add(m_b);
+            hashcode.Add(m_c);
+            hashcode.Add(m_material);
+            hashcode.Add(m_weldingInfo);
+            hashcode.Add(m_transformIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

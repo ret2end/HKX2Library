@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_disableWelding m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_collectionType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 41 flags: FLAGS_NONE enum: CollectionType
-    public partial class hkpShapeCollection : hkpShape
+    public partial class hkpShapeCollection : hkpShape, IEquatable<hkpShapeCollection?>
     {
-        public bool m_disableWelding { set; get; } = default;
-        public byte m_collectionType { set; get; } = default;
+        public bool m_disableWelding { set; get; }
+        public byte m_collectionType { set; get; }
 
         public override uint Signature => 0xe8c3991d;
 
@@ -46,6 +44,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteBoolean(xe, nameof(m_disableWelding), m_disableWelding);
             xs.WriteEnum<CollectionType, byte>(xe, nameof(m_collectionType), m_collectionType);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpShapeCollection);
+        }
+
+        public bool Equals(hkpShapeCollection? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_disableWelding.Equals(other.m_disableWelding) &&
+                   m_collectionType.Equals(other.m_collectionType) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_disableWelding);
+            hashcode.Add(m_collectionType);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

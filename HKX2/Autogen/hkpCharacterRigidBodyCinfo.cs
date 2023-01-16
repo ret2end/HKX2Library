@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -23,24 +22,24 @@ namespace HKX2
     // m_supportDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_hardSupportDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: FLAGS_NONE enum: 
     // m_vdbColor m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
-    public partial class hkpCharacterRigidBodyCinfo : hkpCharacterControllerCinfo
+    public partial class hkpCharacterRigidBodyCinfo : hkpCharacterControllerCinfo, IEquatable<hkpCharacterRigidBodyCinfo?>
     {
-        public uint m_collisionFilterInfo { set; get; } = default;
-        public hkpShape? m_shape { set; get; } = default;
-        public Vector4 m_position { set; get; } = default;
-        public Quaternion m_rotation { set; get; } = default;
-        public float m_mass { set; get; } = default;
-        public float m_friction { set; get; } = default;
-        public float m_maxLinearVelocity { set; get; } = default;
-        public float m_allowedPenetrationDepth { set; get; } = default;
-        public Vector4 m_up { set; get; } = default;
-        public float m_maxSlope { set; get; } = default;
-        public float m_maxForce { set; get; } = default;
-        public float m_unweldingHeightOffsetFactor { set; get; } = default;
-        public float m_maxSpeedForSimplexSolver { set; get; } = default;
-        public float m_supportDistance { set; get; } = default;
-        public float m_hardSupportDistance { set; get; } = default;
-        public int m_vdbColor { set; get; } = default;
+        public uint m_collisionFilterInfo { set; get; }
+        public hkpShape? m_shape { set; get; }
+        public Vector4 m_position { set; get; }
+        public Quaternion m_rotation { set; get; }
+        public float m_mass { set; get; }
+        public float m_friction { set; get; }
+        public float m_maxLinearVelocity { set; get; }
+        public float m_allowedPenetrationDepth { set; get; }
+        public Vector4 m_up { set; get; }
+        public float m_maxSlope { set; get; }
+        public float m_maxForce { set; get; }
+        public float m_unweldingHeightOffsetFactor { set; get; }
+        public float m_maxSpeedForSimplexSolver { set; get; }
+        public float m_supportDistance { set; get; }
+        public float m_hardSupportDistance { set; get; }
+        public int m_vdbColor { set; get; }
 
         public override uint Signature => 0x892f441;
 
@@ -130,6 +129,58 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_supportDistance), m_supportDistance);
             xs.WriteFloat(xe, nameof(m_hardSupportDistance), m_hardSupportDistance);
             xs.WriteNumber(xe, nameof(m_vdbColor), m_vdbColor);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCharacterRigidBodyCinfo);
+        }
+
+        public bool Equals(hkpCharacterRigidBodyCinfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   ((m_shape is null && other.m_shape is null) || (m_shape is not null && other.m_shape is not null && m_shape.Equals((IHavokObject)other.m_shape))) &&
+                   m_position.Equals(other.m_position) &&
+                   m_rotation.Equals(other.m_rotation) &&
+                   m_mass.Equals(other.m_mass) &&
+                   m_friction.Equals(other.m_friction) &&
+                   m_maxLinearVelocity.Equals(other.m_maxLinearVelocity) &&
+                   m_allowedPenetrationDepth.Equals(other.m_allowedPenetrationDepth) &&
+                   m_up.Equals(other.m_up) &&
+                   m_maxSlope.Equals(other.m_maxSlope) &&
+                   m_maxForce.Equals(other.m_maxForce) &&
+                   m_unweldingHeightOffsetFactor.Equals(other.m_unweldingHeightOffsetFactor) &&
+                   m_maxSpeedForSimplexSolver.Equals(other.m_maxSpeedForSimplexSolver) &&
+                   m_supportDistance.Equals(other.m_supportDistance) &&
+                   m_hardSupportDistance.Equals(other.m_hardSupportDistance) &&
+                   m_vdbColor.Equals(other.m_vdbColor) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(m_shape);
+            hashcode.Add(m_position);
+            hashcode.Add(m_rotation);
+            hashcode.Add(m_mass);
+            hashcode.Add(m_friction);
+            hashcode.Add(m_maxLinearVelocity);
+            hashcode.Add(m_allowedPenetrationDepth);
+            hashcode.Add(m_up);
+            hashcode.Add(m_maxSlope);
+            hashcode.Add(m_maxForce);
+            hashcode.Add(m_unweldingHeightOffsetFactor);
+            hashcode.Add(m_maxSpeedForSimplexSolver);
+            hashcode.Add(m_supportDistance);
+            hashcode.Add(m_hardSupportDistance);
+            hashcode.Add(m_vdbColor);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

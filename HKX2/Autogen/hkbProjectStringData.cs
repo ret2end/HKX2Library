@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,12 +16,12 @@ namespace HKX2
     // m_characterPath m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_fullPathToSource m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_rootPath m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbProjectStringData : hkReferencedObject
+    public partial class hkbProjectStringData : hkReferencedObject, IEquatable<hkbProjectStringData?>
     {
-        public IList<string> m_animationFilenames { set; get; } = new List<string>();
-        public IList<string> m_behaviorFilenames { set; get; } = new List<string>();
-        public IList<string> m_characterFilenames { set; get; } = new List<string>();
-        public IList<string> m_eventNames { set; get; } = new List<string>();
+        public IList<string> m_animationFilenames { set; get; } = Array.Empty<string>();
+        public IList<string> m_behaviorFilenames { set; get; } = Array.Empty<string>();
+        public IList<string> m_characterFilenames { set; get; } = Array.Empty<string>();
+        public IList<string> m_eventNames { set; get; } = Array.Empty<string>();
         public string m_animationPath { set; get; } = "";
         public string m_behaviorPath { set; get; } = "";
         public string m_characterPath { set; get; } = "";
@@ -83,6 +83,42 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_characterPath), m_characterPath);
             xs.WriteString(xe, nameof(m_fullPathToSource), m_fullPathToSource);
             xs.WriteSerializeIgnored(xe, nameof(m_rootPath));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbProjectStringData);
+        }
+
+        public bool Equals(hkbProjectStringData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_animationFilenames.SequenceEqual(other.m_animationFilenames) &&
+                   m_behaviorFilenames.SequenceEqual(other.m_behaviorFilenames) &&
+                   m_characterFilenames.SequenceEqual(other.m_characterFilenames) &&
+                   m_eventNames.SequenceEqual(other.m_eventNames) &&
+                   (m_animationPath is null && other.m_animationPath is null || m_animationPath == other.m_animationPath || m_animationPath is null && other.m_animationPath == "" || m_animationPath == "" && other.m_animationPath is null) &&
+                   (m_behaviorPath is null && other.m_behaviorPath is null || m_behaviorPath == other.m_behaviorPath || m_behaviorPath is null && other.m_behaviorPath == "" || m_behaviorPath == "" && other.m_behaviorPath is null) &&
+                   (m_characterPath is null && other.m_characterPath is null || m_characterPath == other.m_characterPath || m_characterPath is null && other.m_characterPath == "" || m_characterPath == "" && other.m_characterPath is null) &&
+                   (m_fullPathToSource is null && other.m_fullPathToSource is null || m_fullPathToSource == other.m_fullPathToSource || m_fullPathToSource is null && other.m_fullPathToSource == "" || m_fullPathToSource == "" && other.m_fullPathToSource is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_animationFilenames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_behaviorFilenames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_characterFilenames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_eventNames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_animationPath);
+            hashcode.Add(m_behaviorPath);
+            hashcode.Add(m_characterPath);
+            hashcode.Add(m_fullPathToSource);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

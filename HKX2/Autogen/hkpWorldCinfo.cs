@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -64,65 +63,65 @@ namespace HKX2
     // m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 241 flags: FLAGS_NONE enum: 
     // m_frameMarkerPsiSnap m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 244 flags: FLAGS_NONE enum: 
     // m_fireCollisionCallbacks m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 248 flags: FLAGS_NONE enum: 
-    public partial class hkpWorldCinfo : hkReferencedObject
+    public partial class hkpWorldCinfo : hkReferencedObject, IEquatable<hkpWorldCinfo?>
     {
-        public Vector4 m_gravity { set; get; } = default;
-        public int m_broadPhaseQuerySize { set; get; } = default;
-        public float m_contactRestingVelocity { set; get; } = default;
-        public sbyte m_broadPhaseBorderBehaviour { set; get; } = default;
-        public bool m_mtPostponeAndSortBroadPhaseBorderCallbacks { set; get; } = default;
+        public Vector4 m_gravity { set; get; }
+        public int m_broadPhaseQuerySize { set; get; }
+        public float m_contactRestingVelocity { set; get; }
+        public sbyte m_broadPhaseBorderBehaviour { set; get; }
+        public bool m_mtPostponeAndSortBroadPhaseBorderCallbacks { set; get; }
         public hkAabb m_broadPhaseWorldAabb { set; get; } = new();
-        public bool m_useKdTree { set; get; } = default;
-        public bool m_useMultipleTree { set; get; } = default;
-        public sbyte m_treeUpdateType { set; get; } = default;
-        public bool m_autoUpdateKdTree { set; get; } = default;
-        public float m_collisionTolerance { set; get; } = default;
-        public hkpCollisionFilter? m_collisionFilter { set; get; } = default;
-        public hkpConvexListFilter? m_convexListFilter { set; get; } = default;
-        public float m_expectedMaxLinearVelocity { set; get; } = default;
-        public int m_sizeOfToiEventQueue { set; get; } = default;
-        public float m_expectedMinPsiDeltaTime { set; get; } = default;
-        public hkWorldMemoryAvailableWatchDog? m_memoryWatchDog { set; get; } = default;
-        public int m_broadPhaseNumMarkers { set; get; } = default;
-        public sbyte m_contactPointGeneration { set; get; } = default;
-        public bool m_allowToSkipConfirmedCallbacks { set; get; } = default;
-        public bool m_useHybridBroadphase { set; get; } = default;
-        public float m_solverTau { set; get; } = default;
-        public float m_solverDamp { set; get; } = default;
-        public int m_solverIterations { set; get; } = default;
-        public int m_solverMicrosteps { set; get; } = default;
-        public float m_maxConstraintViolation { set; get; } = default;
-        public bool m_forceCoherentConstraintOrderingInSolver { set; get; } = default;
-        public float m_snapCollisionToConvexEdgeThreshold { set; get; } = default;
-        public float m_snapCollisionToConcaveEdgeThreshold { set; get; } = default;
-        public bool m_enableToiWeldRejection { set; get; } = default;
-        public bool m_enableDeprecatedWelding { set; get; } = default;
-        public float m_iterativeLinearCastEarlyOutDistance { set; get; } = default;
-        public int m_iterativeLinearCastMaxIterations { set; get; } = default;
-        public byte m_deactivationNumInactiveFramesSelectFlag0 { set; get; } = default;
-        public byte m_deactivationNumInactiveFramesSelectFlag1 { set; get; } = default;
-        public byte m_deactivationIntegrateCounter { set; get; } = default;
-        public bool m_shouldActivateOnRigidBodyTransformChange { set; get; } = default;
-        public float m_deactivationReferenceDistance { set; get; } = default;
-        public float m_toiCollisionResponseRotateNormal { set; get; } = default;
-        public int m_maxSectorsPerMidphaseCollideTask { set; get; } = default;
-        public int m_maxSectorsPerNarrowphaseCollideTask { set; get; } = default;
-        public bool m_processToisMultithreaded { set; get; } = default;
-        public int m_maxEntriesPerToiMidphaseCollideTask { set; get; } = default;
-        public int m_maxEntriesPerToiNarrowphaseCollideTask { set; get; } = default;
-        public int m_maxNumToiCollisionPairsSinglethreaded { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationSimplifiedToi { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationToi { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationToiHigher { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationToiForced { set; get; } = default;
-        public bool m_enableDeactivation { set; get; } = default;
-        public sbyte m_simulationType { set; get; } = default;
-        public bool m_enableSimulationIslands { set; get; } = default;
-        public uint m_minDesiredIslandSize { set; get; } = default;
-        public bool m_processActionsInSingleThread { set; get; } = default;
-        public bool m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob { set; get; } = default;
-        public float m_frameMarkerPsiSnap { set; get; } = default;
-        public bool m_fireCollisionCallbacks { set; get; } = default;
+        public bool m_useKdTree { set; get; }
+        public bool m_useMultipleTree { set; get; }
+        public sbyte m_treeUpdateType { set; get; }
+        public bool m_autoUpdateKdTree { set; get; }
+        public float m_collisionTolerance { set; get; }
+        public hkpCollisionFilter? m_collisionFilter { set; get; }
+        public hkpConvexListFilter? m_convexListFilter { set; get; }
+        public float m_expectedMaxLinearVelocity { set; get; }
+        public int m_sizeOfToiEventQueue { set; get; }
+        public float m_expectedMinPsiDeltaTime { set; get; }
+        public hkWorldMemoryAvailableWatchDog? m_memoryWatchDog { set; get; }
+        public int m_broadPhaseNumMarkers { set; get; }
+        public sbyte m_contactPointGeneration { set; get; }
+        public bool m_allowToSkipConfirmedCallbacks { set; get; }
+        public bool m_useHybridBroadphase { set; get; }
+        public float m_solverTau { set; get; }
+        public float m_solverDamp { set; get; }
+        public int m_solverIterations { set; get; }
+        public int m_solverMicrosteps { set; get; }
+        public float m_maxConstraintViolation { set; get; }
+        public bool m_forceCoherentConstraintOrderingInSolver { set; get; }
+        public float m_snapCollisionToConvexEdgeThreshold { set; get; }
+        public float m_snapCollisionToConcaveEdgeThreshold { set; get; }
+        public bool m_enableToiWeldRejection { set; get; }
+        public bool m_enableDeprecatedWelding { set; get; }
+        public float m_iterativeLinearCastEarlyOutDistance { set; get; }
+        public int m_iterativeLinearCastMaxIterations { set; get; }
+        public byte m_deactivationNumInactiveFramesSelectFlag0 { set; get; }
+        public byte m_deactivationNumInactiveFramesSelectFlag1 { set; get; }
+        public byte m_deactivationIntegrateCounter { set; get; }
+        public bool m_shouldActivateOnRigidBodyTransformChange { set; get; }
+        public float m_deactivationReferenceDistance { set; get; }
+        public float m_toiCollisionResponseRotateNormal { set; get; }
+        public int m_maxSectorsPerMidphaseCollideTask { set; get; }
+        public int m_maxSectorsPerNarrowphaseCollideTask { set; get; }
+        public bool m_processToisMultithreaded { set; get; }
+        public int m_maxEntriesPerToiMidphaseCollideTask { set; get; }
+        public int m_maxEntriesPerToiNarrowphaseCollideTask { set; get; }
+        public int m_maxNumToiCollisionPairsSinglethreaded { set; get; }
+        public float m_numToisTillAllowedPenetrationSimplifiedToi { set; get; }
+        public float m_numToisTillAllowedPenetrationToi { set; get; }
+        public float m_numToisTillAllowedPenetrationToiHigher { set; get; }
+        public float m_numToisTillAllowedPenetrationToiForced { set; get; }
+        public bool m_enableDeactivation { set; get; }
+        public sbyte m_simulationType { set; get; }
+        public bool m_enableSimulationIslands { set; get; }
+        public uint m_minDesiredIslandSize { set; get; }
+        public bool m_processActionsInSingleThread { set; get; }
+        public bool m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob { set; get; }
+        public float m_frameMarkerPsiSnap { set; get; }
+        public bool m_fireCollisionCallbacks { set; get; }
 
         public override uint Signature => 0xa5255445;
 
@@ -390,6 +389,140 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob), m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob);
             xs.WriteFloat(xe, nameof(m_frameMarkerPsiSnap), m_frameMarkerPsiSnap);
             xs.WriteBoolean(xe, nameof(m_fireCollisionCallbacks), m_fireCollisionCallbacks);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpWorldCinfo);
+        }
+
+        public bool Equals(hkpWorldCinfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_gravity.Equals(other.m_gravity) &&
+                   m_broadPhaseQuerySize.Equals(other.m_broadPhaseQuerySize) &&
+                   m_contactRestingVelocity.Equals(other.m_contactRestingVelocity) &&
+                   m_broadPhaseBorderBehaviour.Equals(other.m_broadPhaseBorderBehaviour) &&
+                   m_mtPostponeAndSortBroadPhaseBorderCallbacks.Equals(other.m_mtPostponeAndSortBroadPhaseBorderCallbacks) &&
+                   ((m_broadPhaseWorldAabb is null && other.m_broadPhaseWorldAabb is null) || (m_broadPhaseWorldAabb is not null && other.m_broadPhaseWorldAabb is not null && m_broadPhaseWorldAabb.Equals((IHavokObject)other.m_broadPhaseWorldAabb))) &&
+                   m_useKdTree.Equals(other.m_useKdTree) &&
+                   m_useMultipleTree.Equals(other.m_useMultipleTree) &&
+                   m_treeUpdateType.Equals(other.m_treeUpdateType) &&
+                   m_autoUpdateKdTree.Equals(other.m_autoUpdateKdTree) &&
+                   m_collisionTolerance.Equals(other.m_collisionTolerance) &&
+                   ((m_collisionFilter is null && other.m_collisionFilter is null) || (m_collisionFilter is not null && other.m_collisionFilter is not null && m_collisionFilter.Equals((IHavokObject)other.m_collisionFilter))) &&
+                   ((m_convexListFilter is null && other.m_convexListFilter is null) || (m_convexListFilter is not null && other.m_convexListFilter is not null && m_convexListFilter.Equals((IHavokObject)other.m_convexListFilter))) &&
+                   m_expectedMaxLinearVelocity.Equals(other.m_expectedMaxLinearVelocity) &&
+                   m_sizeOfToiEventQueue.Equals(other.m_sizeOfToiEventQueue) &&
+                   m_expectedMinPsiDeltaTime.Equals(other.m_expectedMinPsiDeltaTime) &&
+                   ((m_memoryWatchDog is null && other.m_memoryWatchDog is null) || (m_memoryWatchDog is not null && other.m_memoryWatchDog is not null && m_memoryWatchDog.Equals((IHavokObject)other.m_memoryWatchDog))) &&
+                   m_broadPhaseNumMarkers.Equals(other.m_broadPhaseNumMarkers) &&
+                   m_contactPointGeneration.Equals(other.m_contactPointGeneration) &&
+                   m_allowToSkipConfirmedCallbacks.Equals(other.m_allowToSkipConfirmedCallbacks) &&
+                   m_useHybridBroadphase.Equals(other.m_useHybridBroadphase) &&
+                   m_solverTau.Equals(other.m_solverTau) &&
+                   m_solverDamp.Equals(other.m_solverDamp) &&
+                   m_solverIterations.Equals(other.m_solverIterations) &&
+                   m_solverMicrosteps.Equals(other.m_solverMicrosteps) &&
+                   m_maxConstraintViolation.Equals(other.m_maxConstraintViolation) &&
+                   m_forceCoherentConstraintOrderingInSolver.Equals(other.m_forceCoherentConstraintOrderingInSolver) &&
+                   m_snapCollisionToConvexEdgeThreshold.Equals(other.m_snapCollisionToConvexEdgeThreshold) &&
+                   m_snapCollisionToConcaveEdgeThreshold.Equals(other.m_snapCollisionToConcaveEdgeThreshold) &&
+                   m_enableToiWeldRejection.Equals(other.m_enableToiWeldRejection) &&
+                   m_enableDeprecatedWelding.Equals(other.m_enableDeprecatedWelding) &&
+                   m_iterativeLinearCastEarlyOutDistance.Equals(other.m_iterativeLinearCastEarlyOutDistance) &&
+                   m_iterativeLinearCastMaxIterations.Equals(other.m_iterativeLinearCastMaxIterations) &&
+                   m_deactivationNumInactiveFramesSelectFlag0.Equals(other.m_deactivationNumInactiveFramesSelectFlag0) &&
+                   m_deactivationNumInactiveFramesSelectFlag1.Equals(other.m_deactivationNumInactiveFramesSelectFlag1) &&
+                   m_deactivationIntegrateCounter.Equals(other.m_deactivationIntegrateCounter) &&
+                   m_shouldActivateOnRigidBodyTransformChange.Equals(other.m_shouldActivateOnRigidBodyTransformChange) &&
+                   m_deactivationReferenceDistance.Equals(other.m_deactivationReferenceDistance) &&
+                   m_toiCollisionResponseRotateNormal.Equals(other.m_toiCollisionResponseRotateNormal) &&
+                   m_maxSectorsPerMidphaseCollideTask.Equals(other.m_maxSectorsPerMidphaseCollideTask) &&
+                   m_maxSectorsPerNarrowphaseCollideTask.Equals(other.m_maxSectorsPerNarrowphaseCollideTask) &&
+                   m_processToisMultithreaded.Equals(other.m_processToisMultithreaded) &&
+                   m_maxEntriesPerToiMidphaseCollideTask.Equals(other.m_maxEntriesPerToiMidphaseCollideTask) &&
+                   m_maxEntriesPerToiNarrowphaseCollideTask.Equals(other.m_maxEntriesPerToiNarrowphaseCollideTask) &&
+                   m_maxNumToiCollisionPairsSinglethreaded.Equals(other.m_maxNumToiCollisionPairsSinglethreaded) &&
+                   m_numToisTillAllowedPenetrationSimplifiedToi.Equals(other.m_numToisTillAllowedPenetrationSimplifiedToi) &&
+                   m_numToisTillAllowedPenetrationToi.Equals(other.m_numToisTillAllowedPenetrationToi) &&
+                   m_numToisTillAllowedPenetrationToiHigher.Equals(other.m_numToisTillAllowedPenetrationToiHigher) &&
+                   m_numToisTillAllowedPenetrationToiForced.Equals(other.m_numToisTillAllowedPenetrationToiForced) &&
+                   m_enableDeactivation.Equals(other.m_enableDeactivation) &&
+                   m_simulationType.Equals(other.m_simulationType) &&
+                   m_enableSimulationIslands.Equals(other.m_enableSimulationIslands) &&
+                   m_minDesiredIslandSize.Equals(other.m_minDesiredIslandSize) &&
+                   m_processActionsInSingleThread.Equals(other.m_processActionsInSingleThread) &&
+                   m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob.Equals(other.m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob) &&
+                   m_frameMarkerPsiSnap.Equals(other.m_frameMarkerPsiSnap) &&
+                   m_fireCollisionCallbacks.Equals(other.m_fireCollisionCallbacks) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_gravity);
+            hashcode.Add(m_broadPhaseQuerySize);
+            hashcode.Add(m_contactRestingVelocity);
+            hashcode.Add(m_broadPhaseBorderBehaviour);
+            hashcode.Add(m_mtPostponeAndSortBroadPhaseBorderCallbacks);
+            hashcode.Add(m_broadPhaseWorldAabb);
+            hashcode.Add(m_useKdTree);
+            hashcode.Add(m_useMultipleTree);
+            hashcode.Add(m_treeUpdateType);
+            hashcode.Add(m_autoUpdateKdTree);
+            hashcode.Add(m_collisionTolerance);
+            hashcode.Add(m_collisionFilter);
+            hashcode.Add(m_convexListFilter);
+            hashcode.Add(m_expectedMaxLinearVelocity);
+            hashcode.Add(m_sizeOfToiEventQueue);
+            hashcode.Add(m_expectedMinPsiDeltaTime);
+            hashcode.Add(m_memoryWatchDog);
+            hashcode.Add(m_broadPhaseNumMarkers);
+            hashcode.Add(m_contactPointGeneration);
+            hashcode.Add(m_allowToSkipConfirmedCallbacks);
+            hashcode.Add(m_useHybridBroadphase);
+            hashcode.Add(m_solverTau);
+            hashcode.Add(m_solverDamp);
+            hashcode.Add(m_solverIterations);
+            hashcode.Add(m_solverMicrosteps);
+            hashcode.Add(m_maxConstraintViolation);
+            hashcode.Add(m_forceCoherentConstraintOrderingInSolver);
+            hashcode.Add(m_snapCollisionToConvexEdgeThreshold);
+            hashcode.Add(m_snapCollisionToConcaveEdgeThreshold);
+            hashcode.Add(m_enableToiWeldRejection);
+            hashcode.Add(m_enableDeprecatedWelding);
+            hashcode.Add(m_iterativeLinearCastEarlyOutDistance);
+            hashcode.Add(m_iterativeLinearCastMaxIterations);
+            hashcode.Add(m_deactivationNumInactiveFramesSelectFlag0);
+            hashcode.Add(m_deactivationNumInactiveFramesSelectFlag1);
+            hashcode.Add(m_deactivationIntegrateCounter);
+            hashcode.Add(m_shouldActivateOnRigidBodyTransformChange);
+            hashcode.Add(m_deactivationReferenceDistance);
+            hashcode.Add(m_toiCollisionResponseRotateNormal);
+            hashcode.Add(m_maxSectorsPerMidphaseCollideTask);
+            hashcode.Add(m_maxSectorsPerNarrowphaseCollideTask);
+            hashcode.Add(m_processToisMultithreaded);
+            hashcode.Add(m_maxEntriesPerToiMidphaseCollideTask);
+            hashcode.Add(m_maxEntriesPerToiNarrowphaseCollideTask);
+            hashcode.Add(m_maxNumToiCollisionPairsSinglethreaded);
+            hashcode.Add(m_numToisTillAllowedPenetrationSimplifiedToi);
+            hashcode.Add(m_numToisTillAllowedPenetrationToi);
+            hashcode.Add(m_numToisTillAllowedPenetrationToiHigher);
+            hashcode.Add(m_numToisTillAllowedPenetrationToiForced);
+            hashcode.Add(m_enableDeactivation);
+            hashcode.Add(m_simulationType);
+            hashcode.Add(m_enableSimulationIslands);
+            hashcode.Add(m_minDesiredIslandSize);
+            hashcode.Add(m_processActionsInSingleThread);
+            hashcode.Add(m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob);
+            hashcode.Add(m_frameMarkerPsiSnap);
+            hashcode.Add(m_fireCollisionCallbacks);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

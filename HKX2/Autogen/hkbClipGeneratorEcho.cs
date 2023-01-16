@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_offsetLocalTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 0 flags: ALIGN_16|FLAGS_NONE enum: 
     // m_weight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_dwdt m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkbClipGeneratorEcho : IHavokObject
+    public partial class hkbClipGeneratorEcho : IHavokObject, IEquatable<hkbClipGeneratorEcho?>
     {
-        public float m_offsetLocalTime { set; get; } = default;
-        public float m_weight { set; get; } = default;
-        public float m_dwdt { set; get; } = default;
+        public float m_offsetLocalTime { set; get; }
+        public float m_weight { set; get; }
+        public float m_dwdt { set; get; }
 
         public virtual uint Signature => 0x750edf40;
 
@@ -46,6 +44,30 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_offsetLocalTime), m_offsetLocalTime);
             xs.WriteFloat(xe, nameof(m_weight), m_weight);
             xs.WriteFloat(xe, nameof(m_dwdt), m_dwdt);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbClipGeneratorEcho);
+        }
+
+        public bool Equals(hkbClipGeneratorEcho? other)
+        {
+            return other is not null &&
+                   m_offsetLocalTime.Equals(other.m_offsetLocalTime) &&
+                   m_weight.Equals(other.m_weight) &&
+                   m_dwdt.Equals(other.m_dwdt) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_offsetLocalTime);
+            hashcode.Add(m_weight);
+            hashcode.Add(m_dwdt);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

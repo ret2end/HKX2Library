@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_boneWeights m_class: hkbBoneWeightArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_weight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_worldFromModelWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
-    public partial class hkbBlenderGeneratorChild : hkbBindable
+    public partial class hkbBlenderGeneratorChild : hkbBindable, IEquatable<hkbBlenderGeneratorChild?>
     {
-        public hkbGenerator? m_generator { set; get; } = default;
-        public hkbBoneWeightArray? m_boneWeights { set; get; } = default;
-        public float m_weight { set; get; } = default;
-        public float m_worldFromModelWeight { set; get; } = default;
+        public hkbGenerator? m_generator { set; get; }
+        public hkbBoneWeightArray? m_boneWeights { set; get; }
+        public float m_weight { set; get; }
+        public float m_worldFromModelWeight { set; get; }
 
         public override uint Signature => 0xe2b384b0;
 
@@ -56,6 +54,34 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_boneWeights), m_boneWeights);
             xs.WriteFloat(xe, nameof(m_weight), m_weight);
             xs.WriteFloat(xe, nameof(m_worldFromModelWeight), m_worldFromModelWeight);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBlenderGeneratorChild);
+        }
+
+        public bool Equals(hkbBlenderGeneratorChild? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_generator is null && other.m_generator is null) || (m_generator is not null && other.m_generator is not null && m_generator.Equals((IHavokObject)other.m_generator))) &&
+                   ((m_boneWeights is null && other.m_boneWeights is null) || (m_boneWeights is not null && other.m_boneWeights is not null && m_boneWeights.Equals((IHavokObject)other.m_boneWeights))) &&
+                   m_weight.Equals(other.m_weight) &&
+                   m_worldFromModelWeight.Equals(other.m_worldFromModelWeight) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_generator);
+            hashcode.Add(m_boneWeights);
+            hashcode.Add(m_weight);
+            hashcode.Add(m_worldFromModelWeight);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

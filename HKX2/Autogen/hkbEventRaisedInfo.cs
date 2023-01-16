@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_raisedBySdk m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_senderId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
-    public partial class hkbEventRaisedInfo : hkReferencedObject
+    public partial class hkbEventRaisedInfo : hkReferencedObject, IEquatable<hkbEventRaisedInfo?>
     {
-        public ulong m_characterId { set; get; } = default;
+        public ulong m_characterId { set; get; }
         public string m_eventName { set; get; } = "";
-        public bool m_raisedBySdk { set; get; } = default;
-        public int m_senderId { set; get; } = default;
-        public int m_padding { set; get; } = default;
+        public bool m_raisedBySdk { set; get; }
+        public int m_senderId { set; get; }
+        public int m_padding { set; get; }
 
         public override uint Signature => 0xc02da3;
 
@@ -64,6 +62,36 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_raisedBySdk), m_raisedBySdk);
             xs.WriteNumber(xe, nameof(m_senderId), m_senderId);
             xs.WriteNumber(xe, nameof(m_padding), m_padding);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbEventRaisedInfo);
+        }
+
+        public bool Equals(hkbEventRaisedInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   (m_eventName is null && other.m_eventName is null || m_eventName == other.m_eventName || m_eventName is null && other.m_eventName == "" || m_eventName == "" && other.m_eventName is null) &&
+                   m_raisedBySdk.Equals(other.m_raisedBySdk) &&
+                   m_senderId.Equals(other.m_senderId) &&
+                   m_padding.Equals(other.m_padding) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_eventName);
+            hashcode.Add(m_raisedBySdk);
+            hashcode.Add(m_senderId);
+            hashcode.Add(m_padding);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

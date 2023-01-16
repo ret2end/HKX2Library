@@ -15,16 +15,16 @@ namespace HKX2
     // m_throwVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_capturedObjectPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_capturedObjectsOffset m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkpGravityGun : hkpFirstPersonGun
+    public partial class hkpGravityGun : hkpFirstPersonGun, IEquatable<hkpGravityGun?>
     {
-        public IList<object> m_grabbedBodies { set; get; } = new List<object>();
-        public int m_maxNumObjectsPicked { set; get; } = default;
-        public float m_maxMassOfObjectPicked { set; get; } = default;
-        public float m_maxDistOfObjectPicked { set; get; } = default;
-        public float m_impulseAppliedWhenObjectNotPicked { set; get; } = default;
-        public float m_throwVelocity { set; get; } = default;
-        public Vector4 m_capturedObjectPosition { set; get; } = default;
-        public Vector4 m_capturedObjectsOffset { set; get; } = default;
+        public IList<object> m_grabbedBodies { set; get; } = Array.Empty<object>();
+        public int m_maxNumObjectsPicked { set; get; }
+        public float m_maxMassOfObjectPicked { set; get; }
+        public float m_maxDistOfObjectPicked { set; get; }
+        public float m_impulseAppliedWhenObjectNotPicked { set; get; }
+        public float m_throwVelocity { set; get; }
+        public Vector4 m_capturedObjectPosition { set; get; }
+        public Vector4 m_capturedObjectsOffset { set; get; }
 
         public override uint Signature => 0x5e2754cd;
 
@@ -79,6 +79,40 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_throwVelocity), m_throwVelocity);
             xs.WriteVector4(xe, nameof(m_capturedObjectPosition), m_capturedObjectPosition);
             xs.WriteVector4(xe, nameof(m_capturedObjectsOffset), m_capturedObjectsOffset);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpGravityGun);
+        }
+
+        public bool Equals(hkpGravityGun? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_maxNumObjectsPicked.Equals(other.m_maxNumObjectsPicked) &&
+                   m_maxMassOfObjectPicked.Equals(other.m_maxMassOfObjectPicked) &&
+                   m_maxDistOfObjectPicked.Equals(other.m_maxDistOfObjectPicked) &&
+                   m_impulseAppliedWhenObjectNotPicked.Equals(other.m_impulseAppliedWhenObjectNotPicked) &&
+                   m_throwVelocity.Equals(other.m_throwVelocity) &&
+                   m_capturedObjectPosition.Equals(other.m_capturedObjectPosition) &&
+                   m_capturedObjectsOffset.Equals(other.m_capturedObjectsOffset) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_maxNumObjectsPicked);
+            hashcode.Add(m_maxMassOfObjectPicked);
+            hashcode.Add(m_maxDistOfObjectPicked);
+            hashcode.Add(m_impulseAppliedWhenObjectNotPicked);
+            hashcode.Add(m_throwVelocity);
+            hashcode.Add(m_capturedObjectPosition);
+            hashcode.Add(m_capturedObjectsOffset);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

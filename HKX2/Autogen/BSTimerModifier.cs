@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_alarmEvent m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_resetAlarm m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_secondsElapsed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSTimerModifier : hkbModifier
+    public partial class BSTimerModifier : hkbModifier, IEquatable<BSTimerModifier?>
     {
-        public float m_alarmTimeSeconds { set; get; } = default;
+        public float m_alarmTimeSeconds { set; get; }
         public hkbEventProperty m_alarmEvent { set; get; } = new();
-        public bool m_resetAlarm { set; get; } = default;
-        private float m_secondsElapsed { set; get; } = default;
+        public bool m_resetAlarm { set; get; }
+        private float m_secondsElapsed { set; get; }
 
         public override uint Signature => 0x531f3292;
 
@@ -57,6 +55,32 @@ namespace HKX2
             xs.WriteClass<hkbEventProperty>(xe, nameof(m_alarmEvent), m_alarmEvent);
             xs.WriteBoolean(xe, nameof(m_resetAlarm), m_resetAlarm);
             xs.WriteSerializeIgnored(xe, nameof(m_secondsElapsed));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSTimerModifier);
+        }
+
+        public bool Equals(BSTimerModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_alarmTimeSeconds.Equals(other.m_alarmTimeSeconds) &&
+                   ((m_alarmEvent is null && other.m_alarmEvent is null) || (m_alarmEvent is not null && other.m_alarmEvent is not null && m_alarmEvent.Equals((IHavokObject)other.m_alarmEvent))) &&
+                   m_resetAlarm.Equals(other.m_resetAlarm) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_alarmTimeSeconds);
+            hashcode.Add(m_alarmEvent);
+            hashcode.Add(m_resetAlarm);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

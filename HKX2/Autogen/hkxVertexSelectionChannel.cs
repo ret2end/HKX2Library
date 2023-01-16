@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkxVertexSelectionChannel Signatire: 0x866ec6d0 size: 32 flags: FLAGS_NONE
 
     // m_selectedVertices m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkxVertexSelectionChannel : hkReferencedObject
+    public partial class hkxVertexSelectionChannel : hkReferencedObject, IEquatable<hkxVertexSelectionChannel?>
     {
-        public IList<int> m_selectedVertices { set; get; } = new List<int>();
+        public IList<int> m_selectedVertices { set; get; } = Array.Empty<int>();
 
         public override uint Signature => 0x866ec6d0;
 
@@ -36,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumberArray(xe, nameof(m_selectedVertices), m_selectedVertices);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxVertexSelectionChannel);
+        }
+
+        public bool Equals(hkxVertexSelectionChannel? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_selectedVertices.SequenceEqual(other.m_selectedVertices) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_selectedVertices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

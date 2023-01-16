@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpSingleShapeContainer Signatire: 0x73aa1d38 size: 16 flags: FLAGS_NONE
 
     // m_childShape m_class: hkpShape Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpSingleShapeContainer : hkpShapeContainer
+    public partial class hkpSingleShapeContainer : hkpShapeContainer, IEquatable<hkpSingleShapeContainer?>
     {
-        public hkpShape? m_childShape { set; get; } = default;
+        public hkpShape? m_childShape { set; get; }
 
         public override uint Signature => 0x73aa1d38;
 
@@ -36,6 +34,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteClassPointer(xe, nameof(m_childShape), m_childShape);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSingleShapeContainer);
+        }
+
+        public bool Equals(hkpSingleShapeContainer? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_childShape is null && other.m_childShape is null) || (m_childShape is not null && other.m_childShape is not null && m_childShape.Equals((IHavokObject)other.m_childShape))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_childShape);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

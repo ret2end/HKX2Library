@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,13 +14,13 @@ namespace HKX2
     // m_aabbHalfExtents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_aabbCenter m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_enabledChildren m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 8 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkpListShape : hkpShapeCollection
+    public partial class hkpListShape : hkpShapeCollection, IEquatable<hkpListShape?>
     {
-        public IList<hkpListShapeChildInfo> m_childInfo { set; get; } = new List<hkpListShapeChildInfo>();
-        public ushort m_flags { set; get; } = default;
-        public ushort m_numDisabledChildren { set; get; } = default;
-        public Vector4 m_aabbHalfExtents { set; get; } = default;
-        public Vector4 m_aabbCenter { set; get; } = default;
+        public IList<hkpListShapeChildInfo> m_childInfo { set; get; } = Array.Empty<hkpListShapeChildInfo>();
+        public ushort m_flags { set; get; }
+        public ushort m_numDisabledChildren { set; get; }
+        public Vector4 m_aabbHalfExtents { set; get; }
+        public Vector4 m_aabbCenter { set; get; }
         public uint[] m_enabledChildren = new uint[8];
 
         public override uint Signature => 0xa1937cbd;
@@ -62,12 +63,44 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkpListShapeChildInfo>(xe, nameof(m_childInfo), m_childInfo);
+            xs.WriteClassArray(xe, nameof(m_childInfo), m_childInfo);
             xs.WriteNumber(xe, nameof(m_flags), m_flags);
             xs.WriteNumber(xe, nameof(m_numDisabledChildren), m_numDisabledChildren);
             xs.WriteVector4(xe, nameof(m_aabbHalfExtents), m_aabbHalfExtents);
             xs.WriteVector4(xe, nameof(m_aabbCenter), m_aabbCenter);
             xs.WriteNumberArray(xe, nameof(m_enabledChildren), m_enabledChildren);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpListShape);
+        }
+
+        public bool Equals(hkpListShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_childInfo.SequenceEqual(other.m_childInfo) &&
+                   m_flags.Equals(other.m_flags) &&
+                   m_numDisabledChildren.Equals(other.m_numDisabledChildren) &&
+                   m_aabbHalfExtents.Equals(other.m_aabbHalfExtents) &&
+                   m_aabbCenter.Equals(other.m_aabbCenter) &&
+                   m_enabledChildren.SequenceEqual(other.m_enabledChildren) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_childInfo.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_flags);
+            hashcode.Add(m_numDisabledChildren);
+            hashcode.Add(m_aabbHalfExtents);
+            hashcode.Add(m_aabbCenter);
+            hashcode.Add(m_enabledChildren.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

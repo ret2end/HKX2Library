@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_selfTransitionMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 72 flags: FLAGS_NONE enum: SelfTransitionMode
     // m_eventMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 73 flags: FLAGS_NONE enum: EventMode
     // m_defaultEventMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 74 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbTransitionEffect : hkbGenerator
+    public partial class hkbTransitionEffect : hkbGenerator, IEquatable<hkbTransitionEffect?>
     {
-        public sbyte m_selfTransitionMode { set; get; } = default;
-        public sbyte m_eventMode { set; get; } = default;
-        private sbyte m_defaultEventMode { set; get; } = default;
+        public sbyte m_selfTransitionMode { set; get; }
+        public sbyte m_eventMode { set; get; }
+        private sbyte m_defaultEventMode { set; get; }
 
         public override uint Signature => 0x945da157;
 
@@ -49,6 +47,30 @@ namespace HKX2
             xs.WriteEnum<SelfTransitionMode, sbyte>(xe, nameof(m_selfTransitionMode), m_selfTransitionMode);
             xs.WriteEnum<EventMode, sbyte>(xe, nameof(m_eventMode), m_eventMode);
             xs.WriteSerializeIgnored(xe, nameof(m_defaultEventMode));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbTransitionEffect);
+        }
+
+        public bool Equals(hkbTransitionEffect? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_selfTransitionMode.Equals(other.m_selfTransitionMode) &&
+                   m_eventMode.Equals(other.m_eventMode) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_selfTransitionMode);
+            hashcode.Add(m_eventMode);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

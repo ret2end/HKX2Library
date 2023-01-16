@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -20,21 +20,21 @@ namespace HKX2
     // m_floatOffsets m_class:  Type.TYPE_ARRAY Type.TYPE_UINT32 arrSize: 0 offset: 136 flags: FLAGS_NONE enum: 
     // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
     // m_endian m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 168 flags: FLAGS_NONE enum: 
-    public partial class hkaSplineCompressedAnimation : hkaAnimation
+    public partial class hkaSplineCompressedAnimation : hkaAnimation, IEquatable<hkaSplineCompressedAnimation?>
     {
-        public int m_numFrames { set; get; } = default;
-        public int m_numBlocks { set; get; } = default;
-        public int m_maxFramesPerBlock { set; get; } = default;
-        public int m_maskAndQuantizationSize { set; get; } = default;
-        public float m_blockDuration { set; get; } = default;
-        public float m_blockInverseDuration { set; get; } = default;
-        public float m_frameDuration { set; get; } = default;
-        public IList<uint> m_blockOffsets { set; get; } = new List<uint>();
-        public IList<uint> m_floatBlockOffsets { set; get; } = new List<uint>();
-        public IList<uint> m_transformOffsets { set; get; } = new List<uint>();
-        public IList<uint> m_floatOffsets { set; get; } = new List<uint>();
-        public IList<byte> m_data { set; get; } = new List<byte>();
-        public int m_endian { set; get; } = default;
+        public int m_numFrames { set; get; }
+        public int m_numBlocks { set; get; }
+        public int m_maxFramesPerBlock { set; get; }
+        public int m_maskAndQuantizationSize { set; get; }
+        public float m_blockDuration { set; get; }
+        public float m_blockInverseDuration { set; get; }
+        public float m_frameDuration { set; get; }
+        public IList<uint> m_blockOffsets { set; get; } = Array.Empty<uint>();
+        public IList<uint> m_floatBlockOffsets { set; get; } = Array.Empty<uint>();
+        public IList<uint> m_transformOffsets { set; get; } = Array.Empty<uint>();
+        public IList<uint> m_floatOffsets { set; get; } = Array.Empty<uint>();
+        public IList<byte> m_data { set; get; } = Array.Empty<byte>();
+        public int m_endian { set; get; }
 
         public override uint Signature => 0x792ee0bb;
 
@@ -112,6 +112,52 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_floatOffsets), m_floatOffsets);
             xs.WriteNumberArray(xe, nameof(m_data), m_data);
             xs.WriteNumber(xe, nameof(m_endian), m_endian);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaSplineCompressedAnimation);
+        }
+
+        public bool Equals(hkaSplineCompressedAnimation? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_numFrames.Equals(other.m_numFrames) &&
+                   m_numBlocks.Equals(other.m_numBlocks) &&
+                   m_maxFramesPerBlock.Equals(other.m_maxFramesPerBlock) &&
+                   m_maskAndQuantizationSize.Equals(other.m_maskAndQuantizationSize) &&
+                   m_blockDuration.Equals(other.m_blockDuration) &&
+                   m_blockInverseDuration.Equals(other.m_blockInverseDuration) &&
+                   m_frameDuration.Equals(other.m_frameDuration) &&
+                   m_blockOffsets.SequenceEqual(other.m_blockOffsets) &&
+                   m_floatBlockOffsets.SequenceEqual(other.m_floatBlockOffsets) &&
+                   m_transformOffsets.SequenceEqual(other.m_transformOffsets) &&
+                   m_floatOffsets.SequenceEqual(other.m_floatOffsets) &&
+                   m_data.SequenceEqual(other.m_data) &&
+                   m_endian.Equals(other.m_endian) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_numFrames);
+            hashcode.Add(m_numBlocks);
+            hashcode.Add(m_maxFramesPerBlock);
+            hashcode.Add(m_maskAndQuantizationSize);
+            hashcode.Add(m_blockDuration);
+            hashcode.Add(m_blockInverseDuration);
+            hashcode.Add(m_frameDuration);
+            hashcode.Add(m_blockOffsets.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_floatBlockOffsets.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_transformOffsets.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_floatOffsets.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_endian);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

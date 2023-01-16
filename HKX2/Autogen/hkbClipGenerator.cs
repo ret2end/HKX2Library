@@ -34,35 +34,35 @@ namespace HKX2
     // m_atEnd m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 260 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_ignoreStartTime m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 261 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_pingPongBackward m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 262 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbClipGenerator : hkbGenerator
+    public partial class hkbClipGenerator : hkbGenerator, IEquatable<hkbClipGenerator?>
     {
         public string m_animationName { set; get; } = "";
-        public hkbClipTriggerArray? m_triggers { set; get; } = default;
-        public float m_cropStartAmountLocalTime { set; get; } = default;
-        public float m_cropEndAmountLocalTime { set; get; } = default;
-        public float m_startTime { set; get; } = default;
-        public float m_playbackSpeed { set; get; } = default;
-        public float m_enforcedDuration { set; get; } = default;
-        public float m_userControlledTimeFraction { set; get; } = default;
-        public short m_animationBindingIndex { set; get; } = default;
-        public sbyte m_mode { set; get; } = default;
-        public sbyte m_flags { set; get; } = default;
-        public IList<object> m_animDatas { set; get; } = new List<object>();
-        private object? m_animationControl { set; get; } = default;
-        private object? m_originalTriggers { set; get; } = default;
-        private object? m_mapperData { set; get; } = default;
-        private object? m_binding { set; get; } = default;
-        private object? m_mirroredAnimation { set; get; } = default;
-        private Matrix4x4 m_extractedMotion { set; get; } = default;
-        public IList<object> m_echos { set; get; } = new List<object>();
-        private float m_localTime { set; get; } = default;
-        private float m_time { set; get; } = default;
-        private float m_previousUserControlledTimeFraction { set; get; } = default;
-        private int m_bufferSize { set; get; } = default;
-        private int m_echoBufferSize { set; get; } = default;
-        private bool m_atEnd { set; get; } = default;
-        private bool m_ignoreStartTime { set; get; } = default;
-        private bool m_pingPongBackward { set; get; } = default;
+        public hkbClipTriggerArray? m_triggers { set; get; }
+        public float m_cropStartAmountLocalTime { set; get; }
+        public float m_cropEndAmountLocalTime { set; get; }
+        public float m_startTime { set; get; }
+        public float m_playbackSpeed { set; get; }
+        public float m_enforcedDuration { set; get; }
+        public float m_userControlledTimeFraction { set; get; }
+        public short m_animationBindingIndex { set; get; }
+        public sbyte m_mode { set; get; }
+        public sbyte m_flags { set; get; }
+        public IList<object> m_animDatas { set; get; } = Array.Empty<object>();
+        private object? m_animationControl { set; get; }
+        private object? m_originalTriggers { set; get; }
+        private object? m_mapperData { set; get; }
+        private object? m_binding { set; get; }
+        private object? m_mirroredAnimation { set; get; }
+        private Matrix4x4 m_extractedMotion { set; get; }
+        public IList<object> m_echos { set; get; } = Array.Empty<object>();
+        private float m_localTime { set; get; }
+        private float m_time { set; get; }
+        private float m_previousUserControlledTimeFraction { set; get; }
+        private int m_bufferSize { set; get; }
+        private int m_echoBufferSize { set; get; }
+        private bool m_atEnd { set; get; }
+        private bool m_ignoreStartTime { set; get; }
+        private bool m_pingPongBackward { set; get; }
 
         public override uint Signature => 0x333b85b9;
 
@@ -180,6 +180,48 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_atEnd));
             xs.WriteSerializeIgnored(xe, nameof(m_ignoreStartTime));
             xs.WriteSerializeIgnored(xe, nameof(m_pingPongBackward));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbClipGenerator);
+        }
+
+        public bool Equals(hkbClipGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_animationName is null && other.m_animationName is null || m_animationName == other.m_animationName || m_animationName is null && other.m_animationName == "" || m_animationName == "" && other.m_animationName is null) &&
+                   ((m_triggers is null && other.m_triggers is null) || (m_triggers is not null && other.m_triggers is not null && m_triggers.Equals((IHavokObject)other.m_triggers))) &&
+                   m_cropStartAmountLocalTime.Equals(other.m_cropStartAmountLocalTime) &&
+                   m_cropEndAmountLocalTime.Equals(other.m_cropEndAmountLocalTime) &&
+                   m_startTime.Equals(other.m_startTime) &&
+                   m_playbackSpeed.Equals(other.m_playbackSpeed) &&
+                   m_enforcedDuration.Equals(other.m_enforcedDuration) &&
+                   m_userControlledTimeFraction.Equals(other.m_userControlledTimeFraction) &&
+                   m_animationBindingIndex.Equals(other.m_animationBindingIndex) &&
+                   m_mode.Equals(other.m_mode) &&
+                   m_flags.Equals(other.m_flags) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_animationName);
+            hashcode.Add(m_triggers);
+            hashcode.Add(m_cropStartAmountLocalTime);
+            hashcode.Add(m_cropEndAmountLocalTime);
+            hashcode.Add(m_startTime);
+            hashcode.Add(m_playbackSpeed);
+            hashcode.Add(m_enforcedDuration);
+            hashcode.Add(m_userControlledTimeFraction);
+            hashcode.Add(m_animationBindingIndex);
+            hashcode.Add(m_mode);
+            hashcode.Add(m_flags);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

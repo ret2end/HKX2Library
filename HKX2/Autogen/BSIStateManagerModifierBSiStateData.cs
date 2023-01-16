@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_pStateMachine m_class: hkbGenerator Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_StateID m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_iStateToSetAs m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class BSIStateManagerModifierBSiStateData : IHavokObject
+    public partial class BSIStateManagerModifierBSiStateData : IHavokObject, IEquatable<BSIStateManagerModifierBSiStateData?>
     {
-        public hkbGenerator? m_pStateMachine { set; get; } = default;
-        public int m_StateID { set; get; } = default;
-        public int m_iStateToSetAs { set; get; } = default;
+        public hkbGenerator? m_pStateMachine { set; get; }
+        public int m_StateID { set; get; }
+        public int m_iStateToSetAs { set; get; }
 
         public virtual uint Signature => 0x6b8a15fc;
 
@@ -44,6 +42,30 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_pStateMachine), m_pStateMachine);
             xs.WriteNumber(xe, nameof(m_StateID), m_StateID);
             xs.WriteNumber(xe, nameof(m_iStateToSetAs), m_iStateToSetAs);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSIStateManagerModifierBSiStateData);
+        }
+
+        public bool Equals(BSIStateManagerModifierBSiStateData? other)
+        {
+            return other is not null &&
+                   ((m_pStateMachine is null && other.m_pStateMachine is null) || (m_pStateMachine is not null && other.m_pStateMachine is not null && m_pStateMachine.Equals((IHavokObject)other.m_pStateMachine))) &&
+                   m_StateID.Equals(other.m_StateID) &&
+                   m_iStateToSetAs.Equals(other.m_iStateToSetAs) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_pStateMachine);
+            hashcode.Add(m_StateID);
+            hashcode.Add(m_iStateToSetAs);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

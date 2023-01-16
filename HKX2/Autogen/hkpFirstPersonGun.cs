@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +10,12 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_keyboardKey m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: KeyboardKey
     // m_listeners m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpFirstPersonGun : hkReferencedObject
+    public partial class hkpFirstPersonGun : hkReferencedObject, IEquatable<hkpFirstPersonGun?>
     {
-        private byte m_type { set; get; } = default;
+        private byte m_type { set; get; }
         public string m_name { set; get; } = "";
-        public byte m_keyboardKey { set; get; } = default;
-        public IList<object> m_listeners { set; get; } = new List<object>();
+        public byte m_keyboardKey { set; get; }
+        public IList<object> m_listeners { set; get; } = Array.Empty<object>();
 
         public override uint Signature => 0x852ab70b;
 
@@ -56,6 +55,30 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteEnum<KeyboardKey, byte>(xe, nameof(m_keyboardKey), m_keyboardKey);
             xs.WriteSerializeIgnored(xe, nameof(m_listeners));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpFirstPersonGun);
+        }
+
+        public bool Equals(hkpFirstPersonGun? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_keyboardKey.Equals(other.m_keyboardKey) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(m_keyboardKey);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

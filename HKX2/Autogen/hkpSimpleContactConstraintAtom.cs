@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,15 +13,15 @@ namespace HKX2
     // m_contactPointPropertiesStriding m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 10 flags: FLAGS_NONE enum: 
     // m_maxNumContactPoints m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_info m_class: hkpSimpleContactConstraintDataInfo Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: ALIGN_16|FLAGS_NONE enum: 
-    public partial class hkpSimpleContactConstraintAtom : hkpConstraintAtom
+    public partial class hkpSimpleContactConstraintAtom : hkpConstraintAtom, IEquatable<hkpSimpleContactConstraintAtom?>
     {
-        public ushort m_sizeOfAllAtoms { set; get; } = default;
-        public ushort m_numContactPoints { set; get; } = default;
-        public ushort m_numReservedContactPoints { set; get; } = default;
-        public byte m_numUserDatasForBodyA { set; get; } = default;
-        public byte m_numUserDatasForBodyB { set; get; } = default;
-        public byte m_contactPointPropertiesStriding { set; get; } = default;
-        public ushort m_maxNumContactPoints { set; get; } = default;
+        public ushort m_sizeOfAllAtoms { set; get; }
+        public ushort m_numContactPoints { set; get; }
+        public ushort m_numReservedContactPoints { set; get; }
+        public byte m_numUserDatasForBodyA { set; get; }
+        public byte m_numUserDatasForBodyB { set; get; }
+        public byte m_contactPointPropertiesStriding { set; get; }
+        public ushort m_maxNumContactPoints { set; get; }
         public hkpSimpleContactConstraintDataInfo m_info { set; get; } = new();
 
         public override uint Signature => 0x920df11a;
@@ -82,6 +80,42 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_contactPointPropertiesStriding), m_contactPointPropertiesStriding);
             xs.WriteNumber(xe, nameof(m_maxNumContactPoints), m_maxNumContactPoints);
             xs.WriteClass<hkpSimpleContactConstraintDataInfo>(xe, nameof(m_info), m_info);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSimpleContactConstraintAtom);
+        }
+
+        public bool Equals(hkpSimpleContactConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_sizeOfAllAtoms.Equals(other.m_sizeOfAllAtoms) &&
+                   m_numContactPoints.Equals(other.m_numContactPoints) &&
+                   m_numReservedContactPoints.Equals(other.m_numReservedContactPoints) &&
+                   m_numUserDatasForBodyA.Equals(other.m_numUserDatasForBodyA) &&
+                   m_numUserDatasForBodyB.Equals(other.m_numUserDatasForBodyB) &&
+                   m_contactPointPropertiesStriding.Equals(other.m_contactPointPropertiesStriding) &&
+                   m_maxNumContactPoints.Equals(other.m_maxNumContactPoints) &&
+                   ((m_info is null && other.m_info is null) || (m_info is not null && other.m_info is not null && m_info.Equals((IHavokObject)other.m_info))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_sizeOfAllAtoms);
+            hashcode.Add(m_numContactPoints);
+            hashcode.Add(m_numReservedContactPoints);
+            hashcode.Add(m_numUserDatasForBodyA);
+            hashcode.Add(m_numUserDatasForBodyB);
+            hashcode.Add(m_contactPointPropertiesStriding);
+            hashcode.Add(m_maxNumContactPoints);
+            hashcode.Add(m_info);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

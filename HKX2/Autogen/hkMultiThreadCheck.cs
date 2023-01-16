@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_stackTraceId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_markCount m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_markBitStack m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 10 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkMultiThreadCheck : IHavokObject
+    public partial class hkMultiThreadCheck : IHavokObject, IEquatable<hkMultiThreadCheck?>
     {
-        private uint m_threadId { set; get; } = default;
-        private int m_stackTraceId { set; get; } = default;
-        private ushort m_markCount { set; get; } = default;
-        private ushort m_markBitStack { set; get; } = default;
+        private uint m_threadId { set; get; }
+        private int m_stackTraceId { set; get; }
+        private ushort m_markCount { set; get; }
+        private ushort m_markBitStack { set; get; }
 
         public virtual uint Signature => 0x11e4408b;
 
@@ -47,6 +45,25 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_stackTraceId));
             xs.WriteSerializeIgnored(xe, nameof(m_markCount));
             xs.WriteSerializeIgnored(xe, nameof(m_markBitStack));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkMultiThreadCheck);
+        }
+
+        public bool Equals(hkMultiThreadCheck? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

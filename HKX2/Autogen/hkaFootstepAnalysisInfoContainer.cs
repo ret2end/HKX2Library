@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkaFootstepAnalysisInfoContainer Signatire: 0x1d81207c size: 32 flags: FLAGS_NONE
 
     // m_previewInfo m_class: hkaFootstepAnalysisInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkaFootstepAnalysisInfoContainer : hkReferencedObject
+    public partial class hkaFootstepAnalysisInfoContainer : hkReferencedObject, IEquatable<hkaFootstepAnalysisInfoContainer?>
     {
-        public IList<hkaFootstepAnalysisInfo> m_previewInfo { set; get; } = new List<hkaFootstepAnalysisInfo>();
+        public IList<hkaFootstepAnalysisInfo> m_previewInfo { set; get; } = Array.Empty<hkaFootstepAnalysisInfo>();
 
         public override uint Signature => 0x1d81207c;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkaFootstepAnalysisInfo>(xe, nameof(m_previewInfo), m_previewInfo);
+            xs.WriteClassPointerArray(xe, nameof(m_previewInfo), m_previewInfo);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaFootstepAnalysisInfoContainer);
+        }
+
+        public bool Equals(hkaFootstepAnalysisInfoContainer? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_previewInfo.SequenceEqual(other.m_previewInfo) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_previewInfo.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

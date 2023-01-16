@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpNamedMeshMaterial Signatire: 0x66b42df1 size: 16 flags: FLAGS_NONE
 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpNamedMeshMaterial : hkpMeshMaterial
+    public partial class hkpNamedMeshMaterial : hkpMeshMaterial, IEquatable<hkpNamedMeshMaterial?>
     {
         public string m_name { set; get; } = "";
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteString(xe, nameof(m_name), m_name);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpNamedMeshMaterial);
+        }
+
+        public bool Equals(hkpNamedMeshMaterial? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

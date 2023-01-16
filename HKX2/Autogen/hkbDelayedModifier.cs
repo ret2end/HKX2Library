@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_durationSeconds m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
     // m_secondsElapsed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_isActive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbDelayedModifier : hkbModifierWrapper
+    public partial class hkbDelayedModifier : hkbModifierWrapper, IEquatable<hkbDelayedModifier?>
     {
-        public float m_delaySeconds { set; get; } = default;
-        public float m_durationSeconds { set; get; } = default;
-        private float m_secondsElapsed { set; get; } = default;
-        private bool m_isActive { set; get; } = default;
+        public float m_delaySeconds { set; get; }
+        public float m_durationSeconds { set; get; }
+        private float m_secondsElapsed { set; get; }
+        private bool m_isActive { set; get; }
 
         public override uint Signature => 0x8e101a7a;
 
@@ -54,6 +52,30 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_durationSeconds), m_durationSeconds);
             xs.WriteSerializeIgnored(xe, nameof(m_secondsElapsed));
             xs.WriteSerializeIgnored(xe, nameof(m_isActive));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbDelayedModifier);
+        }
+
+        public bool Equals(hkbDelayedModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_delaySeconds.Equals(other.m_delaySeconds) &&
+                   m_durationSeconds.Equals(other.m_durationSeconds) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_delaySeconds);
+            hashcode.Add(m_durationSeconds);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

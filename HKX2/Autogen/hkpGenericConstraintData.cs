@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +7,7 @@ namespace HKX2
 
     // m_atoms m_class: hkpBridgeAtoms Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_scheme m_class: hkpGenericConstraintDataScheme Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkpGenericConstraintData : hkpConstraintData
+    public partial class hkpGenericConstraintData : hkpConstraintData, IEquatable<hkpGenericConstraintData?>
     {
         public hkpBridgeAtoms m_atoms { set; get; } = new();
         public hkpGenericConstraintDataScheme m_scheme { set; get; } = new();
@@ -42,6 +40,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteClass<hkpBridgeAtoms>(xe, nameof(m_atoms), m_atoms);
             xs.WriteClass<hkpGenericConstraintDataScheme>(xe, nameof(m_scheme), m_scheme);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpGenericConstraintData);
+        }
+
+        public bool Equals(hkpGenericConstraintData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_atoms is null && other.m_atoms is null) || (m_atoms is not null && other.m_atoms is not null && m_atoms.Equals((IHavokObject)other.m_atoms))) &&
+                   ((m_scheme is null && other.m_scheme is null) || (m_scheme is not null && other.m_scheme is not null && m_scheme.Equals((IHavokObject)other.m_scheme))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_atoms);
+            hashcode.Add(m_scheme);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

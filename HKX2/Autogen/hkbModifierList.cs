@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkbModifierList Signatire: 0xa4180ca1 size: 96 flags: FLAGS_NONE
 
     // m_modifiers m_class: hkbModifier Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkbModifierList : hkbModifier
+    public partial class hkbModifierList : hkbModifier, IEquatable<hkbModifierList?>
     {
-        public IList<hkbModifier> m_modifiers { set; get; } = new List<hkbModifier>();
+        public IList<hkbModifier> m_modifiers { set; get; } = Array.Empty<hkbModifier>();
 
         public override uint Signature => 0xa4180ca1;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkbModifier>(xe, nameof(m_modifiers), m_modifiers);
+            xs.WriteClassPointerArray(xe, nameof(m_modifiers), m_modifiers);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbModifierList);
+        }
+
+        public bool Equals(hkbModifierList? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_modifiers.SequenceEqual(other.m_modifiers) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_modifiers.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

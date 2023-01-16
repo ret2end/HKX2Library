@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkxMaterialShaderSet Signatire: 0x154650f3 size: 32 flags: FLAGS_NONE
 
     // m_shaders m_class: hkxMaterialShader Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkxMaterialShaderSet : hkReferencedObject
+    public partial class hkxMaterialShaderSet : hkReferencedObject, IEquatable<hkxMaterialShaderSet?>
     {
-        public IList<hkxMaterialShader> m_shaders { set; get; } = new List<hkxMaterialShader>();
+        public IList<hkxMaterialShader> m_shaders { set; get; } = Array.Empty<hkxMaterialShader>();
 
         public override uint Signature => 0x154650f3;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkxMaterialShader>(xe, nameof(m_shaders), m_shaders);
+            xs.WriteClassPointerArray(xe, nameof(m_shaders), m_shaders);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxMaterialShaderSet);
+        }
+
+        public bool Equals(hkxMaterialShaderSet? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_shaders.SequenceEqual(other.m_shaders) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_shaders.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

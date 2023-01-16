@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpSphereShape Signatire: 0x795d9fa size: 56 flags: FLAGS_NONE
 
     // m_pad16 m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 3 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpSphereShape : hkpConvexShape
+    public partial class hkpSphereShape : hkpConvexShape, IEquatable<hkpSphereShape?>
     {
         public uint[] m_pad16 = new uint[3];
 
@@ -37,6 +35,26 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteSerializeIgnored(xe, nameof(m_pad16));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSphereShape);
+        }
+
+        public bool Equals(hkpSphereShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

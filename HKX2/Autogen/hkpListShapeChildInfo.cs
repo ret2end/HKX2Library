@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_shapeSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_numChildShapes m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpListShapeChildInfo : IHavokObject
+    public partial class hkpListShapeChildInfo : IHavokObject, IEquatable<hkpListShapeChildInfo?>
     {
-        public hkpShape? m_shape { set; get; } = default;
-        public uint m_collisionFilterInfo { set; get; } = default;
-        private int m_shapeSize { set; get; } = default;
-        private int m_numChildShapes { set; get; } = default;
+        public hkpShape? m_shape { set; get; }
+        public uint m_collisionFilterInfo { set; get; }
+        private int m_shapeSize { set; get; }
+        private int m_numChildShapes { set; get; }
 
         public virtual uint Signature => 0x80df0f90;
 
@@ -50,6 +48,28 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_collisionFilterInfo), m_collisionFilterInfo);
             xs.WriteSerializeIgnored(xe, nameof(m_shapeSize));
             xs.WriteSerializeIgnored(xe, nameof(m_numChildShapes));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpListShapeChildInfo);
+        }
+
+        public bool Equals(hkpListShapeChildInfo? other)
+        {
+            return other is not null &&
+                   ((m_shape is null && other.m_shape is null) || (m_shape is not null && other.m_shape is not null && m_shape.Equals((IHavokObject)other.m_shape))) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_shape);
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

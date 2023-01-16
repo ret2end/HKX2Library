@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -19,20 +18,20 @@ namespace HKX2
     // m_handleChangeSpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
     // m_handleChangeMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 80 flags: FLAGS_NONE enum: HandleChangeMode
     // m_fixUp m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 81 flags: FLAGS_NONE enum: 
-    public partial class hkbHandIkControlData : IHavokObject
+    public partial class hkbHandIkControlData : IHavokObject, IEquatable<hkbHandIkControlData?>
     {
-        public Vector4 m_targetPosition { set; get; } = default;
-        public Quaternion m_targetRotation { set; get; } = default;
-        public Vector4 m_targetNormal { set; get; } = default;
-        public hkbHandle? m_targetHandle { set; get; } = default;
-        public float m_transformOnFraction { set; get; } = default;
-        public float m_normalOnFraction { set; get; } = default;
-        public float m_fadeInDuration { set; get; } = default;
-        public float m_fadeOutDuration { set; get; } = default;
-        public float m_extrapolationTimeStep { set; get; } = default;
-        public float m_handleChangeSpeed { set; get; } = default;
-        public sbyte m_handleChangeMode { set; get; } = default;
-        public bool m_fixUp { set; get; } = default;
+        public Vector4 m_targetPosition { set; get; }
+        public Quaternion m_targetRotation { set; get; }
+        public Vector4 m_targetNormal { set; get; }
+        public hkbHandle? m_targetHandle { set; get; }
+        public float m_transformOnFraction { set; get; }
+        public float m_normalOnFraction { set; get; }
+        public float m_fadeInDuration { set; get; }
+        public float m_fadeOutDuration { set; get; }
+        public float m_extrapolationTimeStep { set; get; }
+        public float m_handleChangeSpeed { set; get; }
+        public sbyte m_handleChangeMode { set; get; }
+        public bool m_fixUp { set; get; }
 
         public virtual uint Signature => 0xd72b8d17;
 
@@ -100,6 +99,48 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_handleChangeSpeed), m_handleChangeSpeed);
             xs.WriteEnum<HandleChangeMode, sbyte>(xe, nameof(m_handleChangeMode), m_handleChangeMode);
             xs.WriteBoolean(xe, nameof(m_fixUp), m_fixUp);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbHandIkControlData);
+        }
+
+        public bool Equals(hkbHandIkControlData? other)
+        {
+            return other is not null &&
+                   m_targetPosition.Equals(other.m_targetPosition) &&
+                   m_targetRotation.Equals(other.m_targetRotation) &&
+                   m_targetNormal.Equals(other.m_targetNormal) &&
+                   ((m_targetHandle is null && other.m_targetHandle is null) || (m_targetHandle is not null && other.m_targetHandle is not null && m_targetHandle.Equals((IHavokObject)other.m_targetHandle))) &&
+                   m_transformOnFraction.Equals(other.m_transformOnFraction) &&
+                   m_normalOnFraction.Equals(other.m_normalOnFraction) &&
+                   m_fadeInDuration.Equals(other.m_fadeInDuration) &&
+                   m_fadeOutDuration.Equals(other.m_fadeOutDuration) &&
+                   m_extrapolationTimeStep.Equals(other.m_extrapolationTimeStep) &&
+                   m_handleChangeSpeed.Equals(other.m_handleChangeSpeed) &&
+                   m_handleChangeMode.Equals(other.m_handleChangeMode) &&
+                   m_fixUp.Equals(other.m_fixUp) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_targetPosition);
+            hashcode.Add(m_targetRotation);
+            hashcode.Add(m_targetNormal);
+            hashcode.Add(m_targetHandle);
+            hashcode.Add(m_transformOnFraction);
+            hashcode.Add(m_normalOnFraction);
+            hashcode.Add(m_fadeInDuration);
+            hashcode.Add(m_fadeOutDuration);
+            hashcode.Add(m_extrapolationTimeStep);
+            hashcode.Add(m_handleChangeSpeed);
+            hashcode.Add(m_handleChangeMode);
+            hashcode.Add(m_fixUp);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

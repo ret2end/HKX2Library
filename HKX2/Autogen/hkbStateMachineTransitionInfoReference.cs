@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_fromStateIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_transitionIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
     // m_stateMachineId m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
-    public partial class hkbStateMachineTransitionInfoReference : IHavokObject
+    public partial class hkbStateMachineTransitionInfoReference : IHavokObject, IEquatable<hkbStateMachineTransitionInfoReference?>
     {
-        public short m_fromStateIndex { set; get; } = default;
-        public short m_transitionIndex { set; get; } = default;
-        public short m_stateMachineId { set; get; } = default;
+        public short m_fromStateIndex { set; get; }
+        public short m_transitionIndex { set; get; }
+        public short m_stateMachineId { set; get; }
 
         public virtual uint Signature => 0x9810c2d0;
 
@@ -44,6 +42,30 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_fromStateIndex), m_fromStateIndex);
             xs.WriteNumber(xe, nameof(m_transitionIndex), m_transitionIndex);
             xs.WriteNumber(xe, nameof(m_stateMachineId), m_stateMachineId);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineTransitionInfoReference);
+        }
+
+        public bool Equals(hkbStateMachineTransitionInfoReference? other)
+        {
+            return other is not null &&
+                   m_fromStateIndex.Equals(other.m_fromStateIndex) &&
+                   m_transitionIndex.Equals(other.m_transitionIndex) &&
+                   m_stateMachineId.Equals(other.m_stateMachineId) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_fromStateIndex);
+            hashcode.Add(m_transitionIndex);
+            hashcode.Add(m_stateMachineId);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

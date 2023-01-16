@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_key m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_value m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
-    public partial class hkxMaterialProperty : IHavokObject
+    public partial class hkxMaterialProperty : IHavokObject, IEquatable<hkxMaterialProperty?>
     {
-        public uint m_key { set; get; } = default;
-        public uint m_value { set; get; } = default;
+        public uint m_key { set; get; }
+        public uint m_value { set; get; }
 
         public virtual uint Signature => 0xd295234d;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteNumber(xe, nameof(m_key), m_key);
             xs.WriteNumber(xe, nameof(m_value), m_value);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxMaterialProperty);
+        }
+
+        public bool Equals(hkxMaterialProperty? other)
+        {
+            return other is not null &&
+                   m_key.Equals(other.m_key) &&
+                   m_value.Equals(other.m_value) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_key);
+            hashcode.Add(m_value);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

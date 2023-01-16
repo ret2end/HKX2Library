@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_firstFrictionAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 3 flags: FLAGS_NONE enum: 
     // m_numFrictionAxes m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_maxFrictionTorque m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpAngFrictionConstraintAtom : hkpConstraintAtom
+    public partial class hkpAngFrictionConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngFrictionConstraintAtom?>
     {
-        public byte m_isEnabled { set; get; } = default;
-        public byte m_firstFrictionAxis { set; get; } = default;
-        public byte m_numFrictionAxes { set; get; } = default;
-        public float m_maxFrictionTorque { set; get; } = default;
+        public byte m_isEnabled { set; get; }
+        public byte m_firstFrictionAxis { set; get; }
+        public byte m_numFrictionAxes { set; get; }
+        public float m_maxFrictionTorque { set; get; }
 
         public override uint Signature => 0xf313aa80;
 
@@ -56,6 +54,34 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_firstFrictionAxis), m_firstFrictionAxis);
             xs.WriteNumber(xe, nameof(m_numFrictionAxes), m_numFrictionAxes);
             xs.WriteFloat(xe, nameof(m_maxFrictionTorque), m_maxFrictionTorque);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpAngFrictionConstraintAtom);
+        }
+
+        public bool Equals(hkpAngFrictionConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_isEnabled.Equals(other.m_isEnabled) &&
+                   m_firstFrictionAxis.Equals(other.m_firstFrictionAxis) &&
+                   m_numFrictionAxes.Equals(other.m_numFrictionAxes) &&
+                   m_maxFrictionTorque.Equals(other.m_maxFrictionTorque) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_isEnabled);
+            hashcode.Add(m_firstFrictionAxis);
+            hashcode.Add(m_numFrictionAxes);
+            hashcode.Add(m_maxFrictionTorque);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

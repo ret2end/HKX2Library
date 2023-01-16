@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,11 +9,11 @@ namespace HKX2
     // m_lookAtLastTargetWS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_lookAtWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_isTargetInsideLimitCone m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
-    public partial class hkbLookAtModifierInternalState : hkReferencedObject
+    public partial class hkbLookAtModifierInternalState : hkReferencedObject, IEquatable<hkbLookAtModifierInternalState?>
     {
-        public Vector4 m_lookAtLastTargetWS { set; get; } = default;
-        public float m_lookAtWeight { set; get; } = default;
-        public bool m_isTargetInsideLimitCone { set; get; } = default;
+        public Vector4 m_lookAtLastTargetWS { set; get; }
+        public float m_lookAtWeight { set; get; }
+        public bool m_isTargetInsideLimitCone { set; get; }
 
         public override uint Signature => 0xa14caba6;
 
@@ -50,6 +49,32 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_lookAtLastTargetWS), m_lookAtLastTargetWS);
             xs.WriteFloat(xe, nameof(m_lookAtWeight), m_lookAtWeight);
             xs.WriteBoolean(xe, nameof(m_isTargetInsideLimitCone), m_isTargetInsideLimitCone);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbLookAtModifierInternalState);
+        }
+
+        public bool Equals(hkbLookAtModifierInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_lookAtLastTargetWS.Equals(other.m_lookAtLastTargetWS) &&
+                   m_lookAtWeight.Equals(other.m_lookAtWeight) &&
+                   m_isTargetInsideLimitCone.Equals(other.m_isTargetInsideLimitCone) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_lookAtLastTargetWS);
+            hashcode.Add(m_lookAtWeight);
+            hashcode.Add(m_isTargetInsideLimitCone);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

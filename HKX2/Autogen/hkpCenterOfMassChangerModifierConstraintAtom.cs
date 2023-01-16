@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_displacementA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_displacementB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpCenterOfMassChangerModifierConstraintAtom : hkpModifierConstraintAtom
+    public partial class hkpCenterOfMassChangerModifierConstraintAtom : hkpModifierConstraintAtom, IEquatable<hkpCenterOfMassChangerModifierConstraintAtom?>
     {
-        public Vector4 m_displacementA { set; get; } = default;
-        public Vector4 m_displacementB { set; get; } = default;
+        public Vector4 m_displacementA { set; get; }
+        public Vector4 m_displacementB { set; get; }
 
         public override uint Signature => 0x1d7dbdd2;
 
@@ -42,6 +41,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_displacementA), m_displacementA);
             xs.WriteVector4(xe, nameof(m_displacementB), m_displacementB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCenterOfMassChangerModifierConstraintAtom);
+        }
+
+        public bool Equals(hkpCenterOfMassChangerModifierConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_displacementA.Equals(other.m_displacementA) &&
+                   m_displacementB.Equals(other.m_displacementB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_displacementA);
+            hashcode.Add(m_displacementB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

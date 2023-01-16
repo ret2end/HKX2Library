@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +7,9 @@ namespace HKX2
 
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_padModifier m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 3 offset: 73 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbModifier : hkbNode
+    public partial class hkbModifier : hkbNode, IEquatable<hkbModifier?>
     {
-        public bool m_enable { set; get; } = default;
+        public bool m_enable { set; get; }
         public bool[] m_padModifier = new bool[3];
 
         public override uint Signature => 0x96ec5ced;
@@ -43,6 +41,28 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteBoolean(xe, nameof(m_enable), m_enable);
             xs.WriteSerializeIgnored(xe, nameof(m_padModifier));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbModifier);
+        }
+
+        public bool Equals(hkbModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_enable.Equals(other.m_enable) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_enable);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

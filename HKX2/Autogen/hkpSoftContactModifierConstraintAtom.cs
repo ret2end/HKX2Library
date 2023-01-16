@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_tau m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_maxAcceleration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
-    public partial class hkpSoftContactModifierConstraintAtom : hkpModifierConstraintAtom
+    public partial class hkpSoftContactModifierConstraintAtom : hkpModifierConstraintAtom, IEquatable<hkpSoftContactModifierConstraintAtom?>
     {
-        public float m_tau { set; get; } = default;
-        public float m_maxAcceleration { set; get; } = default;
+        public float m_tau { set; get; }
+        public float m_maxAcceleration { set; get; }
 
         public override uint Signature => 0xecb34e27;
 
@@ -44,6 +42,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteFloat(xe, nameof(m_tau), m_tau);
             xs.WriteFloat(xe, nameof(m_maxAcceleration), m_maxAcceleration);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSoftContactModifierConstraintAtom);
+        }
+
+        public bool Equals(hkpSoftContactModifierConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_tau.Equals(other.m_tau) &&
+                   m_maxAcceleration.Equals(other.m_maxAcceleration) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_tau);
+            hashcode.Add(m_maxAcceleration);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

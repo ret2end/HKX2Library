@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_rollingFrictionMultiplier m_class:  Type.TYPE_HALF Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
     // m_friction m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_restitution m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpMaterial : IHavokObject
+    public partial class hkpMaterial : IHavokObject, IEquatable<hkpMaterial?>
     {
-        public sbyte m_responseType { set; get; } = default;
-        public Half m_rollingFrictionMultiplier { set; get; } = default;
-        public float m_friction { set; get; } = default;
-        public float m_restitution { set; get; } = default;
+        public sbyte m_responseType { set; get; }
+        public Half m_rollingFrictionMultiplier { set; get; }
+        public float m_friction { set; get; }
+        public float m_restitution { set; get; }
 
         public virtual uint Signature => 0x33be6570;
 
@@ -52,6 +50,32 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_rollingFrictionMultiplier), m_rollingFrictionMultiplier);
             xs.WriteFloat(xe, nameof(m_friction), m_friction);
             xs.WriteFloat(xe, nameof(m_restitution), m_restitution);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMaterial);
+        }
+
+        public bool Equals(hkpMaterial? other)
+        {
+            return other is not null &&
+                   m_responseType.Equals(other.m_responseType) &&
+                   m_rollingFrictionMultiplier.Equals(other.m_rollingFrictionMultiplier) &&
+                   m_friction.Equals(other.m_friction) &&
+                   m_restitution.Equals(other.m_restitution) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_responseType);
+            hashcode.Add(m_rollingFrictionMultiplier);
+            hashcode.Add(m_friction);
+            hashcode.Add(m_restitution);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

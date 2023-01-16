@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,14 +12,14 @@ namespace HKX2
     // m_vertexB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_perpendicular1 m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_perpendicular2 m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkpCylinderShape : hkpConvexShape
+    public partial class hkpCylinderShape : hkpConvexShape, IEquatable<hkpCylinderShape?>
     {
-        public float m_cylRadius { set; get; } = default;
-        public float m_cylBaseRadiusFactorForHeightFieldCollisions { set; get; } = default;
-        public Vector4 m_vertexA { set; get; } = default;
-        public Vector4 m_vertexB { set; get; } = default;
-        public Vector4 m_perpendicular1 { set; get; } = default;
-        public Vector4 m_perpendicular2 { set; get; } = default;
+        public float m_cylRadius { set; get; }
+        public float m_cylBaseRadiusFactorForHeightFieldCollisions { set; get; }
+        public Vector4 m_vertexA { set; get; }
+        public Vector4 m_vertexB { set; get; }
+        public Vector4 m_perpendicular1 { set; get; }
+        public Vector4 m_perpendicular2 { set; get; }
 
         public override uint Signature => 0x3e463c3a;
 
@@ -66,6 +65,38 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_vertexB), m_vertexB);
             xs.WriteVector4(xe, nameof(m_perpendicular1), m_perpendicular1);
             xs.WriteVector4(xe, nameof(m_perpendicular2), m_perpendicular2);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCylinderShape);
+        }
+
+        public bool Equals(hkpCylinderShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_cylRadius.Equals(other.m_cylRadius) &&
+                   m_cylBaseRadiusFactorForHeightFieldCollisions.Equals(other.m_cylBaseRadiusFactorForHeightFieldCollisions) &&
+                   m_vertexA.Equals(other.m_vertexA) &&
+                   m_vertexB.Equals(other.m_vertexB) &&
+                   m_perpendicular1.Equals(other.m_perpendicular1) &&
+                   m_perpendicular2.Equals(other.m_perpendicular2) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_cylRadius);
+            hashcode.Add(m_cylBaseRadiusFactorForHeightFieldCollisions);
+            hashcode.Add(m_vertexA);
+            hashcode.Add(m_vertexB);
+            hashcode.Add(m_perpendicular1);
+            hashcode.Add(m_perpendicular2);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

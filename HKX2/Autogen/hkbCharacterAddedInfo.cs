@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,15 +15,15 @@ namespace HKX2
     // m_skeleton m_class: hkaSkeleton Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_worldFromModel m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_poseModelSpace m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkbCharacterAddedInfo : hkReferencedObject
+    public partial class hkbCharacterAddedInfo : hkReferencedObject, IEquatable<hkbCharacterAddedInfo?>
     {
-        public ulong m_characterId { set; get; } = default;
+        public ulong m_characterId { set; get; }
         public string m_instanceName { set; get; } = "";
         public string m_templateName { set; get; } = "";
         public string m_fullPathToProject { set; get; } = "";
-        public hkaSkeleton? m_skeleton { set; get; } = default;
-        public Matrix4x4 m_worldFromModel { set; get; } = default;
-        public IList<Matrix4x4> m_poseModelSpace { set; get; } = new List<Matrix4x4>();
+        public hkaSkeleton? m_skeleton { set; get; }
+        public Matrix4x4 m_worldFromModel { set; get; }
+        public IList<Matrix4x4> m_poseModelSpace { set; get; } = Array.Empty<Matrix4x4>();
 
         public override uint Signature => 0x3544e182;
 
@@ -74,6 +75,40 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_skeleton), m_skeleton);
             xs.WriteQSTransform(xe, nameof(m_worldFromModel), m_worldFromModel);
             xs.WriteQSTransformArray(xe, nameof(m_poseModelSpace), m_poseModelSpace);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterAddedInfo);
+        }
+
+        public bool Equals(hkbCharacterAddedInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   (m_instanceName is null && other.m_instanceName is null || m_instanceName == other.m_instanceName || m_instanceName is null && other.m_instanceName == "" || m_instanceName == "" && other.m_instanceName is null) &&
+                   (m_templateName is null && other.m_templateName is null || m_templateName == other.m_templateName || m_templateName is null && other.m_templateName == "" || m_templateName == "" && other.m_templateName is null) &&
+                   (m_fullPathToProject is null && other.m_fullPathToProject is null || m_fullPathToProject == other.m_fullPathToProject || m_fullPathToProject is null && other.m_fullPathToProject == "" || m_fullPathToProject == "" && other.m_fullPathToProject is null) &&
+                   ((m_skeleton is null && other.m_skeleton is null) || (m_skeleton is not null && other.m_skeleton is not null && m_skeleton.Equals((IHavokObject)other.m_skeleton))) &&
+                   m_worldFromModel.Equals(other.m_worldFromModel) &&
+                   m_poseModelSpace.SequenceEqual(other.m_poseModelSpace) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_instanceName);
+            hashcode.Add(m_templateName);
+            hashcode.Add(m_fullPathToProject);
+            hashcode.Add(m_skeleton);
+            hashcode.Add(m_worldFromModel);
+            hashcode.Add(m_poseModelSpace.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -21,22 +21,22 @@ namespace HKX2
     // m_posTol m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 192 flags: FLAGS_NONE enum: 
     // m_velTol m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 196 flags: FLAGS_NONE enum: 
     // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 200 flags: FLAGS_NONE enum: 
-    public partial class hkaFootstepAnalysisInfo : hkReferencedObject
+    public partial class hkaFootstepAnalysisInfo : hkReferencedObject, IEquatable<hkaFootstepAnalysisInfo?>
     {
         public string m_name { set; get; } = "";
         public string m_nameStrike { set; get; } = "";
         public string m_nameLift { set; get; } = "";
         public string m_nameLock { set; get; } = "";
         public string m_nameUnlock { set; get; } = "";
-        public IList<float> m_minPos { set; get; } = new List<float>();
-        public IList<float> m_maxPos { set; get; } = new List<float>();
-        public IList<float> m_minVel { set; get; } = new List<float>();
-        public IList<float> m_maxVel { set; get; } = new List<float>();
-        public IList<float> m_allBonesDown { set; get; } = new List<float>();
-        public IList<float> m_anyBonesDown { set; get; } = new List<float>();
-        public float m_posTol { set; get; } = default;
-        public float m_velTol { set; get; } = default;
-        public float m_duration { set; get; } = default;
+        public IList<float> m_minPos { set; get; } = Array.Empty<float>();
+        public IList<float> m_maxPos { set; get; } = Array.Empty<float>();
+        public IList<float> m_minVel { set; get; } = Array.Empty<float>();
+        public IList<float> m_maxVel { set; get; } = Array.Empty<float>();
+        public IList<float> m_allBonesDown { set; get; } = Array.Empty<float>();
+        public IList<float> m_anyBonesDown { set; get; } = Array.Empty<float>();
+        public float m_posTol { set; get; }
+        public float m_velTol { set; get; }
+        public float m_duration { set; get; }
 
         public override uint Signature => 0x824faf75;
 
@@ -116,6 +116,54 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_posTol), m_posTol);
             xs.WriteFloat(xe, nameof(m_velTol), m_velTol);
             xs.WriteFloat(xe, nameof(m_duration), m_duration);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaFootstepAnalysisInfo);
+        }
+
+        public bool Equals(hkaFootstepAnalysisInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_name.SequenceEqual(other.m_name) &&
+                   m_nameStrike.SequenceEqual(other.m_nameStrike) &&
+                   m_nameLift.SequenceEqual(other.m_nameLift) &&
+                   m_nameLock.SequenceEqual(other.m_nameLock) &&
+                   m_nameUnlock.SequenceEqual(other.m_nameUnlock) &&
+                   m_minPos.SequenceEqual(other.m_minPos) &&
+                   m_maxPos.SequenceEqual(other.m_maxPos) &&
+                   m_minVel.SequenceEqual(other.m_minVel) &&
+                   m_maxVel.SequenceEqual(other.m_maxVel) &&
+                   m_allBonesDown.SequenceEqual(other.m_allBonesDown) &&
+                   m_anyBonesDown.SequenceEqual(other.m_anyBonesDown) &&
+                   m_posTol.Equals(other.m_posTol) &&
+                   m_velTol.Equals(other.m_velTol) &&
+                   m_duration.Equals(other.m_duration) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nameStrike.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nameLift.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nameLock.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nameUnlock.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_minPos.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_maxPos.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_minVel.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_maxVel.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_allBonesDown.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_anyBonesDown.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_posTol);
+            hashcode.Add(m_velTol);
+            hashcode.Add(m_duration);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

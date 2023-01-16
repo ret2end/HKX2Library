@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,11 +10,11 @@ namespace HKX2
     // m_childSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_wantAabbRejectionTest m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
     // m_padding m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 12 offset: 61 flags: FLAGS_NONE enum: 
-    public partial class hkpTriSampledHeightFieldBvTreeShape : hkpBvTreeShape
+    public partial class hkpTriSampledHeightFieldBvTreeShape : hkpBvTreeShape, IEquatable<hkpTriSampledHeightFieldBvTreeShape?>
     {
         public hkpSingleShapeContainer m_childContainer { set; get; } = new();
-        private int m_childSize { set; get; } = default;
-        public bool m_wantAabbRejectionTest { set; get; } = default;
+        private int m_childSize { set; get; }
+        public bool m_wantAabbRejectionTest { set; get; }
         public byte[] m_padding = new byte[12];
 
         public override uint Signature => 0x58e1e585;
@@ -55,6 +54,32 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_childSize));
             xs.WriteBoolean(xe, nameof(m_wantAabbRejectionTest), m_wantAabbRejectionTest);
             xs.WriteNumberArray(xe, nameof(m_padding), m_padding);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTriSampledHeightFieldBvTreeShape);
+        }
+
+        public bool Equals(hkpTriSampledHeightFieldBvTreeShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_childContainer is null && other.m_childContainer is null) || (m_childContainer is not null && other.m_childContainer is not null && m_childContainer.Equals((IHavokObject)other.m_childContainer))) &&
+                   m_wantAabbRejectionTest.Equals(other.m_wantAabbRejectionTest) &&
+                   m_padding.SequenceEqual(other.m_padding) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_childContainer);
+            hashcode.Add(m_wantAabbRejectionTest);
+            hashcode.Add(m_padding.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -29,30 +30,30 @@ namespace HKX2
     // m_isSetUp m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 236 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_isGroundPositionValid m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 237 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 240 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbFootIkModifier : hkbModifier
+    public partial class hkbFootIkModifier : hkbModifier, IEquatable<hkbFootIkModifier?>
     {
         public hkbFootIkGains m_gains { set; get; } = new();
-        public IList<hkbFootIkModifierLeg> m_legs { set; get; } = new List<hkbFootIkModifierLeg>();
-        public float m_raycastDistanceUp { set; get; } = default;
-        public float m_raycastDistanceDown { set; get; } = default;
-        public float m_originalGroundHeightMS { set; get; } = default;
-        public float m_errorOut { set; get; } = default;
-        public Vector4 m_errorOutTranslation { set; get; } = default;
-        public Quaternion m_alignWithGroundRotation { set; get; } = default;
-        public float m_verticalOffset { set; get; } = default;
-        public uint m_collisionFilterInfo { set; get; } = default;
-        public float m_forwardAlignFraction { set; get; } = default;
-        public float m_sidewaysAlignFraction { set; get; } = default;
-        public float m_sidewaysSampleWidth { set; get; } = default;
-        public bool m_useTrackData { set; get; } = default;
-        public bool m_lockFeetWhenPlanted { set; get; } = default;
-        public bool m_useCharacterUpVector { set; get; } = default;
-        public sbyte m_alignMode { set; get; } = default;
-        public IList<hkbFootIkModifierInternalLegData> m_internalLegData { set; get; } = new List<hkbFootIkModifierInternalLegData>();
-        private float m_prevIsFootIkEnabled { set; get; } = default;
-        private bool m_isSetUp { set; get; } = default;
-        private bool m_isGroundPositionValid { set; get; } = default;
-        private float m_timeStep { set; get; } = default;
+        public IList<hkbFootIkModifierLeg> m_legs { set; get; } = Array.Empty<hkbFootIkModifierLeg>();
+        public float m_raycastDistanceUp { set; get; }
+        public float m_raycastDistanceDown { set; get; }
+        public float m_originalGroundHeightMS { set; get; }
+        public float m_errorOut { set; get; }
+        public Vector4 m_errorOutTranslation { set; get; }
+        public Quaternion m_alignWithGroundRotation { set; get; }
+        public float m_verticalOffset { set; get; }
+        public uint m_collisionFilterInfo { set; get; }
+        public float m_forwardAlignFraction { set; get; }
+        public float m_sidewaysAlignFraction { set; get; }
+        public float m_sidewaysSampleWidth { set; get; }
+        public bool m_useTrackData { set; get; }
+        public bool m_lockFeetWhenPlanted { set; get; }
+        public bool m_useCharacterUpVector { set; get; }
+        public sbyte m_alignMode { set; get; }
+        public IList<hkbFootIkModifierInternalLegData> m_internalLegData { set; get; } = Array.Empty<hkbFootIkModifierInternalLegData>();
+        private float m_prevIsFootIkEnabled { set; get; }
+        private bool m_isSetUp { set; get; }
+        private bool m_isGroundPositionValid { set; get; }
+        private float m_timeStep { set; get; }
 
         public override uint Signature => 0xed8966c0;
 
@@ -140,7 +141,7 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteClass<hkbFootIkGains>(xe, nameof(m_gains), m_gains);
-            xs.WriteClassArray<hkbFootIkModifierLeg>(xe, nameof(m_legs), m_legs);
+            xs.WriteClassArray(xe, nameof(m_legs), m_legs);
             xs.WriteFloat(xe, nameof(m_raycastDistanceUp), m_raycastDistanceUp);
             xs.WriteFloat(xe, nameof(m_raycastDistanceDown), m_raycastDistanceDown);
             xs.WriteFloat(xe, nameof(m_originalGroundHeightMS), m_originalGroundHeightMS);
@@ -161,6 +162,60 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_isSetUp));
             xs.WriteSerializeIgnored(xe, nameof(m_isGroundPositionValid));
             xs.WriteSerializeIgnored(xe, nameof(m_timeStep));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbFootIkModifier);
+        }
+
+        public bool Equals(hkbFootIkModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_gains is null && other.m_gains is null) || (m_gains is not null && other.m_gains is not null && m_gains.Equals((IHavokObject)other.m_gains))) &&
+                   m_legs.SequenceEqual(other.m_legs) &&
+                   m_raycastDistanceUp.Equals(other.m_raycastDistanceUp) &&
+                   m_raycastDistanceDown.Equals(other.m_raycastDistanceDown) &&
+                   m_originalGroundHeightMS.Equals(other.m_originalGroundHeightMS) &&
+                   m_errorOut.Equals(other.m_errorOut) &&
+                   m_errorOutTranslation.Equals(other.m_errorOutTranslation) &&
+                   m_alignWithGroundRotation.Equals(other.m_alignWithGroundRotation) &&
+                   m_verticalOffset.Equals(other.m_verticalOffset) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   m_forwardAlignFraction.Equals(other.m_forwardAlignFraction) &&
+                   m_sidewaysAlignFraction.Equals(other.m_sidewaysAlignFraction) &&
+                   m_sidewaysSampleWidth.Equals(other.m_sidewaysSampleWidth) &&
+                   m_useTrackData.Equals(other.m_useTrackData) &&
+                   m_lockFeetWhenPlanted.Equals(other.m_lockFeetWhenPlanted) &&
+                   m_useCharacterUpVector.Equals(other.m_useCharacterUpVector) &&
+                   m_alignMode.Equals(other.m_alignMode) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_gains);
+            hashcode.Add(m_legs.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_raycastDistanceUp);
+            hashcode.Add(m_raycastDistanceDown);
+            hashcode.Add(m_originalGroundHeightMS);
+            hashcode.Add(m_errorOut);
+            hashcode.Add(m_errorOutTranslation);
+            hashcode.Add(m_alignWithGroundRotation);
+            hashcode.Add(m_verticalOffset);
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(m_forwardAlignFraction);
+            hashcode.Add(m_sidewaysAlignFraction);
+            hashcode.Add(m_sidewaysSampleWidth);
+            hashcode.Add(m_useTrackData);
+            hashcode.Add(m_lockFeetWhenPlanted);
+            hashcode.Add(m_useCharacterUpVector);
+            hashcode.Add(m_alignMode);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

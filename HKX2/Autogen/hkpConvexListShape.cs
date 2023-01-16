@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +13,13 @@ namespace HKX2
     // m_aabbCenter m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_useCachedAabb m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_childShapes m_class: hkpConvexShape Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
-    public partial class hkpConvexListShape : hkpConvexShape
+    public partial class hkpConvexListShape : hkpConvexShape, IEquatable<hkpConvexListShape?>
     {
-        public float m_minDistanceToUseConvexHullForGetClosestPoints { set; get; } = default;
-        public Vector4 m_aabbHalfExtents { set; get; } = default;
-        public Vector4 m_aabbCenter { set; get; } = default;
-        public bool m_useCachedAabb { set; get; } = default;
-        public IList<hkpConvexShape> m_childShapes { set; get; } = new List<hkpConvexShape>();
+        public float m_minDistanceToUseConvexHullForGetClosestPoints { set; get; }
+        public Vector4 m_aabbHalfExtents { set; get; }
+        public Vector4 m_aabbCenter { set; get; }
+        public bool m_useCachedAabb { set; get; }
+        public IList<hkpConvexShape> m_childShapes { set; get; } = Array.Empty<hkpConvexShape>();
 
         public override uint Signature => 0x450b26e8;
 
@@ -67,7 +68,37 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_aabbHalfExtents), m_aabbHalfExtents);
             xs.WriteVector4(xe, nameof(m_aabbCenter), m_aabbCenter);
             xs.WriteBoolean(xe, nameof(m_useCachedAabb), m_useCachedAabb);
-            xs.WriteClassPointerArray<hkpConvexShape>(xe, nameof(m_childShapes), m_childShapes);
+            xs.WriteClassPointerArray(xe, nameof(m_childShapes), m_childShapes);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpConvexListShape);
+        }
+
+        public bool Equals(hkpConvexListShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_minDistanceToUseConvexHullForGetClosestPoints.Equals(other.m_minDistanceToUseConvexHullForGetClosestPoints) &&
+                   m_aabbHalfExtents.Equals(other.m_aabbHalfExtents) &&
+                   m_aabbCenter.Equals(other.m_aabbCenter) &&
+                   m_useCachedAabb.Equals(other.m_useCachedAabb) &&
+                   m_childShapes.SequenceEqual(other.m_childShapes) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_minDistanceToUseConvexHullForGetClosestPoints);
+            hashcode.Add(m_aabbHalfExtents);
+            hashcode.Add(m_aabbCenter);
+            hashcode.Add(m_useCachedAabb);
+            hashcode.Add(m_childShapes.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

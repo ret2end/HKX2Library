@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,27 +27,27 @@ namespace HKX2
     // m_worldFromModel m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 192 flags: FLAGS_NONE enum: 
     // m_poseModelSpace m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 240 flags: FLAGS_NONE enum: 
     // m_rigidAttachmentTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 256 flags: FLAGS_NONE enum: 
-    public partial class hkbClientCharacterState : hkReferencedObject
+    public partial class hkbClientCharacterState : hkReferencedObject, IEquatable<hkbClientCharacterState?>
     {
-        public IList<ulong> m_deformableSkinIds { set; get; } = new List<ulong>();
-        public IList<ulong> m_rigidSkinIds { set; get; } = new List<ulong>();
-        public IList<short> m_externalEventIds { set; get; } = new List<short>();
-        public IList<hkbAuxiliaryNodeInfo> m_auxiliaryInfo { set; get; } = new List<hkbAuxiliaryNodeInfo>();
-        public IList<short> m_activeEventIds { set; get; } = new List<short>();
-        public IList<short> m_activeVariableIds { set; get; } = new List<short>();
-        public ulong m_characterId { set; get; } = default;
+        public IList<ulong> m_deformableSkinIds { set; get; } = Array.Empty<ulong>();
+        public IList<ulong> m_rigidSkinIds { set; get; } = Array.Empty<ulong>();
+        public IList<short> m_externalEventIds { set; get; } = Array.Empty<short>();
+        public IList<hkbAuxiliaryNodeInfo> m_auxiliaryInfo { set; get; } = Array.Empty<hkbAuxiliaryNodeInfo>();
+        public IList<short> m_activeEventIds { set; get; } = Array.Empty<short>();
+        public IList<short> m_activeVariableIds { set; get; } = Array.Empty<short>();
+        public ulong m_characterId { set; get; }
         public string m_instanceName { set; get; } = "";
         public string m_templateName { set; get; } = "";
         public string m_fullPathToProject { set; get; } = "";
-        public hkbBehaviorGraphData? m_behaviorData { set; get; } = default;
-        public hkbBehaviorGraphInternalState? m_behaviorInternalState { set; get; } = default;
-        private object? m_nodeIdToInternalStateMap { set; get; } = default;
-        public bool m_visible { set; get; } = default;
-        public float m_elapsedSimulationTime { set; get; } = default;
-        public hkaSkeleton? m_skeleton { set; get; } = default;
-        public Matrix4x4 m_worldFromModel { set; get; } = default;
-        public IList<Matrix4x4> m_poseModelSpace { set; get; } = new List<Matrix4x4>();
-        public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = new List<Matrix4x4>();
+        public hkbBehaviorGraphData? m_behaviorData { set; get; }
+        public hkbBehaviorGraphInternalState? m_behaviorInternalState { set; get; }
+        private object? m_nodeIdToInternalStateMap { set; get; }
+        public bool m_visible { set; get; }
+        public float m_elapsedSimulationTime { set; get; }
+        public hkaSkeleton? m_skeleton { set; get; }
+        public Matrix4x4 m_worldFromModel { set; get; }
+        public IList<Matrix4x4> m_poseModelSpace { set; get; } = Array.Empty<Matrix4x4>();
+        public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = Array.Empty<Matrix4x4>();
 
         public override uint Signature => 0xa2624c97;
 
@@ -131,7 +132,7 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_deformableSkinIds), m_deformableSkinIds);
             xs.WriteNumberArray(xe, nameof(m_rigidSkinIds), m_rigidSkinIds);
             xs.WriteNumberArray(xe, nameof(m_externalEventIds), m_externalEventIds);
-            xs.WriteClassPointerArray<hkbAuxiliaryNodeInfo>(xe, nameof(m_auxiliaryInfo), m_auxiliaryInfo);
+            xs.WriteClassPointerArray(xe, nameof(m_auxiliaryInfo), m_auxiliaryInfo);
             xs.WriteNumberArray(xe, nameof(m_activeEventIds), m_activeEventIds);
             xs.WriteNumberArray(xe, nameof(m_activeVariableIds), m_activeVariableIds);
             xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
@@ -147,6 +148,62 @@ namespace HKX2
             xs.WriteQSTransform(xe, nameof(m_worldFromModel), m_worldFromModel);
             xs.WriteQSTransformArray(xe, nameof(m_poseModelSpace), m_poseModelSpace);
             xs.WriteQSTransformArray(xe, nameof(m_rigidAttachmentTransforms), m_rigidAttachmentTransforms);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbClientCharacterState);
+        }
+
+        public bool Equals(hkbClientCharacterState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_deformableSkinIds.SequenceEqual(other.m_deformableSkinIds) &&
+                   m_rigidSkinIds.SequenceEqual(other.m_rigidSkinIds) &&
+                   m_externalEventIds.SequenceEqual(other.m_externalEventIds) &&
+                   m_auxiliaryInfo.SequenceEqual(other.m_auxiliaryInfo) &&
+                   m_activeEventIds.SequenceEqual(other.m_activeEventIds) &&
+                   m_activeVariableIds.SequenceEqual(other.m_activeVariableIds) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   (m_instanceName is null && other.m_instanceName is null || m_instanceName == other.m_instanceName || m_instanceName is null && other.m_instanceName == "" || m_instanceName == "" && other.m_instanceName is null) &&
+                   (m_templateName is null && other.m_templateName is null || m_templateName == other.m_templateName || m_templateName is null && other.m_templateName == "" || m_templateName == "" && other.m_templateName is null) &&
+                   (m_fullPathToProject is null && other.m_fullPathToProject is null || m_fullPathToProject == other.m_fullPathToProject || m_fullPathToProject is null && other.m_fullPathToProject == "" || m_fullPathToProject == "" && other.m_fullPathToProject is null) &&
+                   ((m_behaviorData is null && other.m_behaviorData is null) || (m_behaviorData is not null && other.m_behaviorData is not null && m_behaviorData.Equals((IHavokObject)other.m_behaviorData))) &&
+                   ((m_behaviorInternalState is null && other.m_behaviorInternalState is null) || (m_behaviorInternalState is not null && other.m_behaviorInternalState is not null && m_behaviorInternalState.Equals((IHavokObject)other.m_behaviorInternalState))) &&
+                   m_visible.Equals(other.m_visible) &&
+                   m_elapsedSimulationTime.Equals(other.m_elapsedSimulationTime) &&
+                   ((m_skeleton is null && other.m_skeleton is null) || (m_skeleton is not null && other.m_skeleton is not null && m_skeleton.Equals((IHavokObject)other.m_skeleton))) &&
+                   m_worldFromModel.Equals(other.m_worldFromModel) &&
+                   m_poseModelSpace.SequenceEqual(other.m_poseModelSpace) &&
+                   m_rigidAttachmentTransforms.SequenceEqual(other.m_rigidAttachmentTransforms) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_deformableSkinIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_rigidSkinIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_externalEventIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_auxiliaryInfo.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_activeEventIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_activeVariableIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_instanceName);
+            hashcode.Add(m_templateName);
+            hashcode.Add(m_fullPathToProject);
+            hashcode.Add(m_behaviorData);
+            hashcode.Add(m_behaviorInternalState);
+            hashcode.Add(m_visible);
+            hashcode.Add(m_elapsedSimulationTime);
+            hashcode.Add(m_skeleton);
+            hashcode.Add(m_worldFromModel);
+            hashcode.Add(m_poseModelSpace.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_rigidAttachmentTransforms.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

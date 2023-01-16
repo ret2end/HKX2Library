@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_upperBound m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_event m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_eventMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 24 flags: FLAGS_NONE enum: EventRangeMode
-    public partial class hkbEventRangeData : IHavokObject
+    public partial class hkbEventRangeData : IHavokObject, IEquatable<hkbEventRangeData?>
     {
-        public float m_upperBound { set; get; } = default;
+        public float m_upperBound { set; get; }
         public hkbEventProperty m_event { set; get; } = new();
-        public sbyte m_eventMode { set; get; } = default;
+        public sbyte m_eventMode { set; get; }
 
         public virtual uint Signature => 0x6cb92c76;
 
@@ -48,6 +46,30 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_upperBound), m_upperBound);
             xs.WriteClass<hkbEventProperty>(xe, nameof(m_event), m_event);
             xs.WriteEnum<EventRangeMode, sbyte>(xe, nameof(m_eventMode), m_eventMode);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbEventRangeData);
+        }
+
+        public bool Equals(hkbEventRangeData? other)
+        {
+            return other is not null &&
+                   m_upperBound.Equals(other.m_upperBound) &&
+                   ((m_event is null && other.m_event is null) || (m_event is not null && other.m_event is not null && m_event.Equals((IHavokObject)other.m_event))) &&
+                   m_eventMode.Equals(other.m_eventMode) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_upperBound);
+            hashcode.Add(m_event);
+            hashcode.Add(m_eventMode);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

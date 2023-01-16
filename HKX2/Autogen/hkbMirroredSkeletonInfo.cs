@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +10,10 @@ namespace HKX2
 
     // m_mirrorAxis m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_bonePairMap m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkbMirroredSkeletonInfo : hkReferencedObject
+    public partial class hkbMirroredSkeletonInfo : hkReferencedObject, IEquatable<hkbMirroredSkeletonInfo?>
     {
-        public Vector4 m_mirrorAxis { set; get; } = default;
-        public IList<short> m_bonePairMap { set; get; } = new List<short>();
+        public Vector4 m_mirrorAxis { set; get; }
+        public IList<short> m_bonePairMap { set; get; } = Array.Empty<short>();
 
         public override uint Signature => 0xc6c2da4f;
 
@@ -42,6 +43,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_mirrorAxis), m_mirrorAxis);
             xs.WriteNumberArray(xe, nameof(m_bonePairMap), m_bonePairMap);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbMirroredSkeletonInfo);
+        }
+
+        public bool Equals(hkbMirroredSkeletonInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_mirrorAxis.Equals(other.m_mirrorAxis) &&
+                   m_bonePairMap.SequenceEqual(other.m_bonePairMap) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_mirrorAxis);
+            hashcode.Add(m_bonePairMap.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

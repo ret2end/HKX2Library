@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +12,14 @@ namespace HKX2
     // m_max m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 3 offset: 16 flags: FLAGS_NONE enum: 
     // m_expansionMax m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 3 offset: 28 flags: FLAGS_NONE enum: 
     // m_shapeKeyByte m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 31 flags: FLAGS_NONE enum: 
-    public partial class hkAabbUint32 : IHavokObject
+    public partial class hkAabbUint32 : IHavokObject, IEquatable<hkAabbUint32?>
     {
         public uint[] m_min = new uint[3];
         public byte[] m_expansionMin = new byte[3];
-        public byte m_expansionShift { set; get; } = default;
+        public byte m_expansionShift { set; get; }
         public uint[] m_max = new uint[3];
         public byte[] m_expansionMax = new byte[3];
-        public byte m_shapeKeyByte { set; get; } = default;
+        public byte m_shapeKeyByte { set; get; }
 
         public virtual uint Signature => 0x11e7c11;
 
@@ -62,6 +61,36 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_max), m_max);
             xs.WriteNumberArray(xe, nameof(m_expansionMax), m_expansionMax);
             xs.WriteNumber(xe, nameof(m_shapeKeyByte), m_shapeKeyByte);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkAabbUint32);
+        }
+
+        public bool Equals(hkAabbUint32? other)
+        {
+            return other is not null &&
+                   m_min.SequenceEqual(other.m_min) &&
+                   m_expansionMin.SequenceEqual(other.m_expansionMin) &&
+                   m_expansionShift.Equals(other.m_expansionShift) &&
+                   m_max.SequenceEqual(other.m_max) &&
+                   m_expansionMax.SequenceEqual(other.m_expansionMax) &&
+                   m_shapeKeyByte.Equals(other.m_shapeKeyByte) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_min.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_expansionMin.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_expansionShift);
+            hashcode.Add(m_max.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_expansionMax.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_shapeKeyByte);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

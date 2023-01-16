@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_rb m_class: hkpRigidBody Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_localToDisplay m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpSerializedDisplayRbTransformsDisplayTransformPair : IHavokObject
+    public partial class hkpSerializedDisplayRbTransformsDisplayTransformPair : IHavokObject, IEquatable<hkpSerializedDisplayRbTransformsDisplayTransformPair?>
     {
-        public hkpRigidBody? m_rb { set; get; } = default;
-        public Matrix4x4 m_localToDisplay { set; get; } = default;
+        public hkpRigidBody? m_rb { set; get; }
+        public Matrix4x4 m_localToDisplay { set; get; }
 
         public virtual uint Signature => 0x94ac5bec;
 
@@ -40,6 +39,28 @@ namespace HKX2
         {
             xs.WriteClassPointer(xe, nameof(m_rb), m_rb);
             xs.WriteTransform(xe, nameof(m_localToDisplay), m_localToDisplay);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSerializedDisplayRbTransformsDisplayTransformPair);
+        }
+
+        public bool Equals(hkpSerializedDisplayRbTransformsDisplayTransformPair? other)
+        {
+            return other is not null &&
+                   ((m_rb is null && other.m_rb is null) || (m_rb is not null && other.m_rb is not null && m_rb.Equals((IHavokObject)other.m_rb))) &&
+                   m_localToDisplay.Equals(other.m_localToDisplay) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_rb);
+            hashcode.Add(m_localToDisplay);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

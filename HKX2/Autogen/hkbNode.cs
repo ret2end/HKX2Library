@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,12 +10,12 @@ namespace HKX2
     // m_id m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 64 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_cloneState m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 66 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_padNode m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 1 offset: 67 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbNode : hkbBindable
+    public partial class hkbNode : hkbBindable, IEquatable<hkbNode?>
     {
-        public ulong m_userData { set; get; } = default;
+        public ulong m_userData { set; get; }
         public string m_name { set; get; } = "";
-        private short m_id { set; get; } = default;
-        private sbyte m_cloneState { set; get; } = default;
+        private short m_id { set; get; }
+        private sbyte m_cloneState { set; get; }
         public bool[] m_padNode = new bool[1];
 
         public override uint Signature => 0x6d26f61d;
@@ -59,6 +57,30 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_id));
             xs.WriteSerializeIgnored(xe, nameof(m_cloneState));
             xs.WriteSerializeIgnored(xe, nameof(m_padNode));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbNode);
+        }
+
+        public bool Equals(hkbNode? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_userData.Equals(other.m_userData) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_userData);
+            hashcode.Add(m_name);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

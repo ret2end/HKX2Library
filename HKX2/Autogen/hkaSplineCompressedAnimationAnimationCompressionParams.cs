@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_maxFramesPerBlock m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_enableSampleSingleTracks m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
-    public partial class hkaSplineCompressedAnimationAnimationCompressionParams : IHavokObject
+    public partial class hkaSplineCompressedAnimationAnimationCompressionParams : IHavokObject, IEquatable<hkaSplineCompressedAnimationAnimationCompressionParams?>
     {
-        public ushort m_maxFramesPerBlock { set; get; } = default;
-        public bool m_enableSampleSingleTracks { set; get; } = default;
+        public ushort m_maxFramesPerBlock { set; get; }
+        public bool m_enableSampleSingleTracks { set; get; }
 
         public virtual uint Signature => 0xde830789;
 
@@ -40,6 +38,28 @@ namespace HKX2
         {
             xs.WriteNumber(xe, nameof(m_maxFramesPerBlock), m_maxFramesPerBlock);
             xs.WriteBoolean(xe, nameof(m_enableSampleSingleTracks), m_enableSampleSingleTracks);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaSplineCompressedAnimationAnimationCompressionParams);
+        }
+
+        public bool Equals(hkaSplineCompressedAnimationAnimationCompressionParams? other)
+        {
+            return other is not null &&
+                   m_maxFramesPerBlock.Equals(other.m_maxFramesPerBlock) &&
+                   m_enableSampleSingleTracks.Equals(other.m_enableSampleSingleTracks) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_maxFramesPerBlock);
+            hashcode.Add(m_enableSampleSingleTracks);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

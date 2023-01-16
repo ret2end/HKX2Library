@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +11,13 @@ namespace HKX2
     // m_rotationLSOut m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_scaleLSOut m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     // m_pSkeletonMemory m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSComputeAddBoneAnimModifier : hkbModifier
+    public partial class BSComputeAddBoneAnimModifier : hkbModifier, IEquatable<BSComputeAddBoneAnimModifier?>
     {
-        public short m_boneIndex { set; get; } = default;
-        public Vector4 m_translationLSOut { set; get; } = default;
-        public Quaternion m_rotationLSOut { set; get; } = default;
-        public Vector4 m_scaleLSOut { set; get; } = default;
-        private object? m_pSkeletonMemory { set; get; } = default;
+        public short m_boneIndex { set; get; }
+        public Vector4 m_translationLSOut { set; get; }
+        public Quaternion m_rotationLSOut { set; get; }
+        public Vector4 m_scaleLSOut { set; get; }
+        private object? m_pSkeletonMemory { set; get; }
 
         public override uint Signature => 0xa67f8c46;
 
@@ -63,6 +62,34 @@ namespace HKX2
             xs.WriteQuaternion(xe, nameof(m_rotationLSOut), m_rotationLSOut);
             xs.WriteVector4(xe, nameof(m_scaleLSOut), m_scaleLSOut);
             xs.WriteSerializeIgnored(xe, nameof(m_pSkeletonMemory));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSComputeAddBoneAnimModifier);
+        }
+
+        public bool Equals(BSComputeAddBoneAnimModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_boneIndex.Equals(other.m_boneIndex) &&
+                   m_translationLSOut.Equals(other.m_translationLSOut) &&
+                   m_rotationLSOut.Equals(other.m_rotationLSOut) &&
+                   m_scaleLSOut.Equals(other.m_scaleLSOut) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_boneIndex);
+            hashcode.Add(m_translationLSOut);
+            hashcode.Add(m_rotationLSOut);
+            hashcode.Add(m_scaleLSOut);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

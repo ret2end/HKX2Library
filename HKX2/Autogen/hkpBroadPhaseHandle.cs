@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpBroadPhaseHandle Signatire: 0x940569dc size: 4 flags: FLAGS_NONE
 
     // m_id m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpBroadPhaseHandle : IHavokObject
+    public partial class hkpBroadPhaseHandle : IHavokObject, IEquatable<hkpBroadPhaseHandle?>
     {
-        private uint m_id { set; get; } = default;
+        private uint m_id { set; get; }
 
         public virtual uint Signature => 0x940569dc;
 
@@ -32,6 +30,25 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
             xs.WriteSerializeIgnored(xe, nameof(m_id));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpBroadPhaseHandle);
+        }
+
+        public bool Equals(hkpBroadPhaseHandle? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

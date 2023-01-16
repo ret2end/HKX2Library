@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_elem m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 0 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_numElems m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_hashMod m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class hkpPairCollisionFilterMapPairFilterKeyOverrideType : IHavokObject
+    public partial class hkpPairCollisionFilterMapPairFilterKeyOverrideType : IHavokObject, IEquatable<hkpPairCollisionFilterMapPairFilterKeyOverrideType?>
     {
-        private object? m_elem { set; get; } = default;
-        public int m_numElems { set; get; } = default;
-        public int m_hashMod { set; get; } = default;
+        private object? m_elem { set; get; }
+        public int m_numElems { set; get; }
+        public int m_hashMod { set; get; }
 
         public virtual uint Signature => 0x36195969;
 
@@ -43,6 +41,28 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_elem));
             xs.WriteNumber(xe, nameof(m_numElems), m_numElems);
             xs.WriteNumber(xe, nameof(m_hashMod), m_hashMod);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPairCollisionFilterMapPairFilterKeyOverrideType);
+        }
+
+        public bool Equals(hkpPairCollisionFilterMapPairFilterKeyOverrideType? other)
+        {
+            return other is not null &&
+                   m_numElems.Equals(other.m_numElems) &&
+                   m_hashMod.Equals(other.m_hashMod) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_numElems);
+            hashcode.Add(m_hashMod);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

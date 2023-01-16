@@ -1,3 +1,4 @@
+using System;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -7,7 +8,7 @@ namespace HKX2
     // m_memSizeAndFlags m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED enum: 
     // m_referenceCount m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 10 flags: SERIALIZE_IGNORED enum: 
 
-    public partial class hkReferencedObject : hkBaseObject
+    public partial class hkReferencedObject : hkBaseObject, IEquatable<hkReferencedObject?>
     {
 
         public ushort m_memSizeAndFlags { set; get; } = default;
@@ -22,7 +23,6 @@ namespace HKX2
             m_memSizeAndFlags = br.ReadUInt16();
             m_referenceCount = br.ReadInt16();
 
-            //br.Position += 4;
             if (des._header.PointerSize == 8) br.Pad(8);
         }
 
@@ -33,7 +33,6 @@ namespace HKX2
             bw.WriteUInt16(m_memSizeAndFlags);
             bw.WriteInt16(m_referenceCount);
 
-            //bw.Position += 4;
             if (s._header.PointerSize == 8) bw.Pad(8);
         }
 
@@ -47,6 +46,26 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteSerializeIgnored(xe, nameof(m_memSizeAndFlags));
             xs.WriteSerializeIgnored(xe, nameof(m_referenceCount));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkReferencedObject);
+        }
+
+        public bool Equals(hkReferencedObject? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

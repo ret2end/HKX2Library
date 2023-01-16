@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,17 +15,17 @@ namespace HKX2
     // m_invertLeftTransform m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
     // m_invertRightTransform m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 177 flags: FLAGS_NONE enum: 
     // m_invertResult m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 178 flags: FLAGS_NONE enum: 
-    public partial class hkbCombineTransformsModifier : hkbModifier
+    public partial class hkbCombineTransformsModifier : hkbModifier, IEquatable<hkbCombineTransformsModifier?>
     {
-        public Vector4 m_translationOut { set; get; } = default;
-        public Quaternion m_rotationOut { set; get; } = default;
-        public Vector4 m_leftTranslation { set; get; } = default;
-        public Quaternion m_leftRotation { set; get; } = default;
-        public Vector4 m_rightTranslation { set; get; } = default;
-        public Quaternion m_rightRotation { set; get; } = default;
-        public bool m_invertLeftTransform { set; get; } = default;
-        public bool m_invertRightTransform { set; get; } = default;
-        public bool m_invertResult { set; get; } = default;
+        public Vector4 m_translationOut { set; get; }
+        public Quaternion m_rotationOut { set; get; }
+        public Vector4 m_leftTranslation { set; get; }
+        public Quaternion m_leftRotation { set; get; }
+        public Vector4 m_rightTranslation { set; get; }
+        public Quaternion m_rightRotation { set; get; }
+        public bool m_invertLeftTransform { set; get; }
+        public bool m_invertRightTransform { set; get; }
+        public bool m_invertResult { set; get; }
 
         public override uint Signature => 0xfd1f0b79;
 
@@ -86,6 +85,44 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_invertLeftTransform), m_invertLeftTransform);
             xs.WriteBoolean(xe, nameof(m_invertRightTransform), m_invertRightTransform);
             xs.WriteBoolean(xe, nameof(m_invertResult), m_invertResult);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCombineTransformsModifier);
+        }
+
+        public bool Equals(hkbCombineTransformsModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_translationOut.Equals(other.m_translationOut) &&
+                   m_rotationOut.Equals(other.m_rotationOut) &&
+                   m_leftTranslation.Equals(other.m_leftTranslation) &&
+                   m_leftRotation.Equals(other.m_leftRotation) &&
+                   m_rightTranslation.Equals(other.m_rightTranslation) &&
+                   m_rightRotation.Equals(other.m_rightRotation) &&
+                   m_invertLeftTransform.Equals(other.m_invertLeftTransform) &&
+                   m_invertRightTransform.Equals(other.m_invertRightTransform) &&
+                   m_invertResult.Equals(other.m_invertResult) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_translationOut);
+            hashcode.Add(m_rotationOut);
+            hashcode.Add(m_leftTranslation);
+            hashcode.Add(m_leftRotation);
+            hashcode.Add(m_rightTranslation);
+            hashcode.Add(m_rightRotation);
+            hashcode.Add(m_invertLeftTransform);
+            hashcode.Add(m_invertRightTransform);
+            hashcode.Add(m_invertResult);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

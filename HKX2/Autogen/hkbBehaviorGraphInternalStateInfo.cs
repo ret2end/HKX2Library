@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +12,13 @@ namespace HKX2
     // m_auxiliaryNodeInfo m_class: hkbAuxiliaryNodeInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_activeEventIds m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_activeVariableIds m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkbBehaviorGraphInternalStateInfo : hkReferencedObject
+    public partial class hkbBehaviorGraphInternalStateInfo : hkReferencedObject, IEquatable<hkbBehaviorGraphInternalStateInfo?>
     {
-        public ulong m_characterId { set; get; } = default;
-        public hkbBehaviorGraphInternalState? m_internalState { set; get; } = default;
-        public IList<hkbAuxiliaryNodeInfo> m_auxiliaryNodeInfo { set; get; } = new List<hkbAuxiliaryNodeInfo>();
-        public IList<short> m_activeEventIds { set; get; } = new List<short>();
-        public IList<short> m_activeVariableIds { set; get; } = new List<short>();
+        public ulong m_characterId { set; get; }
+        public hkbBehaviorGraphInternalState? m_internalState { set; get; }
+        public IList<hkbAuxiliaryNodeInfo> m_auxiliaryNodeInfo { set; get; } = Array.Empty<hkbAuxiliaryNodeInfo>();
+        public IList<short> m_activeEventIds { set; get; } = Array.Empty<short>();
+        public IList<short> m_activeVariableIds { set; get; } = Array.Empty<short>();
 
         public override uint Signature => 0x645f898b;
 
@@ -57,9 +57,39 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
             xs.WriteClassPointer(xe, nameof(m_internalState), m_internalState);
-            xs.WriteClassPointerArray<hkbAuxiliaryNodeInfo>(xe, nameof(m_auxiliaryNodeInfo), m_auxiliaryNodeInfo);
+            xs.WriteClassPointerArray(xe, nameof(m_auxiliaryNodeInfo), m_auxiliaryNodeInfo);
             xs.WriteNumberArray(xe, nameof(m_activeEventIds), m_activeEventIds);
             xs.WriteNumberArray(xe, nameof(m_activeVariableIds), m_activeVariableIds);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBehaviorGraphInternalStateInfo);
+        }
+
+        public bool Equals(hkbBehaviorGraphInternalStateInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   ((m_internalState is null && other.m_internalState is null) || (m_internalState is not null && other.m_internalState is not null && m_internalState.Equals((IHavokObject)other.m_internalState))) &&
+                   m_auxiliaryNodeInfo.SequenceEqual(other.m_auxiliaryNodeInfo) &&
+                   m_activeEventIds.SequenceEqual(other.m_activeEventIds) &&
+                   m_activeVariableIds.SequenceEqual(other.m_activeVariableIds) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_internalState);
+            hashcode.Add(m_auxiliaryNodeInfo.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_activeEventIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_activeVariableIds.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

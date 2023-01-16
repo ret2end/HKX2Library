@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +11,14 @@ namespace HKX2
     // m_memOffsetToInitialAngleOffset m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 13 flags: FLAGS_NONE enum: 
     // m_memOffsetToPrevAngle m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 14 flags: FLAGS_NONE enum: 
     // m_memOffsetToRevolutionCounter m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 15 flags: FLAGS_NONE enum: 
-    public partial class hkpCogWheelConstraintAtom : hkpConstraintAtom
+    public partial class hkpCogWheelConstraintAtom : hkpConstraintAtom, IEquatable<hkpCogWheelConstraintAtom?>
     {
-        public float m_cogWheelRadiusA { set; get; } = default;
-        public float m_cogWheelRadiusB { set; get; } = default;
-        public bool m_isScrew { set; get; } = default;
-        public sbyte m_memOffsetToInitialAngleOffset { set; get; } = default;
-        public sbyte m_memOffsetToPrevAngle { set; get; } = default;
-        public sbyte m_memOffsetToRevolutionCounter { set; get; } = default;
+        public float m_cogWheelRadiusA { set; get; }
+        public float m_cogWheelRadiusB { set; get; }
+        public bool m_isScrew { set; get; }
+        public sbyte m_memOffsetToInitialAngleOffset { set; get; }
+        public sbyte m_memOffsetToPrevAngle { set; get; }
+        public sbyte m_memOffsetToRevolutionCounter { set; get; }
 
         public override uint Signature => 0xf2b1f399;
 
@@ -68,6 +66,38 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_memOffsetToInitialAngleOffset), m_memOffsetToInitialAngleOffset);
             xs.WriteNumber(xe, nameof(m_memOffsetToPrevAngle), m_memOffsetToPrevAngle);
             xs.WriteNumber(xe, nameof(m_memOffsetToRevolutionCounter), m_memOffsetToRevolutionCounter);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCogWheelConstraintAtom);
+        }
+
+        public bool Equals(hkpCogWheelConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_cogWheelRadiusA.Equals(other.m_cogWheelRadiusA) &&
+                   m_cogWheelRadiusB.Equals(other.m_cogWheelRadiusB) &&
+                   m_isScrew.Equals(other.m_isScrew) &&
+                   m_memOffsetToInitialAngleOffset.Equals(other.m_memOffsetToInitialAngleOffset) &&
+                   m_memOffsetToPrevAngle.Equals(other.m_memOffsetToPrevAngle) &&
+                   m_memOffsetToRevolutionCounter.Equals(other.m_memOffsetToRevolutionCounter) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_cogWheelRadiusA);
+            hashcode.Add(m_cogWheelRadiusB);
+            hashcode.Add(m_isScrew);
+            hashcode.Add(m_memOffsetToInitialAngleOffset);
+            hashcode.Add(m_memOffsetToPrevAngle);
+            hashcode.Add(m_memOffsetToRevolutionCounter);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

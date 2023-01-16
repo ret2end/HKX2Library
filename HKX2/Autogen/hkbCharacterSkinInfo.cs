@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +10,11 @@ namespace HKX2
     // m_characterId m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_deformableSkins m_class:  Type.TYPE_ARRAY Type.TYPE_UINT64 arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_rigidSkins m_class:  Type.TYPE_ARRAY Type.TYPE_UINT64 arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
-    public partial class hkbCharacterSkinInfo : hkReferencedObject
+    public partial class hkbCharacterSkinInfo : hkReferencedObject, IEquatable<hkbCharacterSkinInfo?>
     {
-        public ulong m_characterId { set; get; } = default;
-        public IList<ulong> m_deformableSkins { set; get; } = new List<ulong>();
-        public IList<ulong> m_rigidSkins { set; get; } = new List<ulong>();
+        public ulong m_characterId { set; get; }
+        public IList<ulong> m_deformableSkins { set; get; } = Array.Empty<ulong>();
+        public IList<ulong> m_rigidSkins { set; get; } = Array.Empty<ulong>();
 
         public override uint Signature => 0x180d900d;
 
@@ -48,6 +48,32 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
             xs.WriteNumberArray(xe, nameof(m_deformableSkins), m_deformableSkins);
             xs.WriteNumberArray(xe, nameof(m_rigidSkins), m_rigidSkins);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterSkinInfo);
+        }
+
+        public bool Equals(hkbCharacterSkinInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   m_deformableSkins.SequenceEqual(other.m_deformableSkins) &&
+                   m_rigidSkins.SequenceEqual(other.m_rigidSkins) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_deformableSkins.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_rigidSkins.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

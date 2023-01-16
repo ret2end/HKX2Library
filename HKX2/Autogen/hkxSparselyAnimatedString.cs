@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_strings m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_times m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkxSparselyAnimatedString : hkReferencedObject
+    public partial class hkxSparselyAnimatedString : hkReferencedObject, IEquatable<hkxSparselyAnimatedString?>
     {
-        public IList<string> m_strings { set; get; } = new List<string>();
-        public IList<float> m_times { set; get; } = new List<float>();
+        public IList<string> m_strings { set; get; } = Array.Empty<string>();
+        public IList<float> m_times { set; get; } = Array.Empty<float>();
 
         public override uint Signature => 0x185da6fd;
 
@@ -42,6 +42,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteStringArray(xe, nameof(m_strings), m_strings);
             xs.WriteFloatArray(xe, nameof(m_times), m_times);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxSparselyAnimatedString);
+        }
+
+        public bool Equals(hkxSparselyAnimatedString? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_strings.SequenceEqual(other.m_strings) &&
+                   m_times.SequenceEqual(other.m_times) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_strings.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_times.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

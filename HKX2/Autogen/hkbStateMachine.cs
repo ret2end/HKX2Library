@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -35,36 +35,36 @@ namespace HKX2
     // m_stateOrTransitionChanged m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 256 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_echoNextUpdate m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 257 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_sCurrentStateIndexAndEntered m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 258 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbStateMachine : hkbGenerator
+    public partial class hkbStateMachine : hkbGenerator, IEquatable<hkbStateMachine?>
     {
         public hkbEvent m_eventToSendWhenStateOrTransitionChanges { set; get; } = new();
-        public hkbStateChooser? m_startStateChooser { set; get; } = default;
-        public int m_startStateId { set; get; } = default;
-        public int m_returnToPreviousStateEventId { set; get; } = default;
-        public int m_randomTransitionEventId { set; get; } = default;
-        public int m_transitionToNextHigherStateEventId { set; get; } = default;
-        public int m_transitionToNextLowerStateEventId { set; get; } = default;
-        public int m_syncVariableIndex { set; get; } = default;
-        private int m_currentStateId { set; get; } = default;
-        public bool m_wrapAroundStateId { set; get; } = default;
-        public sbyte m_maxSimultaneousTransitions { set; get; } = default;
-        public sbyte m_startStateMode { set; get; } = default;
-        public sbyte m_selfTransitionMode { set; get; } = default;
-        private bool m_isActive { set; get; } = default;
-        public IList<hkbStateMachineStateInfo> m_states { set; get; } = new List<hkbStateMachineStateInfo>();
-        public hkbStateMachineTransitionInfoArray? m_wildcardTransitions { set; get; } = default;
-        private object? m_stateIdToIndexMap { set; get; } = default;
-        public IList<object> m_activeTransitions { set; get; } = new List<object>();
-        public IList<object> m_transitionFlags { set; get; } = new List<object>();
-        public IList<object> m_wildcardTransitionFlags { set; get; } = new List<object>();
-        public IList<object> m_delayedTransitions { set; get; } = new List<object>();
-        private float m_timeInState { set; get; } = default;
-        private float m_lastLocalTime { set; get; } = default;
-        private int m_previousStateId { set; get; } = default;
-        private int m_nextStartStateIndexOverride { set; get; } = default;
-        private bool m_stateOrTransitionChanged { set; get; } = default;
-        private bool m_echoNextUpdate { set; get; } = default;
-        private ushort m_sCurrentStateIndexAndEntered { set; get; } = default;
+        public hkbStateChooser? m_startStateChooser { set; get; }
+        public int m_startStateId { set; get; }
+        public int m_returnToPreviousStateEventId { set; get; }
+        public int m_randomTransitionEventId { set; get; }
+        public int m_transitionToNextHigherStateEventId { set; get; }
+        public int m_transitionToNextLowerStateEventId { set; get; }
+        public int m_syncVariableIndex { set; get; }
+        private int m_currentStateId { set; get; }
+        public bool m_wrapAroundStateId { set; get; }
+        public sbyte m_maxSimultaneousTransitions { set; get; }
+        public sbyte m_startStateMode { set; get; }
+        public sbyte m_selfTransitionMode { set; get; }
+        private bool m_isActive { set; get; }
+        public IList<hkbStateMachineStateInfo> m_states { set; get; } = Array.Empty<hkbStateMachineStateInfo>();
+        public hkbStateMachineTransitionInfoArray? m_wildcardTransitions { set; get; }
+        private object? m_stateIdToIndexMap { set; get; }
+        public IList<object> m_activeTransitions { set; get; } = Array.Empty<object>();
+        public IList<object> m_transitionFlags { set; get; } = Array.Empty<object>();
+        public IList<object> m_wildcardTransitionFlags { set; get; } = Array.Empty<object>();
+        public IList<object> m_delayedTransitions { set; get; } = Array.Empty<object>();
+        private float m_timeInState { set; get; }
+        private float m_lastLocalTime { set; get; }
+        private int m_previousStateId { set; get; }
+        private int m_nextStartStateIndexOverride { set; get; }
+        private bool m_stateOrTransitionChanged { set; get; }
+        private bool m_echoNextUpdate { set; get; }
+        private ushort m_sCurrentStateIndexAndEntered { set; get; }
 
         public override uint Signature => 0x816c1dcb;
 
@@ -174,7 +174,7 @@ namespace HKX2
             xs.WriteEnum<StartStateMode, sbyte>(xe, nameof(m_startStateMode), m_startStateMode);
             xs.WriteEnum<StateMachineSelfTransitionMode, sbyte>(xe, nameof(m_selfTransitionMode), m_selfTransitionMode);
             xs.WriteSerializeIgnored(xe, nameof(m_isActive));
-            xs.WriteClassPointerArray<hkbStateMachineStateInfo>(xe, nameof(m_states), m_states);
+            xs.WriteClassPointerArray(xe, nameof(m_states), m_states);
             xs.WriteClassPointer(xe, nameof(m_wildcardTransitions), m_wildcardTransitions);
             xs.WriteSerializeIgnored(xe, nameof(m_stateIdToIndexMap));
             xs.WriteSerializeIgnored(xe, nameof(m_activeTransitions));
@@ -188,6 +188,54 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_stateOrTransitionChanged));
             xs.WriteSerializeIgnored(xe, nameof(m_echoNextUpdate));
             xs.WriteSerializeIgnored(xe, nameof(m_sCurrentStateIndexAndEntered));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachine);
+        }
+
+        public bool Equals(hkbStateMachine? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_eventToSendWhenStateOrTransitionChanges is null && other.m_eventToSendWhenStateOrTransitionChanges is null) || (m_eventToSendWhenStateOrTransitionChanges is not null && other.m_eventToSendWhenStateOrTransitionChanges is not null && m_eventToSendWhenStateOrTransitionChanges.Equals((IHavokObject)other.m_eventToSendWhenStateOrTransitionChanges))) &&
+                   ((m_startStateChooser is null && other.m_startStateChooser is null) || (m_startStateChooser is not null && other.m_startStateChooser is not null && m_startStateChooser.Equals((IHavokObject)other.m_startStateChooser))) &&
+                   m_startStateId.Equals(other.m_startStateId) &&
+                   m_returnToPreviousStateEventId.Equals(other.m_returnToPreviousStateEventId) &&
+                   m_randomTransitionEventId.Equals(other.m_randomTransitionEventId) &&
+                   m_transitionToNextHigherStateEventId.Equals(other.m_transitionToNextHigherStateEventId) &&
+                   m_transitionToNextLowerStateEventId.Equals(other.m_transitionToNextLowerStateEventId) &&
+                   m_syncVariableIndex.Equals(other.m_syncVariableIndex) &&
+                   m_wrapAroundStateId.Equals(other.m_wrapAroundStateId) &&
+                   m_maxSimultaneousTransitions.Equals(other.m_maxSimultaneousTransitions) &&
+                   m_startStateMode.Equals(other.m_startStateMode) &&
+                   m_selfTransitionMode.Equals(other.m_selfTransitionMode) &&
+                   m_states.SequenceEqual(other.m_states) &&
+                   ((m_wildcardTransitions is null && other.m_wildcardTransitions is null) || (m_wildcardTransitions is not null && other.m_wildcardTransitions is not null && m_wildcardTransitions.Equals((IHavokObject)other.m_wildcardTransitions))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_eventToSendWhenStateOrTransitionChanges);
+            hashcode.Add(m_startStateChooser);
+            hashcode.Add(m_startStateId);
+            hashcode.Add(m_returnToPreviousStateEventId);
+            hashcode.Add(m_randomTransitionEventId);
+            hashcode.Add(m_transitionToNextHigherStateEventId);
+            hashcode.Add(m_transitionToNextLowerStateEventId);
+            hashcode.Add(m_syncVariableIndex);
+            hashcode.Add(m_wrapAroundStateId);
+            hashcode.Add(m_maxSimultaneousTransitions);
+            hashcode.Add(m_startStateMode);
+            hashcode.Add(m_selfTransitionMode);
+            hashcode.Add(m_states.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_wildcardTransitions);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +11,12 @@ namespace HKX2
     // m_triangleFlip m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     // m_offset m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 132 flags: FLAGS_NONE enum: 
     // m_scale m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 136 flags: FLAGS_NONE enum: 
-    public partial class hkpCompressedSampledHeightFieldShape : hkpSampledHeightFieldShape
+    public partial class hkpCompressedSampledHeightFieldShape : hkpSampledHeightFieldShape, IEquatable<hkpCompressedSampledHeightFieldShape?>
     {
-        public IList<ushort> m_storage { set; get; } = new List<ushort>();
-        public bool m_triangleFlip { set; get; } = default;
-        public float m_offset { set; get; } = default;
-        public float m_scale { set; get; } = default;
+        public IList<ushort> m_storage { set; get; } = Array.Empty<ushort>();
+        public bool m_triangleFlip { set; get; }
+        public float m_offset { set; get; }
+        public float m_scale { set; get; }
 
         public override uint Signature => 0x97b6e143;
 
@@ -58,6 +58,34 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_triangleFlip), m_triangleFlip);
             xs.WriteFloat(xe, nameof(m_offset), m_offset);
             xs.WriteFloat(xe, nameof(m_scale), m_scale);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCompressedSampledHeightFieldShape);
+        }
+
+        public bool Equals(hkpCompressedSampledHeightFieldShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_storage.SequenceEqual(other.m_storage) &&
+                   m_triangleFlip.Equals(other.m_triangleFlip) &&
+                   m_offset.Equals(other.m_offset) &&
+                   m_scale.Equals(other.m_scale) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_storage.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_triangleFlip);
+            hashcode.Add(m_offset);
+            hashcode.Add(m_scale);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

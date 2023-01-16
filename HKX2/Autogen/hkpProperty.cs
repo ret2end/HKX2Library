@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +8,10 @@ namespace HKX2
     // m_key m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_alignmentPadding m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_value m_class: hkpPropertyValue Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpProperty : IHavokObject
+    public partial class hkpProperty : IHavokObject, IEquatable<hkpProperty?>
     {
-        public uint m_key { set; get; } = default;
-        public uint m_alignmentPadding { set; get; } = default;
+        public uint m_key { set; get; }
+        public uint m_alignmentPadding { set; get; }
         public hkpPropertyValue m_value { set; get; } = new();
 
         public virtual uint Signature => 0x9ce308e9;
@@ -44,6 +42,30 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_key), m_key);
             xs.WriteNumber(xe, nameof(m_alignmentPadding), m_alignmentPadding);
             xs.WriteClass<hkpPropertyValue>(xe, nameof(m_value), m_value);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpProperty);
+        }
+
+        public bool Equals(hkpProperty? other)
+        {
+            return other is not null &&
+                   m_key.Equals(other.m_key) &&
+                   m_alignmentPadding.Equals(other.m_alignmentPadding) &&
+                   ((m_value is null && other.m_value is null) || (m_value is not null && other.m_value is not null && m_value.Equals((IHavokObject)other.m_value))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_key);
+            hashcode.Add(m_alignmentPadding);
+            hashcode.Add(m_value);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

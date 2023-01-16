@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,17 +15,17 @@ namespace HKX2
     // m_timeSinceBegin m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 116 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_initNextModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbGetUpModifier : hkbModifier
+    public partial class hkbGetUpModifier : hkbModifier, IEquatable<hkbGetUpModifier?>
     {
-        public Vector4 m_groundNormal { set; get; } = default;
-        public float m_duration { set; get; } = default;
-        public float m_alignWithGroundDuration { set; get; } = default;
-        public short m_rootBoneIndex { set; get; } = default;
-        public short m_otherBoneIndex { set; get; } = default;
-        public short m_anotherBoneIndex { set; get; } = default;
-        private float m_timeSinceBegin { set; get; } = default;
-        private float m_timeStep { set; get; } = default;
-        private bool m_initNextModify { set; get; } = default;
+        public Vector4 m_groundNormal { set; get; }
+        public float m_duration { set; get; }
+        public float m_alignWithGroundDuration { set; get; }
+        public short m_rootBoneIndex { set; get; }
+        public short m_otherBoneIndex { set; get; }
+        public short m_anotherBoneIndex { set; get; }
+        private float m_timeSinceBegin { set; get; }
+        private float m_timeStep { set; get; }
+        private bool m_initNextModify { set; get; }
 
         public override uint Signature => 0x61cb7ac0;
 
@@ -85,6 +84,38 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_timeSinceBegin));
             xs.WriteSerializeIgnored(xe, nameof(m_timeStep));
             xs.WriteSerializeIgnored(xe, nameof(m_initNextModify));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbGetUpModifier);
+        }
+
+        public bool Equals(hkbGetUpModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_groundNormal.Equals(other.m_groundNormal) &&
+                   m_duration.Equals(other.m_duration) &&
+                   m_alignWithGroundDuration.Equals(other.m_alignWithGroundDuration) &&
+                   m_rootBoneIndex.Equals(other.m_rootBoneIndex) &&
+                   m_otherBoneIndex.Equals(other.m_otherBoneIndex) &&
+                   m_anotherBoneIndex.Equals(other.m_anotherBoneIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_groundNormal);
+            hashcode.Add(m_duration);
+            hashcode.Add(m_alignWithGroundDuration);
+            hashcode.Add(m_rootBoneIndex);
+            hashcode.Add(m_otherBoneIndex);
+            hashcode.Add(m_anotherBoneIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -23,24 +21,24 @@ namespace HKX2
     // m_justActivated m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 139 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_updateActiveNodes m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 140 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_stage m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 141 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbGeneratorTransitionEffect : hkbTransitionEffect
+    public partial class hkbGeneratorTransitionEffect : hkbTransitionEffect, IEquatable<hkbGeneratorTransitionEffect?>
     {
-        public hkbGenerator? m_transitionGenerator { set; get; } = default;
-        public float m_blendInDuration { set; get; } = default;
-        public float m_blendOutDuration { set; get; } = default;
-        public bool m_syncToGeneratorStartTime { set; get; } = default;
-        private object? m_fromGenerator { set; get; } = default;
-        private object? m_toGenerator { set; get; } = default;
-        private float m_timeInTransition { set; get; } = default;
-        private float m_duration { set; get; } = default;
-        private float m_effectiveBlendInDuration { set; get; } = default;
-        private float m_effectiveBlendOutDuration { set; get; } = default;
-        private sbyte m_toGeneratorState { set; get; } = default;
-        private bool m_echoTransitionGenerator { set; get; } = default;
-        private bool m_echoToGenerator { set; get; } = default;
-        private bool m_justActivated { set; get; } = default;
-        private bool m_updateActiveNodes { set; get; } = default;
-        private sbyte m_stage { set; get; } = default;
+        public hkbGenerator? m_transitionGenerator { set; get; }
+        public float m_blendInDuration { set; get; }
+        public float m_blendOutDuration { set; get; }
+        public bool m_syncToGeneratorStartTime { set; get; }
+        private object? m_fromGenerator { set; get; }
+        private object? m_toGenerator { set; get; }
+        private float m_timeInTransition { set; get; }
+        private float m_duration { set; get; }
+        private float m_effectiveBlendInDuration { set; get; }
+        private float m_effectiveBlendOutDuration { set; get; }
+        private sbyte m_toGeneratorState { set; get; }
+        private bool m_echoTransitionGenerator { set; get; }
+        private bool m_echoToGenerator { set; get; }
+        private bool m_justActivated { set; get; }
+        private bool m_updateActiveNodes { set; get; }
+        private sbyte m_stage { set; get; }
 
         public override uint Signature => 0x5f771b12;
 
@@ -118,6 +116,34 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_justActivated));
             xs.WriteSerializeIgnored(xe, nameof(m_updateActiveNodes));
             xs.WriteSerializeIgnored(xe, nameof(m_stage));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbGeneratorTransitionEffect);
+        }
+
+        public bool Equals(hkbGeneratorTransitionEffect? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_transitionGenerator is null && other.m_transitionGenerator is null) || (m_transitionGenerator is not null && other.m_transitionGenerator is not null && m_transitionGenerator.Equals((IHavokObject)other.m_transitionGenerator))) &&
+                   m_blendInDuration.Equals(other.m_blendInDuration) &&
+                   m_blendOutDuration.Equals(other.m_blendOutDuration) &&
+                   m_syncToGeneratorStartTime.Equals(other.m_syncToGeneratorStartTime) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_transitionGenerator);
+            hashcode.Add(m_blendInDuration);
+            hashcode.Add(m_blendOutDuration);
+            hashcode.Add(m_syncToGeneratorStartTime);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

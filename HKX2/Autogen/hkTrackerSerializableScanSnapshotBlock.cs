@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +11,14 @@ namespace HKX2
     // m_arraySize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_startReferenceIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     // m_numReferences m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkTrackerSerializableScanSnapshotBlock : IHavokObject
+    public partial class hkTrackerSerializableScanSnapshotBlock : IHavokObject, IEquatable<hkTrackerSerializableScanSnapshotBlock?>
     {
-        public int m_typeIndex { set; get; } = default;
-        public ulong m_start { set; get; } = default;
-        public ulong m_size { set; get; } = default;
-        public int m_arraySize { set; get; } = default;
-        public int m_startReferenceIndex { set; get; } = default;
-        public int m_numReferences { set; get; } = default;
+        public int m_typeIndex { set; get; }
+        public ulong m_start { set; get; }
+        public ulong m_size { set; get; }
+        public int m_arraySize { set; get; }
+        public int m_startReferenceIndex { set; get; }
+        public int m_numReferences { set; get; }
 
         public virtual uint Signature => 0xe7f23e6d;
 
@@ -66,6 +64,36 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_arraySize), m_arraySize);
             xs.WriteNumber(xe, nameof(m_startReferenceIndex), m_startReferenceIndex);
             xs.WriteNumber(xe, nameof(m_numReferences), m_numReferences);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkTrackerSerializableScanSnapshotBlock);
+        }
+
+        public bool Equals(hkTrackerSerializableScanSnapshotBlock? other)
+        {
+            return other is not null &&
+                   m_typeIndex.Equals(other.m_typeIndex) &&
+                   m_start.Equals(other.m_start) &&
+                   m_size.Equals(other.m_size) &&
+                   m_arraySize.Equals(other.m_arraySize) &&
+                   m_startReferenceIndex.Equals(other.m_startReferenceIndex) &&
+                   m_numReferences.Equals(other.m_numReferences) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_typeIndex);
+            hashcode.Add(m_start);
+            hashcode.Add(m_size);
+            hashcode.Add(m_arraySize);
+            hashcode.Add(m_startReferenceIndex);
+            hashcode.Add(m_numReferences);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

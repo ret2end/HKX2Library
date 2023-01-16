@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_characterId m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_command m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 24 flags: FLAGS_NONE enum: CharacterControlCommand
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
-    public partial class hkbCharacterControlCommand : hkReferencedObject
+    public partial class hkbCharacterControlCommand : hkReferencedObject, IEquatable<hkbCharacterControlCommand?>
     {
-        public ulong m_characterId { set; get; } = default;
-        public byte m_command { set; get; } = default;
-        public int m_padding { set; get; } = default;
+        public ulong m_characterId { set; get; }
+        public byte m_command { set; get; }
+        public int m_padding { set; get; }
 
         public override uint Signature => 0x7a195d1d;
 
@@ -50,6 +48,32 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
             xs.WriteEnum<CharacterControlCommand, byte>(xe, nameof(m_command), m_command);
             xs.WriteNumber(xe, nameof(m_padding), m_padding);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterControlCommand);
+        }
+
+        public bool Equals(hkbCharacterControlCommand? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   m_command.Equals(other.m_command) &&
+                   m_padding.Equals(other.m_padding) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_command);
+            hashcode.Add(m_padding);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

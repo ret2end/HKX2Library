@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,14 +12,14 @@ namespace HKX2
     // m_direction m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_numParticles m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_speed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
-    public partial class hkbParticleSystemEventPayload : hkbEventPayload
+    public partial class hkbParticleSystemEventPayload : hkbEventPayload, IEquatable<hkbParticleSystemEventPayload?>
     {
-        public byte m_type { set; get; } = default;
-        public short m_emitBoneIndex { set; get; } = default;
-        public Vector4 m_offset { set; get; } = default;
-        public Vector4 m_direction { set; get; } = default;
-        public int m_numParticles { set; get; } = default;
-        public float m_speed { set; get; } = default;
+        public byte m_type { set; get; }
+        public short m_emitBoneIndex { set; get; }
+        public Vector4 m_offset { set; get; }
+        public Vector4 m_direction { set; get; }
+        public int m_numParticles { set; get; }
+        public float m_speed { set; get; }
 
         public override uint Signature => 0x9df46cd6;
 
@@ -72,6 +71,38 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_direction), m_direction);
             xs.WriteNumber(xe, nameof(m_numParticles), m_numParticles);
             xs.WriteFloat(xe, nameof(m_speed), m_speed);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbParticleSystemEventPayload);
+        }
+
+        public bool Equals(hkbParticleSystemEventPayload? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   m_emitBoneIndex.Equals(other.m_emitBoneIndex) &&
+                   m_offset.Equals(other.m_offset) &&
+                   m_direction.Equals(other.m_direction) &&
+                   m_numParticles.Equals(other.m_numParticles) &&
+                   m_speed.Equals(other.m_speed) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(m_emitBoneIndex);
+            hashcode.Add(m_offset);
+            hashcode.Add(m_direction);
+            hashcode.Add(m_numParticles);
+            hashcode.Add(m_speed);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

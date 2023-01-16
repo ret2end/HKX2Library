@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,17 +14,17 @@ namespace HKX2
     // m_castOffset m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_pSkeletonMemory m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSLimbIKModifier : hkbModifier
+    public partial class BSLimbIKModifier : hkbModifier, IEquatable<BSLimbIKModifier?>
     {
-        public float m_limitAngleDegrees { set; get; } = default;
-        private float m_currentAngle { set; get; } = default;
-        public short m_startBoneIndex { set; get; } = default;
-        public short m_endBoneIndex { set; get; } = default;
-        public float m_gain { set; get; } = default;
-        public float m_boneRadius { set; get; } = default;
-        public float m_castOffset { set; get; } = default;
-        private float m_timeStep { set; get; } = default;
-        private object? m_pSkeletonMemory { set; get; } = default;
+        public float m_limitAngleDegrees { set; get; }
+        private float m_currentAngle { set; get; }
+        public short m_startBoneIndex { set; get; }
+        public short m_endBoneIndex { set; get; }
+        public float m_gain { set; get; }
+        public float m_boneRadius { set; get; }
+        public float m_castOffset { set; get; }
+        private float m_timeStep { set; get; }
+        private object? m_pSkeletonMemory { set; get; }
 
         public override uint Signature => 0x8ea971e5;
 
@@ -83,6 +81,38 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_castOffset), m_castOffset);
             xs.WriteSerializeIgnored(xe, nameof(m_timeStep));
             xs.WriteSerializeIgnored(xe, nameof(m_pSkeletonMemory));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSLimbIKModifier);
+        }
+
+        public bool Equals(BSLimbIKModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_limitAngleDegrees.Equals(other.m_limitAngleDegrees) &&
+                   m_startBoneIndex.Equals(other.m_startBoneIndex) &&
+                   m_endBoneIndex.Equals(other.m_endBoneIndex) &&
+                   m_gain.Equals(other.m_gain) &&
+                   m_boneRadius.Equals(other.m_boneRadius) &&
+                   m_castOffset.Equals(other.m_castOffset) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_limitAngleDegrees);
+            hashcode.Add(m_startBoneIndex);
+            hashcode.Add(m_endBoneIndex);
+            hashcode.Add(m_gain);
+            hashcode.Add(m_boneRadius);
+            hashcode.Add(m_castOffset);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

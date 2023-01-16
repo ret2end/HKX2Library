@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,9 +10,9 @@ namespace HKX2
     // m_nextFreeSystemGroup m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_collisionLookupTable m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 32 offset: 76 flags: FLAGS_NONE enum: 
     // m_pad256 m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 4 offset: 208 flags: FLAGS_NONE enum: 
-    public partial class hkpGroupFilter : hkpCollisionFilter
+    public partial class hkpGroupFilter : hkpCollisionFilter, IEquatable<hkpGroupFilter?>
     {
-        public int m_nextFreeSystemGroup { set; get; } = default;
+        public int m_nextFreeSystemGroup { set; get; }
         public uint[] m_collisionLookupTable = new uint[32];
         public Vector4[] m_pad256 = new Vector4[4];
 
@@ -50,6 +50,32 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_nextFreeSystemGroup), m_nextFreeSystemGroup);
             xs.WriteNumberArray(xe, nameof(m_collisionLookupTable), m_collisionLookupTable);
             xs.WriteVector4Array(xe, nameof(m_pad256), m_pad256);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpGroupFilter);
+        }
+
+        public bool Equals(hkpGroupFilter? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_nextFreeSystemGroup.Equals(other.m_nextFreeSystemGroup) &&
+                   m_collisionLookupTable.SequenceEqual(other.m_collisionLookupTable) &&
+                   m_pad256.SequenceEqual(other.m_pad256) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_nextFreeSystemGroup);
+            hashcode.Add(m_collisionLookupTable.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_pad256.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

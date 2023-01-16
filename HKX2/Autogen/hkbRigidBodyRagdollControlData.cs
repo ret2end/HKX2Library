@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_keyFrameHierarchyControlData m_class: hkaKeyFrameHierarchyUtilityControlData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: ALIGN_16|FLAGS_NONE enum: 
     // m_durationToBlend m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkbRigidBodyRagdollControlData : IHavokObject
+    public partial class hkbRigidBodyRagdollControlData : IHavokObject, IEquatable<hkbRigidBodyRagdollControlData?>
     {
         public hkaKeyFrameHierarchyUtilityControlData m_keyFrameHierarchyControlData { set; get; } = new();
-        public float m_durationToBlend { set; get; } = default;
+        public float m_durationToBlend { set; get; }
 
         public virtual uint Signature => 0x1e0bc068;
 
@@ -40,6 +38,28 @@ namespace HKX2
         {
             xs.WriteClass<hkaKeyFrameHierarchyUtilityControlData>(xe, nameof(m_keyFrameHierarchyControlData), m_keyFrameHierarchyControlData);
             xs.WriteFloat(xe, nameof(m_durationToBlend), m_durationToBlend);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbRigidBodyRagdollControlData);
+        }
+
+        public bool Equals(hkbRigidBodyRagdollControlData? other)
+        {
+            return other is not null &&
+                   ((m_keyFrameHierarchyControlData is null && other.m_keyFrameHierarchyControlData is null) || (m_keyFrameHierarchyControlData is not null && other.m_keyFrameHierarchyControlData is not null && m_keyFrameHierarchyControlData.Equals((IHavokObject)other.m_keyFrameHierarchyControlData))) &&
+                   m_durationToBlend.Equals(other.m_durationToBlend) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_keyFrameHierarchyControlData);
+            hashcode.Add(m_durationToBlend);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

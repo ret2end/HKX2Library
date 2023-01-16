@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,15 +13,15 @@ namespace HKX2
     // m_far m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     // m_near m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_leftHanded m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
-    public partial class hkxCamera : hkReferencedObject
+    public partial class hkxCamera : hkReferencedObject, IEquatable<hkxCamera?>
     {
-        public Vector4 m_from { set; get; } = default;
-        public Vector4 m_focus { set; get; } = default;
-        public Vector4 m_up { set; get; } = default;
-        public float m_fov { set; get; } = default;
-        public float m_far { set; get; } = default;
-        public float m_near { set; get; } = default;
-        public bool m_leftHanded { set; get; } = default;
+        public Vector4 m_from { set; get; }
+        public Vector4 m_focus { set; get; }
+        public Vector4 m_up { set; get; }
+        public float m_fov { set; get; }
+        public float m_far { set; get; }
+        public float m_near { set; get; }
+        public bool m_leftHanded { set; get; }
 
         public override uint Signature => 0xe3597b02;
 
@@ -74,6 +73,40 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_far), m_far);
             xs.WriteFloat(xe, nameof(m_near), m_near);
             xs.WriteBoolean(xe, nameof(m_leftHanded), m_leftHanded);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxCamera);
+        }
+
+        public bool Equals(hkxCamera? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_from.Equals(other.m_from) &&
+                   m_focus.Equals(other.m_focus) &&
+                   m_up.Equals(other.m_up) &&
+                   m_fov.Equals(other.m_fov) &&
+                   m_far.Equals(other.m_far) &&
+                   m_near.Equals(other.m_near) &&
+                   m_leftHanded.Equals(other.m_leftHanded) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_from);
+            hashcode.Add(m_focus);
+            hashcode.Add(m_up);
+            hashcode.Add(m_fov);
+            hashcode.Add(m_far);
+            hashcode.Add(m_near);
+            hashcode.Add(m_leftHanded);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_result m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_gain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSInterpValueModifier : hkbModifier
+    public partial class BSInterpValueModifier : hkbModifier, IEquatable<BSInterpValueModifier?>
     {
-        public float m_source { set; get; } = default;
-        public float m_target { set; get; } = default;
-        public float m_result { set; get; } = default;
-        public float m_gain { set; get; } = default;
-        private float m_timeStep { set; get; } = default;
+        public float m_source { set; get; }
+        public float m_target { set; get; }
+        public float m_result { set; get; }
+        public float m_gain { set; get; }
+        private float m_timeStep { set; get; }
 
         public override uint Signature => 0x29adc802;
 
@@ -61,6 +59,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_result), m_result);
             xs.WriteFloat(xe, nameof(m_gain), m_gain);
             xs.WriteSerializeIgnored(xe, nameof(m_timeStep));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSInterpValueModifier);
+        }
+
+        public bool Equals(BSInterpValueModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_source.Equals(other.m_source) &&
+                   m_target.Equals(other.m_target) &&
+                   m_result.Equals(other.m_result) &&
+                   m_gain.Equals(other.m_gain) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_source);
+            hashcode.Add(m_target);
+            hashcode.Add(m_result);
+            hashcode.Add(m_gain);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

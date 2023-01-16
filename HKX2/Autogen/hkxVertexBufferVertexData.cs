@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -18,19 +19,19 @@ namespace HKX2
     // m_uint32Stride m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 92 flags: FLAGS_NONE enum: 
     // m_uint16Stride m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_uint8Stride m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
-    public partial class hkxVertexBufferVertexData : IHavokObject
+    public partial class hkxVertexBufferVertexData : IHavokObject, IEquatable<hkxVertexBufferVertexData?>
     {
-        public IList<Vector4> m_vectorData { set; get; } = new List<Vector4>();
-        public IList<float> m_floatData { set; get; } = new List<float>();
-        public IList<uint> m_uint32Data { set; get; } = new List<uint>();
-        public IList<ushort> m_uint16Data { set; get; } = new List<ushort>();
-        public IList<byte> m_uint8Data { set; get; } = new List<byte>();
-        public uint m_numVerts { set; get; } = default;
-        public uint m_vectorStride { set; get; } = default;
-        public uint m_floatStride { set; get; } = default;
-        public uint m_uint32Stride { set; get; } = default;
-        public uint m_uint16Stride { set; get; } = default;
-        public uint m_uint8Stride { set; get; } = default;
+        public IList<Vector4> m_vectorData { set; get; } = Array.Empty<Vector4>();
+        public IList<float> m_floatData { set; get; } = Array.Empty<float>();
+        public IList<uint> m_uint32Data { set; get; } = Array.Empty<uint>();
+        public IList<ushort> m_uint16Data { set; get; } = Array.Empty<ushort>();
+        public IList<byte> m_uint8Data { set; get; } = Array.Empty<byte>();
+        public uint m_numVerts { set; get; }
+        public uint m_vectorStride { set; get; }
+        public uint m_floatStride { set; get; }
+        public uint m_uint32Stride { set; get; }
+        public uint m_uint16Stride { set; get; }
+        public uint m_uint8Stride { set; get; }
 
         public virtual uint Signature => 0xd72b6fd0;
 
@@ -92,6 +93,46 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_uint32Stride), m_uint32Stride);
             xs.WriteNumber(xe, nameof(m_uint16Stride), m_uint16Stride);
             xs.WriteNumber(xe, nameof(m_uint8Stride), m_uint8Stride);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxVertexBufferVertexData);
+        }
+
+        public bool Equals(hkxVertexBufferVertexData? other)
+        {
+            return other is not null &&
+                   m_vectorData.SequenceEqual(other.m_vectorData) &&
+                   m_floatData.SequenceEqual(other.m_floatData) &&
+                   m_uint32Data.SequenceEqual(other.m_uint32Data) &&
+                   m_uint16Data.SequenceEqual(other.m_uint16Data) &&
+                   m_uint8Data.SequenceEqual(other.m_uint8Data) &&
+                   m_numVerts.Equals(other.m_numVerts) &&
+                   m_vectorStride.Equals(other.m_vectorStride) &&
+                   m_floatStride.Equals(other.m_floatStride) &&
+                   m_uint32Stride.Equals(other.m_uint32Stride) &&
+                   m_uint16Stride.Equals(other.m_uint16Stride) &&
+                   m_uint8Stride.Equals(other.m_uint8Stride) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_vectorData.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_floatData.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_uint32Data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_uint16Data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_uint8Data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_numVerts);
+            hashcode.Add(m_vectorStride);
+            hashcode.Add(m_floatStride);
+            hashcode.Add(m_uint32Stride);
+            hashcode.Add(m_uint16Stride);
+            hashcode.Add(m_uint8Stride);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

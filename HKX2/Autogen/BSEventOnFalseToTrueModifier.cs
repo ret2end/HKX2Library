@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,20 +17,20 @@ namespace HKX2
     // m_bSlot1ActivatedLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 152 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bSlot2ActivatedLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 153 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bSlot3ActivatedLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 154 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSEventOnFalseToTrueModifier : hkbModifier
+    public partial class BSEventOnFalseToTrueModifier : hkbModifier, IEquatable<BSEventOnFalseToTrueModifier?>
     {
-        public bool m_bEnableEvent1 { set; get; } = default;
-        public bool m_bVariableToTest1 { set; get; } = default;
+        public bool m_bEnableEvent1 { set; get; }
+        public bool m_bVariableToTest1 { set; get; }
         public hkbEventProperty m_EventToSend1 { set; get; } = new();
-        public bool m_bEnableEvent2 { set; get; } = default;
-        public bool m_bVariableToTest2 { set; get; } = default;
+        public bool m_bEnableEvent2 { set; get; }
+        public bool m_bVariableToTest2 { set; get; }
         public hkbEventProperty m_EventToSend2 { set; get; } = new();
-        public bool m_bEnableEvent3 { set; get; } = default;
-        public bool m_bVariableToTest3 { set; get; } = default;
+        public bool m_bEnableEvent3 { set; get; }
+        public bool m_bVariableToTest3 { set; get; }
         public hkbEventProperty m_EventToSend3 { set; get; } = new();
-        private bool m_bSlot1ActivatedLastFrame { set; get; } = default;
-        private bool m_bSlot2ActivatedLastFrame { set; get; } = default;
-        private bool m_bSlot3ActivatedLastFrame { set; get; } = default;
+        private bool m_bSlot1ActivatedLastFrame { set; get; }
+        private bool m_bSlot2ActivatedLastFrame { set; get; }
+        private bool m_bSlot3ActivatedLastFrame { set; get; }
 
         public override uint Signature => 0x81d0777a;
 
@@ -107,6 +105,44 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_bSlot1ActivatedLastFrame));
             xs.WriteSerializeIgnored(xe, nameof(m_bSlot2ActivatedLastFrame));
             xs.WriteSerializeIgnored(xe, nameof(m_bSlot3ActivatedLastFrame));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSEventOnFalseToTrueModifier);
+        }
+
+        public bool Equals(BSEventOnFalseToTrueModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_bEnableEvent1.Equals(other.m_bEnableEvent1) &&
+                   m_bVariableToTest1.Equals(other.m_bVariableToTest1) &&
+                   ((m_EventToSend1 is null && other.m_EventToSend1 is null) || (m_EventToSend1 is not null && other.m_EventToSend1 is not null && m_EventToSend1.Equals((IHavokObject)other.m_EventToSend1))) &&
+                   m_bEnableEvent2.Equals(other.m_bEnableEvent2) &&
+                   m_bVariableToTest2.Equals(other.m_bVariableToTest2) &&
+                   ((m_EventToSend2 is null && other.m_EventToSend2 is null) || (m_EventToSend2 is not null && other.m_EventToSend2 is not null && m_EventToSend2.Equals((IHavokObject)other.m_EventToSend2))) &&
+                   m_bEnableEvent3.Equals(other.m_bEnableEvent3) &&
+                   m_bVariableToTest3.Equals(other.m_bVariableToTest3) &&
+                   ((m_EventToSend3 is null && other.m_EventToSend3 is null) || (m_EventToSend3 is not null && other.m_EventToSend3 is not null && m_EventToSend3.Equals((IHavokObject)other.m_EventToSend3))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_bEnableEvent1);
+            hashcode.Add(m_bVariableToTest1);
+            hashcode.Add(m_EventToSend1);
+            hashcode.Add(m_bEnableEvent2);
+            hashcode.Add(m_bVariableToTest2);
+            hashcode.Add(m_EventToSend2);
+            hashcode.Add(m_bEnableEvent3);
+            hashcode.Add(m_bVariableToTest3);
+            hashcode.Add(m_EventToSend3);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

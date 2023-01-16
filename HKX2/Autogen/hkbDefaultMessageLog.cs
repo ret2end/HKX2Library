@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkbDefaultMessageLog Signatire: 0x7bd5c66f size: 1 flags: FLAGS_NONE
 
 
-    public partial class hkbDefaultMessageLog : IHavokObject
+    public partial class hkbDefaultMessageLog : IHavokObject, IEquatable<hkbDefaultMessageLog?>
     {
         private byte[] unk0 = new byte[1];
 
@@ -32,6 +30,25 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
 
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbDefaultMessageLog);
+        }
+
+        public bool Equals(hkbDefaultMessageLog? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -94,95 +95,95 @@ namespace HKX2
     // m_broadPhaseQuerySize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 1048 flags: FLAGS_NONE enum: 
     // m_broadPhaseUpdateSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 1052 flags: FLAGS_NONE enum: 
     // m_contactPointGeneration m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 1056 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpWorld : hkReferencedObject
+    public partial class hkpWorld : hkReferencedObject, IEquatable<hkpWorld?>
     {
-        public hkpSimulation? m_simulation { set; get; } = default;
-        public Vector4 m_gravity { set; get; } = default;
-        private object? m_fixedIsland { set; get; } = default;
-        public hkpRigidBody? m_fixedRigidBody { set; get; } = default;
-        public IList<object> m_activeSimulationIslands { set; get; } = new List<object>();
-        public IList<object> m_inactiveSimulationIslands { set; get; } = new List<object>();
-        public IList<object> m_dirtySimulationIslands { set; get; } = new List<object>();
-        private object? m_maintenanceMgr { set; get; } = default;
-        private object? m_memoryWatchDog { set; get; } = default;
-        private bool m_assertOnRunningOutOfSolverMemory { set; get; } = default;
-        private object? m_broadPhase { set; get; } = default;
-        private object? m_kdTreeManager { set; get; } = default;
-        public bool m_autoUpdateTree { set; get; } = default;
-        private object? m_broadPhaseDispatcher { set; get; } = default;
-        private object? m_phantomBroadPhaseListener { set; get; } = default;
-        private object? m_entityEntityBroadPhaseListener { set; get; } = default;
-        private object? m_broadPhaseBorderListener { set; get; } = default;
-        private object? m_multithreadedSimulationJobData { set; get; } = default;
-        private object? m_collisionInput { set; get; } = default;
-        private object? m_collisionFilter { set; get; } = default;
-        private object? m_collisionDispatcher { set; get; } = default;
-        private object? m_convexListFilter { set; get; } = default;
-        private object? m_pendingOperations { set; get; } = default;
-        public int m_pendingOperationsCount { set; get; } = default;
-        private int m_pendingBodyOperationsCount { set; get; } = default;
-        public int m_criticalOperationsLockCount { set; get; } = default;
-        public int m_criticalOperationsLockCountForPhantoms { set; get; } = default;
-        public bool m_blockExecutingPendingOperations { set; get; } = default;
-        public bool m_criticalOperationsAllowed { set; get; } = default;
-        private object? m_pendingOperationQueues { set; get; } = default;
-        public int m_pendingOperationQueueCount { set; get; } = default;
+        public hkpSimulation? m_simulation { set; get; }
+        public Vector4 m_gravity { set; get; }
+        private object? m_fixedIsland { set; get; }
+        public hkpRigidBody? m_fixedRigidBody { set; get; }
+        public IList<object> m_activeSimulationIslands { set; get; } = Array.Empty<object>();
+        public IList<object> m_inactiveSimulationIslands { set; get; } = Array.Empty<object>();
+        public IList<object> m_dirtySimulationIslands { set; get; } = Array.Empty<object>();
+        private object? m_maintenanceMgr { set; get; }
+        private object? m_memoryWatchDog { set; get; }
+        private bool m_assertOnRunningOutOfSolverMemory { set; get; }
+        private object? m_broadPhase { set; get; }
+        private object? m_kdTreeManager { set; get; }
+        public bool m_autoUpdateTree { set; get; }
+        private object? m_broadPhaseDispatcher { set; get; }
+        private object? m_phantomBroadPhaseListener { set; get; }
+        private object? m_entityEntityBroadPhaseListener { set; get; }
+        private object? m_broadPhaseBorderListener { set; get; }
+        private object? m_multithreadedSimulationJobData { set; get; }
+        private object? m_collisionInput { set; get; }
+        private object? m_collisionFilter { set; get; }
+        private object? m_collisionDispatcher { set; get; }
+        private object? m_convexListFilter { set; get; }
+        private object? m_pendingOperations { set; get; }
+        public int m_pendingOperationsCount { set; get; }
+        private int m_pendingBodyOperationsCount { set; get; }
+        public int m_criticalOperationsLockCount { set; get; }
+        public int m_criticalOperationsLockCountForPhantoms { set; get; }
+        public bool m_blockExecutingPendingOperations { set; get; }
+        public bool m_criticalOperationsAllowed { set; get; }
+        private object? m_pendingOperationQueues { set; get; }
+        public int m_pendingOperationQueueCount { set; get; }
         public hkMultiThreadCheck m_multiThreadCheck { set; get; } = new();
-        public bool m_processActionsInSingleThread { set; get; } = default;
-        public bool m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob { set; get; } = default;
-        public uint m_minDesiredIslandSize { set; get; } = default;
-        private object? m_modifyConstraintCriticalSection { set; get; } = default;
-        public int m_isLocked { set; get; } = default;
-        private object? m_islandDirtyListCriticalSection { set; get; } = default;
-        private object? m_propertyMasterLock { set; get; } = default;
-        public bool m_wantSimulationIslands { set; get; } = default;
-        private bool m_useHybridBroadphase { set; get; } = default;
-        public float m_snapCollisionToConvexEdgeThreshold { set; get; } = default;
-        public float m_snapCollisionToConcaveEdgeThreshold { set; get; } = default;
-        public bool m_enableToiWeldRejection { set; get; } = default;
-        public bool m_wantDeactivation { set; get; } = default;
-        public bool m_shouldActivateOnRigidBodyTransformChange { set; get; } = default;
-        public float m_deactivationReferenceDistance { set; get; } = default;
-        public float m_toiCollisionResponseRotateNormal { set; get; } = default;
-        public int m_maxSectorsPerMidphaseCollideTask { set; get; } = default;
-        public int m_maxSectorsPerNarrowphaseCollideTask { set; get; } = default;
-        public bool m_processToisMultithreaded { set; get; } = default;
-        public int m_maxEntriesPerToiMidphaseCollideTask { set; get; } = default;
-        public int m_maxEntriesPerToiNarrowphaseCollideTask { set; get; } = default;
-        public int m_maxNumToiCollisionPairsSinglethreaded { set; get; } = default;
-        private int m_simulationType { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationSimplifiedToi { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationToi { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationToiHigher { set; get; } = default;
-        public float m_numToisTillAllowedPenetrationToiForced { set; get; } = default;
-        public uint m_lastEntityUid { set; get; } = default;
-        public uint m_lastIslandUid { set; get; } = default;
-        public uint m_lastConstraintUid { set; get; } = default;
-        public IList<hkpPhantom> m_phantoms { set; get; } = new List<hkpPhantom>();
-        public IList<object> m_actionListeners { set; get; } = new List<object>();
-        public IList<object> m_entityListeners { set; get; } = new List<object>();
-        public IList<object> m_phantomListeners { set; get; } = new List<object>();
-        public IList<object> m_constraintListeners { set; get; } = new List<object>();
-        public IList<object> m_worldDeletionListeners { set; get; } = new List<object>();
-        public IList<object> m_islandActivationListeners { set; get; } = new List<object>();
-        public IList<object> m_worldPostSimulationListeners { set; get; } = new List<object>();
-        public IList<object> m_worldPostIntegrateListeners { set; get; } = new List<object>();
-        public IList<object> m_worldPostCollideListeners { set; get; } = new List<object>();
-        public IList<object> m_islandPostIntegrateListeners { set; get; } = new List<object>();
-        public IList<object> m_islandPostCollideListeners { set; get; } = new List<object>();
-        public IList<object> m_contactListeners { set; get; } = new List<object>();
-        public IList<object> m_contactImpulseLimitBreachedListeners { set; get; } = new List<object>();
-        public IList<object> m_worldExtensions { set; get; } = new List<object>();
-        private object? m_violatedConstraintArray { set; get; } = default;
-        private object? m_broadPhaseBorder { set; get; } = default;
-        private object? m_destructionWorld { set; get; } = default;
-        private object? m_npWorld { set; get; } = default;
+        public bool m_processActionsInSingleThread { set; get; }
+        public bool m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob { set; get; }
+        public uint m_minDesiredIslandSize { set; get; }
+        private object? m_modifyConstraintCriticalSection { set; get; }
+        public int m_isLocked { set; get; }
+        private object? m_islandDirtyListCriticalSection { set; get; }
+        private object? m_propertyMasterLock { set; get; }
+        public bool m_wantSimulationIslands { set; get; }
+        private bool m_useHybridBroadphase { set; get; }
+        public float m_snapCollisionToConvexEdgeThreshold { set; get; }
+        public float m_snapCollisionToConcaveEdgeThreshold { set; get; }
+        public bool m_enableToiWeldRejection { set; get; }
+        public bool m_wantDeactivation { set; get; }
+        public bool m_shouldActivateOnRigidBodyTransformChange { set; get; }
+        public float m_deactivationReferenceDistance { set; get; }
+        public float m_toiCollisionResponseRotateNormal { set; get; }
+        public int m_maxSectorsPerMidphaseCollideTask { set; get; }
+        public int m_maxSectorsPerNarrowphaseCollideTask { set; get; }
+        public bool m_processToisMultithreaded { set; get; }
+        public int m_maxEntriesPerToiMidphaseCollideTask { set; get; }
+        public int m_maxEntriesPerToiNarrowphaseCollideTask { set; get; }
+        public int m_maxNumToiCollisionPairsSinglethreaded { set; get; }
+        private int m_simulationType { set; get; }
+        public float m_numToisTillAllowedPenetrationSimplifiedToi { set; get; }
+        public float m_numToisTillAllowedPenetrationToi { set; get; }
+        public float m_numToisTillAllowedPenetrationToiHigher { set; get; }
+        public float m_numToisTillAllowedPenetrationToiForced { set; get; }
+        public uint m_lastEntityUid { set; get; }
+        public uint m_lastIslandUid { set; get; }
+        public uint m_lastConstraintUid { set; get; }
+        public IList<hkpPhantom> m_phantoms { set; get; } = Array.Empty<hkpPhantom>();
+        public IList<object> m_actionListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_entityListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_phantomListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_constraintListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_worldDeletionListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_islandActivationListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_worldPostSimulationListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_worldPostIntegrateListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_worldPostCollideListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_islandPostIntegrateListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_islandPostCollideListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_contactListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_contactImpulseLimitBreachedListeners { set; get; } = Array.Empty<object>();
+        public IList<object> m_worldExtensions { set; get; } = Array.Empty<object>();
+        private object? m_violatedConstraintArray { set; get; }
+        private object? m_broadPhaseBorder { set; get; }
+        private object? m_destructionWorld { set; get; }
+        private object? m_npWorld { set; get; }
         public Vector4[] m_broadPhaseExtents = new Vector4[2];
-        public int m_broadPhaseNumMarkers { set; get; } = default;
-        public int m_sizeOfToiEventQueue { set; get; } = default;
-        public int m_broadPhaseQuerySize { set; get; } = default;
-        public int m_broadPhaseUpdateSize { set; get; } = default;
-        private sbyte m_contactPointGeneration { set; get; } = default;
+        public int m_broadPhaseNumMarkers { set; get; }
+        public int m_sizeOfToiEventQueue { set; get; }
+        public int m_broadPhaseQuerySize { set; get; }
+        public int m_broadPhaseUpdateSize { set; get; }
+        private sbyte m_contactPointGeneration { set; get; }
 
         public override uint Signature => 0xaadcec37;
 
@@ -503,7 +504,7 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_lastEntityUid), m_lastEntityUid);
             xs.WriteNumber(xe, nameof(m_lastIslandUid), m_lastIslandUid);
             xs.WriteNumber(xe, nameof(m_lastConstraintUid), m_lastConstraintUid);
-            xs.WriteClassPointerArray<hkpPhantom>(xe, nameof(m_phantoms), m_phantoms);
+            xs.WriteClassPointerArray(xe, nameof(m_phantoms), m_phantoms);
             xs.WriteSerializeIgnored(xe, nameof(m_actionListeners));
             xs.WriteSerializeIgnored(xe, nameof(m_entityListeners));
             xs.WriteSerializeIgnored(xe, nameof(m_phantomListeners));
@@ -528,6 +529,108 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_broadPhaseQuerySize), m_broadPhaseQuerySize);
             xs.WriteNumber(xe, nameof(m_broadPhaseUpdateSize), m_broadPhaseUpdateSize);
             xs.WriteSerializeIgnored(xe, nameof(m_contactPointGeneration));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpWorld);
+        }
+
+        public bool Equals(hkpWorld? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_simulation is null && other.m_simulation is null) || (m_simulation is not null && other.m_simulation is not null && m_simulation.Equals((IHavokObject)other.m_simulation))) &&
+                   m_gravity.Equals(other.m_gravity) &&
+                   ((m_fixedRigidBody is null && other.m_fixedRigidBody is null) || (m_fixedRigidBody is not null && other.m_fixedRigidBody is not null && m_fixedRigidBody.Equals((IHavokObject)other.m_fixedRigidBody))) &&
+                   m_autoUpdateTree.Equals(other.m_autoUpdateTree) &&
+                   m_pendingOperationsCount.Equals(other.m_pendingOperationsCount) &&
+                   m_criticalOperationsLockCount.Equals(other.m_criticalOperationsLockCount) &&
+                   m_criticalOperationsLockCountForPhantoms.Equals(other.m_criticalOperationsLockCountForPhantoms) &&
+                   m_blockExecutingPendingOperations.Equals(other.m_blockExecutingPendingOperations) &&
+                   m_criticalOperationsAllowed.Equals(other.m_criticalOperationsAllowed) &&
+                   m_pendingOperationQueueCount.Equals(other.m_pendingOperationQueueCount) &&
+                   m_processActionsInSingleThread.Equals(other.m_processActionsInSingleThread) &&
+                   m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob.Equals(other.m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob) &&
+                   m_minDesiredIslandSize.Equals(other.m_minDesiredIslandSize) &&
+                   m_isLocked.Equals(other.m_isLocked) &&
+                   m_wantSimulationIslands.Equals(other.m_wantSimulationIslands) &&
+                   m_snapCollisionToConvexEdgeThreshold.Equals(other.m_snapCollisionToConvexEdgeThreshold) &&
+                   m_snapCollisionToConcaveEdgeThreshold.Equals(other.m_snapCollisionToConcaveEdgeThreshold) &&
+                   m_enableToiWeldRejection.Equals(other.m_enableToiWeldRejection) &&
+                   m_wantDeactivation.Equals(other.m_wantDeactivation) &&
+                   m_shouldActivateOnRigidBodyTransformChange.Equals(other.m_shouldActivateOnRigidBodyTransformChange) &&
+                   m_deactivationReferenceDistance.Equals(other.m_deactivationReferenceDistance) &&
+                   m_toiCollisionResponseRotateNormal.Equals(other.m_toiCollisionResponseRotateNormal) &&
+                   m_maxSectorsPerMidphaseCollideTask.Equals(other.m_maxSectorsPerMidphaseCollideTask) &&
+                   m_maxSectorsPerNarrowphaseCollideTask.Equals(other.m_maxSectorsPerNarrowphaseCollideTask) &&
+                   m_processToisMultithreaded.Equals(other.m_processToisMultithreaded) &&
+                   m_maxEntriesPerToiMidphaseCollideTask.Equals(other.m_maxEntriesPerToiMidphaseCollideTask) &&
+                   m_maxEntriesPerToiNarrowphaseCollideTask.Equals(other.m_maxEntriesPerToiNarrowphaseCollideTask) &&
+                   m_maxNumToiCollisionPairsSinglethreaded.Equals(other.m_maxNumToiCollisionPairsSinglethreaded) &&
+                   m_numToisTillAllowedPenetrationSimplifiedToi.Equals(other.m_numToisTillAllowedPenetrationSimplifiedToi) &&
+                   m_numToisTillAllowedPenetrationToi.Equals(other.m_numToisTillAllowedPenetrationToi) &&
+                   m_numToisTillAllowedPenetrationToiHigher.Equals(other.m_numToisTillAllowedPenetrationToiHigher) &&
+                   m_numToisTillAllowedPenetrationToiForced.Equals(other.m_numToisTillAllowedPenetrationToiForced) &&
+                   m_lastEntityUid.Equals(other.m_lastEntityUid) &&
+                   m_lastIslandUid.Equals(other.m_lastIslandUid) &&
+                   m_lastConstraintUid.Equals(other.m_lastConstraintUid) &&
+                   m_phantoms.SequenceEqual(other.m_phantoms) &&
+                   m_broadPhaseExtents.SequenceEqual(other.m_broadPhaseExtents) &&
+                   m_broadPhaseNumMarkers.Equals(other.m_broadPhaseNumMarkers) &&
+                   m_sizeOfToiEventQueue.Equals(other.m_sizeOfToiEventQueue) &&
+                   m_broadPhaseQuerySize.Equals(other.m_broadPhaseQuerySize) &&
+                   m_broadPhaseUpdateSize.Equals(other.m_broadPhaseUpdateSize) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_simulation);
+            hashcode.Add(m_gravity);
+            hashcode.Add(m_fixedRigidBody);
+            hashcode.Add(m_autoUpdateTree);
+            hashcode.Add(m_pendingOperationsCount);
+            hashcode.Add(m_criticalOperationsLockCount);
+            hashcode.Add(m_criticalOperationsLockCountForPhantoms);
+            hashcode.Add(m_blockExecutingPendingOperations);
+            hashcode.Add(m_criticalOperationsAllowed);
+            hashcode.Add(m_pendingOperationQueueCount);
+            hashcode.Add(m_processActionsInSingleThread);
+            hashcode.Add(m_allowIntegrationOfIslandsWithoutConstraintsInASeparateJob);
+            hashcode.Add(m_minDesiredIslandSize);
+            hashcode.Add(m_isLocked);
+            hashcode.Add(m_wantSimulationIslands);
+            hashcode.Add(m_snapCollisionToConvexEdgeThreshold);
+            hashcode.Add(m_snapCollisionToConcaveEdgeThreshold);
+            hashcode.Add(m_enableToiWeldRejection);
+            hashcode.Add(m_wantDeactivation);
+            hashcode.Add(m_shouldActivateOnRigidBodyTransformChange);
+            hashcode.Add(m_deactivationReferenceDistance);
+            hashcode.Add(m_toiCollisionResponseRotateNormal);
+            hashcode.Add(m_maxSectorsPerMidphaseCollideTask);
+            hashcode.Add(m_maxSectorsPerNarrowphaseCollideTask);
+            hashcode.Add(m_processToisMultithreaded);
+            hashcode.Add(m_maxEntriesPerToiMidphaseCollideTask);
+            hashcode.Add(m_maxEntriesPerToiNarrowphaseCollideTask);
+            hashcode.Add(m_maxNumToiCollisionPairsSinglethreaded);
+            hashcode.Add(m_numToisTillAllowedPenetrationSimplifiedToi);
+            hashcode.Add(m_numToisTillAllowedPenetrationToi);
+            hashcode.Add(m_numToisTillAllowedPenetrationToiHigher);
+            hashcode.Add(m_numToisTillAllowedPenetrationToiForced);
+            hashcode.Add(m_lastEntityUid);
+            hashcode.Add(m_lastIslandUid);
+            hashcode.Add(m_lastConstraintUid);
+            hashcode.Add(m_phantoms.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_broadPhaseExtents.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_broadPhaseNumMarkers);
+            hashcode.Add(m_sizeOfToiEventQueue);
+            hashcode.Add(m_broadPhaseQuerySize);
+            hashcode.Add(m_broadPhaseUpdateSize);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -17,18 +18,18 @@ namespace HKX2
     // m_atEnd m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     // m_ignoreStartTime m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 101 flags: FLAGS_NONE enum: 
     // m_pingPongBackward m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 102 flags: FLAGS_NONE enum: 
-    public partial class hkbClipGeneratorInternalState : hkReferencedObject
+    public partial class hkbClipGeneratorInternalState : hkReferencedObject, IEquatable<hkbClipGeneratorInternalState?>
     {
-        public Matrix4x4 m_extractedMotion { set; get; } = default;
-        public IList<hkbClipGeneratorEcho> m_echos { set; get; } = new List<hkbClipGeneratorEcho>();
-        public float m_localTime { set; get; } = default;
-        public float m_time { set; get; } = default;
-        public float m_previousUserControlledTimeFraction { set; get; } = default;
-        public int m_bufferSize { set; get; } = default;
-        public int m_echoBufferSize { set; get; } = default;
-        public bool m_atEnd { set; get; } = default;
-        public bool m_ignoreStartTime { set; get; } = default;
-        public bool m_pingPongBackward { set; get; } = default;
+        public Matrix4x4 m_extractedMotion { set; get; }
+        public IList<hkbClipGeneratorEcho> m_echos { set; get; } = Array.Empty<hkbClipGeneratorEcho>();
+        public float m_localTime { set; get; }
+        public float m_time { set; get; }
+        public float m_previousUserControlledTimeFraction { set; get; }
+        public int m_bufferSize { set; get; }
+        public int m_echoBufferSize { set; get; }
+        public bool m_atEnd { set; get; }
+        public bool m_ignoreStartTime { set; get; }
+        public bool m_pingPongBackward { set; get; }
 
         public override uint Signature => 0x26ce5bf3;
 
@@ -83,7 +84,7 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteQSTransform(xe, nameof(m_extractedMotion), m_extractedMotion);
-            xs.WriteClassArray<hkbClipGeneratorEcho>(xe, nameof(m_echos), m_echos);
+            xs.WriteClassArray(xe, nameof(m_echos), m_echos);
             xs.WriteFloat(xe, nameof(m_localTime), m_localTime);
             xs.WriteFloat(xe, nameof(m_time), m_time);
             xs.WriteFloat(xe, nameof(m_previousUserControlledTimeFraction), m_previousUserControlledTimeFraction);
@@ -92,6 +93,46 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_atEnd), m_atEnd);
             xs.WriteBoolean(xe, nameof(m_ignoreStartTime), m_ignoreStartTime);
             xs.WriteBoolean(xe, nameof(m_pingPongBackward), m_pingPongBackward);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbClipGeneratorInternalState);
+        }
+
+        public bool Equals(hkbClipGeneratorInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_extractedMotion.Equals(other.m_extractedMotion) &&
+                   m_echos.SequenceEqual(other.m_echos) &&
+                   m_localTime.Equals(other.m_localTime) &&
+                   m_time.Equals(other.m_time) &&
+                   m_previousUserControlledTimeFraction.Equals(other.m_previousUserControlledTimeFraction) &&
+                   m_bufferSize.Equals(other.m_bufferSize) &&
+                   m_echoBufferSize.Equals(other.m_echoBufferSize) &&
+                   m_atEnd.Equals(other.m_atEnd) &&
+                   m_ignoreStartTime.Equals(other.m_ignoreStartTime) &&
+                   m_pingPongBackward.Equals(other.m_pingPongBackward) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_extractedMotion);
+            hashcode.Add(m_echos.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_localTime);
+            hashcode.Add(m_time);
+            hashcode.Add(m_previousUserControlledTimeFraction);
+            hashcode.Add(m_bufferSize);
+            hashcode.Add(m_echoBufferSize);
+            hashcode.Add(m_atEnd);
+            hashcode.Add(m_ignoreStartTime);
+            hashcode.Add(m_pingPongBackward);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

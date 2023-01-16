@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_nodeInternalStateInfos m_class: hkbNodeInternalStateInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_variableValueSet m_class: hkbVariableValueSet Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkbBehaviorGraphInternalState : hkReferencedObject
+    public partial class hkbBehaviorGraphInternalState : hkReferencedObject, IEquatable<hkbBehaviorGraphInternalState?>
     {
-        public IList<hkbNodeInternalStateInfo> m_nodeInternalStateInfos { set; get; } = new List<hkbNodeInternalStateInfo>();
-        public hkbVariableValueSet? m_variableValueSet { set; get; } = default;
+        public IList<hkbNodeInternalStateInfo> m_nodeInternalStateInfos { set; get; } = Array.Empty<hkbNodeInternalStateInfo>();
+        public hkbVariableValueSet? m_variableValueSet { set; get; }
 
         public override uint Signature => 0x8699b6eb;
 
@@ -40,8 +40,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkbNodeInternalStateInfo>(xe, nameof(m_nodeInternalStateInfos), m_nodeInternalStateInfos);
+            xs.WriteClassPointerArray(xe, nameof(m_nodeInternalStateInfos), m_nodeInternalStateInfos);
             xs.WriteClassPointer(xe, nameof(m_variableValueSet), m_variableValueSet);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBehaviorGraphInternalState);
+        }
+
+        public bool Equals(hkbBehaviorGraphInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_nodeInternalStateInfos.SequenceEqual(other.m_nodeInternalStateInfos) &&
+                   ((m_variableValueSet is null && other.m_variableValueSet is null) || (m_variableValueSet is not null && other.m_variableValueSet is not null && m_variableValueSet.Equals((IHavokObject)other.m_variableValueSet))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_nodeInternalStateInfos.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_variableValueSet);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

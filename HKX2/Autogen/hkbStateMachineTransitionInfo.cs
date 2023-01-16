@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,18 +15,18 @@ namespace HKX2
     // m_toNestedStateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
     // m_priority m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_INT16 arrSize: 0 offset: 66 flags: FLAGS_NONE enum: TransitionFlags
-    public partial class hkbStateMachineTransitionInfo : IHavokObject
+    public partial class hkbStateMachineTransitionInfo : IHavokObject, IEquatable<hkbStateMachineTransitionInfo?>
     {
         public hkbStateMachineTimeInterval m_triggerInterval { set; get; } = new();
         public hkbStateMachineTimeInterval m_initiateInterval { set; get; } = new();
-        public hkbTransitionEffect? m_transition { set; get; } = default;
-        public hkbCondition? m_condition { set; get; } = default;
-        public int m_eventId { set; get; } = default;
-        public int m_toStateId { set; get; } = default;
-        public int m_fromNestedStateId { set; get; } = default;
-        public int m_toNestedStateId { set; get; } = default;
-        public short m_priority { set; get; } = default;
-        public short m_flags { set; get; } = default;
+        public hkbTransitionEffect? m_transition { set; get; }
+        public hkbCondition? m_condition { set; get; }
+        public int m_eventId { set; get; }
+        public int m_toStateId { set; get; }
+        public int m_fromNestedStateId { set; get; }
+        public int m_toNestedStateId { set; get; }
+        public short m_priority { set; get; }
+        public short m_flags { set; get; }
 
         public virtual uint Signature => 0xcdec8025;
 
@@ -88,6 +86,44 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_toNestedStateId), m_toNestedStateId);
             xs.WriteNumber(xe, nameof(m_priority), m_priority);
             xs.WriteFlag<TransitionFlags, short>(xe, nameof(m_flags), m_flags);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineTransitionInfo);
+        }
+
+        public bool Equals(hkbStateMachineTransitionInfo? other)
+        {
+            return other is not null &&
+                   ((m_triggerInterval is null && other.m_triggerInterval is null) || (m_triggerInterval is not null && other.m_triggerInterval is not null && m_triggerInterval.Equals((IHavokObject)other.m_triggerInterval))) &&
+                   ((m_initiateInterval is null && other.m_initiateInterval is null) || (m_initiateInterval is not null && other.m_initiateInterval is not null && m_initiateInterval.Equals((IHavokObject)other.m_initiateInterval))) &&
+                   ((m_transition is null && other.m_transition is null) || (m_transition is not null && other.m_transition is not null && m_transition.Equals((IHavokObject)other.m_transition))) &&
+                   ((m_condition is null && other.m_condition is null) || (m_condition is not null && other.m_condition is not null && m_condition.Equals((IHavokObject)other.m_condition))) &&
+                   m_eventId.Equals(other.m_eventId) &&
+                   m_toStateId.Equals(other.m_toStateId) &&
+                   m_fromNestedStateId.Equals(other.m_fromNestedStateId) &&
+                   m_toNestedStateId.Equals(other.m_toNestedStateId) &&
+                   m_priority.Equals(other.m_priority) &&
+                   m_flags.Equals(other.m_flags) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_triggerInterval);
+            hashcode.Add(m_initiateInterval);
+            hashcode.Add(m_transition);
+            hashcode.Add(m_condition);
+            hashcode.Add(m_eventId);
+            hashcode.Add(m_toStateId);
+            hashcode.Add(m_fromNestedStateId);
+            hashcode.Add(m_toNestedStateId);
+            hashcode.Add(m_priority);
+            hashcode.Add(m_flags);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

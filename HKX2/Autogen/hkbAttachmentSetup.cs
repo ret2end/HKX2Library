@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,16 +13,16 @@ namespace HKX2
     // m_maxLinearDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_maxAngularDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_attachmentType m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 44 flags: FLAGS_NONE enum: AttachmentType
-    public partial class hkbAttachmentSetup : hkReferencedObject
+    public partial class hkbAttachmentSetup : hkReferencedObject, IEquatable<hkbAttachmentSetup?>
     {
-        public float m_blendInTime { set; get; } = default;
-        public float m_moveAttacherFraction { set; get; } = default;
-        public float m_gain { set; get; } = default;
-        public float m_extrapolationTimeStep { set; get; } = default;
-        public float m_fixUpGain { set; get; } = default;
-        public float m_maxLinearDistance { set; get; } = default;
-        public float m_maxAngularDistance { set; get; } = default;
-        public sbyte m_attachmentType { set; get; } = default;
+        public float m_blendInTime { set; get; }
+        public float m_moveAttacherFraction { set; get; }
+        public float m_gain { set; get; }
+        public float m_extrapolationTimeStep { set; get; }
+        public float m_fixUpGain { set; get; }
+        public float m_maxLinearDistance { set; get; }
+        public float m_maxAngularDistance { set; get; }
+        public sbyte m_attachmentType { set; get; }
 
         public override uint Signature => 0x774632b;
 
@@ -80,6 +78,42 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_maxLinearDistance), m_maxLinearDistance);
             xs.WriteFloat(xe, nameof(m_maxAngularDistance), m_maxAngularDistance);
             xs.WriteEnum<AttachmentType, sbyte>(xe, nameof(m_attachmentType), m_attachmentType);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbAttachmentSetup);
+        }
+
+        public bool Equals(hkbAttachmentSetup? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_blendInTime.Equals(other.m_blendInTime) &&
+                   m_moveAttacherFraction.Equals(other.m_moveAttacherFraction) &&
+                   m_gain.Equals(other.m_gain) &&
+                   m_extrapolationTimeStep.Equals(other.m_extrapolationTimeStep) &&
+                   m_fixUpGain.Equals(other.m_fixUpGain) &&
+                   m_maxLinearDistance.Equals(other.m_maxLinearDistance) &&
+                   m_maxAngularDistance.Equals(other.m_maxAngularDistance) &&
+                   m_attachmentType.Equals(other.m_attachmentType) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_blendInTime);
+            hashcode.Add(m_moveAttacherFraction);
+            hashcode.Add(m_gain);
+            hashcode.Add(m_extrapolationTimeStep);
+            hashcode.Add(m_fixUpGain);
+            hashcode.Add(m_maxLinearDistance);
+            hashcode.Add(m_maxAngularDistance);
+            hashcode.Add(m_attachmentType);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

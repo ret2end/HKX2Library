@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +11,12 @@ namespace HKX2
     // m_depth m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 17 flags: FLAGS_NONE enum: 
     // m_referenceBehaviorName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_selfTransitionNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkbAuxiliaryNodeInfo : hkReferencedObject
+    public partial class hkbAuxiliaryNodeInfo : hkReferencedObject, IEquatable<hkbAuxiliaryNodeInfo?>
     {
-        public byte m_type { set; get; } = default;
-        public byte m_depth { set; get; } = default;
+        public byte m_type { set; get; }
+        public byte m_depth { set; get; }
         public string m_referenceBehaviorName { set; get; } = "";
-        public IList<string> m_selfTransitionNames { set; get; } = new List<string>();
+        public IList<string> m_selfTransitionNames { set; get; } = Array.Empty<string>();
 
         public override uint Signature => 0xca0888ca;
 
@@ -56,6 +56,34 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_depth), m_depth);
             xs.WriteString(xe, nameof(m_referenceBehaviorName), m_referenceBehaviorName);
             xs.WriteStringArray(xe, nameof(m_selfTransitionNames), m_selfTransitionNames);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbAuxiliaryNodeInfo);
+        }
+
+        public bool Equals(hkbAuxiliaryNodeInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   m_depth.Equals(other.m_depth) &&
+                   (m_referenceBehaviorName is null && other.m_referenceBehaviorName is null || m_referenceBehaviorName == other.m_referenceBehaviorName || m_referenceBehaviorName is null && other.m_referenceBehaviorName == "" || m_referenceBehaviorName == "" && other.m_referenceBehaviorName is null) &&
+                   m_selfTransitionNames.SequenceEqual(other.m_selfTransitionNames) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(m_depth);
+            hashcode.Add(m_referenceBehaviorName);
+            hashcode.Add(m_selfTransitionNames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

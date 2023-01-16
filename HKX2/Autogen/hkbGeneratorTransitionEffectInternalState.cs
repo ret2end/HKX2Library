@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,18 +15,18 @@ namespace HKX2
     // m_justActivated m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 35 flags: FLAGS_NONE enum: 
     // m_updateActiveNodes m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_stage m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 37 flags: FLAGS_NONE enum: Stage
-    public partial class hkbGeneratorTransitionEffectInternalState : hkReferencedObject
+    public partial class hkbGeneratorTransitionEffectInternalState : hkReferencedObject, IEquatable<hkbGeneratorTransitionEffectInternalState?>
     {
-        public float m_timeInTransition { set; get; } = default;
-        public float m_duration { set; get; } = default;
-        public float m_effectiveBlendInDuration { set; get; } = default;
-        public float m_effectiveBlendOutDuration { set; get; } = default;
-        public sbyte m_toGeneratorState { set; get; } = default;
-        public bool m_echoTransitionGenerator { set; get; } = default;
-        public bool m_echoToGenerator { set; get; } = default;
-        public bool m_justActivated { set; get; } = default;
-        public bool m_updateActiveNodes { set; get; } = default;
-        public sbyte m_stage { set; get; } = default;
+        public float m_timeInTransition { set; get; }
+        public float m_duration { set; get; }
+        public float m_effectiveBlendInDuration { set; get; }
+        public float m_effectiveBlendOutDuration { set; get; }
+        public sbyte m_toGeneratorState { set; get; }
+        public bool m_echoTransitionGenerator { set; get; }
+        public bool m_echoToGenerator { set; get; }
+        public bool m_justActivated { set; get; }
+        public bool m_updateActiveNodes { set; get; }
+        public sbyte m_stage { set; get; }
 
         public override uint Signature => 0xd6692b5d;
 
@@ -92,6 +90,46 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_justActivated), m_justActivated);
             xs.WriteBoolean(xe, nameof(m_updateActiveNodes), m_updateActiveNodes);
             xs.WriteEnum<Stage, sbyte>(xe, nameof(m_stage), m_stage);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbGeneratorTransitionEffectInternalState);
+        }
+
+        public bool Equals(hkbGeneratorTransitionEffectInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_timeInTransition.Equals(other.m_timeInTransition) &&
+                   m_duration.Equals(other.m_duration) &&
+                   m_effectiveBlendInDuration.Equals(other.m_effectiveBlendInDuration) &&
+                   m_effectiveBlendOutDuration.Equals(other.m_effectiveBlendOutDuration) &&
+                   m_toGeneratorState.Equals(other.m_toGeneratorState) &&
+                   m_echoTransitionGenerator.Equals(other.m_echoTransitionGenerator) &&
+                   m_echoToGenerator.Equals(other.m_echoToGenerator) &&
+                   m_justActivated.Equals(other.m_justActivated) &&
+                   m_updateActiveNodes.Equals(other.m_updateActiveNodes) &&
+                   m_stage.Equals(other.m_stage) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_timeInTransition);
+            hashcode.Add(m_duration);
+            hashcode.Add(m_effectiveBlendInDuration);
+            hashcode.Add(m_effectiveBlendOutDuration);
+            hashcode.Add(m_toGeneratorState);
+            hashcode.Add(m_echoTransitionGenerator);
+            hashcode.Add(m_echoToGenerator);
+            hashcode.Add(m_justActivated);
+            hashcode.Add(m_updateActiveNodes);
+            hashcode.Add(m_stage);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

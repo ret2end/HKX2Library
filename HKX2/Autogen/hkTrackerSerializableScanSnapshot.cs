@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +14,15 @@ namespace HKX2
     // m_traceText m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_traceAddrs m_class:  Type.TYPE_ARRAY Type.TYPE_UINT64 arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_traceParents m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkTrackerSerializableScanSnapshot : hkReferencedObject
+    public partial class hkTrackerSerializableScanSnapshot : hkReferencedObject, IEquatable<hkTrackerSerializableScanSnapshot?>
     {
-        public IList<hkTrackerSerializableScanSnapshotAllocation> m_allocations { set; get; } = new List<hkTrackerSerializableScanSnapshotAllocation>();
-        public IList<hkTrackerSerializableScanSnapshotBlock> m_blocks { set; get; } = new List<hkTrackerSerializableScanSnapshotBlock>();
-        public IList<int> m_refs { set; get; } = new List<int>();
-        public IList<byte> m_typeNames { set; get; } = new List<byte>();
-        public IList<byte> m_traceText { set; get; } = new List<byte>();
-        public IList<ulong> m_traceAddrs { set; get; } = new List<ulong>();
-        public IList<int> m_traceParents { set; get; } = new List<int>();
+        public IList<hkTrackerSerializableScanSnapshotAllocation> m_allocations { set; get; } = Array.Empty<hkTrackerSerializableScanSnapshotAllocation>();
+        public IList<hkTrackerSerializableScanSnapshotBlock> m_blocks { set; get; } = Array.Empty<hkTrackerSerializableScanSnapshotBlock>();
+        public IList<int> m_refs { set; get; } = Array.Empty<int>();
+        public IList<byte> m_typeNames { set; get; } = Array.Empty<byte>();
+        public IList<byte> m_traceText { set; get; } = Array.Empty<byte>();
+        public IList<ulong> m_traceAddrs { set; get; } = Array.Empty<ulong>();
+        public IList<int> m_traceParents { set; get; } = Array.Empty<int>();
 
         public override uint Signature => 0x875af1d9;
 
@@ -65,13 +65,47 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkTrackerSerializableScanSnapshotAllocation>(xe, nameof(m_allocations), m_allocations);
-            xs.WriteClassArray<hkTrackerSerializableScanSnapshotBlock>(xe, nameof(m_blocks), m_blocks);
+            xs.WriteClassArray(xe, nameof(m_allocations), m_allocations);
+            xs.WriteClassArray(xe, nameof(m_blocks), m_blocks);
             xs.WriteNumberArray(xe, nameof(m_refs), m_refs);
             xs.WriteNumberArray(xe, nameof(m_typeNames), m_typeNames);
             xs.WriteNumberArray(xe, nameof(m_traceText), m_traceText);
             xs.WriteNumberArray(xe, nameof(m_traceAddrs), m_traceAddrs);
             xs.WriteNumberArray(xe, nameof(m_traceParents), m_traceParents);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkTrackerSerializableScanSnapshot);
+        }
+
+        public bool Equals(hkTrackerSerializableScanSnapshot? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_allocations.SequenceEqual(other.m_allocations) &&
+                   m_blocks.SequenceEqual(other.m_blocks) &&
+                   m_refs.SequenceEqual(other.m_refs) &&
+                   m_typeNames.SequenceEqual(other.m_typeNames) &&
+                   m_traceText.SequenceEqual(other.m_traceText) &&
+                   m_traceAddrs.SequenceEqual(other.m_traceAddrs) &&
+                   m_traceParents.SequenceEqual(other.m_traceParents) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_allocations.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_blocks.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_refs.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_typeNames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_traceText.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_traceAddrs.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_traceParents.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

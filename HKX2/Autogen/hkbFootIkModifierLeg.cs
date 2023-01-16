@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,27 +25,27 @@ namespace HKX2
     // m_hitSomething m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 150 flags: FLAGS_NONE enum: 
     // m_isPlantedMS m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 151 flags: FLAGS_NONE enum: 
     // m_isOriginalAnkleTransformMSSet m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
-    public partial class hkbFootIkModifierLeg : IHavokObject
+    public partial class hkbFootIkModifierLeg : IHavokObject, IEquatable<hkbFootIkModifierLeg?>
     {
-        public Matrix4x4 m_originalAnkleTransformMS { set; get; } = default;
-        private Quaternion m_prevAnkleRotLS { set; get; } = default;
-        public Vector4 m_kneeAxisLS { set; get; } = default;
-        public Vector4 m_footEndLS { set; get; } = default;
+        public Matrix4x4 m_originalAnkleTransformMS { set; get; }
+        private Quaternion m_prevAnkleRotLS { set; get; }
+        public Vector4 m_kneeAxisLS { set; get; }
+        public Vector4 m_footEndLS { set; get; }
         public hkbEventProperty m_ungroundedEvent { set; get; } = new();
-        public float m_footPlantedAnkleHeightMS { set; get; } = default;
-        public float m_footRaisedAnkleHeightMS { set; get; } = default;
-        public float m_maxAnkleHeightMS { set; get; } = default;
-        public float m_minAnkleHeightMS { set; get; } = default;
-        public float m_maxKneeAngleDegrees { set; get; } = default;
-        public float m_minKneeAngleDegrees { set; get; } = default;
-        public float m_verticalError { set; get; } = default;
-        public float m_maxAnkleAngleDegrees { set; get; } = default;
-        public short m_hipIndex { set; get; } = default;
-        public short m_kneeIndex { set; get; } = default;
-        public short m_ankleIndex { set; get; } = default;
-        public bool m_hitSomething { set; get; } = default;
-        public bool m_isPlantedMS { set; get; } = default;
-        public bool m_isOriginalAnkleTransformMSSet { set; get; } = default;
+        public float m_footPlantedAnkleHeightMS { set; get; }
+        public float m_footRaisedAnkleHeightMS { set; get; }
+        public float m_maxAnkleHeightMS { set; get; }
+        public float m_minAnkleHeightMS { set; get; }
+        public float m_maxKneeAngleDegrees { set; get; }
+        public float m_minKneeAngleDegrees { set; get; }
+        public float m_verticalError { set; get; }
+        public float m_maxAnkleAngleDegrees { set; get; }
+        public short m_hipIndex { set; get; }
+        public short m_kneeIndex { set; get; }
+        public short m_ankleIndex { set; get; }
+        public bool m_hitSomething { set; get; }
+        public bool m_isPlantedMS { set; get; }
+        public bool m_isOriginalAnkleTransformMSSet { set; get; }
 
         public virtual uint Signature => 0x9f3e3a04;
 
@@ -141,6 +140,60 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_hitSomething), m_hitSomething);
             xs.WriteBoolean(xe, nameof(m_isPlantedMS), m_isPlantedMS);
             xs.WriteBoolean(xe, nameof(m_isOriginalAnkleTransformMSSet), m_isOriginalAnkleTransformMSSet);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbFootIkModifierLeg);
+        }
+
+        public bool Equals(hkbFootIkModifierLeg? other)
+        {
+            return other is not null &&
+                   m_originalAnkleTransformMS.Equals(other.m_originalAnkleTransformMS) &&
+                   m_kneeAxisLS.Equals(other.m_kneeAxisLS) &&
+                   m_footEndLS.Equals(other.m_footEndLS) &&
+                   ((m_ungroundedEvent is null && other.m_ungroundedEvent is null) || (m_ungroundedEvent is not null && other.m_ungroundedEvent is not null && m_ungroundedEvent.Equals((IHavokObject)other.m_ungroundedEvent))) &&
+                   m_footPlantedAnkleHeightMS.Equals(other.m_footPlantedAnkleHeightMS) &&
+                   m_footRaisedAnkleHeightMS.Equals(other.m_footRaisedAnkleHeightMS) &&
+                   m_maxAnkleHeightMS.Equals(other.m_maxAnkleHeightMS) &&
+                   m_minAnkleHeightMS.Equals(other.m_minAnkleHeightMS) &&
+                   m_maxKneeAngleDegrees.Equals(other.m_maxKneeAngleDegrees) &&
+                   m_minKneeAngleDegrees.Equals(other.m_minKneeAngleDegrees) &&
+                   m_verticalError.Equals(other.m_verticalError) &&
+                   m_maxAnkleAngleDegrees.Equals(other.m_maxAnkleAngleDegrees) &&
+                   m_hipIndex.Equals(other.m_hipIndex) &&
+                   m_kneeIndex.Equals(other.m_kneeIndex) &&
+                   m_ankleIndex.Equals(other.m_ankleIndex) &&
+                   m_hitSomething.Equals(other.m_hitSomething) &&
+                   m_isPlantedMS.Equals(other.m_isPlantedMS) &&
+                   m_isOriginalAnkleTransformMSSet.Equals(other.m_isOriginalAnkleTransformMSSet) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_originalAnkleTransformMS);
+            hashcode.Add(m_kneeAxisLS);
+            hashcode.Add(m_footEndLS);
+            hashcode.Add(m_ungroundedEvent);
+            hashcode.Add(m_footPlantedAnkleHeightMS);
+            hashcode.Add(m_footRaisedAnkleHeightMS);
+            hashcode.Add(m_maxAnkleHeightMS);
+            hashcode.Add(m_minAnkleHeightMS);
+            hashcode.Add(m_maxKneeAngleDegrees);
+            hashcode.Add(m_minKneeAngleDegrees);
+            hashcode.Add(m_verticalError);
+            hashcode.Add(m_maxAnkleAngleDegrees);
+            hashcode.Add(m_hipIndex);
+            hashcode.Add(m_kneeIndex);
+            hashcode.Add(m_ankleIndex);
+            hashcode.Add(m_hitSomething);
+            hashcode.Add(m_isPlantedMS);
+            hashcode.Add(m_isOriginalAnkleTransformMSSet);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

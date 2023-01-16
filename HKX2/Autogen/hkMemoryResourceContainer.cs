@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +11,12 @@ namespace HKX2
     // m_parent m_class: hkMemoryResourceContainer Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 24 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_resourceHandles m_class: hkMemoryResourceHandle Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_children m_class: hkMemoryResourceContainer Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkMemoryResourceContainer : hkResourceContainer
+    public partial class hkMemoryResourceContainer : hkResourceContainer, IEquatable<hkMemoryResourceContainer?>
     {
         public string m_name { set; get; } = "";
-        private hkMemoryResourceContainer? m_parent { set; get; } = default;
-        public IList<hkMemoryResourceHandle> m_resourceHandles { set; get; } = new List<hkMemoryResourceHandle>();
-        public IList<hkMemoryResourceContainer> m_children { set; get; } = new List<hkMemoryResourceContainer>();
+        private hkMemoryResourceContainer? m_parent { set; get; }
+        public IList<hkMemoryResourceHandle> m_resourceHandles { set; get; } = Array.Empty<hkMemoryResourceHandle>();
+        public IList<hkMemoryResourceContainer> m_children { set; get; } = Array.Empty<hkMemoryResourceContainer>();
 
         public override uint Signature => 0x4762f92a;
 
@@ -51,8 +51,34 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteSerializeIgnored(xe, nameof(m_parent));
-            xs.WriteClassPointerArray<hkMemoryResourceHandle>(xe, nameof(m_resourceHandles), m_resourceHandles);
-            xs.WriteClassPointerArray<hkMemoryResourceContainer>(xe, nameof(m_children), m_children);
+            xs.WriteClassPointerArray(xe, nameof(m_resourceHandles), m_resourceHandles);
+            xs.WriteClassPointerArray(xe, nameof(m_children), m_children);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkMemoryResourceContainer);
+        }
+
+        public bool Equals(hkMemoryResourceContainer? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_resourceHandles.SequenceEqual(other.m_resourceHandles) &&
+                   m_children.SequenceEqual(other.m_children) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(m_resourceHandles.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_children.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

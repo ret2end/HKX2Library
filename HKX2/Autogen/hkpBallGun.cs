@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,15 +13,15 @@ namespace HKX2
     // m_maxBulletsInWorld m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_bulletOffsetFromCenter m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_addedBodies m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpBallGun : hkpFirstPersonGun
+    public partial class hkpBallGun : hkpFirstPersonGun, IEquatable<hkpBallGun?>
     {
-        public float m_bulletRadius { set; get; } = default;
-        public float m_bulletVelocity { set; get; } = default;
-        public float m_bulletMass { set; get; } = default;
-        public float m_damageMultiplier { set; get; } = default;
-        public int m_maxBulletsInWorld { set; get; } = default;
-        public Vector4 m_bulletOffsetFromCenter { set; get; } = default;
-        private object? m_addedBodies { set; get; } = default;
+        public float m_bulletRadius { set; get; }
+        public float m_bulletVelocity { set; get; }
+        public float m_bulletMass { set; get; }
+        public float m_damageMultiplier { set; get; }
+        public int m_maxBulletsInWorld { set; get; }
+        public Vector4 m_bulletOffsetFromCenter { set; get; }
+        private object? m_addedBodies { set; get; }
 
         public override uint Signature => 0x57b06d35;
 
@@ -75,6 +74,38 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_maxBulletsInWorld), m_maxBulletsInWorld);
             xs.WriteVector4(xe, nameof(m_bulletOffsetFromCenter), m_bulletOffsetFromCenter);
             xs.WriteSerializeIgnored(xe, nameof(m_addedBodies));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpBallGun);
+        }
+
+        public bool Equals(hkpBallGun? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_bulletRadius.Equals(other.m_bulletRadius) &&
+                   m_bulletVelocity.Equals(other.m_bulletVelocity) &&
+                   m_bulletMass.Equals(other.m_bulletMass) &&
+                   m_damageMultiplier.Equals(other.m_damageMultiplier) &&
+                   m_maxBulletsInWorld.Equals(other.m_maxBulletsInWorld) &&
+                   m_bulletOffsetFromCenter.Equals(other.m_bulletOffsetFromCenter) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_bulletRadius);
+            hashcode.Add(m_bulletVelocity);
+            hashcode.Add(m_bulletMass);
+            hashcode.Add(m_damageMultiplier);
+            hashcode.Add(m_maxBulletsInWorld);
+            hashcode.Add(m_bulletOffsetFromCenter);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

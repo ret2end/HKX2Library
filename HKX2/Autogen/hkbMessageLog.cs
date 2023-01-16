@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_messages m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 0 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_maxMessages m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbMessageLog : IHavokObject
+    public partial class hkbMessageLog : IHavokObject, IEquatable<hkbMessageLog?>
     {
-        private object? m_messages { set; get; } = default;
-        private int m_maxMessages { set; get; } = default;
+        private object? m_messages { set; get; }
+        private int m_maxMessages { set; get; }
 
         public virtual uint Signature => 0x26a196c5;
 
@@ -39,6 +37,25 @@ namespace HKX2
         {
             xs.WriteSerializeIgnored(xe, nameof(m_messages));
             xs.WriteSerializeIgnored(xe, nameof(m_maxMessages));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbMessageLog);
+        }
+
+        public bool Equals(hkbMessageLog? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

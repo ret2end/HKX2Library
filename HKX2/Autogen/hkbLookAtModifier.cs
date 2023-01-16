@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -27,28 +26,28 @@ namespace HKX2
     // m_isTargetInsideLimitCone m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 198 flags: FLAGS_NONE enum: 
     // m_lookAtLastTargetWS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 208 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_lookAtWeight m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 224 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbLookAtModifier : hkbModifier
+    public partial class hkbLookAtModifier : hkbModifier, IEquatable<hkbLookAtModifier?>
     {
-        public Vector4 m_targetWS { set; get; } = default;
-        public Vector4 m_headForwardLS { set; get; } = default;
-        public Vector4 m_neckForwardLS { set; get; } = default;
-        public Vector4 m_neckRightLS { set; get; } = default;
-        public Vector4 m_eyePositionHS { set; get; } = default;
-        public float m_newTargetGain { set; get; } = default;
-        public float m_onGain { set; get; } = default;
-        public float m_offGain { set; get; } = default;
-        public float m_limitAngleDegrees { set; get; } = default;
-        public float m_limitAngleLeft { set; get; } = default;
-        public float m_limitAngleRight { set; get; } = default;
-        public float m_limitAngleUp { set; get; } = default;
-        public float m_limitAngleDown { set; get; } = default;
-        public short m_headIndex { set; get; } = default;
-        public short m_neckIndex { set; get; } = default;
-        public bool m_isOn { set; get; } = default;
-        public bool m_individualLimitsOn { set; get; } = default;
-        public bool m_isTargetInsideLimitCone { set; get; } = default;
-        private Vector4 m_lookAtLastTargetWS { set; get; } = default;
-        private float m_lookAtWeight { set; get; } = default;
+        public Vector4 m_targetWS { set; get; }
+        public Vector4 m_headForwardLS { set; get; }
+        public Vector4 m_neckForwardLS { set; get; }
+        public Vector4 m_neckRightLS { set; get; }
+        public Vector4 m_eyePositionHS { set; get; }
+        public float m_newTargetGain { set; get; }
+        public float m_onGain { set; get; }
+        public float m_offGain { set; get; }
+        public float m_limitAngleDegrees { set; get; }
+        public float m_limitAngleLeft { set; get; }
+        public float m_limitAngleRight { set; get; }
+        public float m_limitAngleUp { set; get; }
+        public float m_limitAngleDown { set; get; }
+        public short m_headIndex { set; get; }
+        public short m_neckIndex { set; get; }
+        public bool m_isOn { set; get; }
+        public bool m_individualLimitsOn { set; get; }
+        public bool m_isTargetInsideLimitCone { set; get; }
+        private Vector4 m_lookAtLastTargetWS { set; get; }
+        private float m_lookAtWeight { set; get; }
 
         public override uint Signature => 0x3d28e066;
 
@@ -152,6 +151,62 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_isTargetInsideLimitCone), m_isTargetInsideLimitCone);
             xs.WriteSerializeIgnored(xe, nameof(m_lookAtLastTargetWS));
             xs.WriteSerializeIgnored(xe, nameof(m_lookAtWeight));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbLookAtModifier);
+        }
+
+        public bool Equals(hkbLookAtModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_targetWS.Equals(other.m_targetWS) &&
+                   m_headForwardLS.Equals(other.m_headForwardLS) &&
+                   m_neckForwardLS.Equals(other.m_neckForwardLS) &&
+                   m_neckRightLS.Equals(other.m_neckRightLS) &&
+                   m_eyePositionHS.Equals(other.m_eyePositionHS) &&
+                   m_newTargetGain.Equals(other.m_newTargetGain) &&
+                   m_onGain.Equals(other.m_onGain) &&
+                   m_offGain.Equals(other.m_offGain) &&
+                   m_limitAngleDegrees.Equals(other.m_limitAngleDegrees) &&
+                   m_limitAngleLeft.Equals(other.m_limitAngleLeft) &&
+                   m_limitAngleRight.Equals(other.m_limitAngleRight) &&
+                   m_limitAngleUp.Equals(other.m_limitAngleUp) &&
+                   m_limitAngleDown.Equals(other.m_limitAngleDown) &&
+                   m_headIndex.Equals(other.m_headIndex) &&
+                   m_neckIndex.Equals(other.m_neckIndex) &&
+                   m_isOn.Equals(other.m_isOn) &&
+                   m_individualLimitsOn.Equals(other.m_individualLimitsOn) &&
+                   m_isTargetInsideLimitCone.Equals(other.m_isTargetInsideLimitCone) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_targetWS);
+            hashcode.Add(m_headForwardLS);
+            hashcode.Add(m_neckForwardLS);
+            hashcode.Add(m_neckRightLS);
+            hashcode.Add(m_eyePositionHS);
+            hashcode.Add(m_newTargetGain);
+            hashcode.Add(m_onGain);
+            hashcode.Add(m_offGain);
+            hashcode.Add(m_limitAngleDegrees);
+            hashcode.Add(m_limitAngleLeft);
+            hashcode.Add(m_limitAngleRight);
+            hashcode.Add(m_limitAngleUp);
+            hashcode.Add(m_limitAngleDown);
+            hashcode.Add(m_headIndex);
+            hashcode.Add(m_neckIndex);
+            hashcode.Add(m_isOn);
+            hashcode.Add(m_individualLimitsOn);
+            hashcode.Add(m_isTargetInsideLimitCone);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

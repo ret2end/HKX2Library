@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,17 +16,17 @@ namespace HKX2
     // m_cfmAngAdd m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_cfmAngMul m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
     // m_maxErrorDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
-    public partial class hkpPoweredChainData : hkpConstraintChainData
+    public partial class hkpPoweredChainData : hkpConstraintChainData, IEquatable<hkpPoweredChainData?>
     {
         public hkpBridgeAtoms m_atoms { set; get; } = new();
-        public IList<hkpPoweredChainDataConstraintInfo> m_infos { set; get; } = new List<hkpPoweredChainDataConstraintInfo>();
-        public float m_tau { set; get; } = default;
-        public float m_damping { set; get; } = default;
-        public float m_cfmLinAdd { set; get; } = default;
-        public float m_cfmLinMul { set; get; } = default;
-        public float m_cfmAngAdd { set; get; } = default;
-        public float m_cfmAngMul { set; get; } = default;
-        public float m_maxErrorDistance { set; get; } = default;
+        public IList<hkpPoweredChainDataConstraintInfo> m_infos { set; get; } = Array.Empty<hkpPoweredChainDataConstraintInfo>();
+        public float m_tau { set; get; }
+        public float m_damping { set; get; }
+        public float m_cfmLinAdd { set; get; }
+        public float m_cfmLinMul { set; get; }
+        public float m_cfmAngAdd { set; get; }
+        public float m_cfmAngMul { set; get; }
+        public float m_maxErrorDistance { set; get; }
 
         public override uint Signature => 0x38aeafc3;
 
@@ -78,7 +78,7 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteClass<hkpBridgeAtoms>(xe, nameof(m_atoms), m_atoms);
-            xs.WriteClassArray<hkpPoweredChainDataConstraintInfo>(xe, nameof(m_infos), m_infos);
+            xs.WriteClassArray(xe, nameof(m_infos), m_infos);
             xs.WriteFloat(xe, nameof(m_tau), m_tau);
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
             xs.WriteFloat(xe, nameof(m_cfmLinAdd), m_cfmLinAdd);
@@ -86,6 +86,44 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_cfmAngAdd), m_cfmAngAdd);
             xs.WriteFloat(xe, nameof(m_cfmAngMul), m_cfmAngMul);
             xs.WriteFloat(xe, nameof(m_maxErrorDistance), m_maxErrorDistance);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPoweredChainData);
+        }
+
+        public bool Equals(hkpPoweredChainData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_atoms is null && other.m_atoms is null) || (m_atoms is not null && other.m_atoms is not null && m_atoms.Equals((IHavokObject)other.m_atoms))) &&
+                   m_infos.SequenceEqual(other.m_infos) &&
+                   m_tau.Equals(other.m_tau) &&
+                   m_damping.Equals(other.m_damping) &&
+                   m_cfmLinAdd.Equals(other.m_cfmLinAdd) &&
+                   m_cfmLinMul.Equals(other.m_cfmLinMul) &&
+                   m_cfmAngAdd.Equals(other.m_cfmAngAdd) &&
+                   m_cfmAngMul.Equals(other.m_cfmAngMul) &&
+                   m_maxErrorDistance.Equals(other.m_maxErrorDistance) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_atoms);
+            hashcode.Add(m_infos.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_tau);
+            hashcode.Add(m_damping);
+            hashcode.Add(m_cfmLinAdd);
+            hashcode.Add(m_cfmLinMul);
+            hashcode.Add(m_cfmAngAdd);
+            hashcode.Add(m_cfmAngMul);
+            hashcode.Add(m_maxErrorDistance);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

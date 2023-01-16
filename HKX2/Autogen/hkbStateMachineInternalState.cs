@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,19 +18,19 @@ namespace HKX2
     // m_nextStartStateIndexOverride m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_stateOrTransitionChanged m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     // m_echoNextUpdate m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 101 flags: FLAGS_NONE enum: 
-    public partial class hkbStateMachineInternalState : hkReferencedObject
+    public partial class hkbStateMachineInternalState : hkReferencedObject, IEquatable<hkbStateMachineInternalState?>
     {
-        public IList<hkbStateMachineActiveTransitionInfo> m_activeTransitions { set; get; } = new List<hkbStateMachineActiveTransitionInfo>();
-        public IList<byte> m_transitionFlags { set; get; } = new List<byte>();
-        public IList<byte> m_wildcardTransitionFlags { set; get; } = new List<byte>();
-        public IList<hkbStateMachineDelayedTransitionInfo> m_delayedTransitions { set; get; } = new List<hkbStateMachineDelayedTransitionInfo>();
-        public float m_timeInState { set; get; } = default;
-        public float m_lastLocalTime { set; get; } = default;
-        public int m_currentStateId { set; get; } = default;
-        public int m_previousStateId { set; get; } = default;
-        public int m_nextStartStateIndexOverride { set; get; } = default;
-        public bool m_stateOrTransitionChanged { set; get; } = default;
-        public bool m_echoNextUpdate { set; get; } = default;
+        public IList<hkbStateMachineActiveTransitionInfo> m_activeTransitions { set; get; } = Array.Empty<hkbStateMachineActiveTransitionInfo>();
+        public IList<byte> m_transitionFlags { set; get; } = Array.Empty<byte>();
+        public IList<byte> m_wildcardTransitionFlags { set; get; } = Array.Empty<byte>();
+        public IList<hkbStateMachineDelayedTransitionInfo> m_delayedTransitions { set; get; } = Array.Empty<hkbStateMachineDelayedTransitionInfo>();
+        public float m_timeInState { set; get; }
+        public float m_lastLocalTime { set; get; }
+        public int m_currentStateId { set; get; }
+        public int m_previousStateId { set; get; }
+        public int m_nextStartStateIndexOverride { set; get; }
+        public bool m_stateOrTransitionChanged { set; get; }
+        public bool m_echoNextUpdate { set; get; }
 
         public override uint Signature => 0xbd1a7502;
 
@@ -87,10 +87,10 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkbStateMachineActiveTransitionInfo>(xe, nameof(m_activeTransitions), m_activeTransitions);
+            xs.WriteClassArray(xe, nameof(m_activeTransitions), m_activeTransitions);
             xs.WriteNumberArray(xe, nameof(m_transitionFlags), m_transitionFlags);
             xs.WriteNumberArray(xe, nameof(m_wildcardTransitionFlags), m_wildcardTransitionFlags);
-            xs.WriteClassArray<hkbStateMachineDelayedTransitionInfo>(xe, nameof(m_delayedTransitions), m_delayedTransitions);
+            xs.WriteClassArray(xe, nameof(m_delayedTransitions), m_delayedTransitions);
             xs.WriteFloat(xe, nameof(m_timeInState), m_timeInState);
             xs.WriteFloat(xe, nameof(m_lastLocalTime), m_lastLocalTime);
             xs.WriteNumber(xe, nameof(m_currentStateId), m_currentStateId);
@@ -98,6 +98,48 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_nextStartStateIndexOverride), m_nextStartStateIndexOverride);
             xs.WriteBoolean(xe, nameof(m_stateOrTransitionChanged), m_stateOrTransitionChanged);
             xs.WriteBoolean(xe, nameof(m_echoNextUpdate), m_echoNextUpdate);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineInternalState);
+        }
+
+        public bool Equals(hkbStateMachineInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_activeTransitions.SequenceEqual(other.m_activeTransitions) &&
+                   m_transitionFlags.SequenceEqual(other.m_transitionFlags) &&
+                   m_wildcardTransitionFlags.SequenceEqual(other.m_wildcardTransitionFlags) &&
+                   m_delayedTransitions.SequenceEqual(other.m_delayedTransitions) &&
+                   m_timeInState.Equals(other.m_timeInState) &&
+                   m_lastLocalTime.Equals(other.m_lastLocalTime) &&
+                   m_currentStateId.Equals(other.m_currentStateId) &&
+                   m_previousStateId.Equals(other.m_previousStateId) &&
+                   m_nextStartStateIndexOverride.Equals(other.m_nextStartStateIndexOverride) &&
+                   m_stateOrTransitionChanged.Equals(other.m_stateOrTransitionChanged) &&
+                   m_echoNextUpdate.Equals(other.m_echoNextUpdate) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_activeTransitions.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_transitionFlags.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_wildcardTransitionFlags.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_delayedTransitions.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_timeInState);
+            hashcode.Add(m_lastLocalTime);
+            hashcode.Add(m_currentStateId);
+            hashcode.Add(m_previousStateId);
+            hashcode.Add(m_nextStartStateIndexOverride);
+            hashcode.Add(m_stateOrTransitionChanged);
+            hashcode.Add(m_echoNextUpdate);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

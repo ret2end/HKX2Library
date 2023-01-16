@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +11,13 @@ namespace HKX2
     // m_direction m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_color m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_angle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
-    public partial class hkxLight : hkReferencedObject
+    public partial class hkxLight : hkReferencedObject, IEquatable<hkxLight?>
     {
-        public sbyte m_type { set; get; } = default;
-        public Vector4 m_position { set; get; } = default;
-        public Vector4 m_direction { set; get; } = default;
-        public uint m_color { set; get; } = default;
-        public float m_angle { set; get; } = default;
+        public sbyte m_type { set; get; }
+        public Vector4 m_position { set; get; }
+        public Vector4 m_direction { set; get; }
+        public uint m_color { set; get; }
+        public float m_angle { set; get; }
 
         public override uint Signature => 0x81c86d42;
 
@@ -64,6 +63,36 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_direction), m_direction);
             xs.WriteNumber(xe, nameof(m_color), m_color);
             xs.WriteFloat(xe, nameof(m_angle), m_angle);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxLight);
+        }
+
+        public bool Equals(hkxLight? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   m_position.Equals(other.m_position) &&
+                   m_direction.Equals(other.m_direction) &&
+                   m_color.Equals(other.m_color) &&
+                   m_angle.Equals(other.m_angle) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(m_position);
+            hashcode.Add(m_direction);
+            hashcode.Add(m_color);
+            hashcode.Add(m_angle);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

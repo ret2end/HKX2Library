@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -19,20 +19,20 @@ namespace HKX2
     // m_savedMotion m_class: hkpMaxSizeMotion Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 296 flags: FLAGS_NONE enum: 
     // m_savedQualityTypeIndex m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 304 flags: FLAGS_NONE enum: 
     // m_gravityFactor m_class:  Type.TYPE_HALF Type.TYPE_VOID arrSize: 0 offset: 306 flags: FLAGS_NONE enum: 
-    public partial class hkpMotion : hkReferencedObject
+    public partial class hkpMotion : hkReferencedObject, IEquatable<hkpMotion?>
     {
-        public byte m_type { set; get; } = default;
-        public byte m_deactivationIntegrateCounter { set; get; } = default;
+        public byte m_type { set; get; }
+        public byte m_deactivationIntegrateCounter { set; get; }
         public ushort[] m_deactivationNumInactiveFrames = new ushort[2];
         public hkMotionState m_motionState { set; get; } = new();
-        public Vector4 m_inertiaAndMassInv { set; get; } = default;
-        public Vector4 m_linearVelocity { set; get; } = default;
-        public Vector4 m_angularVelocity { set; get; } = default;
+        public Vector4 m_inertiaAndMassInv { set; get; }
+        public Vector4 m_linearVelocity { set; get; }
+        public Vector4 m_angularVelocity { set; get; }
         public Vector4[] m_deactivationRefPosition = new Vector4[2];
         public uint[] m_deactivationRefOrientation = new uint[2];
-        public hkpMaxSizeMotion? m_savedMotion { set; get; } = default;
-        public ushort m_savedQualityTypeIndex { set; get; } = default;
-        public Half m_gravityFactor { set; get; } = default;
+        public hkpMaxSizeMotion? m_savedMotion { set; get; }
+        public ushort m_savedQualityTypeIndex { set; get; }
+        public Half m_gravityFactor { set; get; }
 
         public override uint Signature => 0x98aadb4f;
 
@@ -106,6 +106,50 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_savedMotion), m_savedMotion);
             xs.WriteNumber(xe, nameof(m_savedQualityTypeIndex), m_savedQualityTypeIndex);
             xs.WriteFloat(xe, nameof(m_gravityFactor), m_gravityFactor);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMotion);
+        }
+
+        public bool Equals(hkpMotion? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   m_deactivationIntegrateCounter.Equals(other.m_deactivationIntegrateCounter) &&
+                   m_deactivationNumInactiveFrames.SequenceEqual(other.m_deactivationNumInactiveFrames) &&
+                   ((m_motionState is null && other.m_motionState is null) || (m_motionState is not null && other.m_motionState is not null && m_motionState.Equals((IHavokObject)other.m_motionState))) &&
+                   m_inertiaAndMassInv.Equals(other.m_inertiaAndMassInv) &&
+                   m_linearVelocity.Equals(other.m_linearVelocity) &&
+                   m_angularVelocity.Equals(other.m_angularVelocity) &&
+                   m_deactivationRefPosition.SequenceEqual(other.m_deactivationRefPosition) &&
+                   m_deactivationRefOrientation.SequenceEqual(other.m_deactivationRefOrientation) &&
+                   ((m_savedMotion is null && other.m_savedMotion is null) || (m_savedMotion is not null && other.m_savedMotion is not null && m_savedMotion.Equals((IHavokObject)other.m_savedMotion))) &&
+                   m_savedQualityTypeIndex.Equals(other.m_savedQualityTypeIndex) &&
+                   m_gravityFactor.Equals(other.m_gravityFactor) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(m_deactivationIntegrateCounter);
+            hashcode.Add(m_deactivationNumInactiveFrames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_motionState);
+            hashcode.Add(m_inertiaAndMassInv);
+            hashcode.Add(m_linearVelocity);
+            hashcode.Add(m_angularVelocity);
+            hashcode.Add(m_deactivationRefPosition.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_deactivationRefOrientation.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_savedMotion);
+            hashcode.Add(m_savedQualityTypeIndex);
+            hashcode.Add(m_gravityFactor);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

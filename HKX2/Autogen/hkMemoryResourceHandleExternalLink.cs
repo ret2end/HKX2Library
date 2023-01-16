@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +7,7 @@ namespace HKX2
 
     // m_memberName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_externalId m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkMemoryResourceHandleExternalLink : IHavokObject
+    public partial class hkMemoryResourceHandleExternalLink : IHavokObject, IEquatable<hkMemoryResourceHandleExternalLink?>
     {
         public string m_memberName { set; get; } = "";
         public string m_externalId { set; get; } = "";
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteString(xe, nameof(m_memberName), m_memberName);
             xs.WriteString(xe, nameof(m_externalId), m_externalId);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkMemoryResourceHandleExternalLink);
+        }
+
+        public bool Equals(hkMemoryResourceHandleExternalLink? other)
+        {
+            return other is not null &&
+                   (m_memberName is null && other.m_memberName is null || m_memberName == other.m_memberName || m_memberName is null && other.m_memberName == "" || m_memberName == "" && other.m_memberName is null) &&
+                   (m_externalId is null && other.m_externalId is null || m_externalId == other.m_externalId || m_externalId is null && other.m_externalId == "" || m_externalId == "" && other.m_externalId is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_memberName);
+            hashcode.Add(m_externalId);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

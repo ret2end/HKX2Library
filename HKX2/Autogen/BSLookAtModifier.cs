@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,27 +27,27 @@ namespace HKX2
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 200 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_ballBonesValid m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 204 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_pSkeletonMemory m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 208 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSLookAtModifier : hkbModifier
+    public partial class BSLookAtModifier : hkbModifier, IEquatable<BSLookAtModifier?>
     {
-        public bool m_lookAtTarget { set; get; } = default;
-        public IList<BSLookAtModifierBoneData> m_bones { set; get; } = new List<BSLookAtModifierBoneData>();
-        public IList<BSLookAtModifierBoneData> m_eyeBones { set; get; } = new List<BSLookAtModifierBoneData>();
-        public float m_limitAngleDegrees { set; get; } = default;
-        public float m_limitAngleThresholdDegrees { set; get; } = default;
-        public bool m_continueLookOutsideOfLimit { set; get; } = default;
-        public float m_onGain { set; get; } = default;
-        public float m_offGain { set; get; } = default;
-        public bool m_useBoneGains { set; get; } = default;
-        public Vector4 m_targetLocation { set; get; } = default;
-        public bool m_targetOutsideLimits { set; get; } = default;
+        public bool m_lookAtTarget { set; get; }
+        public IList<BSLookAtModifierBoneData> m_bones { set; get; } = Array.Empty<BSLookAtModifierBoneData>();
+        public IList<BSLookAtModifierBoneData> m_eyeBones { set; get; } = Array.Empty<BSLookAtModifierBoneData>();
+        public float m_limitAngleDegrees { set; get; }
+        public float m_limitAngleThresholdDegrees { set; get; }
+        public bool m_continueLookOutsideOfLimit { set; get; }
+        public float m_onGain { set; get; }
+        public float m_offGain { set; get; }
+        public bool m_useBoneGains { set; get; }
+        public Vector4 m_targetLocation { set; get; }
+        public bool m_targetOutsideLimits { set; get; }
         public hkbEventProperty m_targetOutOfLimitEvent { set; get; } = new();
-        public bool m_lookAtCamera { set; get; } = default;
-        public float m_lookAtCameraX { set; get; } = default;
-        public float m_lookAtCameraY { set; get; } = default;
-        public float m_lookAtCameraZ { set; get; } = default;
-        private float m_timeStep { set; get; } = default;
-        private bool m_ballBonesValid { set; get; } = default;
-        private object? m_pSkeletonMemory { set; get; } = default;
+        public bool m_lookAtCamera { set; get; }
+        public float m_lookAtCameraX { set; get; }
+        public float m_lookAtCameraY { set; get; }
+        public float m_lookAtCameraZ { set; get; }
+        private float m_timeStep { set; get; }
+        private bool m_ballBonesValid { set; get; }
+        private object? m_pSkeletonMemory { set; get; }
 
         public override uint Signature => 0xd756fc25;
 
@@ -137,8 +138,8 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteBoolean(xe, nameof(m_lookAtTarget), m_lookAtTarget);
-            xs.WriteClassArray<BSLookAtModifierBoneData>(xe, nameof(m_bones), m_bones);
-            xs.WriteClassArray<BSLookAtModifierBoneData>(xe, nameof(m_eyeBones), m_eyeBones);
+            xs.WriteClassArray(xe, nameof(m_bones), m_bones);
+            xs.WriteClassArray(xe, nameof(m_eyeBones), m_eyeBones);
             xs.WriteFloat(xe, nameof(m_limitAngleDegrees), m_limitAngleDegrees);
             xs.WriteFloat(xe, nameof(m_limitAngleThresholdDegrees), m_limitAngleThresholdDegrees);
             xs.WriteBoolean(xe, nameof(m_continueLookOutsideOfLimit), m_continueLookOutsideOfLimit);
@@ -155,6 +156,58 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_timeStep));
             xs.WriteSerializeIgnored(xe, nameof(m_ballBonesValid));
             xs.WriteSerializeIgnored(xe, nameof(m_pSkeletonMemory));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSLookAtModifier);
+        }
+
+        public bool Equals(BSLookAtModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_lookAtTarget.Equals(other.m_lookAtTarget) &&
+                   m_bones.SequenceEqual(other.m_bones) &&
+                   m_eyeBones.SequenceEqual(other.m_eyeBones) &&
+                   m_limitAngleDegrees.Equals(other.m_limitAngleDegrees) &&
+                   m_limitAngleThresholdDegrees.Equals(other.m_limitAngleThresholdDegrees) &&
+                   m_continueLookOutsideOfLimit.Equals(other.m_continueLookOutsideOfLimit) &&
+                   m_onGain.Equals(other.m_onGain) &&
+                   m_offGain.Equals(other.m_offGain) &&
+                   m_useBoneGains.Equals(other.m_useBoneGains) &&
+                   m_targetLocation.Equals(other.m_targetLocation) &&
+                   m_targetOutsideLimits.Equals(other.m_targetOutsideLimits) &&
+                   ((m_targetOutOfLimitEvent is null && other.m_targetOutOfLimitEvent is null) || (m_targetOutOfLimitEvent is not null && other.m_targetOutOfLimitEvent is not null && m_targetOutOfLimitEvent.Equals((IHavokObject)other.m_targetOutOfLimitEvent))) &&
+                   m_lookAtCamera.Equals(other.m_lookAtCamera) &&
+                   m_lookAtCameraX.Equals(other.m_lookAtCameraX) &&
+                   m_lookAtCameraY.Equals(other.m_lookAtCameraY) &&
+                   m_lookAtCameraZ.Equals(other.m_lookAtCameraZ) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_lookAtTarget);
+            hashcode.Add(m_bones.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_eyeBones.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_limitAngleDegrees);
+            hashcode.Add(m_limitAngleThresholdDegrees);
+            hashcode.Add(m_continueLookOutsideOfLimit);
+            hashcode.Add(m_onGain);
+            hashcode.Add(m_offGain);
+            hashcode.Add(m_useBoneGains);
+            hashcode.Add(m_targetLocation);
+            hashcode.Add(m_targetOutsideLimits);
+            hashcode.Add(m_targetOutOfLimitEvent);
+            hashcode.Add(m_lookAtCamera);
+            hashcode.Add(m_lookAtCameraX);
+            hashcode.Add(m_lookAtCameraY);
+            hashcode.Add(m_lookAtCameraZ);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_localFrame m_class: hkLocalFrame Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_boneIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkaSkeletonLocalFrameOnBone : IHavokObject
+    public partial class hkaSkeletonLocalFrameOnBone : IHavokObject, IEquatable<hkaSkeletonLocalFrameOnBone?>
     {
-        public hkLocalFrame? m_localFrame { set; get; } = default;
-        public int m_boneIndex { set; get; } = default;
+        public hkLocalFrame? m_localFrame { set; get; }
+        public int m_boneIndex { set; get; }
 
         public virtual uint Signature => 0x52e8043;
 
@@ -40,6 +38,28 @@ namespace HKX2
         {
             xs.WriteClassPointer(xe, nameof(m_localFrame), m_localFrame);
             xs.WriteNumber(xe, nameof(m_boneIndex), m_boneIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaSkeletonLocalFrameOnBone);
+        }
+
+        public bool Equals(hkaSkeletonLocalFrameOnBone? other)
+        {
+            return other is not null &&
+                   ((m_localFrame is null && other.m_localFrame is null) || (m_localFrame is not null && other.m_localFrame is not null && m_localFrame.Equals((IHavokObject)other.m_localFrame))) &&
+                   m_boneIndex.Equals(other.m_boneIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_localFrame);
+            hashcode.Add(m_boneIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

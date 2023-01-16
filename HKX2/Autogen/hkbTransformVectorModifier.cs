@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -15,16 +14,16 @@ namespace HKX2
     // m_inverse m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 145 flags: FLAGS_NONE enum: 
     // m_computeOnActivate m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 146 flags: FLAGS_NONE enum: 
     // m_computeOnModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 147 flags: FLAGS_NONE enum: 
-    public partial class hkbTransformVectorModifier : hkbModifier
+    public partial class hkbTransformVectorModifier : hkbModifier, IEquatable<hkbTransformVectorModifier?>
     {
-        public Quaternion m_rotation { set; get; } = default;
-        public Vector4 m_translation { set; get; } = default;
-        public Vector4 m_vectorIn { set; get; } = default;
-        public Vector4 m_vectorOut { set; get; } = default;
-        public bool m_rotateOnly { set; get; } = default;
-        public bool m_inverse { set; get; } = default;
-        public bool m_computeOnActivate { set; get; } = default;
-        public bool m_computeOnModify { set; get; } = default;
+        public Quaternion m_rotation { set; get; }
+        public Vector4 m_translation { set; get; }
+        public Vector4 m_vectorIn { set; get; }
+        public Vector4 m_vectorOut { set; get; }
+        public bool m_rotateOnly { set; get; }
+        public bool m_inverse { set; get; }
+        public bool m_computeOnActivate { set; get; }
+        public bool m_computeOnModify { set; get; }
 
         public override uint Signature => 0xf93e0e24;
 
@@ -80,6 +79,42 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_inverse), m_inverse);
             xs.WriteBoolean(xe, nameof(m_computeOnActivate), m_computeOnActivate);
             xs.WriteBoolean(xe, nameof(m_computeOnModify), m_computeOnModify);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbTransformVectorModifier);
+        }
+
+        public bool Equals(hkbTransformVectorModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rotation.Equals(other.m_rotation) &&
+                   m_translation.Equals(other.m_translation) &&
+                   m_vectorIn.Equals(other.m_vectorIn) &&
+                   m_vectorOut.Equals(other.m_vectorOut) &&
+                   m_rotateOnly.Equals(other.m_rotateOnly) &&
+                   m_inverse.Equals(other.m_inverse) &&
+                   m_computeOnActivate.Equals(other.m_computeOnActivate) &&
+                   m_computeOnModify.Equals(other.m_computeOnModify) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rotation);
+            hashcode.Add(m_translation);
+            hashcode.Add(m_vectorIn);
+            hashcode.Add(m_vectorOut);
+            hashcode.Add(m_rotateOnly);
+            hashcode.Add(m_inverse);
+            hashcode.Add(m_computeOnActivate);
+            hashcode.Add(m_computeOnModify);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

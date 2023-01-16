@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpNullCollisionFilter Signatire: 0xb120a34f size: 72 flags: FLAGS_NONE
 
 
-    public partial class hkpNullCollisionFilter : hkpCollisionFilter
+    public partial class hkpNullCollisionFilter : hkpCollisionFilter, IEquatable<hkpNullCollisionFilter?>
     {
 
 
@@ -32,6 +30,26 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpNullCollisionFilter);
+        }
+
+        public bool Equals(hkpNullCollisionFilter? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

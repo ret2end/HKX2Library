@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_behaviorName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_behavior m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbBehaviorReferenceGenerator : hkbGenerator
+    public partial class hkbBehaviorReferenceGenerator : hkbGenerator, IEquatable<hkbBehaviorReferenceGenerator?>
     {
         public string m_behaviorName { set; get; } = "";
-        private object? m_behavior { set; get; } = default;
+        private object? m_behavior { set; get; }
 
         public override uint Signature => 0xfcb5423;
 
@@ -41,6 +39,28 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteString(xe, nameof(m_behaviorName), m_behaviorName);
             xs.WriteSerializeIgnored(xe, nameof(m_behavior));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBehaviorReferenceGenerator);
+        }
+
+        public bool Equals(hkbBehaviorReferenceGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_behaviorName is null && other.m_behaviorName is null || m_behaviorName == other.m_behaviorName || m_behaviorName is null && other.m_behaviorName == "" || m_behaviorName == "" && other.m_behaviorName is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_behaviorName);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

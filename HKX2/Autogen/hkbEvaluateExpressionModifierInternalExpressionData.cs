@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_raisedEvent m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_wasTrueInPreviousFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 1 flags: FLAGS_NONE enum: 
-    public partial class hkbEvaluateExpressionModifierInternalExpressionData : IHavokObject
+    public partial class hkbEvaluateExpressionModifierInternalExpressionData : IHavokObject, IEquatable<hkbEvaluateExpressionModifierInternalExpressionData?>
     {
-        public bool m_raisedEvent { set; get; } = default;
-        public bool m_wasTrueInPreviousFrame { set; get; } = default;
+        public bool m_raisedEvent { set; get; }
+        public bool m_wasTrueInPreviousFrame { set; get; }
 
         public virtual uint Signature => 0xb8686f6b;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteBoolean(xe, nameof(m_raisedEvent), m_raisedEvent);
             xs.WriteBoolean(xe, nameof(m_wasTrueInPreviousFrame), m_wasTrueInPreviousFrame);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbEvaluateExpressionModifierInternalExpressionData);
+        }
+
+        public bool Equals(hkbEvaluateExpressionModifierInternalExpressionData? other)
+        {
+            return other is not null &&
+                   m_raisedEvent.Equals(other.m_raisedEvent) &&
+                   m_wasTrueInPreviousFrame.Equals(other.m_wasTrueInPreviousFrame) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_raisedEvent);
+            hashcode.Add(m_wasTrueInPreviousFrame);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

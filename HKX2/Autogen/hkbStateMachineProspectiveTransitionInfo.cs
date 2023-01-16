@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_transitionInfoReference m_class: hkbStateMachineTransitionInfoReference Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_transitionInfoReferenceForTE m_class: hkbStateMachineTransitionInfoReference Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 6 flags: FLAGS_NONE enum: 
     // m_toStateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class hkbStateMachineProspectiveTransitionInfo : IHavokObject
+    public partial class hkbStateMachineProspectiveTransitionInfo : IHavokObject, IEquatable<hkbStateMachineProspectiveTransitionInfo?>
     {
         public hkbStateMachineTransitionInfoReference m_transitionInfoReference { set; get; } = new();
         public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE { set; get; } = new();
-        public int m_toStateId { set; get; } = default;
+        public int m_toStateId { set; get; }
 
         public virtual uint Signature => 0x3ab09a2e;
 
@@ -44,6 +42,30 @@ namespace HKX2
             xs.WriteClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReference), m_transitionInfoReference);
             xs.WriteClass<hkbStateMachineTransitionInfoReference>(xe, nameof(m_transitionInfoReferenceForTE), m_transitionInfoReferenceForTE);
             xs.WriteNumber(xe, nameof(m_toStateId), m_toStateId);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineProspectiveTransitionInfo);
+        }
+
+        public bool Equals(hkbStateMachineProspectiveTransitionInfo? other)
+        {
+            return other is not null &&
+                   ((m_transitionInfoReference is null && other.m_transitionInfoReference is null) || (m_transitionInfoReference is not null && other.m_transitionInfoReference is not null && m_transitionInfoReference.Equals((IHavokObject)other.m_transitionInfoReference))) &&
+                   ((m_transitionInfoReferenceForTE is null && other.m_transitionInfoReferenceForTE is null) || (m_transitionInfoReferenceForTE is not null && other.m_transitionInfoReferenceForTE is not null && m_transitionInfoReferenceForTE.Equals((IHavokObject)other.m_transitionInfoReferenceForTE))) &&
+                   m_toStateId.Equals(other.m_toStateId) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_transitionInfoReference);
+            hashcode.Add(m_transitionInfoReferenceForTE);
+            hashcode.Add(m_toStateId);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

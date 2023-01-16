@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_factorA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_factorB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpMassChangerModifierConstraintAtom : hkpModifierConstraintAtom
+    public partial class hkpMassChangerModifierConstraintAtom : hkpModifierConstraintAtom, IEquatable<hkpMassChangerModifierConstraintAtom?>
     {
-        public Vector4 m_factorA { set; get; } = default;
-        public Vector4 m_factorB { set; get; } = default;
+        public Vector4 m_factorA { set; get; }
+        public Vector4 m_factorB { set; get; }
 
         public override uint Signature => 0xb6b28240;
 
@@ -42,6 +41,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_factorA), m_factorA);
             xs.WriteVector4(xe, nameof(m_factorB), m_factorB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMassChangerModifierConstraintAtom);
+        }
+
+        public bool Equals(hkpMassChangerModifierConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_factorA.Equals(other.m_factorA) &&
+                   m_factorB.Equals(other.m_factorB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_factorA);
+            hashcode.Add(m_factorB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,12 +12,12 @@ namespace HKX2
     // m_previousTargetAnglesOffset m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 6 flags: FLAGS_NONE enum: 
     // m_target_bRca m_class:  Type.TYPE_MATRIX3 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_motors m_class: hkpConstraintMotor Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 3 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpRagdollMotorConstraintAtom : hkpConstraintAtom
+    public partial class hkpRagdollMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpRagdollMotorConstraintAtom?>
     {
-        public bool m_isEnabled { set; get; } = default;
-        public short m_initializedOffset { set; get; } = default;
-        public short m_previousTargetAnglesOffset { set; get; } = default;
-        public Matrix4x4 m_target_bRca { set; get; } = default;
+        public bool m_isEnabled { set; get; }
+        public short m_initializedOffset { set; get; }
+        public short m_previousTargetAnglesOffset { set; get; }
+        public Matrix4x4 m_target_bRca { set; get; }
         public hkpConstraintMotor?[] m_motors = new hkpConstraintMotor?[3];
 
         public override uint Signature => 0x71013826;
@@ -65,7 +65,37 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_initializedOffset), m_initializedOffset);
             xs.WriteNumber(xe, nameof(m_previousTargetAnglesOffset), m_previousTargetAnglesOffset);
             xs.WriteMatrix3(xe, nameof(m_target_bRca), m_target_bRca);
-            xs.WriteClassPointerArray<hkpConstraintMotor>(xe, nameof(m_motors), m_motors);
+            xs.WriteClassPointerArray(xe, nameof(m_motors), m_motors);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpRagdollMotorConstraintAtom);
+        }
+
+        public bool Equals(hkpRagdollMotorConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_isEnabled.Equals(other.m_isEnabled) &&
+                   m_initializedOffset.Equals(other.m_initializedOffset) &&
+                   m_previousTargetAnglesOffset.Equals(other.m_previousTargetAnglesOffset) &&
+                   m_target_bRca.Equals(other.m_target_bRca) &&
+                   m_motors.SequenceEqual(other.m_motors) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_isEnabled);
+            hashcode.Add(m_initializedOffset);
+            hashcode.Add(m_previousTargetAnglesOffset);
+            hashcode.Add(m_target_bRca);
+            hashcode.Add(m_motors.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

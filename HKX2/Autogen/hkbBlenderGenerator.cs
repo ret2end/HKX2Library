@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -23,24 +23,24 @@ namespace HKX2
     // m_endIntervalIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 154 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_initSync m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 156 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_doSubtractiveBlend m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbBlenderGenerator : hkbGenerator
+    public partial class hkbBlenderGenerator : hkbGenerator, IEquatable<hkbBlenderGenerator?>
     {
-        public float m_referencePoseWeightThreshold { set; get; } = default;
-        public float m_blendParameter { set; get; } = default;
-        public float m_minCyclicBlendParameter { set; get; } = default;
-        public float m_maxCyclicBlendParameter { set; get; } = default;
-        public short m_indexOfSyncMasterChild { set; get; } = default;
-        public short m_flags { set; get; } = default;
-        public bool m_subtractLastChild { set; get; } = default;
-        public IList<hkbBlenderGeneratorChild> m_children { set; get; } = new List<hkbBlenderGeneratorChild>();
-        public IList<object> m_childrenInternalStates { set; get; } = new List<object>();
-        public IList<object> m_sortedChildren { set; get; } = new List<object>();
-        private float m_endIntervalWeight { set; get; } = default;
-        private int m_numActiveChildren { set; get; } = default;
-        private short m_beginIntervalIndex { set; get; } = default;
-        private short m_endIntervalIndex { set; get; } = default;
-        private bool m_initSync { set; get; } = default;
-        private bool m_doSubtractiveBlend { set; get; } = default;
+        public float m_referencePoseWeightThreshold { set; get; }
+        public float m_blendParameter { set; get; }
+        public float m_minCyclicBlendParameter { set; get; }
+        public float m_maxCyclicBlendParameter { set; get; }
+        public short m_indexOfSyncMasterChild { set; get; }
+        public short m_flags { set; get; }
+        public bool m_subtractLastChild { set; get; }
+        public IList<hkbBlenderGeneratorChild> m_children { set; get; } = Array.Empty<hkbBlenderGeneratorChild>();
+        public IList<object> m_childrenInternalStates { set; get; } = Array.Empty<object>();
+        public IList<object> m_sortedChildren { set; get; } = Array.Empty<object>();
+        private float m_endIntervalWeight { set; get; }
+        private int m_numActiveChildren { set; get; }
+        private short m_beginIntervalIndex { set; get; }
+        private short m_endIntervalIndex { set; get; }
+        private bool m_initSync { set; get; }
+        private bool m_doSubtractiveBlend { set; get; }
 
         public override uint Signature => 0x22df7147;
 
@@ -113,7 +113,7 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_indexOfSyncMasterChild), m_indexOfSyncMasterChild);
             xs.WriteNumber(xe, nameof(m_flags), m_flags);
             xs.WriteBoolean(xe, nameof(m_subtractLastChild), m_subtractLastChild);
-            xs.WriteClassPointerArray<hkbBlenderGeneratorChild>(xe, nameof(m_children), m_children);
+            xs.WriteClassPointerArray(xe, nameof(m_children), m_children);
             xs.WriteSerializeIgnored(xe, nameof(m_childrenInternalStates));
             xs.WriteSerializeIgnored(xe, nameof(m_sortedChildren));
             xs.WriteSerializeIgnored(xe, nameof(m_endIntervalWeight));
@@ -122,6 +122,42 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_endIntervalIndex));
             xs.WriteSerializeIgnored(xe, nameof(m_initSync));
             xs.WriteSerializeIgnored(xe, nameof(m_doSubtractiveBlend));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBlenderGenerator);
+        }
+
+        public bool Equals(hkbBlenderGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_referencePoseWeightThreshold.Equals(other.m_referencePoseWeightThreshold) &&
+                   m_blendParameter.Equals(other.m_blendParameter) &&
+                   m_minCyclicBlendParameter.Equals(other.m_minCyclicBlendParameter) &&
+                   m_maxCyclicBlendParameter.Equals(other.m_maxCyclicBlendParameter) &&
+                   m_indexOfSyncMasterChild.Equals(other.m_indexOfSyncMasterChild) &&
+                   m_flags.Equals(other.m_flags) &&
+                   m_subtractLastChild.Equals(other.m_subtractLastChild) &&
+                   m_children.SequenceEqual(other.m_children) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_referencePoseWeightThreshold);
+            hashcode.Add(m_blendParameter);
+            hashcode.Add(m_minCyclicBlendParameter);
+            hashcode.Add(m_maxCyclicBlendParameter);
+            hashcode.Add(m_indexOfSyncMasterChild);
+            hashcode.Add(m_flags);
+            hashcode.Add(m_subtractLastChild);
+            hashcode.Add(m_children.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

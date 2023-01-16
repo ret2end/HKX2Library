@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +12,13 @@ namespace HKX2
     // m_indices32 m_class:  Type.TYPE_ARRAY Type.TYPE_UINT32 arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_vertexBaseOffset m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_length m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
-    public partial class hkxIndexBuffer : hkReferencedObject
+    public partial class hkxIndexBuffer : hkReferencedObject, IEquatable<hkxIndexBuffer?>
     {
-        public sbyte m_indexType { set; get; } = default;
-        public IList<ushort> m_indices16 { set; get; } = new List<ushort>();
-        public IList<uint> m_indices32 { set; get; } = new List<uint>();
-        public uint m_vertexBaseOffset { set; get; } = default;
-        public uint m_length { set; get; } = default;
+        public sbyte m_indexType { set; get; }
+        public IList<ushort> m_indices16 { set; get; } = Array.Empty<ushort>();
+        public IList<uint> m_indices32 { set; get; } = Array.Empty<uint>();
+        public uint m_vertexBaseOffset { set; get; }
+        public uint m_length { set; get; }
 
         public override uint Signature => 0xc12c8197;
 
@@ -62,6 +62,36 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_indices32), m_indices32);
             xs.WriteNumber(xe, nameof(m_vertexBaseOffset), m_vertexBaseOffset);
             xs.WriteNumber(xe, nameof(m_length), m_length);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxIndexBuffer);
+        }
+
+        public bool Equals(hkxIndexBuffer? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_indexType.Equals(other.m_indexType) &&
+                   m_indices16.SequenceEqual(other.m_indices16) &&
+                   m_indices32.SequenceEqual(other.m_indices32) &&
+                   m_vertexBaseOffset.Equals(other.m_vertexBaseOffset) &&
+                   m_length.Equals(other.m_length) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_indexType);
+            hashcode.Add(m_indices16.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_indices32.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_vertexBaseOffset);
+            hashcode.Add(m_length);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

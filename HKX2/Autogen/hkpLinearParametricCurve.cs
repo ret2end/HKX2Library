@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +13,13 @@ namespace HKX2
     // m_dirNotParallelToTangentAlongWholePath m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_points m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_distance m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpLinearParametricCurve : hkpParametricCurve
+    public partial class hkpLinearParametricCurve : hkpParametricCurve, IEquatable<hkpLinearParametricCurve?>
     {
-        public float m_smoothingFactor { set; get; } = default;
-        public bool m_closedLoop { set; get; } = default;
-        public Vector4 m_dirNotParallelToTangentAlongWholePath { set; get; } = default;
-        public IList<Vector4> m_points { set; get; } = new List<Vector4>();
-        public IList<float> m_distance { set; get; } = new List<float>();
+        public float m_smoothingFactor { set; get; }
+        public bool m_closedLoop { set; get; }
+        public Vector4 m_dirNotParallelToTangentAlongWholePath { set; get; }
+        public IList<Vector4> m_points { set; get; } = Array.Empty<Vector4>();
+        public IList<float> m_distance { set; get; } = Array.Empty<float>();
 
         public override uint Signature => 0xd7b3be03;
 
@@ -62,6 +63,36 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_dirNotParallelToTangentAlongWholePath), m_dirNotParallelToTangentAlongWholePath);
             xs.WriteVector4Array(xe, nameof(m_points), m_points);
             xs.WriteFloatArray(xe, nameof(m_distance), m_distance);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpLinearParametricCurve);
+        }
+
+        public bool Equals(hkpLinearParametricCurve? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_smoothingFactor.Equals(other.m_smoothingFactor) &&
+                   m_closedLoop.Equals(other.m_closedLoop) &&
+                   m_dirNotParallelToTangentAlongWholePath.Equals(other.m_dirNotParallelToTangentAlongWholePath) &&
+                   m_points.SequenceEqual(other.m_points) &&
+                   m_distance.SequenceEqual(other.m_distance) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_smoothingFactor);
+            hashcode.Add(m_closedLoop);
+            hashcode.Add(m_dirNotParallelToTangentAlongWholePath);
+            hashcode.Add(m_points.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_distance.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

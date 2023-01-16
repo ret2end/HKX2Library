@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +13,13 @@ namespace HKX2
     // m_worldFromModel m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_poseModelSpace m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_rigidAttachmentTransforms m_class:  Type.TYPE_ARRAY Type.TYPE_QSTRANSFORM arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkbCharacterSteppedInfo : hkReferencedObject
+    public partial class hkbCharacterSteppedInfo : hkReferencedObject, IEquatable<hkbCharacterSteppedInfo?>
     {
-        public ulong m_characterId { set; get; } = default;
-        public float m_deltaTime { set; get; } = default;
-        public Matrix4x4 m_worldFromModel { set; get; } = default;
-        public IList<Matrix4x4> m_poseModelSpace { set; get; } = new List<Matrix4x4>();
-        public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = new List<Matrix4x4>();
+        public ulong m_characterId { set; get; }
+        public float m_deltaTime { set; get; }
+        public Matrix4x4 m_worldFromModel { set; get; }
+        public IList<Matrix4x4> m_poseModelSpace { set; get; } = Array.Empty<Matrix4x4>();
+        public IList<Matrix4x4> m_rigidAttachmentTransforms { set; get; } = Array.Empty<Matrix4x4>();
 
         public override uint Signature => 0x2eda84f8;
 
@@ -62,6 +63,36 @@ namespace HKX2
             xs.WriteQSTransform(xe, nameof(m_worldFromModel), m_worldFromModel);
             xs.WriteQSTransformArray(xe, nameof(m_poseModelSpace), m_poseModelSpace);
             xs.WriteQSTransformArray(xe, nameof(m_rigidAttachmentTransforms), m_rigidAttachmentTransforms);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterSteppedInfo);
+        }
+
+        public bool Equals(hkbCharacterSteppedInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   m_deltaTime.Equals(other.m_deltaTime) &&
+                   m_worldFromModel.Equals(other.m_worldFromModel) &&
+                   m_poseModelSpace.SequenceEqual(other.m_poseModelSpace) &&
+                   m_rigidAttachmentTransforms.SequenceEqual(other.m_rigidAttachmentTransforms) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_deltaTime);
+            hashcode.Add(m_worldFromModel);
+            hashcode.Add(m_poseModelSpace.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_rigidAttachmentTransforms.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,15 +15,15 @@ namespace HKX2
     // m_annotations m_class: hkxNodeAnnotationData Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_userProperties m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_selected m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
-    public partial class hkxNode : hkxAttributeHolder
+    public partial class hkxNode : hkxAttributeHolder, IEquatable<hkxNode?>
     {
         public string m_name { set; get; } = "";
-        public hkReferencedObject? m_object { set; get; } = default;
-        public IList<Matrix4x4> m_keyFrames { set; get; } = new List<Matrix4x4>();
-        public IList<hkxNode> m_children { set; get; } = new List<hkxNode>();
-        public IList<hkxNodeAnnotationData> m_annotations { set; get; } = new List<hkxNodeAnnotationData>();
+        public hkReferencedObject? m_object { set; get; }
+        public IList<Matrix4x4> m_keyFrames { set; get; } = Array.Empty<Matrix4x4>();
+        public IList<hkxNode> m_children { set; get; } = Array.Empty<hkxNode>();
+        public IList<hkxNodeAnnotationData> m_annotations { set; get; } = Array.Empty<hkxNodeAnnotationData>();
         public string m_userProperties { set; get; } = "";
-        public bool m_selected { set; get; } = default;
+        public bool m_selected { set; get; }
 
         public override uint Signature => 0x5a218502;
 
@@ -70,10 +71,44 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteClassPointer(xe, nameof(m_object), m_object);
             xs.WriteMatrix4Array(xe, nameof(m_keyFrames), m_keyFrames);
-            xs.WriteClassPointerArray<hkxNode>(xe, nameof(m_children), m_children);
-            xs.WriteClassArray<hkxNodeAnnotationData>(xe, nameof(m_annotations), m_annotations);
+            xs.WriteClassPointerArray(xe, nameof(m_children), m_children);
+            xs.WriteClassArray(xe, nameof(m_annotations), m_annotations);
             xs.WriteString(xe, nameof(m_userProperties), m_userProperties);
             xs.WriteBoolean(xe, nameof(m_selected), m_selected);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxNode);
+        }
+
+        public bool Equals(hkxNode? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   ((m_object is null && other.m_object is null) || (m_object is not null && other.m_object is not null && m_object.Equals((IHavokObject)other.m_object))) &&
+                   m_keyFrames.SequenceEqual(other.m_keyFrames) &&
+                   m_children.SequenceEqual(other.m_children) &&
+                   m_annotations.SequenceEqual(other.m_annotations) &&
+                   (m_userProperties is null && other.m_userProperties is null || m_userProperties == other.m_userProperties || m_userProperties is null && other.m_userProperties == "" || m_userProperties == "" && other.m_userProperties is null) &&
+                   m_selected.Equals(other.m_selected) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(m_object);
+            hashcode.Add(m_keyFrames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_children.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_annotations.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_userProperties);
+            hashcode.Add(m_selected);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

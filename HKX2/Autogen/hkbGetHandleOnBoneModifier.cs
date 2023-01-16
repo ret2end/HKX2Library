@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_localFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_ragdollBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_animationBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 98 flags: FLAGS_NONE enum: 
-    public partial class hkbGetHandleOnBoneModifier : hkbModifier
+    public partial class hkbGetHandleOnBoneModifier : hkbModifier, IEquatable<hkbGetHandleOnBoneModifier?>
     {
-        public hkbHandle? m_handleOut { set; get; } = default;
+        public hkbHandle? m_handleOut { set; get; }
         public string m_localFrameName { set; get; } = "";
-        public short m_ragdollBoneIndex { set; get; } = default;
-        public short m_animationBoneIndex { set; get; } = default;
+        public short m_ragdollBoneIndex { set; get; }
+        public short m_animationBoneIndex { set; get; }
 
         public override uint Signature => 0x50c34a17;
 
@@ -56,6 +54,34 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_localFrameName), m_localFrameName);
             xs.WriteNumber(xe, nameof(m_ragdollBoneIndex), m_ragdollBoneIndex);
             xs.WriteNumber(xe, nameof(m_animationBoneIndex), m_animationBoneIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbGetHandleOnBoneModifier);
+        }
+
+        public bool Equals(hkbGetHandleOnBoneModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_handleOut is null && other.m_handleOut is null) || (m_handleOut is not null && other.m_handleOut is not null && m_handleOut.Equals((IHavokObject)other.m_handleOut))) &&
+                   (m_localFrameName is null && other.m_localFrameName is null || m_localFrameName == other.m_localFrameName || m_localFrameName is null && other.m_localFrameName == "" || m_localFrameName == "" && other.m_localFrameName is null) &&
+                   m_ragdollBoneIndex.Equals(other.m_ragdollBoneIndex) &&
+                   m_animationBoneIndex.Equals(other.m_animationBoneIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_handleOut);
+            hashcode.Add(m_localFrameName);
+            hashcode.Add(m_ragdollBoneIndex);
+            hashcode.Add(m_animationBoneIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

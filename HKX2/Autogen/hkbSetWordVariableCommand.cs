@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,14 +12,14 @@ namespace HKX2
     // m_value m_class: hkbVariableValue Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: VariableType
     // m_global m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 49 flags: FLAGS_NONE enum: 
-    public partial class hkbSetWordVariableCommand : hkReferencedObject
+    public partial class hkbSetWordVariableCommand : hkReferencedObject, IEquatable<hkbSetWordVariableCommand?>
     {
-        public Vector4 m_quadValue { set; get; } = default;
-        public ulong m_characterId { set; get; } = default;
-        public int m_variableId { set; get; } = default;
+        public Vector4 m_quadValue { set; get; }
+        public ulong m_characterId { set; get; }
+        public int m_variableId { set; get; }
         public hkbVariableValue m_value { set; get; } = new();
-        public byte m_type { set; get; } = default;
-        public bool m_global { set; get; } = default;
+        public byte m_type { set; get; }
+        public bool m_global { set; get; }
 
         public override uint Signature => 0xf3ae5fca;
 
@@ -68,6 +67,38 @@ namespace HKX2
             xs.WriteClass<hkbVariableValue>(xe, nameof(m_value), m_value);
             xs.WriteEnum<VariableType, byte>(xe, nameof(m_type), m_type);
             xs.WriteBoolean(xe, nameof(m_global), m_global);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSetWordVariableCommand);
+        }
+
+        public bool Equals(hkbSetWordVariableCommand? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_quadValue.Equals(other.m_quadValue) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   m_variableId.Equals(other.m_variableId) &&
+                   ((m_value is null && other.m_value is null) || (m_value is not null && other.m_value is not null && m_value.Equals((IHavokObject)other.m_value))) &&
+                   m_type.Equals(other.m_type) &&
+                   m_global.Equals(other.m_global) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_quadValue);
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_variableId);
+            hashcode.Add(m_value);
+            hashcode.Add(m_type);
+            hashcode.Add(m_global);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

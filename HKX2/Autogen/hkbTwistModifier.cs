@@ -16,17 +16,17 @@ namespace HKX2
     // m_isAdditive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 106 flags: FLAGS_NONE enum: 
     // m_boneChainIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_parentBoneIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 128 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbTwistModifier : hkbModifier
+    public partial class hkbTwistModifier : hkbModifier, IEquatable<hkbTwistModifier?>
     {
-        public Vector4 m_axisOfRotation { set; get; } = default;
-        public float m_twistAngle { set; get; } = default;
-        public short m_startBoneIndex { set; get; } = default;
-        public short m_endBoneIndex { set; get; } = default;
-        public sbyte m_setAngleMethod { set; get; } = default;
-        public sbyte m_rotationAxisCoordinates { set; get; } = default;
-        public bool m_isAdditive { set; get; } = default;
-        public IList<object> m_boneChainIndices { set; get; } = new List<object>();
-        public IList<object> m_parentBoneIndices { set; get; } = new List<object>();
+        public Vector4 m_axisOfRotation { set; get; }
+        public float m_twistAngle { set; get; }
+        public short m_startBoneIndex { set; get; }
+        public short m_endBoneIndex { set; get; }
+        public sbyte m_setAngleMethod { set; get; }
+        public sbyte m_rotationAxisCoordinates { set; get; }
+        public bool m_isAdditive { set; get; }
+        public IList<object> m_boneChainIndices { set; get; } = Array.Empty<object>();
+        public IList<object> m_parentBoneIndices { set; get; } = Array.Empty<object>();
 
         public override uint Signature => 0xb6b76b32;
 
@@ -84,6 +84,40 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_isAdditive), m_isAdditive);
             xs.WriteSerializeIgnored(xe, nameof(m_boneChainIndices));
             xs.WriteSerializeIgnored(xe, nameof(m_parentBoneIndices));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbTwistModifier);
+        }
+
+        public bool Equals(hkbTwistModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_axisOfRotation.Equals(other.m_axisOfRotation) &&
+                   m_twistAngle.Equals(other.m_twistAngle) &&
+                   m_startBoneIndex.Equals(other.m_startBoneIndex) &&
+                   m_endBoneIndex.Equals(other.m_endBoneIndex) &&
+                   m_setAngleMethod.Equals(other.m_setAngleMethod) &&
+                   m_rotationAxisCoordinates.Equals(other.m_rotationAxisCoordinates) &&
+                   m_isAdditive.Equals(other.m_isAdditive) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_axisOfRotation);
+            hashcode.Add(m_twistAngle);
+            hashcode.Add(m_startBoneIndex);
+            hashcode.Add(m_endBoneIndex);
+            hashcode.Add(m_setAngleMethod);
+            hashcode.Add(m_rotationAxisCoordinates);
+            hashcode.Add(m_isAdditive);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

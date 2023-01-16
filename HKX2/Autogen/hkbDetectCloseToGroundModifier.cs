@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +12,15 @@ namespace HKX2
     // m_boneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
     // m_animBoneIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 110 flags: FLAGS_NONE enum: 
     // m_isCloseToGround m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbDetectCloseToGroundModifier : hkbModifier
+    public partial class hkbDetectCloseToGroundModifier : hkbModifier, IEquatable<hkbDetectCloseToGroundModifier?>
     {
         public hkbEventProperty m_closeToGroundEvent { set; get; } = new();
-        public float m_closeToGroundHeight { set; get; } = default;
-        public float m_raycastDistanceDown { set; get; } = default;
-        public uint m_collisionFilterInfo { set; get; } = default;
-        public short m_boneIndex { set; get; } = default;
-        public short m_animBoneIndex { set; get; } = default;
-        private bool m_isCloseToGround { set; get; } = default;
+        public float m_closeToGroundHeight { set; get; }
+        public float m_raycastDistanceDown { set; get; }
+        public uint m_collisionFilterInfo { set; get; }
+        public short m_boneIndex { set; get; }
+        public short m_animBoneIndex { set; get; }
+        private bool m_isCloseToGround { set; get; }
 
         public override uint Signature => 0x981687b2;
 
@@ -73,6 +71,38 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_boneIndex), m_boneIndex);
             xs.WriteNumber(xe, nameof(m_animBoneIndex), m_animBoneIndex);
             xs.WriteSerializeIgnored(xe, nameof(m_isCloseToGround));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbDetectCloseToGroundModifier);
+        }
+
+        public bool Equals(hkbDetectCloseToGroundModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_closeToGroundEvent is null && other.m_closeToGroundEvent is null) || (m_closeToGroundEvent is not null && other.m_closeToGroundEvent is not null && m_closeToGroundEvent.Equals((IHavokObject)other.m_closeToGroundEvent))) &&
+                   m_closeToGroundHeight.Equals(other.m_closeToGroundHeight) &&
+                   m_raycastDistanceDown.Equals(other.m_raycastDistanceDown) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   m_boneIndex.Equals(other.m_boneIndex) &&
+                   m_animBoneIndex.Equals(other.m_animBoneIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_closeToGroundEvent);
+            hashcode.Add(m_closeToGroundHeight);
+            hashcode.Add(m_raycastDistanceDown);
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(m_boneIndex);
+            hashcode.Add(m_animBoneIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,13 +12,13 @@ namespace HKX2
     // m_rollingFrictionMultiplier m_class:  Type.TYPE_HALF Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_internalData1 m_class:  Type.TYPE_HALF Type.TYPE_VOID arrSize: 0 offset: 10 flags: FLAGS_NONE enum: 
     // m_data m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 5 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class hkpSimpleContactConstraintDataInfo : IHavokObject
+    public partial class hkpSimpleContactConstraintDataInfo : IHavokObject, IEquatable<hkpSimpleContactConstraintDataInfo?>
     {
-        public ushort m_flags { set; get; } = default;
-        public ushort m_index { set; get; } = default;
-        public float m_internalData0 { set; get; } = default;
-        public Half m_rollingFrictionMultiplier { set; get; } = default;
-        public Half m_internalData1 { set; get; } = default;
+        public ushort m_flags { set; get; }
+        public ushort m_index { set; get; }
+        public float m_internalData0 { set; get; }
+        public Half m_rollingFrictionMultiplier { set; get; }
+        public Half m_internalData1 { set; get; }
         public uint[] m_data = new uint[5];
 
         public virtual uint Signature => 0xb59d1734;
@@ -62,6 +61,36 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_rollingFrictionMultiplier), m_rollingFrictionMultiplier);
             xs.WriteFloat(xe, nameof(m_internalData1), m_internalData1);
             xs.WriteNumberArray(xe, nameof(m_data), m_data);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSimpleContactConstraintDataInfo);
+        }
+
+        public bool Equals(hkpSimpleContactConstraintDataInfo? other)
+        {
+            return other is not null &&
+                   m_flags.Equals(other.m_flags) &&
+                   m_index.Equals(other.m_index) &&
+                   m_internalData0.Equals(other.m_internalData0) &&
+                   m_rollingFrictionMultiplier.Equals(other.m_rollingFrictionMultiplier) &&
+                   m_internalData1.Equals(other.m_internalData1) &&
+                   m_data.SequenceEqual(other.m_data) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_flags);
+            hashcode.Add(m_index);
+            hashcode.Add(m_internalData0);
+            hashcode.Add(m_rollingFrictionMultiplier);
+            hashcode.Add(m_internalData1);
+            hashcode.Add(m_data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

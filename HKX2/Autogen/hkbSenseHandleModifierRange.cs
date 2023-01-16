@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_minDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_maxDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
     // m_ignoreHandle m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
-    public partial class hkbSenseHandleModifierRange : IHavokObject
+    public partial class hkbSenseHandleModifierRange : IHavokObject, IEquatable<hkbSenseHandleModifierRange?>
     {
         public hkbEventProperty m_event { set; get; } = new();
-        public float m_minDistance { set; get; } = default;
-        public float m_maxDistance { set; get; } = default;
-        public bool m_ignoreHandle { set; get; } = default;
+        public float m_minDistance { set; get; }
+        public float m_maxDistance { set; get; }
+        public bool m_ignoreHandle { set; get; }
 
         public virtual uint Signature => 0xfb56b692;
 
@@ -52,6 +50,32 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_minDistance), m_minDistance);
             xs.WriteFloat(xe, nameof(m_maxDistance), m_maxDistance);
             xs.WriteBoolean(xe, nameof(m_ignoreHandle), m_ignoreHandle);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSenseHandleModifierRange);
+        }
+
+        public bool Equals(hkbSenseHandleModifierRange? other)
+        {
+            return other is not null &&
+                   ((m_event is null && other.m_event is null) || (m_event is not null && other.m_event is not null && m_event.Equals((IHavokObject)other.m_event))) &&
+                   m_minDistance.Equals(other.m_minDistance) &&
+                   m_maxDistance.Equals(other.m_maxDistance) &&
+                   m_ignoreHandle.Equals(other.m_ignoreHandle) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_event);
+            hashcode.Add(m_minDistance);
+            hashcode.Add(m_maxDistance);
+            hashcode.Add(m_ignoreHandle);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

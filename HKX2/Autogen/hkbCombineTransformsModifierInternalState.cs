@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_translationOut m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_rotationOut m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkbCombineTransformsModifierInternalState : hkReferencedObject
+    public partial class hkbCombineTransformsModifierInternalState : hkReferencedObject, IEquatable<hkbCombineTransformsModifierInternalState?>
     {
-        public Vector4 m_translationOut { set; get; } = default;
-        public Quaternion m_rotationOut { set; get; } = default;
+        public Vector4 m_translationOut { set; get; }
+        public Quaternion m_rotationOut { set; get; }
 
         public override uint Signature => 0xa92ed39f;
 
@@ -42,6 +41,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_translationOut), m_translationOut);
             xs.WriteQuaternion(xe, nameof(m_rotationOut), m_rotationOut);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCombineTransformsModifierInternalState);
+        }
+
+        public bool Equals(hkbCombineTransformsModifierInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_translationOut.Equals(other.m_translationOut) &&
+                   m_rotationOut.Equals(other.m_rotationOut) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_translationOut);
+            hashcode.Add(m_rotationOut);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +13,13 @@ namespace HKX2
     // m_radius m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
     // m_weldingInfo m_class:  Type.TYPE_ARRAY Type.TYPE_UINT16 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_triangleExtrusion m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkpTriSampledHeightFieldCollection : hkpShapeCollection
+    public partial class hkpTriSampledHeightFieldCollection : hkpShapeCollection, IEquatable<hkpTriSampledHeightFieldCollection?>
     {
-        public hkpSampledHeightFieldShape? m_heightfield { set; get; } = default;
-        private int m_childSize { set; get; } = default;
-        public float m_radius { set; get; } = default;
-        public IList<ushort> m_weldingInfo { set; get; } = new List<ushort>();
-        public Vector4 m_triangleExtrusion { set; get; } = default;
+        public hkpSampledHeightFieldShape? m_heightfield { set; get; }
+        private int m_childSize { set; get; }
+        public float m_radius { set; get; }
+        public IList<ushort> m_weldingInfo { set; get; } = Array.Empty<ushort>();
+        public Vector4 m_triangleExtrusion { set; get; }
 
         public override uint Signature => 0xc291ddde;
 
@@ -59,6 +60,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_radius), m_radius);
             xs.WriteNumberArray(xe, nameof(m_weldingInfo), m_weldingInfo);
             xs.WriteVector4(xe, nameof(m_triangleExtrusion), m_triangleExtrusion);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTriSampledHeightFieldCollection);
+        }
+
+        public bool Equals(hkpTriSampledHeightFieldCollection? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_heightfield is null && other.m_heightfield is null) || (m_heightfield is not null && other.m_heightfield is not null && m_heightfield.Equals((IHavokObject)other.m_heightfield))) &&
+                   m_radius.Equals(other.m_radius) &&
+                   m_weldingInfo.SequenceEqual(other.m_weldingInfo) &&
+                   m_triangleExtrusion.Equals(other.m_triangleExtrusion) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_heightfield);
+            hashcode.Add(m_radius);
+            hashcode.Add(m_weldingInfo.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_triangleExtrusion);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

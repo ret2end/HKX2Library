@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,17 +14,17 @@ namespace HKX2
     // m_simulateUntilTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_frameMarkerPsiSnap m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
     // m_previousStepResult m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
-    public partial class hkpSimulation : hkReferencedObject
+    public partial class hkpSimulation : hkReferencedObject, IEquatable<hkpSimulation?>
     {
-        public uint m_determinismCheckFrameCounter { set; get; } = default;
-        public hkpWorld? m_world { set; get; } = default;
-        public byte m_lastProcessingStep { set; get; } = default;
-        public float m_currentTime { set; get; } = default;
-        public float m_currentPsiTime { set; get; } = default;
-        public float m_physicsDeltaTime { set; get; } = default;
-        public float m_simulateUntilTime { set; get; } = default;
-        public float m_frameMarkerPsiSnap { set; get; } = default;
-        public uint m_previousStepResult { set; get; } = default;
+        public uint m_determinismCheckFrameCounter { set; get; }
+        public hkpWorld? m_world { set; get; }
+        public byte m_lastProcessingStep { set; get; }
+        public float m_currentTime { set; get; }
+        public float m_currentPsiTime { set; get; }
+        public float m_physicsDeltaTime { set; get; }
+        public float m_simulateUntilTime { set; get; }
+        public float m_frameMarkerPsiSnap { set; get; }
+        public uint m_previousStepResult { set; get; }
 
         public override uint Signature => 0x97aba922;
 
@@ -90,6 +88,44 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_simulateUntilTime), m_simulateUntilTime);
             xs.WriteFloat(xe, nameof(m_frameMarkerPsiSnap), m_frameMarkerPsiSnap);
             xs.WriteNumber(xe, nameof(m_previousStepResult), m_previousStepResult);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSimulation);
+        }
+
+        public bool Equals(hkpSimulation? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_determinismCheckFrameCounter.Equals(other.m_determinismCheckFrameCounter) &&
+                   ((m_world is null && other.m_world is null) || (m_world is not null && other.m_world is not null && m_world.Equals((IHavokObject)other.m_world))) &&
+                   m_lastProcessingStep.Equals(other.m_lastProcessingStep) &&
+                   m_currentTime.Equals(other.m_currentTime) &&
+                   m_currentPsiTime.Equals(other.m_currentPsiTime) &&
+                   m_physicsDeltaTime.Equals(other.m_physicsDeltaTime) &&
+                   m_simulateUntilTime.Equals(other.m_simulateUntilTime) &&
+                   m_frameMarkerPsiSnap.Equals(other.m_frameMarkerPsiSnap) &&
+                   m_previousStepResult.Equals(other.m_previousStepResult) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_determinismCheckFrameCounter);
+            hashcode.Add(m_world);
+            hashcode.Add(m_lastProcessingStep);
+            hashcode.Add(m_currentTime);
+            hashcode.Add(m_currentPsiTime);
+            hashcode.Add(m_physicsDeltaTime);
+            hashcode.Add(m_simulateUntilTime);
+            hashcode.Add(m_frameMarkerPsiSnap);
+            hashcode.Add(m_previousStepResult);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

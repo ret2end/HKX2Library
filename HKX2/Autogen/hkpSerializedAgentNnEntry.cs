@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -21,22 +21,22 @@ namespace HKX2
     // m_trackInfo m_class: hkpSerializedTrack1nInfo Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 320 flags: FLAGS_NONE enum: 
     // m_endianCheckBuffer m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 4 offset: 352 flags: FLAGS_NONE enum: 
     // m_version m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 356 flags: FLAGS_NONE enum: 
-    public partial class hkpSerializedAgentNnEntry : hkReferencedObject
+    public partial class hkpSerializedAgentNnEntry : hkReferencedObject, IEquatable<hkpSerializedAgentNnEntry?>
     {
-        public hkpEntity? m_bodyA { set; get; } = default;
-        public hkpEntity? m_bodyB { set; get; } = default;
-        public ulong m_bodyAId { set; get; } = default;
-        public ulong m_bodyBId { set; get; } = default;
-        public bool m_useEntityIds { set; get; } = default;
-        public sbyte m_agentType { set; get; } = default;
+        public hkpEntity? m_bodyA { set; get; }
+        public hkpEntity? m_bodyB { set; get; }
+        public ulong m_bodyAId { set; get; }
+        public ulong m_bodyBId { set; get; }
+        public bool m_useEntityIds { set; get; }
+        public sbyte m_agentType { set; get; }
         public hkpSimpleContactConstraintAtom m_atom { set; get; } = new();
-        public IList<byte> m_propertiesStream { set; get; } = new List<byte>();
-        public IList<hkContactPoint> m_contactPoints { set; get; } = new List<hkContactPoint>();
-        public IList<byte> m_cpIdMgr { set; get; } = new List<byte>();
+        public IList<byte> m_propertiesStream { set; get; } = Array.Empty<byte>();
+        public IList<hkContactPoint> m_contactPoints { set; get; } = Array.Empty<hkContactPoint>();
+        public IList<byte> m_cpIdMgr { set; get; } = Array.Empty<byte>();
         public byte[] m_nnEntryData = new byte[160];
         public hkpSerializedTrack1nInfo m_trackInfo { set; get; } = new();
         public byte[] m_endianCheckBuffer = new byte[4];
-        public uint m_version { set; get; } = default;
+        public uint m_version { set; get; }
 
         public override uint Signature => 0x49ec7de3;
 
@@ -112,12 +112,60 @@ namespace HKX2
             xs.WriteEnum<SerializedAgentType, sbyte>(xe, nameof(m_agentType), m_agentType);
             xs.WriteClass<hkpSimpleContactConstraintAtom>(xe, nameof(m_atom), m_atom);
             xs.WriteNumberArray(xe, nameof(m_propertiesStream), m_propertiesStream);
-            xs.WriteClassArray<hkContactPoint>(xe, nameof(m_contactPoints), m_contactPoints);
+            xs.WriteClassArray(xe, nameof(m_contactPoints), m_contactPoints);
             xs.WriteNumberArray(xe, nameof(m_cpIdMgr), m_cpIdMgr);
             xs.WriteNumberArray(xe, nameof(m_nnEntryData), m_nnEntryData);
             xs.WriteClass<hkpSerializedTrack1nInfo>(xe, nameof(m_trackInfo), m_trackInfo);
             xs.WriteNumberArray(xe, nameof(m_endianCheckBuffer), m_endianCheckBuffer);
             xs.WriteNumber(xe, nameof(m_version), m_version);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSerializedAgentNnEntry);
+        }
+
+        public bool Equals(hkpSerializedAgentNnEntry? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_bodyA is null && other.m_bodyA is null) || (m_bodyA is not null && other.m_bodyA is not null && m_bodyA.Equals((IHavokObject)other.m_bodyA))) &&
+                   ((m_bodyB is null && other.m_bodyB is null) || (m_bodyB is not null && other.m_bodyB is not null && m_bodyB.Equals((IHavokObject)other.m_bodyB))) &&
+                   m_bodyAId.Equals(other.m_bodyAId) &&
+                   m_bodyBId.Equals(other.m_bodyBId) &&
+                   m_useEntityIds.Equals(other.m_useEntityIds) &&
+                   m_agentType.Equals(other.m_agentType) &&
+                   ((m_atom is null && other.m_atom is null) || (m_atom is not null && other.m_atom is not null && m_atom.Equals((IHavokObject)other.m_atom))) &&
+                   m_propertiesStream.SequenceEqual(other.m_propertiesStream) &&
+                   m_contactPoints.SequenceEqual(other.m_contactPoints) &&
+                   m_cpIdMgr.SequenceEqual(other.m_cpIdMgr) &&
+                   m_nnEntryData.SequenceEqual(other.m_nnEntryData) &&
+                   ((m_trackInfo is null && other.m_trackInfo is null) || (m_trackInfo is not null && other.m_trackInfo is not null && m_trackInfo.Equals((IHavokObject)other.m_trackInfo))) &&
+                   m_endianCheckBuffer.SequenceEqual(other.m_endianCheckBuffer) &&
+                   m_version.Equals(other.m_version) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_bodyA);
+            hashcode.Add(m_bodyB);
+            hashcode.Add(m_bodyAId);
+            hashcode.Add(m_bodyBId);
+            hashcode.Add(m_useEntityIds);
+            hashcode.Add(m_agentType);
+            hashcode.Add(m_atom);
+            hashcode.Add(m_propertiesStream.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_contactPoints.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_cpIdMgr.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nnEntryData.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_trackInfo);
+            hashcode.Add(m_endianCheckBuffer.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_version);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

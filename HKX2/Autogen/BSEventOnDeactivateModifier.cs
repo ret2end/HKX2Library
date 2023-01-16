@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // BSEventOnDeactivateModifier Signatire: 0x1062d993 size: 96 flags: FLAGS_NONE
 
     // m_event m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class BSEventOnDeactivateModifier : hkbModifier
+    public partial class BSEventOnDeactivateModifier : hkbModifier, IEquatable<BSEventOnDeactivateModifier?>
     {
         public hkbEventProperty m_event { set; get; } = new();
 
@@ -36,6 +34,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteClass<hkbEventProperty>(xe, nameof(m_event), m_event);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSEventOnDeactivateModifier);
+        }
+
+        public bool Equals(BSEventOnDeactivateModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_event is null && other.m_event is null) || (m_event is not null && other.m_event is not null && m_event.Equals((IHavokObject)other.m_event))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_event);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

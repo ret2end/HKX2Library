@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +11,12 @@ namespace HKX2
     // m_indexBuffers m_class: hkxIndexBuffer Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_material m_class: hkxMaterial Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_userChannels m_class: hkReferencedObject Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkxMeshSection : hkReferencedObject
+    public partial class hkxMeshSection : hkReferencedObject, IEquatable<hkxMeshSection?>
     {
-        public hkxVertexBuffer? m_vertexBuffer { set; get; } = default;
-        public IList<hkxIndexBuffer> m_indexBuffers { set; get; } = new List<hkxIndexBuffer>();
-        public hkxMaterial? m_material { set; get; } = default;
-        public IList<hkReferencedObject> m_userChannels { set; get; } = new List<hkReferencedObject>();
+        public hkxVertexBuffer? m_vertexBuffer { set; get; }
+        public IList<hkxIndexBuffer> m_indexBuffers { set; get; } = Array.Empty<hkxIndexBuffer>();
+        public hkxMaterial? m_material { set; get; }
+        public IList<hkReferencedObject> m_userChannels { set; get; } = Array.Empty<hkReferencedObject>();
 
         public override uint Signature => 0xe2286cf8;
 
@@ -51,9 +51,37 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteClassPointer(xe, nameof(m_vertexBuffer), m_vertexBuffer);
-            xs.WriteClassPointerArray<hkxIndexBuffer>(xe, nameof(m_indexBuffers), m_indexBuffers);
+            xs.WriteClassPointerArray(xe, nameof(m_indexBuffers), m_indexBuffers);
             xs.WriteClassPointer(xe, nameof(m_material), m_material);
-            xs.WriteClassPointerArray<hkReferencedObject>(xe, nameof(m_userChannels), m_userChannels);
+            xs.WriteClassPointerArray(xe, nameof(m_userChannels), m_userChannels);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxMeshSection);
+        }
+
+        public bool Equals(hkxMeshSection? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_vertexBuffer is null && other.m_vertexBuffer is null) || (m_vertexBuffer is not null && other.m_vertexBuffer is not null && m_vertexBuffer.Equals((IHavokObject)other.m_vertexBuffer))) &&
+                   m_indexBuffers.SequenceEqual(other.m_indexBuffers) &&
+                   ((m_material is null && other.m_material is null) || (m_material is not null && other.m_material is not null && m_material.Equals((IHavokObject)other.m_material))) &&
+                   m_userChannels.SequenceEqual(other.m_userChannels) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_vertexBuffer);
+            hashcode.Add(m_indexBuffers.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_material);
+            hashcode.Add(m_userChannels.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

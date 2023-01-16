@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,7 +12,7 @@ namespace HKX2
     // m_lin2 m_class: hkpLinConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 172 flags: FLAGS_NONE enum: 
     // m_steeringBase m_class: hkpSetLocalRotationsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
     // m_2dAng m_class: hkp2dAngConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 288 flags: FLAGS_NONE enum: 
-    public partial class hkpWheelConstraintDataAtoms : IHavokObject
+    public partial class hkpWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpWheelConstraintDataAtoms?>
     {
         public hkpSetLocalTransformsConstraintAtom m_suspensionBase { set; get; } = new();
         public hkpLinLimitConstraintAtom m_lin0Limit { set; get; } = new();
@@ -70,6 +68,38 @@ namespace HKX2
             xs.WriteClass<hkpLinConstraintAtom>(xe, nameof(m_lin2), m_lin2);
             xs.WriteClass<hkpSetLocalRotationsConstraintAtom>(xe, nameof(m_steeringBase), m_steeringBase);
             xs.WriteClass<hkp2dAngConstraintAtom>(xe, nameof(m_2dAng), m_2dAng);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpWheelConstraintDataAtoms);
+        }
+
+        public bool Equals(hkpWheelConstraintDataAtoms? other)
+        {
+            return other is not null &&
+                   ((m_suspensionBase is null && other.m_suspensionBase is null) || (m_suspensionBase is not null && other.m_suspensionBase is not null && m_suspensionBase.Equals((IHavokObject)other.m_suspensionBase))) &&
+                   ((m_lin0Limit is null && other.m_lin0Limit is null) || (m_lin0Limit is not null && other.m_lin0Limit is not null && m_lin0Limit.Equals((IHavokObject)other.m_lin0Limit))) &&
+                   ((m_lin0Soft is null && other.m_lin0Soft is null) || (m_lin0Soft is not null && other.m_lin0Soft is not null && m_lin0Soft.Equals((IHavokObject)other.m_lin0Soft))) &&
+                   ((m_lin1 is null && other.m_lin1 is null) || (m_lin1 is not null && other.m_lin1 is not null && m_lin1.Equals((IHavokObject)other.m_lin1))) &&
+                   ((m_lin2 is null && other.m_lin2 is null) || (m_lin2 is not null && other.m_lin2 is not null && m_lin2.Equals((IHavokObject)other.m_lin2))) &&
+                   ((m_steeringBase is null && other.m_steeringBase is null) || (m_steeringBase is not null && other.m_steeringBase is not null && m_steeringBase.Equals((IHavokObject)other.m_steeringBase))) &&
+                   ((m_2dAng is null && other.m_2dAng is null) || (m_2dAng is not null && other.m_2dAng is not null && m_2dAng.Equals((IHavokObject)other.m_2dAng))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_suspensionBase);
+            hashcode.Add(m_lin0Limit);
+            hashcode.Add(m_lin0Soft);
+            hashcode.Add(m_lin1);
+            hashcode.Add(m_lin2);
+            hashcode.Add(m_steeringBase);
+            hashcode.Add(m_2dAng);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +14,15 @@ namespace HKX2
     // m_startStateIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_randomizeSimulation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkbSetBehaviorCommand : hkReferencedObject
+    public partial class hkbSetBehaviorCommand : hkReferencedObject, IEquatable<hkbSetBehaviorCommand?>
     {
-        public ulong m_characterId { set; get; } = default;
-        public hkbBehaviorGraph? m_behavior { set; get; } = default;
-        public hkbGenerator? m_rootGenerator { set; get; } = default;
-        public IList<hkbBehaviorGraph> m_referencedBehaviors { set; get; } = new List<hkbBehaviorGraph>();
-        public int m_startStateIndex { set; get; } = default;
-        public bool m_randomizeSimulation { set; get; } = default;
-        public int m_padding { set; get; } = default;
+        public ulong m_characterId { set; get; }
+        public hkbBehaviorGraph? m_behavior { set; get; }
+        public hkbGenerator? m_rootGenerator { set; get; }
+        public IList<hkbBehaviorGraph> m_referencedBehaviors { set; get; } = Array.Empty<hkbBehaviorGraph>();
+        public int m_startStateIndex { set; get; }
+        public bool m_randomizeSimulation { set; get; }
+        public int m_padding { set; get; }
 
         public override uint Signature => 0xe18b74b9;
 
@@ -72,10 +72,44 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
             xs.WriteClassPointer(xe, nameof(m_behavior), m_behavior);
             xs.WriteClassPointer(xe, nameof(m_rootGenerator), m_rootGenerator);
-            xs.WriteClassPointerArray<hkbBehaviorGraph>(xe, nameof(m_referencedBehaviors), m_referencedBehaviors);
+            xs.WriteClassPointerArray(xe, nameof(m_referencedBehaviors), m_referencedBehaviors);
             xs.WriteNumber(xe, nameof(m_startStateIndex), m_startStateIndex);
             xs.WriteBoolean(xe, nameof(m_randomizeSimulation), m_randomizeSimulation);
             xs.WriteNumber(xe, nameof(m_padding), m_padding);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSetBehaviorCommand);
+        }
+
+        public bool Equals(hkbSetBehaviorCommand? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   ((m_behavior is null && other.m_behavior is null) || (m_behavior is not null && other.m_behavior is not null && m_behavior.Equals((IHavokObject)other.m_behavior))) &&
+                   ((m_rootGenerator is null && other.m_rootGenerator is null) || (m_rootGenerator is not null && other.m_rootGenerator is not null && m_rootGenerator.Equals((IHavokObject)other.m_rootGenerator))) &&
+                   m_referencedBehaviors.SequenceEqual(other.m_referencedBehaviors) &&
+                   m_startStateIndex.Equals(other.m_startStateIndex) &&
+                   m_randomizeSimulation.Equals(other.m_randomizeSimulation) &&
+                   m_padding.Equals(other.m_padding) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_behavior);
+            hashcode.Add(m_rootGenerator);
+            hashcode.Add(m_referencedBehaviors.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_startStateIndex);
+            hashcode.Add(m_randomizeSimulation);
+            hashcode.Add(m_padding);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

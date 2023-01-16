@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +10,11 @@ namespace HKX2
     // m_info m_class: hkpMoppCodeCodeInfo Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_buildType m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: BuildType
-    public partial class hkpMoppCode : hkReferencedObject
+    public partial class hkpMoppCode : hkReferencedObject, IEquatable<hkpMoppCode?>
     {
         public hkpMoppCodeCodeInfo m_info { set; get; } = new();
-        public IList<byte> m_data { set; get; } = new List<byte>();
-        public sbyte m_buildType { set; get; } = default;
+        public IList<byte> m_data { set; get; } = Array.Empty<byte>();
+        public sbyte m_buildType { set; get; }
 
         public override uint Signature => 0x924c2661;
 
@@ -50,6 +50,32 @@ namespace HKX2
             xs.WriteClass<hkpMoppCodeCodeInfo>(xe, nameof(m_info), m_info);
             xs.WriteNumberArray(xe, nameof(m_data), m_data);
             xs.WriteEnum<BuildType, sbyte>(xe, nameof(m_buildType), m_buildType);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMoppCode);
+        }
+
+        public bool Equals(hkpMoppCode? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_info is null && other.m_info is null) || (m_info is not null && other.m_info is not null && m_info.Equals((IHavokObject)other.m_info))) &&
+                   m_data.SequenceEqual(other.m_data) &&
+                   m_buildType.Equals(other.m_buildType) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_info);
+            hashcode.Add(m_data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_buildType);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

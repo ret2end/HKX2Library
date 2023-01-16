@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +12,13 @@ namespace HKX2
     // m_bindings m_class: hkaAnimationBinding Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_attachments m_class: hkaBoneAttachment Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_skins m_class: hkaMeshBinding Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkaAnimationContainer : hkReferencedObject
+    public partial class hkaAnimationContainer : hkReferencedObject, IEquatable<hkaAnimationContainer?>
     {
-        public IList<hkaSkeleton> m_skeletons { set; get; } = new List<hkaSkeleton>();
-        public IList<hkaAnimation> m_animations { set; get; } = new List<hkaAnimation>();
-        public IList<hkaAnimationBinding> m_bindings { set; get; } = new List<hkaAnimationBinding>();
-        public IList<hkaBoneAttachment> m_attachments { set; get; } = new List<hkaBoneAttachment>();
-        public IList<hkaMeshBinding> m_skins { set; get; } = new List<hkaMeshBinding>();
+        public IList<hkaSkeleton> m_skeletons { set; get; } = Array.Empty<hkaSkeleton>();
+        public IList<hkaAnimation> m_animations { set; get; } = Array.Empty<hkaAnimation>();
+        public IList<hkaAnimationBinding> m_bindings { set; get; } = Array.Empty<hkaAnimationBinding>();
+        public IList<hkaBoneAttachment> m_attachments { set; get; } = Array.Empty<hkaBoneAttachment>();
+        public IList<hkaMeshBinding> m_skins { set; get; } = Array.Empty<hkaMeshBinding>();
 
         public override uint Signature => 0x8dc20333;
 
@@ -55,11 +55,41 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkaSkeleton>(xe, nameof(m_skeletons), m_skeletons);
-            xs.WriteClassPointerArray<hkaAnimation>(xe, nameof(m_animations), m_animations);
-            xs.WriteClassPointerArray<hkaAnimationBinding>(xe, nameof(m_bindings), m_bindings);
-            xs.WriteClassPointerArray<hkaBoneAttachment>(xe, nameof(m_attachments), m_attachments);
-            xs.WriteClassPointerArray<hkaMeshBinding>(xe, nameof(m_skins), m_skins);
+            xs.WriteClassPointerArray(xe, nameof(m_skeletons), m_skeletons);
+            xs.WriteClassPointerArray(xe, nameof(m_animations), m_animations);
+            xs.WriteClassPointerArray(xe, nameof(m_bindings), m_bindings);
+            xs.WriteClassPointerArray(xe, nameof(m_attachments), m_attachments);
+            xs.WriteClassPointerArray(xe, nameof(m_skins), m_skins);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaAnimationContainer);
+        }
+
+        public bool Equals(hkaAnimationContainer? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_skeletons.SequenceEqual(other.m_skeletons) &&
+                   m_animations.SequenceEqual(other.m_animations) &&
+                   m_bindings.SequenceEqual(other.m_bindings) &&
+                   m_attachments.SequenceEqual(other.m_attachments) &&
+                   m_skins.SequenceEqual(other.m_skins) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_skeletons.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_animations.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_bindings.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_attachments.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_skins.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

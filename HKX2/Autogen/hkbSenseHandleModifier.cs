@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,27 +27,27 @@ namespace HKX2
     // m_foundHandleOut m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 215 flags: FLAGS_NONE enum: 
     // m_timeSinceLastModify m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 216 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_rangeIndexForEventToSendNextUpdate m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 220 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbSenseHandleModifier : hkbModifier
+    public partial class hkbSenseHandleModifier : hkbModifier, IEquatable<hkbSenseHandleModifier?>
     {
         public hkbHandle m_handle { set; get; } = new();
-        public Vector4 m_sensorLocalOffset { set; get; } = default;
-        public IList<hkbSenseHandleModifierRange> m_ranges { set; get; } = new List<hkbSenseHandleModifierRange>();
-        public hkbHandle? m_handleOut { set; get; } = default;
-        public hkbHandle? m_handleIn { set; get; } = default;
+        public Vector4 m_sensorLocalOffset { set; get; }
+        public IList<hkbSenseHandleModifierRange> m_ranges { set; get; } = Array.Empty<hkbSenseHandleModifierRange>();
+        public hkbHandle? m_handleOut { set; get; }
+        public hkbHandle? m_handleIn { set; get; }
         public string m_localFrameName { set; get; } = "";
         public string m_sensorLocalFrameName { set; get; } = "";
-        public float m_minDistance { set; get; } = default;
-        public float m_maxDistance { set; get; } = default;
-        public float m_distanceOut { set; get; } = default;
-        public uint m_collisionFilterInfo { set; get; } = default;
-        public short m_sensorRagdollBoneIndex { set; get; } = default;
-        public short m_sensorAnimationBoneIndex { set; get; } = default;
-        public sbyte m_sensingMode { set; get; } = default;
-        public bool m_extrapolateSensorPosition { set; get; } = default;
-        public bool m_keepFirstSensedHandle { set; get; } = default;
-        public bool m_foundHandleOut { set; get; } = default;
-        private float m_timeSinceLastModify { set; get; } = default;
-        private int m_rangeIndexForEventToSendNextUpdate { set; get; } = default;
+        public float m_minDistance { set; get; }
+        public float m_maxDistance { set; get; }
+        public float m_distanceOut { set; get; }
+        public uint m_collisionFilterInfo { set; get; }
+        public short m_sensorRagdollBoneIndex { set; get; }
+        public short m_sensorAnimationBoneIndex { set; get; }
+        public sbyte m_sensingMode { set; get; }
+        public bool m_extrapolateSensorPosition { set; get; }
+        public bool m_keepFirstSensedHandle { set; get; }
+        public bool m_foundHandleOut { set; get; }
+        private float m_timeSinceLastModify { set; get; }
+        private int m_rangeIndexForEventToSendNextUpdate { set; get; }
 
         public override uint Signature => 0x2a064d99;
 
@@ -124,7 +125,7 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteSerializeIgnored(xe, nameof(m_handle));
             xs.WriteVector4(xe, nameof(m_sensorLocalOffset), m_sensorLocalOffset);
-            xs.WriteClassArray<hkbSenseHandleModifierRange>(xe, nameof(m_ranges), m_ranges);
+            xs.WriteClassArray(xe, nameof(m_ranges), m_ranges);
             xs.WriteClassPointer(xe, nameof(m_handleOut), m_handleOut);
             xs.WriteClassPointer(xe, nameof(m_handleIn), m_handleIn);
             xs.WriteString(xe, nameof(m_localFrameName), m_localFrameName);
@@ -141,6 +142,58 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_foundHandleOut), m_foundHandleOut);
             xs.WriteSerializeIgnored(xe, nameof(m_timeSinceLastModify));
             xs.WriteSerializeIgnored(xe, nameof(m_rangeIndexForEventToSendNextUpdate));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSenseHandleModifier);
+        }
+
+        public bool Equals(hkbSenseHandleModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_sensorLocalOffset.Equals(other.m_sensorLocalOffset) &&
+                   m_ranges.SequenceEqual(other.m_ranges) &&
+                   ((m_handleOut is null && other.m_handleOut is null) || (m_handleOut is not null && other.m_handleOut is not null && m_handleOut.Equals((IHavokObject)other.m_handleOut))) &&
+                   ((m_handleIn is null && other.m_handleIn is null) || (m_handleIn is not null && other.m_handleIn is not null && m_handleIn.Equals((IHavokObject)other.m_handleIn))) &&
+                   (m_localFrameName is null && other.m_localFrameName is null || m_localFrameName == other.m_localFrameName || m_localFrameName is null && other.m_localFrameName == "" || m_localFrameName == "" && other.m_localFrameName is null) &&
+                   (m_sensorLocalFrameName is null && other.m_sensorLocalFrameName is null || m_sensorLocalFrameName == other.m_sensorLocalFrameName || m_sensorLocalFrameName is null && other.m_sensorLocalFrameName == "" || m_sensorLocalFrameName == "" && other.m_sensorLocalFrameName is null) &&
+                   m_minDistance.Equals(other.m_minDistance) &&
+                   m_maxDistance.Equals(other.m_maxDistance) &&
+                   m_distanceOut.Equals(other.m_distanceOut) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   m_sensorRagdollBoneIndex.Equals(other.m_sensorRagdollBoneIndex) &&
+                   m_sensorAnimationBoneIndex.Equals(other.m_sensorAnimationBoneIndex) &&
+                   m_sensingMode.Equals(other.m_sensingMode) &&
+                   m_extrapolateSensorPosition.Equals(other.m_extrapolateSensorPosition) &&
+                   m_keepFirstSensedHandle.Equals(other.m_keepFirstSensedHandle) &&
+                   m_foundHandleOut.Equals(other.m_foundHandleOut) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_sensorLocalOffset);
+            hashcode.Add(m_ranges.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_handleOut);
+            hashcode.Add(m_handleIn);
+            hashcode.Add(m_localFrameName);
+            hashcode.Add(m_sensorLocalFrameName);
+            hashcode.Add(m_minDistance);
+            hashcode.Add(m_maxDistance);
+            hashcode.Add(m_distanceOut);
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(m_sensorRagdollBoneIndex);
+            hashcode.Add(m_sensorAnimationBoneIndex);
+            hashcode.Add(m_sensingMode);
+            hashcode.Add(m_extrapolateSensorPosition);
+            hashcode.Add(m_keepFirstSensedHandle);
+            hashcode.Add(m_foundHandleOut);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

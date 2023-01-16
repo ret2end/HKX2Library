@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,16 +15,16 @@ namespace HKX2
     // m_data m_class: hkbCharacterData Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_mirroredSkeleton m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 72 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_characterPropertyIdMap m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 80 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbCharacterSetup : hkReferencedObject
+    public partial class hkbCharacterSetup : hkReferencedObject, IEquatable<hkbCharacterSetup?>
     {
-        public IList<hkaSkeletonMapper> m_retargetingSkeletonMappers { set; get; } = new List<hkaSkeletonMapper>();
-        public hkaSkeleton? m_animationSkeleton { set; get; } = default;
-        public hkaSkeletonMapper? m_ragdollToAnimationSkeletonMapper { set; get; } = default;
-        public hkaSkeletonMapper? m_animationToRagdollSkeletonMapper { set; get; } = default;
-        private object? m_animationBindingSet { set; get; } = default;
-        public hkbCharacterData? m_data { set; get; } = default;
-        private object? m_mirroredSkeleton { set; get; } = default;
-        private object? m_characterPropertyIdMap { set; get; } = default;
+        public IList<hkaSkeletonMapper> m_retargetingSkeletonMappers { set; get; } = Array.Empty<hkaSkeletonMapper>();
+        public hkaSkeleton? m_animationSkeleton { set; get; }
+        public hkaSkeletonMapper? m_ragdollToAnimationSkeletonMapper { set; get; }
+        public hkaSkeletonMapper? m_animationToRagdollSkeletonMapper { set; get; }
+        private object? m_animationBindingSet { set; get; }
+        public hkbCharacterData? m_data { set; get; }
+        private object? m_mirroredSkeleton { set; get; }
+        private object? m_characterPropertyIdMap { set; get; }
 
         public override uint Signature => 0xe5a2a413;
 
@@ -67,7 +67,7 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkaSkeletonMapper>(xe, nameof(m_retargetingSkeletonMappers), m_retargetingSkeletonMappers);
+            xs.WriteClassPointerArray(xe, nameof(m_retargetingSkeletonMappers), m_retargetingSkeletonMappers);
             xs.WriteClassPointer(xe, nameof(m_animationSkeleton), m_animationSkeleton);
             xs.WriteClassPointer(xe, nameof(m_ragdollToAnimationSkeletonMapper), m_ragdollToAnimationSkeletonMapper);
             xs.WriteClassPointer(xe, nameof(m_animationToRagdollSkeletonMapper), m_animationToRagdollSkeletonMapper);
@@ -75,6 +75,36 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_data), m_data);
             xs.WriteSerializeIgnored(xe, nameof(m_mirroredSkeleton));
             xs.WriteSerializeIgnored(xe, nameof(m_characterPropertyIdMap));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterSetup);
+        }
+
+        public bool Equals(hkbCharacterSetup? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_retargetingSkeletonMappers.SequenceEqual(other.m_retargetingSkeletonMappers) &&
+                   ((m_animationSkeleton is null && other.m_animationSkeleton is null) || (m_animationSkeleton is not null && other.m_animationSkeleton is not null && m_animationSkeleton.Equals((IHavokObject)other.m_animationSkeleton))) &&
+                   ((m_ragdollToAnimationSkeletonMapper is null && other.m_ragdollToAnimationSkeletonMapper is null) || (m_ragdollToAnimationSkeletonMapper is not null && other.m_ragdollToAnimationSkeletonMapper is not null && m_ragdollToAnimationSkeletonMapper.Equals((IHavokObject)other.m_ragdollToAnimationSkeletonMapper))) &&
+                   ((m_animationToRagdollSkeletonMapper is null && other.m_animationToRagdollSkeletonMapper is null) || (m_animationToRagdollSkeletonMapper is not null && other.m_animationToRagdollSkeletonMapper is not null && m_animationToRagdollSkeletonMapper.Equals((IHavokObject)other.m_animationToRagdollSkeletonMapper))) &&
+                   ((m_data is null && other.m_data is null) || (m_data is not null && other.m_data is not null && m_data.Equals((IHavokObject)other.m_data))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_retargetingSkeletonMappers.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_animationSkeleton);
+            hashcode.Add(m_ragdollToAnimationSkeletonMapper);
+            hashcode.Add(m_animationToRagdollSkeletonMapper);
+            hashcode.Add(m_data);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

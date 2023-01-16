@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +14,15 @@ namespace HKX2
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_userData m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_active m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkpPhysicsSystem : hkReferencedObject
+    public partial class hkpPhysicsSystem : hkReferencedObject, IEquatable<hkpPhysicsSystem?>
     {
-        public IList<hkpRigidBody> m_rigidBodies { set; get; } = new List<hkpRigidBody>();
-        public IList<hkpConstraintInstance> m_constraints { set; get; } = new List<hkpConstraintInstance>();
-        public IList<hkpAction> m_actions { set; get; } = new List<hkpAction>();
-        public IList<hkpPhantom> m_phantoms { set; get; } = new List<hkpPhantom>();
+        public IList<hkpRigidBody> m_rigidBodies { set; get; } = Array.Empty<hkpRigidBody>();
+        public IList<hkpConstraintInstance> m_constraints { set; get; } = Array.Empty<hkpConstraintInstance>();
+        public IList<hkpAction> m_actions { set; get; } = Array.Empty<hkpAction>();
+        public IList<hkpPhantom> m_phantoms { set; get; } = Array.Empty<hkpPhantom>();
         public string m_name { set; get; } = "";
-        public ulong m_userData { set; get; } = default;
-        public bool m_active { set; get; } = default;
+        public ulong m_userData { set; get; }
+        public bool m_active { set; get; }
 
         public override uint Signature => 0xff724c17;
 
@@ -67,13 +67,47 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkpRigidBody>(xe, nameof(m_rigidBodies), m_rigidBodies);
-            xs.WriteClassPointerArray<hkpConstraintInstance>(xe, nameof(m_constraints), m_constraints);
-            xs.WriteClassPointerArray<hkpAction>(xe, nameof(m_actions), m_actions);
-            xs.WriteClassPointerArray<hkpPhantom>(xe, nameof(m_phantoms), m_phantoms);
+            xs.WriteClassPointerArray(xe, nameof(m_rigidBodies), m_rigidBodies);
+            xs.WriteClassPointerArray(xe, nameof(m_constraints), m_constraints);
+            xs.WriteClassPointerArray(xe, nameof(m_actions), m_actions);
+            xs.WriteClassPointerArray(xe, nameof(m_phantoms), m_phantoms);
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteNumber(xe, nameof(m_userData), m_userData);
             xs.WriteBoolean(xe, nameof(m_active), m_active);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPhysicsSystem);
+        }
+
+        public bool Equals(hkpPhysicsSystem? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rigidBodies.SequenceEqual(other.m_rigidBodies) &&
+                   m_constraints.SequenceEqual(other.m_constraints) &&
+                   m_actions.SequenceEqual(other.m_actions) &&
+                   m_phantoms.SequenceEqual(other.m_phantoms) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_userData.Equals(other.m_userData) &&
+                   m_active.Equals(other.m_active) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rigidBodies.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_constraints.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_actions.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_phantoms.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_name);
+            hashcode.Add(m_userData);
+            hashcode.Add(m_active);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

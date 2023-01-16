@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -20,21 +19,21 @@ namespace HKX2
     // m_hipIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 76 flags: FLAGS_NONE enum: 
     // m_kneeIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 78 flags: FLAGS_NONE enum: 
     // m_ankleIndex m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkbFootIkDriverInfoLeg : IHavokObject
+    public partial class hkbFootIkDriverInfoLeg : IHavokObject, IEquatable<hkbFootIkDriverInfoLeg?>
     {
-        private Quaternion m_prevAnkleRotLS { set; get; } = default;
-        public Vector4 m_kneeAxisLS { set; get; } = default;
-        public Vector4 m_footEndLS { set; get; } = default;
-        public float m_footPlantedAnkleHeightMS { set; get; } = default;
-        public float m_footRaisedAnkleHeightMS { set; get; } = default;
-        public float m_maxAnkleHeightMS { set; get; } = default;
-        public float m_minAnkleHeightMS { set; get; } = default;
-        public float m_maxKneeAngleDegrees { set; get; } = default;
-        public float m_minKneeAngleDegrees { set; get; } = default;
-        public float m_maxAnkleAngleDegrees { set; get; } = default;
-        public short m_hipIndex { set; get; } = default;
-        public short m_kneeIndex { set; get; } = default;
-        public short m_ankleIndex { set; get; } = default;
+        private Quaternion m_prevAnkleRotLS { set; get; }
+        public Vector4 m_kneeAxisLS { set; get; }
+        public Vector4 m_footEndLS { set; get; }
+        public float m_footPlantedAnkleHeightMS { set; get; }
+        public float m_footRaisedAnkleHeightMS { set; get; }
+        public float m_maxAnkleHeightMS { set; get; }
+        public float m_minAnkleHeightMS { set; get; }
+        public float m_maxKneeAngleDegrees { set; get; }
+        public float m_minKneeAngleDegrees { set; get; }
+        public float m_maxAnkleAngleDegrees { set; get; }
+        public short m_hipIndex { set; get; }
+        public short m_kneeIndex { set; get; }
+        public short m_ankleIndex { set; get; }
 
         public virtual uint Signature => 0x224b18d1;
 
@@ -105,6 +104,48 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_hipIndex), m_hipIndex);
             xs.WriteNumber(xe, nameof(m_kneeIndex), m_kneeIndex);
             xs.WriteNumber(xe, nameof(m_ankleIndex), m_ankleIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbFootIkDriverInfoLeg);
+        }
+
+        public bool Equals(hkbFootIkDriverInfoLeg? other)
+        {
+            return other is not null &&
+                   m_kneeAxisLS.Equals(other.m_kneeAxisLS) &&
+                   m_footEndLS.Equals(other.m_footEndLS) &&
+                   m_footPlantedAnkleHeightMS.Equals(other.m_footPlantedAnkleHeightMS) &&
+                   m_footRaisedAnkleHeightMS.Equals(other.m_footRaisedAnkleHeightMS) &&
+                   m_maxAnkleHeightMS.Equals(other.m_maxAnkleHeightMS) &&
+                   m_minAnkleHeightMS.Equals(other.m_minAnkleHeightMS) &&
+                   m_maxKneeAngleDegrees.Equals(other.m_maxKneeAngleDegrees) &&
+                   m_minKneeAngleDegrees.Equals(other.m_minKneeAngleDegrees) &&
+                   m_maxAnkleAngleDegrees.Equals(other.m_maxAnkleAngleDegrees) &&
+                   m_hipIndex.Equals(other.m_hipIndex) &&
+                   m_kneeIndex.Equals(other.m_kneeIndex) &&
+                   m_ankleIndex.Equals(other.m_ankleIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_kneeAxisLS);
+            hashcode.Add(m_footEndLS);
+            hashcode.Add(m_footPlantedAnkleHeightMS);
+            hashcode.Add(m_footRaisedAnkleHeightMS);
+            hashcode.Add(m_maxAnkleHeightMS);
+            hashcode.Add(m_minAnkleHeightMS);
+            hashcode.Add(m_maxKneeAngleDegrees);
+            hashcode.Add(m_minKneeAngleDegrees);
+            hashcode.Add(m_maxAnkleAngleDegrees);
+            hashcode.Add(m_hipIndex);
+            hashcode.Add(m_kneeIndex);
+            hashcode.Add(m_ankleIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -12,17 +12,19 @@ namespace HKX2
         }
         public static TValue ToEnumValue<TEnum, TValue>(this string value) where TEnum : Enum where TValue : IBinaryInteger<TValue>
         {
-            if (Enum.TryParse(typeof(TEnum), value, out object? val))
+            if (Enum.TryParse(typeof(TEnum), value, out var val))
             {
                 return (TValue)val;
             }
+
             // failed return convert to number
-            else if (TValue.TryParse(value, null, out var retVal))
+            if (TValue.TryParse(value, null, out var retVal))
             {
                 return retVal;
             }
+
             // check is Hex format
-            else if (value.StartsWith("0x"))
+            if (value.StartsWith("0x"))
             {
                 value = value[2..];
                 TValue.TryParse(value, System.Globalization.NumberStyles.HexNumber, null, out var hexVal);
@@ -50,19 +52,19 @@ namespace HKX2
         {
             var result = new List<string>();
             var enums = (TEnum[])Enum.GetValues(typeof(TEnum));
-            for (int i = enums.Length - 1; i >= 0; i--)
+            for (var i = enums.Length - 1; i >= 0; i--)
             {
                 if (enums[i].ToEnumValue<TEnum, TValue>() == TValue.Zero)
                     break;
 
-                if ((enums[i].ToEnumValue<TEnum, TValue>() & value) == enums[i].ToEnumValue<TEnum, TValue>())
+                if ((enums[i].ToEnumValue<TEnum, TValue>() & value) != enums[i].ToEnumValue<TEnum, TValue>())
+                    continue;
+
+                result.Add(enums[i].ToString());
+                value &= ~enums[i].ToEnumValue<TEnum, TValue>();
+                if (value == TValue.Zero)
                 {
-                    result.Add(enums[i].ToString());
-                    value &= ~enums[i].ToEnumValue<TEnum, TValue>();
-                    if (value == TValue.Zero)
-                    {
-                        break;
-                    }
+                    break;
                 }
             }
             if (value > TValue.Zero)
@@ -79,9 +81,9 @@ namespace HKX2
             return splited.ToFlagValue<TEnum, TValue>();
         }
 
-        public static TValue ToFlagValue<TEnum, TValue>(this string[] value) where TEnum : Enum where TValue : IBinaryInteger<TValue>
+        public static TValue ToFlagValue<TEnum, TValue>(this IEnumerable<string> value) where TEnum : Enum where TValue : IBinaryInteger<TValue>
         {
-            TValue result = TValue.Zero;
+            var result = TValue.Zero;
             foreach (var item in value)
             {
                 result |= item.ToEnumValue<TEnum, TValue>();

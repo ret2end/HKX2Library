@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_bones m_class: hkbBoneIndexArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_worldFromModelModeData m_class: hkbWorldFromModelModeData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
     // m_boneWeights m_class: hkbBoneWeightArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
-    public partial class hkbPoweredRagdollControlsModifier : hkbModifier
+    public partial class hkbPoweredRagdollControlsModifier : hkbModifier, IEquatable<hkbPoweredRagdollControlsModifier?>
     {
         public hkbPoweredRagdollControlData m_controlData { set; get; } = new();
-        public hkbBoneIndexArray? m_bones { set; get; } = default;
+        public hkbBoneIndexArray? m_bones { set; get; }
         public hkbWorldFromModelModeData m_worldFromModelModeData { set; get; } = new();
-        public hkbBoneWeightArray? m_boneWeights { set; get; } = default;
+        public hkbBoneWeightArray? m_boneWeights { set; get; }
 
         public override uint Signature => 0x7cb54065;
 
@@ -56,6 +54,34 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_bones), m_bones);
             xs.WriteClass<hkbWorldFromModelModeData>(xe, nameof(m_worldFromModelModeData), m_worldFromModelModeData);
             xs.WriteClassPointer(xe, nameof(m_boneWeights), m_boneWeights);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbPoweredRagdollControlsModifier);
+        }
+
+        public bool Equals(hkbPoweredRagdollControlsModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_controlData is null && other.m_controlData is null) || (m_controlData is not null && other.m_controlData is not null && m_controlData.Equals((IHavokObject)other.m_controlData))) &&
+                   ((m_bones is null && other.m_bones is null) || (m_bones is not null && other.m_bones is not null && m_bones.Equals((IHavokObject)other.m_bones))) &&
+                   ((m_worldFromModelModeData is null && other.m_worldFromModelModeData is null) || (m_worldFromModelModeData is not null && other.m_worldFromModelModeData is not null && m_worldFromModelModeData.Equals((IHavokObject)other.m_worldFromModelModeData))) &&
+                   ((m_boneWeights is null && other.m_boneWeights is null) || (m_boneWeights is not null && other.m_boneWeights is not null && m_boneWeights.Equals((IHavokObject)other.m_boneWeights))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_controlData);
+            hashcode.Add(m_bones);
+            hashcode.Add(m_worldFromModelModeData);
+            hashcode.Add(m_boneWeights);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

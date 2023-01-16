@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +12,12 @@ namespace HKX2
     // m_forward m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_duration m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_referenceFrameSamples m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
-    public partial class hkaDefaultAnimatedReferenceFrame : hkaAnimatedReferenceFrame
+    public partial class hkaDefaultAnimatedReferenceFrame : hkaAnimatedReferenceFrame, IEquatable<hkaDefaultAnimatedReferenceFrame?>
     {
-        public Vector4 m_up { set; get; } = default;
-        public Vector4 m_forward { set; get; } = default;
-        public float m_duration { set; get; } = default;
-        public IList<Vector4> m_referenceFrameSamples { set; get; } = new List<Vector4>();
+        public Vector4 m_up { set; get; }
+        public Vector4 m_forward { set; get; }
+        public float m_duration { set; get; }
+        public IList<Vector4> m_referenceFrameSamples { set; get; } = Array.Empty<Vector4>();
 
         public override uint Signature => 0x6d85e445;
 
@@ -58,6 +59,34 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_forward), m_forward);
             xs.WriteFloat(xe, nameof(m_duration), m_duration);
             xs.WriteVector4Array(xe, nameof(m_referenceFrameSamples), m_referenceFrameSamples);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaDefaultAnimatedReferenceFrame);
+        }
+
+        public bool Equals(hkaDefaultAnimatedReferenceFrame? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_up.Equals(other.m_up) &&
+                   m_forward.Equals(other.m_forward) &&
+                   m_duration.Equals(other.m_duration) &&
+                   m_referenceFrameSamples.SequenceEqual(other.m_referenceFrameSamples) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_up);
+            hashcode.Add(m_forward);
+            hashcode.Add(m_duration);
+            hashcode.Add(m_referenceFrameSamples.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

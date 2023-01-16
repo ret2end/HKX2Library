@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_start m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_end m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpMultiRayShapeRay : IHavokObject
+    public partial class hkpMultiRayShapeRay : IHavokObject, IEquatable<hkpMultiRayShapeRay?>
     {
-        public Vector4 m_start { set; get; } = default;
-        public Vector4 m_end { set; get; } = default;
+        public Vector4 m_start { set; get; }
+        public Vector4 m_end { set; get; }
 
         public virtual uint Signature => 0xffdc0b65;
 
@@ -38,6 +37,28 @@ namespace HKX2
         {
             xs.WriteVector4(xe, nameof(m_start), m_start);
             xs.WriteVector4(xe, nameof(m_end), m_end);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMultiRayShapeRay);
+        }
+
+        public bool Equals(hkpMultiRayShapeRay? other)
+        {
+            return other is not null &&
+                   m_start.Equals(other.m_start) &&
+                   m_end.Equals(other.m_end) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_start);
+            hashcode.Add(m_end);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

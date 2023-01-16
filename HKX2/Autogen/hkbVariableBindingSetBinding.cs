@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,19 +16,19 @@ namespace HKX2
     // m_memberType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 34 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_variableType m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 35 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_INT8 arrSize: 0 offset: 36 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbVariableBindingSetBinding : IHavokObject
+    public partial class hkbVariableBindingSetBinding : IHavokObject, IEquatable<hkbVariableBindingSetBinding?>
     {
         public string m_memberPath { set; get; } = "";
-        private object? m_memberClass { set; get; } = default;
-        private int m_offsetInObjectPlusOne { set; get; } = default;
-        private int m_offsetInArrayPlusOne { set; get; } = default;
-        private int m_rootVariableIndex { set; get; } = default;
-        public int m_variableIndex { set; get; } = default;
-        public sbyte m_bitIndex { set; get; } = default;
-        public sbyte m_bindingType { set; get; } = default;
-        private byte m_memberType { set; get; } = default;
-        private sbyte m_variableType { set; get; } = default;
-        private sbyte m_flags { set; get; } = default;
+        private object? m_memberClass { set; get; }
+        private int m_offsetInObjectPlusOne { set; get; }
+        private int m_offsetInArrayPlusOne { set; get; }
+        private int m_rootVariableIndex { set; get; }
+        public int m_variableIndex { set; get; }
+        public sbyte m_bitIndex { set; get; }
+        public sbyte m_bindingType { set; get; }
+        private byte m_memberType { set; get; }
+        private sbyte m_variableType { set; get; }
+        private sbyte m_flags { set; get; }
 
         public virtual uint Signature => 0x4d592f72;
 
@@ -87,6 +85,32 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_memberType));
             xs.WriteSerializeIgnored(xe, nameof(m_variableType));
             xs.WriteSerializeIgnored(xe, nameof(m_flags));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbVariableBindingSetBinding);
+        }
+
+        public bool Equals(hkbVariableBindingSetBinding? other)
+        {
+            return other is not null &&
+                   (m_memberPath is null && other.m_memberPath is null || m_memberPath == other.m_memberPath || m_memberPath is null && other.m_memberPath == "" || m_memberPath == "" && other.m_memberPath is null) &&
+                   m_variableIndex.Equals(other.m_variableIndex) &&
+                   m_bitIndex.Equals(other.m_bitIndex) &&
+                   m_bindingType.Equals(other.m_bindingType) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_memberPath);
+            hashcode.Add(m_variableIndex);
+            hashcode.Add(m_bitIndex);
+            hashcode.Add(m_bindingType);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

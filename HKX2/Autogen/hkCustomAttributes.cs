@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkCustomAttributes Signatire: 0xbff19005 size: 16 flags: FLAGS_NONE
 
     // m_attributes m_class: hkCustomAttributesAttribute Type.TYPE_SIMPLEARRAY Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
-    public partial class hkCustomAttributes : IHavokObject
+    public partial class hkCustomAttributes : IHavokObject, IEquatable<hkCustomAttributes?>
     {
-        public object? m_attributes { set; get; } = default;
+        public object? m_attributes { set; get; }
 
         public virtual uint Signature => 0xbff19005;
 
@@ -32,6 +30,26 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkCustomAttributes);
+        }
+
+        public bool Equals(hkCustomAttributes? other)
+        {
+            return other is not null &&
+                   m_attributes.Equals(other.m_attributes) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_attributes);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

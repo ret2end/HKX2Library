@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 
 namespace HKX2
 {
@@ -71,6 +68,53 @@ namespace HKX2
         {
             using FileStream stream = File.OpenRead(filePath);
             WriteXml(root, header, stream);
+        }
+
+        public static bool ScrambledEquals<T>(this IEnumerable<T?>? list1, IEnumerable<T?>? list2)
+        {
+            if (list1 is null && list2 is null) return true;
+            if (list1 is null || list2 is null) return false;
+            if (!list1.Any() && !list2.Any()) return true;
+            if (list1.Count() != list2.Count()) return false;
+
+            //var firstNotSecond = list1.Except(list2);
+            //var secondNotFirst = list2.Except(list1);
+
+            //return !firstNotSecond.Any() && !secondNotFirst.Any();
+
+            var nullCounter = 0;
+            var cnt = new Dictionary<T, int>();
+            foreach (var s in list1)
+            {
+                if (s is null)
+                {
+                    nullCounter++;
+                }
+                else if (cnt.ContainsKey(s))
+                {
+                    cnt[s]++;
+                }
+                else
+                {
+                    cnt.Add(s, 1);
+                }
+            }
+            foreach (var s in list2)
+            {
+                if (s is null)
+                {
+                    nullCounter--;
+                }
+                else if (cnt.ContainsKey(s))
+                {
+                    cnt[s]--;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return nullCounter == 0 && cnt.Values.All(c => c == 0);
         }
     }
 }

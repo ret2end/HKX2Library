@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpKeyframedRigidMotion Signatire: 0xbafa2bb7 size: 320 flags: FLAGS_NONE
 
 
-    public partial class hkpKeyframedRigidMotion : hkpMotion
+    public partial class hkpKeyframedRigidMotion : hkpMotion, IEquatable<hkpKeyframedRigidMotion?>
     {
 
 
@@ -32,6 +30,26 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpKeyframedRigidMotion);
+        }
+
+        public bool Equals(hkpKeyframedRigidMotion? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

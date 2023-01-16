@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_rotationA m_class:  Type.TYPE_ROTATION Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_rotationB m_class:  Type.TYPE_ROTATION Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom
+    public partial class hkpSetLocalRotationsConstraintAtom : hkpConstraintAtom, IEquatable<hkpSetLocalRotationsConstraintAtom?>
     {
-        public Matrix4x4 m_rotationA { set; get; } = default;
-        public Matrix4x4 m_rotationB { set; get; } = default;
+        public Matrix4x4 m_rotationA { set; get; }
+        public Matrix4x4 m_rotationB { set; get; }
 
         public override uint Signature => 0xf81db8e;
 
@@ -44,6 +43,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteRotation(xe, nameof(m_rotationA), m_rotationA);
             xs.WriteRotation(xe, nameof(m_rotationB), m_rotationB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSetLocalRotationsConstraintAtom);
+        }
+
+        public bool Equals(hkpSetLocalRotationsConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rotationA.Equals(other.m_rotationA) &&
+                   m_rotationB.Equals(other.m_rotationB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rotationA);
+            hashcode.Add(m_rotationB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

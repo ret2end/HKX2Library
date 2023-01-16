@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,7 +9,7 @@ namespace HKX2
     // m_className m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_variant m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
 
-    public partial class hkRootLevelContainerNamedVariant : IHavokObject
+    public partial class hkRootLevelContainerNamedVariant : IHavokObject, IEquatable<hkRootLevelContainerNamedVariant?>
     {
 
         public string m_name { set; get; } = "";
@@ -21,20 +20,16 @@ namespace HKX2
 
         public void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-
             m_name = des.ReadStringPointer(br);
             m_className = des.ReadStringPointer(br);
             m_variant = des.ReadClassPointer<hkReferencedObject>(br);
-
         }
 
         public void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-
             s.WriteStringPointer(bw, m_name);
             s.WriteStringPointer(bw, m_className);
             s.WriteClassPointer(bw, m_variant);
-
         }
 
         public void ReadXml(XmlDeserializer xd, XElement xe)
@@ -49,6 +44,30 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteString(xe, nameof(m_className), m_className);
             xs.WriteClassPointer(xe, nameof(m_variant), m_variant);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkRootLevelContainerNamedVariant);
+        }
+
+        public bool Equals(hkRootLevelContainerNamedVariant? other)
+        {
+            return other is not null &&
+                   m_name == other.m_name &&
+                   m_className == other.m_className &&
+                   ((m_variant is null && other.m_variant is null) || (m_variant is not null && m_variant.Equals((IHavokObject)other.m_variant))) &&
+                   Signature == other.Signature;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_name);
+            hashcode.Add(m_className);
+            hashcode.Add(m_variant);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

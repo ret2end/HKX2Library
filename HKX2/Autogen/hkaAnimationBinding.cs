@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +12,13 @@ namespace HKX2
     // m_transformTrackToBoneIndices m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_floatTrackToFloatSlotIndices m_class:  Type.TYPE_ARRAY Type.TYPE_INT16 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_blendHint m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: BlendHint
-    public partial class hkaAnimationBinding : hkReferencedObject
+    public partial class hkaAnimationBinding : hkReferencedObject, IEquatable<hkaAnimationBinding?>
     {
         public string m_originalSkeletonName { set; get; } = "";
-        public hkaAnimation? m_animation { set; get; } = default;
-        public IList<short> m_transformTrackToBoneIndices { set; get; } = new List<short>();
-        public IList<short> m_floatTrackToFloatSlotIndices { set; get; } = new List<short>();
-        public sbyte m_blendHint { set; get; } = default;
+        public hkaAnimation? m_animation { set; get; }
+        public IList<short> m_transformTrackToBoneIndices { set; get; } = Array.Empty<short>();
+        public IList<short> m_floatTrackToFloatSlotIndices { set; get; } = Array.Empty<short>();
+        public sbyte m_blendHint { set; get; }
 
         public override uint Signature => 0x66eac971;
 
@@ -62,6 +62,36 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_transformTrackToBoneIndices), m_transformTrackToBoneIndices);
             xs.WriteNumberArray(xe, nameof(m_floatTrackToFloatSlotIndices), m_floatTrackToFloatSlotIndices);
             xs.WriteEnum<BlendHint, sbyte>(xe, nameof(m_blendHint), m_blendHint);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaAnimationBinding);
+        }
+
+        public bool Equals(hkaAnimationBinding? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_originalSkeletonName is null && other.m_originalSkeletonName is null || m_originalSkeletonName == other.m_originalSkeletonName || m_originalSkeletonName is null && other.m_originalSkeletonName == "" || m_originalSkeletonName == "" && other.m_originalSkeletonName is null) &&
+                   ((m_animation is null && other.m_animation is null) || (m_animation is not null && other.m_animation is not null && m_animation.Equals((IHavokObject)other.m_animation))) &&
+                   m_transformTrackToBoneIndices.SequenceEqual(other.m_transformTrackToBoneIndices) &&
+                   m_floatTrackToFloatSlotIndices.SequenceEqual(other.m_floatTrackToFloatSlotIndices) &&
+                   m_blendHint.Equals(other.m_blendHint) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_originalSkeletonName);
+            hashcode.Add(m_animation);
+            hashcode.Add(m_transformTrackToBoneIndices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_floatTrackToFloatSlotIndices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_blendHint);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

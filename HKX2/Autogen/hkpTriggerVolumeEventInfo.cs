@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_sortValue m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_body m_class: hkpRigidBody Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_operation m_class:  Type.TYPE_ENUM Type.TYPE_INT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: Operation
-    public partial class hkpTriggerVolumeEventInfo : IHavokObject
+    public partial class hkpTriggerVolumeEventInfo : IHavokObject, IEquatable<hkpTriggerVolumeEventInfo?>
     {
-        public ulong m_sortValue { set; get; } = default;
-        public hkpRigidBody? m_body { set; get; } = default;
-        public int m_operation { set; get; } = default;
+        public ulong m_sortValue { set; get; }
+        public hkpRigidBody? m_body { set; get; }
+        public int m_operation { set; get; }
 
         public virtual uint Signature => 0xeb60f431;
 
@@ -46,6 +44,30 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_sortValue), m_sortValue);
             xs.WriteClassPointer(xe, nameof(m_body), m_body);
             xs.WriteEnum<Operation, int>(xe, nameof(m_operation), m_operation);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTriggerVolumeEventInfo);
+        }
+
+        public bool Equals(hkpTriggerVolumeEventInfo? other)
+        {
+            return other is not null &&
+                   m_sortValue.Equals(other.m_sortValue) &&
+                   ((m_body is null && other.m_body is null) || (m_body is not null && other.m_body is not null && m_body.Equals((IHavokObject)other.m_body))) &&
+                   m_operation.Equals(other.m_operation) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_sortValue);
+            hashcode.Add(m_body);
+            hashcode.Add(m_operation);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

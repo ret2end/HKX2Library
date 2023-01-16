@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,14 +14,14 @@ namespace HKX2
     // m_faceOffsets m_class:  Type.TYPE_ARRAY Type.TYPE_UINT16 arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_reference m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_transformIndex m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 66 flags: FLAGS_NONE enum: 
-    public partial class hkpCompressedMeshShapeConvexPiece : IHavokObject
+    public partial class hkpCompressedMeshShapeConvexPiece : IHavokObject, IEquatable<hkpCompressedMeshShapeConvexPiece?>
     {
-        public Vector4 m_offset { set; get; } = default;
-        public IList<ushort> m_vertices { set; get; } = new List<ushort>();
-        public IList<byte> m_faceVertices { set; get; } = new List<byte>();
-        public IList<ushort> m_faceOffsets { set; get; } = new List<ushort>();
-        public ushort m_reference { set; get; } = default;
-        public ushort m_transformIndex { set; get; } = default;
+        public Vector4 m_offset { set; get; }
+        public IList<ushort> m_vertices { set; get; } = Array.Empty<ushort>();
+        public IList<byte> m_faceVertices { set; get; } = Array.Empty<byte>();
+        public IList<ushort> m_faceOffsets { set; get; } = Array.Empty<ushort>();
+        public ushort m_reference { set; get; }
+        public ushort m_transformIndex { set; get; }
 
         public virtual uint Signature => 0x385bb842;
 
@@ -64,6 +65,36 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_faceOffsets), m_faceOffsets);
             xs.WriteNumber(xe, nameof(m_reference), m_reference);
             xs.WriteNumber(xe, nameof(m_transformIndex), m_transformIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCompressedMeshShapeConvexPiece);
+        }
+
+        public bool Equals(hkpCompressedMeshShapeConvexPiece? other)
+        {
+            return other is not null &&
+                   m_offset.Equals(other.m_offset) &&
+                   m_vertices.SequenceEqual(other.m_vertices) &&
+                   m_faceVertices.SequenceEqual(other.m_faceVertices) &&
+                   m_faceOffsets.SequenceEqual(other.m_faceOffsets) &&
+                   m_reference.Equals(other.m_reference) &&
+                   m_transformIndex.Equals(other.m_transformIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_offset);
+            hashcode.Add(m_vertices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_faceVertices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_faceOffsets.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_reference);
+            hashcode.Add(m_transformIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

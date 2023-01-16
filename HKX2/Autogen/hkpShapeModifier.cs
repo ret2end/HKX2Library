@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpShapeModifier Signatire: 0xda8c7d7d size: 16 flags: FLAGS_NONE
 
 
-    public partial class hkpShapeModifier : hkReferencedObject
+    public partial class hkpShapeModifier : hkReferencedObject, IEquatable<hkpShapeModifier?>
     {
 
 
@@ -32,6 +30,26 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpShapeModifier);
+        }
+
+        public bool Equals(hkpShapeModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

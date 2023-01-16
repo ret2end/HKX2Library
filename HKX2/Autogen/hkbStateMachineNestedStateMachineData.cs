@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_nestedStateMachine m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 0 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_eventIdMap m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbStateMachineNestedStateMachineData : IHavokObject
+    public partial class hkbStateMachineNestedStateMachineData : IHavokObject, IEquatable<hkbStateMachineNestedStateMachineData?>
     {
-        private object? m_nestedStateMachine { set; get; } = default;
-        private object? m_eventIdMap { set; get; } = default;
+        private object? m_nestedStateMachine { set; get; }
+        private object? m_eventIdMap { set; get; }
 
         public virtual uint Signature => 0x7358f5da;
 
@@ -37,6 +35,25 @@ namespace HKX2
         {
             xs.WriteSerializeIgnored(xe, nameof(m_nestedStateMachine));
             xs.WriteSerializeIgnored(xe, nameof(m_eventIdMap));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineNestedStateMachineData);
+        }
+
+        public bool Equals(hkbStateMachineNestedStateMachineData? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

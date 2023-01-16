@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_controlData m_class: hkbHandIkControlData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_handIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
-    public partial class hkbHandIkControlsModifierHand : IHavokObject
+    public partial class hkbHandIkControlsModifierHand : IHavokObject, IEquatable<hkbHandIkControlsModifierHand?>
     {
         public hkbHandIkControlData m_controlData { set; get; } = new();
-        public int m_handIndex { set; get; } = default;
-        public bool m_enable { set; get; } = default;
+        public int m_handIndex { set; get; }
+        public bool m_enable { set; get; }
 
         public virtual uint Signature => 0x9c72e9e3;
 
@@ -46,6 +44,30 @@ namespace HKX2
             xs.WriteClass<hkbHandIkControlData>(xe, nameof(m_controlData), m_controlData);
             xs.WriteNumber(xe, nameof(m_handIndex), m_handIndex);
             xs.WriteBoolean(xe, nameof(m_enable), m_enable);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbHandIkControlsModifierHand);
+        }
+
+        public bool Equals(hkbHandIkControlsModifierHand? other)
+        {
+            return other is not null &&
+                   ((m_controlData is null && other.m_controlData is null) || (m_controlData is not null && other.m_controlData is not null && m_controlData.Equals((IHavokObject)other.m_controlData))) &&
+                   m_handIndex.Equals(other.m_handIndex) &&
+                   m_enable.Equals(other.m_enable) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_controlData);
+            hashcode.Add(m_handIndex);
+            hashcode.Add(m_enable);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

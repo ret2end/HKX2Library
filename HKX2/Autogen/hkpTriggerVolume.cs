@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +11,12 @@ namespace HKX2
     // m_eventQueue m_class: hkpTriggerVolumeEventInfo Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_triggerBody m_class: hkpRigidBody Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_sequenceNumber m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkpTriggerVolume : hkReferencedObject
+    public partial class hkpTriggerVolume : hkReferencedObject, IEquatable<hkpTriggerVolume?>
     {
-        public IList<hkpRigidBody> m_overlappingBodies { set; get; } = new List<hkpRigidBody>();
-        public IList<hkpTriggerVolumeEventInfo> m_eventQueue { set; get; } = new List<hkpTriggerVolumeEventInfo>();
-        public hkpRigidBody? m_triggerBody { set; get; } = default;
-        public uint m_sequenceNumber { set; get; } = default;
+        public IList<hkpRigidBody> m_overlappingBodies { set; get; } = Array.Empty<hkpRigidBody>();
+        public IList<hkpTriggerVolumeEventInfo> m_eventQueue { set; get; } = Array.Empty<hkpTriggerVolumeEventInfo>();
+        public hkpRigidBody? m_triggerBody { set; get; }
+        public uint m_sequenceNumber { set; get; }
 
         public override uint Signature => 0xa29a8d1a;
 
@@ -54,10 +54,38 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkpRigidBody>(xe, nameof(m_overlappingBodies), m_overlappingBodies);
-            xs.WriteClassArray<hkpTriggerVolumeEventInfo>(xe, nameof(m_eventQueue), m_eventQueue);
+            xs.WriteClassPointerArray(xe, nameof(m_overlappingBodies), m_overlappingBodies);
+            xs.WriteClassArray(xe, nameof(m_eventQueue), m_eventQueue);
             xs.WriteClassPointer(xe, nameof(m_triggerBody), m_triggerBody);
             xs.WriteNumber(xe, nameof(m_sequenceNumber), m_sequenceNumber);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTriggerVolume);
+        }
+
+        public bool Equals(hkpTriggerVolume? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_overlappingBodies.SequenceEqual(other.m_overlappingBodies) &&
+                   m_eventQueue.SequenceEqual(other.m_eventQueue) &&
+                   ((m_triggerBody is null && other.m_triggerBody is null) || (m_triggerBody is not null && other.m_triggerBody is not null && m_triggerBody.Equals((IHavokObject)other.m_triggerBody))) &&
+                   m_sequenceNumber.Equals(other.m_sequenceNumber) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_overlappingBodies.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_eventQueue.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_triggerBody);
+            hashcode.Add(m_sequenceNumber);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

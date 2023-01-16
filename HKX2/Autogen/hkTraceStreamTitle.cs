@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +7,7 @@ namespace HKX2
     // hkTraceStreamTitle Signatire: 0x6a4ca82c size: 32 flags: FLAGS_NOT_SERIALIZABLE
 
     // m_value m_class:  Type.TYPE_CHAR Type.TYPE_VOID arrSize: 32 offset: 0 flags: FLAGS_NONE enum: 
-    public partial class hkTraceStreamTitle : IHavokObject
+    public partial class hkTraceStreamTitle : IHavokObject, IEquatable<hkTraceStreamTitle?>
     {
         public string m_value { set; get; } = "";
 
@@ -32,6 +31,26 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
             xs.WriteString(xe, nameof(m_value), m_value);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkTraceStreamTitle);
+        }
+
+        public bool Equals(hkTraceStreamTitle? other)
+        {
+            return other is not null &&
+                   m_value.SequenceEqual(other.m_value) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_value.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

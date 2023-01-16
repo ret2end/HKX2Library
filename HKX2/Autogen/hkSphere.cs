@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,9 +7,9 @@ namespace HKX2
     // hkSphere Signatire: 0x143dff99 size: 16 flags: FLAGS_NONE
 
     // m_pos m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
-    public partial class hkSphere : IHavokObject
+    public partial class hkSphere : IHavokObject, IEquatable<hkSphere?>
     {
-        public Vector4 m_pos { set; get; } = default;
+        public Vector4 m_pos { set; get; }
 
         public virtual uint Signature => 0x143dff99;
 
@@ -32,6 +31,26 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
             xs.WriteVector4(xe, nameof(m_pos), m_pos);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkSphere);
+        }
+
+        public bool Equals(hkSphere? other)
+        {
+            return other is not null &&
+                   m_pos.Equals(other.m_pos) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_pos);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

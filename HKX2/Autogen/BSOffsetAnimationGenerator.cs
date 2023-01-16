@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -18,19 +17,19 @@ namespace HKX2
     // m_iCurrentFrame m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 156 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bZeroOffset m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 160 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bOffsetValid m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 161 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSOffsetAnimationGenerator : hkbGenerator
+    public partial class BSOffsetAnimationGenerator : hkbGenerator, IEquatable<BSOffsetAnimationGenerator?>
     {
-        public hkbGenerator? m_pDefaultGenerator { set; get; } = default;
-        public hkbGenerator? m_pOffsetClipGenerator { set; get; } = default;
-        public float m_fOffsetVariable { set; get; } = default;
-        public float m_fOffsetRangeStart { set; get; } = default;
-        public float m_fOffsetRangeEnd { set; get; } = default;
-        public IList<object> m_BoneOffsetA { set; get; } = new List<object>();
-        public IList<object> m_BoneIndexA { set; get; } = new List<object>();
-        private float m_fCurrentPercentage { set; get; } = default;
-        private uint m_iCurrentFrame { set; get; } = default;
-        private bool m_bZeroOffset { set; get; } = default;
-        private bool m_bOffsetValid { set; get; } = default;
+        public hkbGenerator? m_pDefaultGenerator { set; get; }
+        public hkbGenerator? m_pOffsetClipGenerator { set; get; }
+        public float m_fOffsetVariable { set; get; }
+        public float m_fOffsetRangeStart { set; get; }
+        public float m_fOffsetRangeEnd { set; get; }
+        public IList<object> m_BoneOffsetA { set; get; } = Array.Empty<object>();
+        public IList<object> m_BoneIndexA { set; get; } = Array.Empty<object>();
+        private float m_fCurrentPercentage { set; get; }
+        private uint m_iCurrentFrame { set; get; }
+        private bool m_bZeroOffset { set; get; }
+        private bool m_bOffsetValid { set; get; }
 
         public override uint Signature => 0xb8571122;
 
@@ -98,6 +97,36 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_iCurrentFrame));
             xs.WriteSerializeIgnored(xe, nameof(m_bZeroOffset));
             xs.WriteSerializeIgnored(xe, nameof(m_bOffsetValid));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSOffsetAnimationGenerator);
+        }
+
+        public bool Equals(BSOffsetAnimationGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_pDefaultGenerator is null && other.m_pDefaultGenerator is null) || (m_pDefaultGenerator is not null && other.m_pDefaultGenerator is not null && m_pDefaultGenerator.Equals((IHavokObject)other.m_pDefaultGenerator))) &&
+                   ((m_pOffsetClipGenerator is null && other.m_pOffsetClipGenerator is null) || (m_pOffsetClipGenerator is not null && other.m_pOffsetClipGenerator is not null && m_pOffsetClipGenerator.Equals((IHavokObject)other.m_pOffsetClipGenerator))) &&
+                   m_fOffsetVariable.Equals(other.m_fOffsetVariable) &&
+                   m_fOffsetRangeStart.Equals(other.m_fOffsetRangeStart) &&
+                   m_fOffsetRangeEnd.Equals(other.m_fOffsetRangeEnd) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_pDefaultGenerator);
+            hashcode.Add(m_pOffsetClipGenerator);
+            hashcode.Add(m_fOffsetVariable);
+            hashcode.Add(m_fOffsetRangeStart);
+            hashcode.Add(m_fOffsetRangeEnd);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

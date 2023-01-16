@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +11,13 @@ namespace HKX2
     // m_verticalError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_hitSomething m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_isPlantedMS m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 37 flags: FLAGS_NONE enum: 
-    public partial class hkbFootIkControlsModifierLeg : IHavokObject
+    public partial class hkbFootIkControlsModifierLeg : IHavokObject, IEquatable<hkbFootIkControlsModifierLeg?>
     {
-        public Vector4 m_groundPosition { set; get; } = default;
+        public Vector4 m_groundPosition { set; get; }
         public hkbEventProperty m_ungroundedEvent { set; get; } = new();
-        public float m_verticalError { set; get; } = default;
-        public bool m_hitSomething { set; get; } = default;
-        public bool m_isPlantedMS { set; get; } = default;
+        public float m_verticalError { set; get; }
+        public bool m_hitSomething { set; get; }
+        public bool m_isPlantedMS { set; get; }
 
         public virtual uint Signature => 0x9e17091a;
 
@@ -58,6 +57,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_verticalError), m_verticalError);
             xs.WriteBoolean(xe, nameof(m_hitSomething), m_hitSomething);
             xs.WriteBoolean(xe, nameof(m_isPlantedMS), m_isPlantedMS);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbFootIkControlsModifierLeg);
+        }
+
+        public bool Equals(hkbFootIkControlsModifierLeg? other)
+        {
+            return other is not null &&
+                   m_groundPosition.Equals(other.m_groundPosition) &&
+                   ((m_ungroundedEvent is null && other.m_ungroundedEvent is null) || (m_ungroundedEvent is not null && other.m_ungroundedEvent is not null && m_ungroundedEvent.Equals((IHavokObject)other.m_ungroundedEvent))) &&
+                   m_verticalError.Equals(other.m_verticalError) &&
+                   m_hitSomething.Equals(other.m_hitSomething) &&
+                   m_isPlantedMS.Equals(other.m_isPlantedMS) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_groundPosition);
+            hashcode.Add(m_ungroundedEvent);
+            hashcode.Add(m_verticalError);
+            hashcode.Add(m_hitSomething);
+            hashcode.Add(m_isPlantedMS);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

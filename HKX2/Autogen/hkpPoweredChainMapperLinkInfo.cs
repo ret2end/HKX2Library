@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_firstTargetIdx m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_numTargets m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_limitConstraint m_class: hkpConstraintInstance Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpPoweredChainMapperLinkInfo : IHavokObject
+    public partial class hkpPoweredChainMapperLinkInfo : IHavokObject, IEquatable<hkpPoweredChainMapperLinkInfo?>
     {
-        public int m_firstTargetIdx { set; get; } = default;
-        public int m_numTargets { set; get; } = default;
-        public hkpConstraintInstance? m_limitConstraint { set; get; } = default;
+        public int m_firstTargetIdx { set; get; }
+        public int m_numTargets { set; get; }
+        public hkpConstraintInstance? m_limitConstraint { set; get; }
 
         public virtual uint Signature => 0xcf071a1b;
 
@@ -44,6 +42,30 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_firstTargetIdx), m_firstTargetIdx);
             xs.WriteNumber(xe, nameof(m_numTargets), m_numTargets);
             xs.WriteClassPointer(xe, nameof(m_limitConstraint), m_limitConstraint);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPoweredChainMapperLinkInfo);
+        }
+
+        public bool Equals(hkpPoweredChainMapperLinkInfo? other)
+        {
+            return other is not null &&
+                   m_firstTargetIdx.Equals(other.m_firstTargetIdx) &&
+                   m_numTargets.Equals(other.m_numTargets) &&
+                   ((m_limitConstraint is null && other.m_limitConstraint is null) || (m_limitConstraint is not null && other.m_limitConstraint is not null && m_limitConstraint.Equals((IHavokObject)other.m_limitConstraint))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_firstTargetIdx);
+            hashcode.Add(m_numTargets);
+            hashcode.Add(m_limitConstraint);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

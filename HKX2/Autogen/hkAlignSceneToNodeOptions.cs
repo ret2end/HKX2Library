@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,16 +14,16 @@ namespace HKX2
     // m_transformSkew m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 22 flags: FLAGS_NONE enum: 
     // m_keyframe m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_nodeName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkAlignSceneToNodeOptions : hkReferencedObject
+    public partial class hkAlignSceneToNodeOptions : hkReferencedObject, IEquatable<hkAlignSceneToNodeOptions?>
     {
-        public bool m_invert { set; get; } = default;
-        public bool m_transformPositionX { set; get; } = default;
-        public bool m_transformPositionY { set; get; } = default;
-        public bool m_transformPositionZ { set; get; } = default;
-        public bool m_transformRotation { set; get; } = default;
-        public bool m_transformScale { set; get; } = default;
-        public bool m_transformSkew { set; get; } = default;
-        public int m_keyframe { set; get; } = default;
+        public bool m_invert { set; get; }
+        public bool m_transformPositionX { set; get; }
+        public bool m_transformPositionY { set; get; }
+        public bool m_transformPositionZ { set; get; }
+        public bool m_transformRotation { set; get; }
+        public bool m_transformScale { set; get; }
+        public bool m_transformSkew { set; get; }
+        public int m_keyframe { set; get; }
         public string m_nodeName { set; get; } = "";
 
         public override uint Signature => 0x207cb01;
@@ -88,6 +86,44 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_transformSkew), m_transformSkew);
             xs.WriteNumber(xe, nameof(m_keyframe), m_keyframe);
             xs.WriteString(xe, nameof(m_nodeName), m_nodeName);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkAlignSceneToNodeOptions);
+        }
+
+        public bool Equals(hkAlignSceneToNodeOptions? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_invert.Equals(other.m_invert) &&
+                   m_transformPositionX.Equals(other.m_transformPositionX) &&
+                   m_transformPositionY.Equals(other.m_transformPositionY) &&
+                   m_transformPositionZ.Equals(other.m_transformPositionZ) &&
+                   m_transformRotation.Equals(other.m_transformRotation) &&
+                   m_transformScale.Equals(other.m_transformScale) &&
+                   m_transformSkew.Equals(other.m_transformSkew) &&
+                   m_keyframe.Equals(other.m_keyframe) &&
+                   (m_nodeName is null && other.m_nodeName is null || m_nodeName == other.m_nodeName || m_nodeName is null && other.m_nodeName == "" || m_nodeName == "" && other.m_nodeName is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_invert);
+            hashcode.Add(m_transformPositionX);
+            hashcode.Add(m_transformPositionY);
+            hashcode.Add(m_transformPositionZ);
+            hashcode.Add(m_transformRotation);
+            hashcode.Add(m_transformScale);
+            hashcode.Add(m_transformSkew);
+            hashcode.Add(m_keyframe);
+            hashcode.Add(m_nodeName);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

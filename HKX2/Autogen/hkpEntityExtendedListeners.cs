@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +7,7 @@ namespace HKX2
 
     // m_activationListeners m_class: hkpEntitySmallArraySerializeOverrideType Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_entityListeners m_class: hkpEntitySmallArraySerializeOverrideType Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpEntityExtendedListeners : IHavokObject
+    public partial class hkpEntityExtendedListeners : IHavokObject, IEquatable<hkpEntityExtendedListeners?>
     {
         public hkpEntitySmallArraySerializeOverrideType m_activationListeners { set; get; } = new();
         public hkpEntitySmallArraySerializeOverrideType m_entityListeners { set; get; } = new();
@@ -37,6 +35,25 @@ namespace HKX2
         {
             xs.WriteSerializeIgnored(xe, nameof(m_activationListeners));
             xs.WriteSerializeIgnored(xe, nameof(m_entityListeners));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpEntityExtendedListeners);
+        }
+
+        public bool Equals(hkpEntityExtendedListeners? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

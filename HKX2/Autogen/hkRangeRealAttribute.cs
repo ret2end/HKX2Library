@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_absmax m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_softmin m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_softmax m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class hkRangeRealAttribute : IHavokObject
+    public partial class hkRangeRealAttribute : IHavokObject, IEquatable<hkRangeRealAttribute?>
     {
-        public float m_absmin { set; get; } = default;
-        public float m_absmax { set; get; } = default;
-        public float m_softmin { set; get; } = default;
-        public float m_softmax { set; get; } = default;
+        public float m_absmin { set; get; }
+        public float m_absmax { set; get; }
+        public float m_softmin { set; get; }
+        public float m_softmax { set; get; }
 
         public virtual uint Signature => 0x949db24f;
 
@@ -50,6 +48,32 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_absmax), m_absmax);
             xs.WriteFloat(xe, nameof(m_softmin), m_softmin);
             xs.WriteFloat(xe, nameof(m_softmax), m_softmax);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkRangeRealAttribute);
+        }
+
+        public bool Equals(hkRangeRealAttribute? other)
+        {
+            return other is not null &&
+                   m_absmin.Equals(other.m_absmin) &&
+                   m_absmax.Equals(other.m_absmax) &&
+                   m_softmin.Equals(other.m_softmin) &&
+                   m_softmax.Equals(other.m_softmax) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_absmin);
+            hashcode.Add(m_absmax);
+            hashcode.Add(m_softmin);
+            hashcode.Add(m_softmax);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

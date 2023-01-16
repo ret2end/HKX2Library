@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkbEvent Signatire: 0x3e0fd810 size: 24 flags: FLAGS_NONE
 
     // m_sender m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbEvent : hkbEventBase
+    public partial class hkbEvent : hkbEventBase, IEquatable<hkbEvent?>
     {
-        private object? m_sender { set; get; } = default;
+        private object? m_sender { set; get; }
 
         public override uint Signature => 0x3e0fd810;
 
@@ -35,6 +33,26 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteSerializeIgnored(xe, nameof(m_sender));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbEvent);
+        }
+
+        public bool Equals(hkbEvent? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

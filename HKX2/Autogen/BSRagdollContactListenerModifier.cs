@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +10,12 @@ namespace HKX2
     // m_bones m_class: hkbBoneIndexArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_throwEvent m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_ragdollRigidBodies m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSRagdollContactListenerModifier : hkbModifier
+    public partial class BSRagdollContactListenerModifier : hkbModifier, IEquatable<BSRagdollContactListenerModifier?>
     {
         public hkbEventProperty m_contactEvent { set; get; } = new();
-        public hkbBoneIndexArray? m_bones { set; get; } = default;
-        private bool m_throwEvent { set; get; } = default;
-        public IList<object> m_ragdollRigidBodies { set; get; } = new List<object>();
+        public hkbBoneIndexArray? m_bones { set; get; }
+        private bool m_throwEvent { set; get; }
+        public IList<object> m_ragdollRigidBodies { set; get; } = Array.Empty<object>();
 
         public override uint Signature => 0x8003d8ce;
 
@@ -56,6 +55,30 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_bones), m_bones);
             xs.WriteSerializeIgnored(xe, nameof(m_throwEvent));
             xs.WriteSerializeIgnored(xe, nameof(m_ragdollRigidBodies));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSRagdollContactListenerModifier);
+        }
+
+        public bool Equals(BSRagdollContactListenerModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_contactEvent is null && other.m_contactEvent is null) || (m_contactEvent is not null && other.m_contactEvent is not null && m_contactEvent.Equals((IHavokObject)other.m_contactEvent))) &&
+                   ((m_bones is null && other.m_bones is null) || (m_bones is not null && other.m_bones is not null && m_bones.Equals((IHavokObject)other.m_bones))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_contactEvent);
+            hashcode.Add(m_bones);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

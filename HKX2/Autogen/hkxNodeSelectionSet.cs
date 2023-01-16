@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +9,9 @@ namespace HKX2
 
     // m_selectedNodes m_class: hkxNode Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkxNodeSelectionSet : hkxAttributeHolder
+    public partial class hkxNodeSelectionSet : hkxAttributeHolder, IEquatable<hkxNodeSelectionSet?>
     {
-        public IList<hkxNode> m_selectedNodes { set; get; } = new List<hkxNode>();
+        public IList<hkxNode> m_selectedNodes { set; get; } = Array.Empty<hkxNode>();
         public string m_name { set; get; } = "";
 
         public override uint Signature => 0xd753fc4d;
@@ -40,8 +40,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkxNode>(xe, nameof(m_selectedNodes), m_selectedNodes);
+            xs.WriteClassPointerArray(xe, nameof(m_selectedNodes), m_selectedNodes);
             xs.WriteString(xe, nameof(m_name), m_name);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxNodeSelectionSet);
+        }
+
+        public bool Equals(hkxNodeSelectionSet? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_selectedNodes.SequenceEqual(other.m_selectedNodes) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_selectedNodes.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_name);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

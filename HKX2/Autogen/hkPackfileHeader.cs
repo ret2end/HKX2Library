@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,19 +18,19 @@ namespace HKX2
     // m_contentsVersion m_class:  Type.TYPE_CHAR Type.TYPE_VOID arrSize: 16 offset: 40 flags: FLAGS_NONE enum: 
     // m_flags m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_pad m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 1 offset: 60 flags: FLAGS_NONE enum: 
-    public partial class hkPackfileHeader : IHavokObject
+    public partial class hkPackfileHeader : IHavokObject, IEquatable<hkPackfileHeader?>
     {
         public int[] m_magic = new int[2];
-        public int m_userTag { set; get; } = default;
-        public int m_fileVersion { set; get; } = default;
+        public int m_userTag { set; get; }
+        public int m_fileVersion { set; get; }
         public byte[] m_layoutRules = new byte[4];
-        public int m_numSections { set; get; } = default;
-        public int m_contentsSectionIndex { set; get; } = default;
-        public int m_contentsSectionOffset { set; get; } = default;
-        public int m_contentsClassNameSectionIndex { set; get; } = default;
-        public int m_contentsClassNameSectionOffset { set; get; } = default;
+        public int m_numSections { set; get; }
+        public int m_contentsSectionIndex { set; get; }
+        public int m_contentsSectionOffset { set; get; }
+        public int m_contentsClassNameSectionIndex { set; get; }
+        public int m_contentsClassNameSectionOffset { set; get; }
         public string m_contentsVersion { set; get; } = "";
-        public int m_flags { set; get; } = default;
+        public int m_flags { set; get; }
         public int[] m_pad = new int[1];
 
         public virtual uint Signature => 0x79f9ffda;
@@ -98,6 +97,48 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_contentsVersion), m_contentsVersion);
             xs.WriteNumber(xe, nameof(m_flags), m_flags);
             xs.WriteNumberArray(xe, nameof(m_pad), m_pad);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkPackfileHeader);
+        }
+
+        public bool Equals(hkPackfileHeader? other)
+        {
+            return other is not null &&
+                   m_magic.SequenceEqual(other.m_magic) &&
+                   m_userTag.Equals(other.m_userTag) &&
+                   m_fileVersion.Equals(other.m_fileVersion) &&
+                   m_layoutRules.SequenceEqual(other.m_layoutRules) &&
+                   m_numSections.Equals(other.m_numSections) &&
+                   m_contentsSectionIndex.Equals(other.m_contentsSectionIndex) &&
+                   m_contentsSectionOffset.Equals(other.m_contentsSectionOffset) &&
+                   m_contentsClassNameSectionIndex.Equals(other.m_contentsClassNameSectionIndex) &&
+                   m_contentsClassNameSectionOffset.Equals(other.m_contentsClassNameSectionOffset) &&
+                   m_contentsVersion.SequenceEqual(other.m_contentsVersion) &&
+                   m_flags.Equals(other.m_flags) &&
+                   m_pad.SequenceEqual(other.m_pad) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_magic.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_userTag);
+            hashcode.Add(m_fileVersion);
+            hashcode.Add(m_layoutRules.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_numSections);
+            hashcode.Add(m_contentsSectionIndex);
+            hashcode.Add(m_contentsSectionOffset);
+            hashcode.Add(m_contentsClassNameSectionIndex);
+            hashcode.Add(m_contentsClassNameSectionOffset);
+            hashcode.Add(m_contentsVersion.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_flags);
+            hashcode.Add(m_pad.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

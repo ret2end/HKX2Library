@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -13,14 +12,14 @@ namespace HKX2
     // m_dampedValue m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_errorSum m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     // m_previousError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
-    public partial class hkbDampingModifierInternalState : hkReferencedObject
+    public partial class hkbDampingModifierInternalState : hkReferencedObject, IEquatable<hkbDampingModifierInternalState?>
     {
-        public Vector4 m_dampedVector { set; get; } = default;
-        public Vector4 m_vecErrorSum { set; get; } = default;
-        public Vector4 m_vecPreviousError { set; get; } = default;
-        public float m_dampedValue { set; get; } = default;
-        public float m_errorSum { set; get; } = default;
-        public float m_previousError { set; get; } = default;
+        public Vector4 m_dampedVector { set; get; }
+        public Vector4 m_vecErrorSum { set; get; }
+        public Vector4 m_vecPreviousError { set; get; }
+        public float m_dampedValue { set; get; }
+        public float m_errorSum { set; get; }
+        public float m_previousError { set; get; }
 
         public override uint Signature => 0x508d3b36;
 
@@ -68,6 +67,38 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_dampedValue), m_dampedValue);
             xs.WriteFloat(xe, nameof(m_errorSum), m_errorSum);
             xs.WriteFloat(xe, nameof(m_previousError), m_previousError);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbDampingModifierInternalState);
+        }
+
+        public bool Equals(hkbDampingModifierInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_dampedVector.Equals(other.m_dampedVector) &&
+                   m_vecErrorSum.Equals(other.m_vecErrorSum) &&
+                   m_vecPreviousError.Equals(other.m_vecPreviousError) &&
+                   m_dampedValue.Equals(other.m_dampedValue) &&
+                   m_errorSum.Equals(other.m_errorSum) &&
+                   m_previousError.Equals(other.m_previousError) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_dampedVector);
+            hashcode.Add(m_vecErrorSum);
+            hashcode.Add(m_vecPreviousError);
+            hashcode.Add(m_dampedValue);
+            hashcode.Add(m_errorSum);
+            hashcode.Add(m_previousError);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

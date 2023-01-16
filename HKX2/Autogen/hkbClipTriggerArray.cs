@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkbClipTriggerArray Signatire: 0x59c23a0f size: 32 flags: FLAGS_NONE
 
     // m_triggers m_class: hkbClipTrigger Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkbClipTriggerArray : hkReferencedObject
+    public partial class hkbClipTriggerArray : hkReferencedObject, IEquatable<hkbClipTriggerArray?>
     {
-        public IList<hkbClipTrigger> m_triggers { set; get; } = new List<hkbClipTrigger>();
+        public IList<hkbClipTrigger> m_triggers { set; get; } = Array.Empty<hkbClipTrigger>();
 
         public override uint Signature => 0x59c23a0f;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkbClipTrigger>(xe, nameof(m_triggers), m_triggers);
+            xs.WriteClassArray(xe, nameof(m_triggers), m_triggers);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbClipTriggerArray);
+        }
+
+        public bool Equals(hkbClipTriggerArray? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_triggers.SequenceEqual(other.m_triggers) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_triggers.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

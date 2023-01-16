@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_relativeToEndOfClip m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_acyclic m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 25 flags: FLAGS_NONE enum: 
     // m_isAnnotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 26 flags: FLAGS_NONE enum: 
-    public partial class hkbClipTrigger : IHavokObject
+    public partial class hkbClipTrigger : IHavokObject, IEquatable<hkbClipTrigger?>
     {
-        public float m_localTime { set; get; } = default;
+        public float m_localTime { set; get; }
         public hkbEventProperty m_event { set; get; } = new();
-        public bool m_relativeToEndOfClip { set; get; } = default;
-        public bool m_acyclic { set; get; } = default;
-        public bool m_isAnnotation { set; get; } = default;
+        public bool m_relativeToEndOfClip { set; get; }
+        public bool m_acyclic { set; get; }
+        public bool m_isAnnotation { set; get; }
 
         public virtual uint Signature => 0x7eb45cea;
 
@@ -60,6 +58,34 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_relativeToEndOfClip), m_relativeToEndOfClip);
             xs.WriteBoolean(xe, nameof(m_acyclic), m_acyclic);
             xs.WriteBoolean(xe, nameof(m_isAnnotation), m_isAnnotation);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbClipTrigger);
+        }
+
+        public bool Equals(hkbClipTrigger? other)
+        {
+            return other is not null &&
+                   m_localTime.Equals(other.m_localTime) &&
+                   ((m_event is null && other.m_event is null) || (m_event is not null && other.m_event is not null && m_event.Equals((IHavokObject)other.m_event))) &&
+                   m_relativeToEndOfClip.Equals(other.m_relativeToEndOfClip) &&
+                   m_acyclic.Equals(other.m_acyclic) &&
+                   m_isAnnotation.Equals(other.m_isAnnotation) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_localTime);
+            hashcode.Add(m_event);
+            hashcode.Add(m_relativeToEndOfClip);
+            hashcode.Add(m_acyclic);
+            hashcode.Add(m_isAnnotation);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

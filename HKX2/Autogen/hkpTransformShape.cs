@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +10,12 @@ namespace HKX2
     // m_childShapeSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 48 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_rotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_transform m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkpTransformShape : hkpShape
+    public partial class hkpTransformShape : hkpShape, IEquatable<hkpTransformShape?>
     {
         public hkpSingleShapeContainer m_childShape { set; get; } = new();
-        private int m_childShapeSize { set; get; } = default;
-        public Quaternion m_rotation { set; get; } = default;
-        public Matrix4x4 m_transform { set; get; } = default;
+        private int m_childShapeSize { set; get; }
+        public Quaternion m_rotation { set; get; }
+        public Matrix4x4 m_transform { set; get; }
 
         public override uint Signature => 0x787ef513;
 
@@ -55,6 +54,32 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_childShapeSize));
             xs.WriteQuaternion(xe, nameof(m_rotation), m_rotation);
             xs.WriteTransform(xe, nameof(m_transform), m_transform);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTransformShape);
+        }
+
+        public bool Equals(hkpTransformShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_childShape is null && other.m_childShape is null) || (m_childShape is not null && other.m_childShape is not null && m_childShape.Equals((IHavokObject)other.m_childShape))) &&
+                   m_rotation.Equals(other.m_rotation) &&
+                   m_transform.Equals(other.m_transform) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_childShape);
+            hashcode.Add(m_rotation);
+            hashcode.Add(m_transform);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

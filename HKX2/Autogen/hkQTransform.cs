@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_rotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_translation m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkQTransform : IHavokObject
+    public partial class hkQTransform : IHavokObject, IEquatable<hkQTransform?>
     {
-        public Quaternion m_rotation { set; get; } = default;
-        public Vector4 m_translation { set; get; } = default;
+        public Quaternion m_rotation { set; get; }
+        public Vector4 m_translation { set; get; }
 
         public virtual uint Signature => 0x471a21ee;
 
@@ -38,6 +37,28 @@ namespace HKX2
         {
             xs.WriteQuaternion(xe, nameof(m_rotation), m_rotation);
             xs.WriteVector4(xe, nameof(m_translation), m_translation);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkQTransform);
+        }
+
+        public bool Equals(hkQTransform? other)
+        {
+            return other is not null &&
+                   m_rotation.Equals(other.m_rotation) &&
+                   m_translation.Equals(other.m_translation) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_rotation);
+            hashcode.Add(m_translation);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

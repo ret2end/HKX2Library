@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,18 +15,18 @@ namespace HKX2
     // m_bInvertActive3 m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 87 flags: FLAGS_NONE enum: 
     // m_bIsActive4 m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_bInvertActive4 m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 89 flags: FLAGS_NONE enum: 
-    public partial class BSIsActiveModifier : hkbModifier
+    public partial class BSIsActiveModifier : hkbModifier, IEquatable<BSIsActiveModifier?>
     {
-        public bool m_bIsActive0 { set; get; } = default;
-        public bool m_bInvertActive0 { set; get; } = default;
-        public bool m_bIsActive1 { set; get; } = default;
-        public bool m_bInvertActive1 { set; get; } = default;
-        public bool m_bIsActive2 { set; get; } = default;
-        public bool m_bInvertActive2 { set; get; } = default;
-        public bool m_bIsActive3 { set; get; } = default;
-        public bool m_bInvertActive3 { set; get; } = default;
-        public bool m_bIsActive4 { set; get; } = default;
-        public bool m_bInvertActive4 { set; get; } = default;
+        public bool m_bIsActive0 { set; get; }
+        public bool m_bInvertActive0 { set; get; }
+        public bool m_bIsActive1 { set; get; }
+        public bool m_bInvertActive1 { set; get; }
+        public bool m_bIsActive2 { set; get; }
+        public bool m_bInvertActive2 { set; get; }
+        public bool m_bIsActive3 { set; get; }
+        public bool m_bInvertActive3 { set; get; }
+        public bool m_bIsActive4 { set; get; }
+        public bool m_bInvertActive4 { set; get; }
 
         public override uint Signature => 0xb0fde45a;
 
@@ -92,6 +90,46 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_bInvertActive3), m_bInvertActive3);
             xs.WriteBoolean(xe, nameof(m_bIsActive4), m_bIsActive4);
             xs.WriteBoolean(xe, nameof(m_bInvertActive4), m_bInvertActive4);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSIsActiveModifier);
+        }
+
+        public bool Equals(BSIsActiveModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_bIsActive0.Equals(other.m_bIsActive0) &&
+                   m_bInvertActive0.Equals(other.m_bInvertActive0) &&
+                   m_bIsActive1.Equals(other.m_bIsActive1) &&
+                   m_bInvertActive1.Equals(other.m_bInvertActive1) &&
+                   m_bIsActive2.Equals(other.m_bIsActive2) &&
+                   m_bInvertActive2.Equals(other.m_bInvertActive2) &&
+                   m_bIsActive3.Equals(other.m_bIsActive3) &&
+                   m_bInvertActive3.Equals(other.m_bInvertActive3) &&
+                   m_bIsActive4.Equals(other.m_bIsActive4) &&
+                   m_bInvertActive4.Equals(other.m_bInvertActive4) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_bIsActive0);
+            hashcode.Add(m_bInvertActive0);
+            hashcode.Add(m_bIsActive1);
+            hashcode.Add(m_bInvertActive1);
+            hashcode.Add(m_bIsActive2);
+            hashcode.Add(m_bInvertActive2);
+            hashcode.Add(m_bIsActive3);
+            hashcode.Add(m_bInvertActive3);
+            hashcode.Add(m_bIsActive4);
+            hashcode.Add(m_bInvertActive4);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

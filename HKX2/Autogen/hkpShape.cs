@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_userData m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_UINT32 arrSize: 0 offset: 24 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpShape : hkReferencedObject
+    public partial class hkpShape : hkReferencedObject, IEquatable<hkpShape?>
     {
-        public ulong m_userData { set; get; } = default;
-        private uint m_type { set; get; } = default;
+        public ulong m_userData { set; get; }
+        private uint m_type { set; get; }
 
         public override uint Signature => 0x666490a1;
 
@@ -43,6 +41,28 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_userData), m_userData);
             xs.WriteSerializeIgnored(xe, nameof(m_type));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpShape);
+        }
+
+        public bool Equals(hkpShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_userData.Equals(other.m_userData) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_userData);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

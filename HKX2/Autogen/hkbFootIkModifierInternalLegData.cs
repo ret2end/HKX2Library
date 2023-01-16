@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_groundPosition m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_footIkSolver m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 16 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbFootIkModifierInternalLegData : IHavokObject
+    public partial class hkbFootIkModifierInternalLegData : IHavokObject, IEquatable<hkbFootIkModifierInternalLegData?>
     {
-        public Vector4 m_groundPosition { set; get; } = default;
-        private object? m_footIkSolver { set; get; } = default;
+        public Vector4 m_groundPosition { set; get; }
+        private object? m_footIkSolver { set; get; }
 
         public virtual uint Signature => 0xe5ca3677;
 
@@ -39,6 +38,26 @@ namespace HKX2
         {
             xs.WriteVector4(xe, nameof(m_groundPosition), m_groundPosition);
             xs.WriteSerializeIgnored(xe, nameof(m_footIkSolver));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbFootIkModifierInternalLegData);
+        }
+
+        public bool Equals(hkbFootIkModifierInternalLegData? other)
+        {
+            return other is not null &&
+                   m_groundPosition.Equals(other.m_groundPosition) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_groundPosition);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -6,7 +7,7 @@ namespace HKX2
 
 
 
-    public partial class hkBaseObject : IHavokObject
+    public partial class hkBaseObject : IHavokObject, IEquatable<hkBaseObject?>
     {
         public virtual uint Signature => 0xe0708a00;
 
@@ -28,6 +29,24 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
 
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkBaseObject);
+        }
+
+        public bool Equals(hkBaseObject? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

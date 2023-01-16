@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -15,16 +14,16 @@ namespace HKX2
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
     // m_onCompression m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 124 flags: FLAGS_NONE enum: 
     // m_onExtension m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 125 flags: FLAGS_NONE enum: 
-    public partial class hkpSpringAction : hkpBinaryAction
+    public partial class hkpSpringAction : hkpBinaryAction, IEquatable<hkpSpringAction?>
     {
-        public Vector4 m_lastForce { set; get; } = default;
-        public Vector4 m_positionAinA { set; get; } = default;
-        public Vector4 m_positionBinB { set; get; } = default;
-        public float m_restLength { set; get; } = default;
-        public float m_strength { set; get; } = default;
-        public float m_damping { set; get; } = default;
-        public bool m_onCompression { set; get; } = default;
-        public bool m_onExtension { set; get; } = default;
+        public Vector4 m_lastForce { set; get; }
+        public Vector4 m_positionAinA { set; get; }
+        public Vector4 m_positionBinB { set; get; }
+        public float m_restLength { set; get; }
+        public float m_strength { set; get; }
+        public float m_damping { set; get; }
+        public bool m_onCompression { set; get; }
+        public bool m_onExtension { set; get; }
 
         public override uint Signature => 0x88fc09fa;
 
@@ -80,6 +79,42 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
             xs.WriteBoolean(xe, nameof(m_onCompression), m_onCompression);
             xs.WriteBoolean(xe, nameof(m_onExtension), m_onExtension);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSpringAction);
+        }
+
+        public bool Equals(hkpSpringAction? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_lastForce.Equals(other.m_lastForce) &&
+                   m_positionAinA.Equals(other.m_positionAinA) &&
+                   m_positionBinB.Equals(other.m_positionBinB) &&
+                   m_restLength.Equals(other.m_restLength) &&
+                   m_strength.Equals(other.m_strength) &&
+                   m_damping.Equals(other.m_damping) &&
+                   m_onCompression.Equals(other.m_onCompression) &&
+                   m_onExtension.Equals(other.m_onExtension) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_lastForce);
+            hashcode.Add(m_positionAinA);
+            hashcode.Add(m_positionBinB);
+            hashcode.Add(m_restLength);
+            hashcode.Add(m_strength);
+            hashcode.Add(m_damping);
+            hashcode.Add(m_onCompression);
+            hashcode.Add(m_onExtension);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

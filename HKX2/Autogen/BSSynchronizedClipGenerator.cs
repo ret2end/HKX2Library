@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -26,27 +25,27 @@ namespace HKX2
     // m_bAtMark m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 298 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bAllCharactersInScene m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 299 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bAllCharactersAtMarks m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 300 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSSynchronizedClipGenerator : hkbGenerator
+    public partial class BSSynchronizedClipGenerator : hkbGenerator, IEquatable<BSSynchronizedClipGenerator?>
     {
-        public hkbGenerator? m_pClipGenerator { set; get; } = default;
+        public hkbGenerator? m_pClipGenerator { set; get; }
         public string m_SyncAnimPrefix { set; get; } = "";
-        public bool m_bSyncClipIgnoreMarkPlacement { set; get; } = default;
-        public float m_fGetToMarkTime { set; get; } = default;
-        public float m_fMarkErrorThreshold { set; get; } = default;
-        public bool m_bLeadCharacter { set; get; } = default;
-        public bool m_bReorientSupportChar { set; get; } = default;
-        public bool m_bApplyMotionFromRoot { set; get; } = default;
-        private object? m_pSyncScene { set; get; } = default;
-        private Matrix4x4 m_StartMarkWS { set; get; } = default;
-        private Matrix4x4 m_EndMarkWS { set; get; } = default;
-        private Matrix4x4 m_StartMarkMS { set; get; } = default;
-        private float m_fCurrentLerp { set; get; } = default;
-        private object? m_pLocalSyncBinding { set; get; } = default;
-        private object? m_pEventMap { set; get; } = default;
-        public short m_sAnimationBindingIndex { set; get; } = default;
-        private bool m_bAtMark { set; get; } = default;
-        private bool m_bAllCharactersInScene { set; get; } = default;
-        private bool m_bAllCharactersAtMarks { set; get; } = default;
+        public bool m_bSyncClipIgnoreMarkPlacement { set; get; }
+        public float m_fGetToMarkTime { set; get; }
+        public float m_fMarkErrorThreshold { set; get; }
+        public bool m_bLeadCharacter { set; get; }
+        public bool m_bReorientSupportChar { set; get; }
+        public bool m_bApplyMotionFromRoot { set; get; }
+        private object? m_pSyncScene { set; get; }
+        private Matrix4x4 m_StartMarkWS { set; get; }
+        private Matrix4x4 m_EndMarkWS { set; get; }
+        private Matrix4x4 m_StartMarkMS { set; get; }
+        private float m_fCurrentLerp { set; get; }
+        private object? m_pLocalSyncBinding { set; get; }
+        private object? m_pEventMap { set; get; }
+        public short m_sAnimationBindingIndex { set; get; }
+        private bool m_bAtMark { set; get; }
+        private bool m_bAllCharactersInScene { set; get; }
+        private bool m_bAllCharactersAtMarks { set; get; }
 
         public override uint Signature => 0xd83bea64;
 
@@ -55,7 +54,7 @@ namespace HKX2
             base.Read(des, br);
             br.Position += 8;
             m_pClipGenerator = des.ReadClassPointer<hkbGenerator>(br);
-            m_SyncAnimPrefix = des.ReadStringPointer(br);
+            m_SyncAnimPrefix = des.ReadCString(br);
             m_bSyncClipIgnoreMarkPlacement = br.ReadBoolean();
             br.Position += 3;
             m_fGetToMarkTime = br.ReadSingle();
@@ -85,7 +84,7 @@ namespace HKX2
             base.Write(s, bw);
             bw.Position += 8;
             s.WriteClassPointer(bw, m_pClipGenerator);
-            s.WriteCStringPointer(bw, m_SyncAnimPrefix);
+            s.WriteCString(bw, m_SyncAnimPrefix);
             bw.WriteBoolean(m_bSyncClipIgnoreMarkPlacement);
             bw.Position += 3;
             bw.WriteSingle(m_fGetToMarkTime);
@@ -146,6 +145,44 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_bAtMark));
             xs.WriteSerializeIgnored(xe, nameof(m_bAllCharactersInScene));
             xs.WriteSerializeIgnored(xe, nameof(m_bAllCharactersAtMarks));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSSynchronizedClipGenerator);
+        }
+
+        public bool Equals(BSSynchronizedClipGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_pClipGenerator is null && other.m_pClipGenerator is null) || (m_pClipGenerator is not null && other.m_pClipGenerator is not null && m_pClipGenerator.Equals((IHavokObject)other.m_pClipGenerator))) &&
+                   (m_SyncAnimPrefix is null && other.m_SyncAnimPrefix is null || m_SyncAnimPrefix == other.m_SyncAnimPrefix || m_SyncAnimPrefix is null && other.m_SyncAnimPrefix == "" || m_SyncAnimPrefix == "" && other.m_SyncAnimPrefix is null) &&
+                   m_bSyncClipIgnoreMarkPlacement.Equals(other.m_bSyncClipIgnoreMarkPlacement) &&
+                   m_fGetToMarkTime.Equals(other.m_fGetToMarkTime) &&
+                   m_fMarkErrorThreshold.Equals(other.m_fMarkErrorThreshold) &&
+                   m_bLeadCharacter.Equals(other.m_bLeadCharacter) &&
+                   m_bReorientSupportChar.Equals(other.m_bReorientSupportChar) &&
+                   m_bApplyMotionFromRoot.Equals(other.m_bApplyMotionFromRoot) &&
+                   m_sAnimationBindingIndex.Equals(other.m_sAnimationBindingIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_pClipGenerator);
+            hashcode.Add(m_SyncAnimPrefix);
+            hashcode.Add(m_bSyncClipIgnoreMarkPlacement);
+            hashcode.Add(m_fGetToMarkTime);
+            hashcode.Add(m_fMarkErrorThreshold);
+            hashcode.Add(m_bLeadCharacter);
+            hashcode.Add(m_bReorientSupportChar);
+            hashcode.Add(m_bApplyMotionFromRoot);
+            hashcode.Add(m_sAnimationBindingIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkbHandIkControlsModifier Signatire: 0x9f0488bb size: 96 flags: FLAGS_NONE
 
     // m_hands m_class: hkbHandIkControlsModifierHand Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkbHandIkControlsModifier : hkbModifier
+    public partial class hkbHandIkControlsModifier : hkbModifier, IEquatable<hkbHandIkControlsModifier?>
     {
-        public IList<hkbHandIkControlsModifierHand> m_hands { set; get; } = new List<hkbHandIkControlsModifierHand>();
+        public IList<hkbHandIkControlsModifierHand> m_hands { set; get; } = Array.Empty<hkbHandIkControlsModifierHand>();
 
         public override uint Signature => 0x9f0488bb;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkbHandIkControlsModifierHand>(xe, nameof(m_hands), m_hands);
+            xs.WriteClassArray(xe, nameof(m_hands), m_hands);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbHandIkControlsModifier);
+        }
+
+        public bool Equals(hkbHandIkControlsModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_hands.SequenceEqual(other.m_hands) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_hands.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

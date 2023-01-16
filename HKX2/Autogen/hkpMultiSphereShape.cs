@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,9 +9,9 @@ namespace HKX2
 
     // m_numSpheres m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_spheres m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 8 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkpMultiSphereShape : hkpSphereRepShape
+    public partial class hkpMultiSphereShape : hkpSphereRepShape, IEquatable<hkpMultiSphereShape?>
     {
-        public int m_numSpheres { set; get; } = default;
+        public int m_numSpheres { set; get; }
         public Vector4[] m_spheres = new Vector4[8];
 
         public override uint Signature => 0x61a590fc;
@@ -44,6 +44,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_numSpheres), m_numSpheres);
             xs.WriteVector4Array(xe, nameof(m_spheres), m_spheres);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMultiSphereShape);
+        }
+
+        public bool Equals(hkpMultiSphereShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_numSpheres.Equals(other.m_numSpheres) &&
+                   m_spheres.SequenceEqual(other.m_spheres) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_numSpheres);
+            hashcode.Add(m_spheres.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

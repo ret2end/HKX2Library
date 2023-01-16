@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_value m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkxAttribute : IHavokObject
+    public partial class hkxAttribute : IHavokObject, IEquatable<hkxAttribute?>
     {
         public string m_name { set; get; } = "";
-        public hkReferencedObject? m_value { set; get; } = default;
+        public hkReferencedObject? m_value { set; get; }
 
         public virtual uint Signature => 0x7375cae3;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteClassPointer(xe, nameof(m_value), m_value);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxAttribute);
+        }
+
+        public bool Equals(hkxAttribute? other)
+        {
+            return other is not null &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   ((m_value is null && other.m_value is null) || (m_value is not null && other.m_value is not null && m_value.Equals((IHavokObject)other.m_value))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_name);
+            hashcode.Add(m_value);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

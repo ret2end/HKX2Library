@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpLinConstraintAtom Signatire: 0x7b6b0210 size: 4 flags: FLAGS_NONE
 
     // m_axisIndex m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
-    public partial class hkpLinConstraintAtom : hkpConstraintAtom
+    public partial class hkpLinConstraintAtom : hkpConstraintAtom, IEquatable<hkpLinConstraintAtom?>
     {
-        public byte m_axisIndex { set; get; } = default;
+        public byte m_axisIndex { set; get; }
 
         public override uint Signature => 0x7b6b0210;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_axisIndex), m_axisIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpLinConstraintAtom);
+        }
+
+        public bool Equals(hkpLinConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_axisIndex.Equals(other.m_axisIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_axisIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

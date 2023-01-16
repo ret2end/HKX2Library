@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -18,19 +17,19 @@ namespace HKX2
     // m_gravity m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_timestep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 160 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_isInitialVelocityAdded m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 164 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbCharacterControllerModifier : hkbModifier
+    public partial class hkbCharacterControllerModifier : hkbModifier, IEquatable<hkbCharacterControllerModifier?>
     {
         public hkbCharacterControllerControlData m_controlData { set; get; } = new();
-        public Vector4 m_initialVelocity { set; get; } = default;
-        public sbyte m_initialVelocityCoordinates { set; get; } = default;
-        public sbyte m_motionMode { set; get; } = default;
-        public bool m_forceDownwardMomentum { set; get; } = default;
-        public bool m_applyGravity { set; get; } = default;
-        public bool m_setInitialVelocity { set; get; } = default;
-        public bool m_isTouchingGround { set; get; } = default;
-        private Vector4 m_gravity { set; get; } = default;
-        private float m_timestep { set; get; } = default;
-        private bool m_isInitialVelocityAdded { set; get; } = default;
+        public Vector4 m_initialVelocity { set; get; }
+        public sbyte m_initialVelocityCoordinates { set; get; }
+        public sbyte m_motionMode { set; get; }
+        public bool m_forceDownwardMomentum { set; get; }
+        public bool m_applyGravity { set; get; }
+        public bool m_setInitialVelocity { set; get; }
+        public bool m_isTouchingGround { set; get; }
+        private Vector4 m_gravity { set; get; }
+        private float m_timestep { set; get; }
+        private bool m_isInitialVelocityAdded { set; get; }
 
         public override uint Signature => 0xf675d6fb;
 
@@ -97,6 +96,42 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_gravity));
             xs.WriteSerializeIgnored(xe, nameof(m_timestep));
             xs.WriteSerializeIgnored(xe, nameof(m_isInitialVelocityAdded));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterControllerModifier);
+        }
+
+        public bool Equals(hkbCharacterControllerModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_controlData is null && other.m_controlData is null) || (m_controlData is not null && other.m_controlData is not null && m_controlData.Equals((IHavokObject)other.m_controlData))) &&
+                   m_initialVelocity.Equals(other.m_initialVelocity) &&
+                   m_initialVelocityCoordinates.Equals(other.m_initialVelocityCoordinates) &&
+                   m_motionMode.Equals(other.m_motionMode) &&
+                   m_forceDownwardMomentum.Equals(other.m_forceDownwardMomentum) &&
+                   m_applyGravity.Equals(other.m_applyGravity) &&
+                   m_setInitialVelocity.Equals(other.m_setInitialVelocity) &&
+                   m_isTouchingGround.Equals(other.m_isTouchingGround) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_controlData);
+            hashcode.Add(m_initialVelocity);
+            hashcode.Add(m_initialVelocityCoordinates);
+            hashcode.Add(m_motionMode);
+            hashcode.Add(m_forceDownwardMomentum);
+            hashcode.Add(m_applyGravity);
+            hashcode.Add(m_setInitialVelocity);
+            hashcode.Add(m_isTouchingGround);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

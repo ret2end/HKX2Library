@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -20,21 +19,21 @@ namespace HKX2
     // m_vecPreviousError m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 160 flags: FLAGS_NONE enum: 
     // m_errorSum m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 176 flags: FLAGS_NONE enum: 
     // m_previousError m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 180 flags: FLAGS_NONE enum: 
-    public partial class hkbDampingModifier : hkbModifier
+    public partial class hkbDampingModifier : hkbModifier, IEquatable<hkbDampingModifier?>
     {
-        public float m_kP { set; get; } = default;
-        public float m_kI { set; get; } = default;
-        public float m_kD { set; get; } = default;
-        public bool m_enableScalarDamping { set; get; } = default;
-        public bool m_enableVectorDamping { set; get; } = default;
-        public float m_rawValue { set; get; } = default;
-        public float m_dampedValue { set; get; } = default;
-        public Vector4 m_rawVector { set; get; } = default;
-        public Vector4 m_dampedVector { set; get; } = default;
-        public Vector4 m_vecErrorSum { set; get; } = default;
-        public Vector4 m_vecPreviousError { set; get; } = default;
-        public float m_errorSum { set; get; } = default;
-        public float m_previousError { set; get; } = default;
+        public float m_kP { set; get; }
+        public float m_kI { set; get; }
+        public float m_kD { set; get; }
+        public bool m_enableScalarDamping { set; get; }
+        public bool m_enableVectorDamping { set; get; }
+        public float m_rawValue { set; get; }
+        public float m_dampedValue { set; get; }
+        public Vector4 m_rawVector { set; get; }
+        public Vector4 m_dampedVector { set; get; }
+        public Vector4 m_vecErrorSum { set; get; }
+        public Vector4 m_vecPreviousError { set; get; }
+        public float m_errorSum { set; get; }
+        public float m_previousError { set; get; }
 
         public override uint Signature => 0x9a040f03;
 
@@ -114,6 +113,52 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_vecPreviousError), m_vecPreviousError);
             xs.WriteFloat(xe, nameof(m_errorSum), m_errorSum);
             xs.WriteFloat(xe, nameof(m_previousError), m_previousError);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbDampingModifier);
+        }
+
+        public bool Equals(hkbDampingModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_kP.Equals(other.m_kP) &&
+                   m_kI.Equals(other.m_kI) &&
+                   m_kD.Equals(other.m_kD) &&
+                   m_enableScalarDamping.Equals(other.m_enableScalarDamping) &&
+                   m_enableVectorDamping.Equals(other.m_enableVectorDamping) &&
+                   m_rawValue.Equals(other.m_rawValue) &&
+                   m_dampedValue.Equals(other.m_dampedValue) &&
+                   m_rawVector.Equals(other.m_rawVector) &&
+                   m_dampedVector.Equals(other.m_dampedVector) &&
+                   m_vecErrorSum.Equals(other.m_vecErrorSum) &&
+                   m_vecPreviousError.Equals(other.m_vecPreviousError) &&
+                   m_errorSum.Equals(other.m_errorSum) &&
+                   m_previousError.Equals(other.m_previousError) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_kP);
+            hashcode.Add(m_kI);
+            hashcode.Add(m_kD);
+            hashcode.Add(m_enableScalarDamping);
+            hashcode.Add(m_enableVectorDamping);
+            hashcode.Add(m_rawValue);
+            hashcode.Add(m_dampedValue);
+            hashcode.Add(m_rawVector);
+            hashcode.Add(m_dampedVector);
+            hashcode.Add(m_vecErrorSum);
+            hashcode.Add(m_vecPreviousError);
+            hashcode.Add(m_errorSum);
+            hashcode.Add(m_previousError);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

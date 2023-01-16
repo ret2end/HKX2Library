@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_capacity m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_eventFilter m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 10 flags: FLAGS_NONE enum: 
     // m_userFilter m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 11 flags: FLAGS_NONE enum: 
-    public partial class hkpEntitySpuCollisionCallback : IHavokObject
+    public partial class hkpEntitySpuCollisionCallback : IHavokObject, IEquatable<hkpEntitySpuCollisionCallback?>
     {
-        private object? m_util { set; get; } = default;
-        private ushort m_capacity { set; get; } = default;
-        public byte m_eventFilter { set; get; } = default;
-        public byte m_userFilter { set; get; } = default;
+        private object? m_util { set; get; }
+        private ushort m_capacity { set; get; }
+        public byte m_eventFilter { set; get; }
+        public byte m_userFilter { set; get; }
 
         public virtual uint Signature => 0x81147f05;
 
@@ -50,6 +48,28 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_capacity));
             xs.WriteNumber(xe, nameof(m_eventFilter), m_eventFilter);
             xs.WriteNumber(xe, nameof(m_userFilter), m_userFilter);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpEntitySpuCollisionCallback);
+        }
+
+        public bool Equals(hkpEntitySpuCollisionCallback? other)
+        {
+            return other is not null &&
+                   m_eventFilter.Equals(other.m_eventFilter) &&
+                   m_userFilter.Equals(other.m_userFilter) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_eventFilter);
+            hashcode.Add(m_userFilter);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

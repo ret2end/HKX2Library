@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_transformA m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_transformB m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkpSetLocalTransformsConstraintAtom : hkpConstraintAtom
+    public partial class hkpSetLocalTransformsConstraintAtom : hkpConstraintAtom, IEquatable<hkpSetLocalTransformsConstraintAtom?>
     {
-        public Matrix4x4 m_transformA { set; get; } = default;
-        public Matrix4x4 m_transformB { set; get; } = default;
+        public Matrix4x4 m_transformA { set; get; }
+        public Matrix4x4 m_transformB { set; get; }
 
         public override uint Signature => 0x6e2a5198;
 
@@ -44,6 +43,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteTransform(xe, nameof(m_transformA), m_transformA);
             xs.WriteTransform(xe, nameof(m_transformB), m_transformB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSetLocalTransformsConstraintAtom);
+        }
+
+        public bool Equals(hkpSetLocalTransformsConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_transformA.Equals(other.m_transformA) &&
+                   m_transformB.Equals(other.m_transformB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_transformA);
+            hashcode.Add(m_transformB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

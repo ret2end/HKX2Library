@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +10,12 @@ namespace HKX2
     // m_fixedPivotBinWorld m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_ropeLength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_leverageOnBodyB m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 52 flags: FLAGS_NONE enum: 
-    public partial class hkpPulleyConstraintAtom : hkpConstraintAtom
+    public partial class hkpPulleyConstraintAtom : hkpConstraintAtom, IEquatable<hkpPulleyConstraintAtom?>
     {
-        public Vector4 m_fixedPivotAinWorld { set; get; } = default;
-        public Vector4 m_fixedPivotBinWorld { set; get; } = default;
-        public float m_ropeLength { set; get; } = default;
-        public float m_leverageOnBodyB { set; get; } = default;
+        public Vector4 m_fixedPivotAinWorld { set; get; }
+        public Vector4 m_fixedPivotBinWorld { set; get; }
+        public float m_ropeLength { set; get; }
+        public float m_leverageOnBodyB { set; get; }
 
         public override uint Signature => 0x94a08848;
 
@@ -58,6 +57,34 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_fixedPivotBinWorld), m_fixedPivotBinWorld);
             xs.WriteFloat(xe, nameof(m_ropeLength), m_ropeLength);
             xs.WriteFloat(xe, nameof(m_leverageOnBodyB), m_leverageOnBodyB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPulleyConstraintAtom);
+        }
+
+        public bool Equals(hkpPulleyConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_fixedPivotAinWorld.Equals(other.m_fixedPivotAinWorld) &&
+                   m_fixedPivotBinWorld.Equals(other.m_fixedPivotBinWorld) &&
+                   m_ropeLength.Equals(other.m_ropeLength) &&
+                   m_leverageOnBodyB.Equals(other.m_leverageOnBodyB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_fixedPivotAinWorld);
+            hashcode.Add(m_fixedPivotBinWorld);
+            hashcode.Add(m_ropeLength);
+            hashcode.Add(m_leverageOnBodyB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,9 +9,9 @@ namespace HKX2
     // hkxVertexVectorDataChannel Signatire: 0x2ea63179 size: 32 flags: FLAGS_NONE
 
     // m_perVertexVectors m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkxVertexVectorDataChannel : hkReferencedObject
+    public partial class hkxVertexVectorDataChannel : hkReferencedObject, IEquatable<hkxVertexVectorDataChannel?>
     {
-        public IList<Vector4> m_perVertexVectors { set; get; } = new List<Vector4>();
+        public IList<Vector4> m_perVertexVectors { set; get; } = Array.Empty<Vector4>();
 
         public override uint Signature => 0x2ea63179;
 
@@ -36,6 +37,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteVector4Array(xe, nameof(m_perVertexVectors), m_perVertexVectors);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxVertexVectorDataChannel);
+        }
+
+        public bool Equals(hkxVertexVectorDataChannel? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_perVertexVectors.SequenceEqual(other.m_perVertexVectors) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_perVertexVectors.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

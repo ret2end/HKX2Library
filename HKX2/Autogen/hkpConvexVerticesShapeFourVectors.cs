@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,11 +9,11 @@ namespace HKX2
     // m_x m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_y m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_z m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkpConvexVerticesShapeFourVectors : IHavokObject
+    public partial class hkpConvexVerticesShapeFourVectors : IHavokObject, IEquatable<hkpConvexVerticesShapeFourVectors?>
     {
-        public Vector4 m_x { set; get; } = default;
-        public Vector4 m_y { set; get; } = default;
-        public Vector4 m_z { set; get; } = default;
+        public Vector4 m_x { set; get; }
+        public Vector4 m_y { set; get; }
+        public Vector4 m_z { set; get; }
 
         public virtual uint Signature => 0x3d80c5bf;
 
@@ -44,6 +43,30 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_x), m_x);
             xs.WriteVector4(xe, nameof(m_y), m_y);
             xs.WriteVector4(xe, nameof(m_z), m_z);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpConvexVerticesShapeFourVectors);
+        }
+
+        public bool Equals(hkpConvexVerticesShapeFourVectors? other)
+        {
+            return other is not null &&
+                   m_x.Equals(other.m_x) &&
+                   m_y.Equals(other.m_y) &&
+                   m_z.Equals(other.m_z) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_x);
+            hashcode.Add(m_y);
+            hashcode.Add(m_z);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

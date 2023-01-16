@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_axisIndex m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
     // m_tau m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpLinSoftConstraintAtom : hkpConstraintAtom
+    public partial class hkpLinSoftConstraintAtom : hkpConstraintAtom, IEquatable<hkpLinSoftConstraintAtom?>
     {
-        public byte m_axisIndex { set; get; } = default;
-        public float m_tau { set; get; } = default;
-        public float m_damping { set; get; } = default;
+        public byte m_axisIndex { set; get; }
+        public float m_tau { set; get; }
+        public float m_damping { set; get; }
 
         public override uint Signature => 0x52b27d69;
 
@@ -50,6 +48,32 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_axisIndex), m_axisIndex);
             xs.WriteFloat(xe, nameof(m_tau), m_tau);
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpLinSoftConstraintAtom);
+        }
+
+        public bool Equals(hkpLinSoftConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_axisIndex.Equals(other.m_axisIndex) &&
+                   m_tau.Equals(other.m_tau) &&
+                   m_damping.Equals(other.m_damping) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_axisIndex);
+            hashcode.Add(m_tau);
+            hashcode.Add(m_damping);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

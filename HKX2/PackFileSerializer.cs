@@ -12,17 +12,17 @@ namespace HKX2
         private int _currentSerializationQueue;
         private List<GlobalFixup> _globalFixups = new();
 
-        private Dictionary<IHavokObject, uint> _globalLookup = new();
+        private Dictionary<IHavokObject, uint> _globalLookup = new(ReferenceEqualityComparer.Instance);
         public HKXHeader _header;
 
         private List<LocalFixup> _localFixups = new();
         private List<Queue<Action>> _localWriteQueues = new();
-        private Dictionary<IHavokObject, List<uint>> _pendingGlobals = new();
+        private Dictionary<IHavokObject, List<uint>> _pendingGlobals = new(ReferenceEqualityComparer.Instance);
 
-        private HashSet<IHavokObject> _pendingVirtuals = new();
+        private HashSet<IHavokObject> _pendingVirtuals = new(ReferenceEqualityComparer.Instance);
         private List<Queue<IHavokObject>> _serializationQueues = new();
 
-        private HashSet<IHavokObject> _serializedObjects = new();
+        private HashSet<IHavokObject> _serializedObjects = new(ReferenceEqualityComparer.Instance);
         private List<VirtualFixup> _virtualFixups = new();
         private Dictionary<string, uint> _virtualLookup = new();
 
@@ -62,15 +62,15 @@ namespace HKX2
             _globalFixups = new List<GlobalFixup>();
             _virtualFixups = new List<VirtualFixup>();
 
-            _globalLookup = new Dictionary<IHavokObject, uint>();
+            _globalLookup = new Dictionary<IHavokObject, uint>(ReferenceEqualityComparer.Instance);
             _virtualLookup = new Dictionary<string, uint>();
 
             _localWriteQueues = new List<Queue<Action>>();
             _serializationQueues = new List<Queue<IHavokObject>>();
-            _pendingGlobals = new Dictionary<IHavokObject, List<uint>>();
-            _pendingVirtuals = new HashSet<IHavokObject>();
+            _pendingGlobals = new Dictionary<IHavokObject, List<uint>>(ReferenceEqualityComparer.Instance);
+            _pendingVirtuals = new HashSet<IHavokObject>(ReferenceEqualityComparer.Instance);
 
-            _serializedObjects = new HashSet<IHavokObject>();
+            _serializedObjects = new HashSet<IHavokObject>(ReferenceEqualityComparer.Instance);
 
             // Memory stream for writing all the class definitions
             var classms = new MemoryStream();
@@ -286,7 +286,7 @@ namespace HKX2
             WriteArrayBase(bw, d, e => { e.Write(this, bw); }, true);
         }
 
-        public void WriteClassPointer<T>(BinaryWriterEx bw, T d) where T : IHavokObject
+        public void WriteClassPointer<T>(BinaryWriterEx bw, T? d) where T : IHavokObject
         {
             PadToPointerSizeIfPaddingOption(bw);
             var pos = (uint)bw.Position;
@@ -338,7 +338,7 @@ namespace HKX2
             });
         }
 
-        public void WriteCStringPointer(BinaryWriterEx bw, string d, int padding = 16)
+        public void WriteCString(BinaryWriterEx bw, string d, int padding = 16)
         {
             // difference with StirngPointer
             // when empty string it didn't create localFixup
@@ -346,7 +346,7 @@ namespace HKX2
             var src = (uint)bw.Position;
             bw.WriteUSize(0);
 
-            if (d == null || d == "") return;
+            if (d == null || d == "" || d == "\u2400") return;
 
             var lfu = new LocalFixup { Src = src };
             _localFixups.Add(lfu);
@@ -534,19 +534,19 @@ namespace HKX2
             bw.WriteSingle(d.M11);
             bw.WriteSingle(d.M12);
             bw.WriteSingle(d.M13);
-            bw.WriteSingle(d.M14);
+            bw.WriteSingle(0.0f); //bw.WriteSingle(d.M14);
             bw.WriteSingle(d.M21);
             bw.WriteSingle(d.M22);
             bw.WriteSingle(d.M23);
-            bw.WriteSingle(d.M24);
+            bw.WriteSingle(0.0f); //bw.WriteSingle(d.M24);
             bw.WriteSingle(d.M31);
             bw.WriteSingle(d.M32);
             bw.WriteSingle(d.M33);
-            bw.WriteSingle(d.M34);
+            bw.WriteSingle(0.0f); //bw.WriteSingle(d.M34);
             bw.WriteSingle(d.M41);
             bw.WriteSingle(d.M42);
             bw.WriteSingle(d.M43);
-            bw.WriteSingle(d.M44);
+            bw.WriteSingle(1.0f); //bw.WriteSingle(d.M44);
         }
 
         public void WriteTransformArray(BinaryWriterEx bw, IList<Matrix4x4> d)
@@ -677,7 +677,7 @@ namespace HKX2
             WriteCStyleArrayBase(bw, d, e => WriteTransform(bw, e));
         }
 
-        public void WriteClassPointerCStyleArray<T>(BinaryWriterEx bw, T[] d) where T : IHavokObject, new()
+        public void WriteClassPointerCStyleArray<T>(BinaryWriterEx bw, T?[] d) where T : IHavokObject, new()
         {
             WriteCStyleArrayBase(bw, d, e => WriteClassPointer(bw, e));
         }

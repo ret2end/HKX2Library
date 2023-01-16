@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +11,14 @@ namespace HKX2
     // m_broadPhaseHandle m_class: hkpTypedBroadPhaseHandle Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_boundingVolumeData m_class: hkpCollidableBoundingVolumeData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_allowedPenetrationDepth m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
-    public partial class hkpCollidable : hkpCdBody
+    public partial class hkpCollidable : hkpCdBody, IEquatable<hkpCollidable?>
     {
-        private sbyte m_ownerOffset { set; get; } = default;
-        public byte m_forceCollideOntoPpu { set; get; } = default;
-        private ushort m_shapeSizeOnSpu { set; get; } = default;
+        private sbyte m_ownerOffset { set; get; }
+        public byte m_forceCollideOntoPpu { set; get; }
+        private ushort m_shapeSizeOnSpu { set; get; }
         public hkpTypedBroadPhaseHandle m_broadPhaseHandle { set; get; } = new();
         public hkpCollidableBoundingVolumeData m_boundingVolumeData { set; get; } = new();
-        public float m_allowedPenetrationDepth { set; get; } = default;
+        public float m_allowedPenetrationDepth { set; get; }
 
         public override uint Signature => 0x9a0e42a5;
 
@@ -65,6 +63,32 @@ namespace HKX2
             xs.WriteClass<hkpTypedBroadPhaseHandle>(xe, nameof(m_broadPhaseHandle), m_broadPhaseHandle);
             xs.WriteSerializeIgnored(xe, nameof(m_boundingVolumeData));
             xs.WriteFloat(xe, nameof(m_allowedPenetrationDepth), m_allowedPenetrationDepth);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCollidable);
+        }
+
+        public bool Equals(hkpCollidable? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_forceCollideOntoPpu.Equals(other.m_forceCollideOntoPpu) &&
+                   ((m_broadPhaseHandle is null && other.m_broadPhaseHandle is null) || (m_broadPhaseHandle is not null && other.m_broadPhaseHandle is not null && m_broadPhaseHandle.Equals((IHavokObject)other.m_broadPhaseHandle))) &&
+                   m_allowedPenetrationDepth.Equals(other.m_allowedPenetrationDepth) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_forceCollideOntoPpu);
+            hashcode.Add(m_broadPhaseHandle);
+            hashcode.Add(m_allowedPenetrationDepth);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

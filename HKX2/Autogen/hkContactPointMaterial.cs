@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_restitution m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 9 flags: FLAGS_NONE enum: 
     // m_maxImpulse m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 10 flags: FLAGS_NONE enum: 
     // m_flags m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 11 flags: FLAGS_NONE enum: 
-    public partial class hkContactPointMaterial : IHavokObject
+    public partial class hkContactPointMaterial : IHavokObject, IEquatable<hkContactPointMaterial?>
     {
-        public ulong m_userData { set; get; } = default;
-        public byte m_friction { set; get; } = default;
-        public byte m_restitution { set; get; } = default;
-        public byte m_maxImpulse { set; get; } = default;
-        public byte m_flags { set; get; } = default;
+        public ulong m_userData { set; get; }
+        public byte m_friction { set; get; }
+        public byte m_restitution { set; get; }
+        public byte m_maxImpulse { set; get; }
+        public byte m_flags { set; get; }
 
         public virtual uint Signature => 0x4e32287c;
 
@@ -58,6 +56,34 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_restitution), m_restitution);
             xs.WriteNumber(xe, nameof(m_maxImpulse), m_maxImpulse);
             xs.WriteNumber(xe, nameof(m_flags), m_flags);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkContactPointMaterial);
+        }
+
+        public bool Equals(hkContactPointMaterial? other)
+        {
+            return other is not null &&
+                   m_userData.Equals(other.m_userData) &&
+                   m_friction.Equals(other.m_friction) &&
+                   m_restitution.Equals(other.m_restitution) &&
+                   m_maxImpulse.Equals(other.m_maxImpulse) &&
+                   m_flags.Equals(other.m_flags) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_userData);
+            hashcode.Add(m_friction);
+            hashcode.Add(m_restitution);
+            hashcode.Add(m_maxImpulse);
+            hashcode.Add(m_flags);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

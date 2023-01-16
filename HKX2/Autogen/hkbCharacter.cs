@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -26,27 +26,27 @@ namespace HKX2
     // m_poseLocal m_class:  Type.TYPE_SIMPLEARRAY Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_deleteWorldFromModel m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 156 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_deletePoseLocal m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 157 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbCharacter : hkReferencedObject
+    public partial class hkbCharacter : hkReferencedObject, IEquatable<hkbCharacter?>
     {
-        public IList<hkbCharacter> m_nearbyCharacters { set; get; } = new List<hkbCharacter>();
-        public short m_currentLod { set; get; } = default;
-        private short m_numTracksInLod { set; get; } = default;
+        public IList<hkbCharacter> m_nearbyCharacters { set; get; } = Array.Empty<hkbCharacter>();
+        public short m_currentLod { set; get; }
+        private short m_numTracksInLod { set; get; }
         public string m_name { set; get; } = "";
-        private object? m_ragdollDriver { set; get; } = default;
-        private object? m_characterControllerDriver { set; get; } = default;
-        private object? m_footIkDriver { set; get; } = default;
-        private object? m_handIkDriver { set; get; } = default;
-        public hkbCharacterSetup? m_setup { set; get; } = default;
-        public hkbBehaviorGraph? m_behaviorGraph { set; get; } = default;
-        public hkbProjectData? m_projectData { set; get; } = default;
-        private object? m_animationBindingSet { set; get; } = default;
-        private object? m_raycastInterface { set; get; } = default;
-        private object? m_world { set; get; } = default;
-        private object? m_eventQueue { set; get; } = default;
-        private object? m_worldFromModel { set; get; } = default;
-        private object? m_poseLocal { set; get; } = default;
-        private bool m_deleteWorldFromModel { set; get; } = default;
-        private bool m_deletePoseLocal { set; get; } = default;
+        private object? m_ragdollDriver { set; get; }
+        private object? m_characterControllerDriver { set; get; }
+        private object? m_footIkDriver { set; get; }
+        private object? m_handIkDriver { set; get; }
+        public hkbCharacterSetup? m_setup { set; get; }
+        public hkbBehaviorGraph? m_behaviorGraph { set; get; }
+        public hkbProjectData? m_projectData { set; get; }
+        private object? m_animationBindingSet { set; get; }
+        private object? m_raycastInterface { set; get; }
+        private object? m_world { set; get; }
+        private object? m_eventQueue { set; get; }
+        private object? m_worldFromModel { set; get; }
+        private object? m_poseLocal { set; get; }
+        private bool m_deleteWorldFromModel { set; get; }
+        private bool m_deletePoseLocal { set; get; }
 
         public override uint Signature => 0x3088a5c5;
 
@@ -114,7 +114,7 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkbCharacter>(xe, nameof(m_nearbyCharacters), m_nearbyCharacters);
+            xs.WriteClassPointerArray(xe, nameof(m_nearbyCharacters), m_nearbyCharacters);
             xs.WriteNumber(xe, nameof(m_currentLod), m_currentLod);
             xs.WriteSerializeIgnored(xe, nameof(m_numTracksInLod));
             xs.WriteString(xe, nameof(m_name), m_name);
@@ -133,6 +133,38 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_poseLocal));
             xs.WriteSerializeIgnored(xe, nameof(m_deleteWorldFromModel));
             xs.WriteSerializeIgnored(xe, nameof(m_deletePoseLocal));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacter);
+        }
+
+        public bool Equals(hkbCharacter? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_nearbyCharacters.SequenceEqual(other.m_nearbyCharacters) &&
+                   m_currentLod.Equals(other.m_currentLod) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   ((m_setup is null && other.m_setup is null) || (m_setup is not null && other.m_setup is not null && m_setup.Equals((IHavokObject)other.m_setup))) &&
+                   ((m_behaviorGraph is null && other.m_behaviorGraph is null) || (m_behaviorGraph is not null && other.m_behaviorGraph is not null && m_behaviorGraph.Equals((IHavokObject)other.m_behaviorGraph))) &&
+                   ((m_projectData is null && other.m_projectData is null) || (m_projectData is not null && other.m_projectData is not null && m_projectData.Equals((IHavokObject)other.m_projectData))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_nearbyCharacters.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_currentLod);
+            hashcode.Add(m_name);
+            hashcode.Add(m_setup);
+            hashcode.Add(m_behaviorGraph);
+            hashcode.Add(m_projectData);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

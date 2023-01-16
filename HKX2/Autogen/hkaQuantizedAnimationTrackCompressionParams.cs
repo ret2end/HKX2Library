@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_translationTolerance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
     // m_scaleTolerance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_floatingTolerance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class hkaQuantizedAnimationTrackCompressionParams : IHavokObject
+    public partial class hkaQuantizedAnimationTrackCompressionParams : IHavokObject, IEquatable<hkaQuantizedAnimationTrackCompressionParams?>
     {
-        public float m_rotationTolerance { set; get; } = default;
-        public float m_translationTolerance { set; get; } = default;
-        public float m_scaleTolerance { set; get; } = default;
-        public float m_floatingTolerance { set; get; } = default;
+        public float m_rotationTolerance { set; get; }
+        public float m_translationTolerance { set; get; }
+        public float m_scaleTolerance { set; get; }
+        public float m_floatingTolerance { set; get; }
 
         public virtual uint Signature => 0xf7d64649;
 
@@ -50,6 +48,32 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_translationTolerance), m_translationTolerance);
             xs.WriteFloat(xe, nameof(m_scaleTolerance), m_scaleTolerance);
             xs.WriteFloat(xe, nameof(m_floatingTolerance), m_floatingTolerance);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaQuantizedAnimationTrackCompressionParams);
+        }
+
+        public bool Equals(hkaQuantizedAnimationTrackCompressionParams? other)
+        {
+            return other is not null &&
+                   m_rotationTolerance.Equals(other.m_rotationTolerance) &&
+                   m_translationTolerance.Equals(other.m_translationTolerance) &&
+                   m_scaleTolerance.Equals(other.m_scaleTolerance) &&
+                   m_floatingTolerance.Equals(other.m_floatingTolerance) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_rotationTolerance);
+            hashcode.Add(m_translationTolerance);
+            hashcode.Add(m_scaleTolerance);
+            hashcode.Add(m_floatingTolerance);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

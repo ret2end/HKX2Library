@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_characterId m_class:  Type.TYPE_UINT64 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_localTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_nodeId m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
-    public partial class hkbSetLocalTimeOfClipGeneratorCommand : hkReferencedObject
+    public partial class hkbSetLocalTimeOfClipGeneratorCommand : hkReferencedObject, IEquatable<hkbSetLocalTimeOfClipGeneratorCommand?>
     {
-        public ulong m_characterId { set; get; } = default;
-        public float m_localTime { set; get; } = default;
-        public short m_nodeId { set; get; } = default;
+        public ulong m_characterId { set; get; }
+        public float m_localTime { set; get; }
+        public short m_nodeId { set; get; }
 
         public override uint Signature => 0xfab12b45;
 
@@ -50,6 +48,32 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_characterId), m_characterId);
             xs.WriteFloat(xe, nameof(m_localTime), m_localTime);
             xs.WriteNumber(xe, nameof(m_nodeId), m_nodeId);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSetLocalTimeOfClipGeneratorCommand);
+        }
+
+        public bool Equals(hkbSetLocalTimeOfClipGeneratorCommand? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   m_localTime.Equals(other.m_localTime) &&
+                   m_nodeId.Equals(other.m_nodeId) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_localTime);
+            hashcode.Add(m_nodeId);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,23 +14,23 @@ namespace HKX2
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_UINT16 arrSize: 0 offset: 28 flags: FLAGS_NONE enum: FlagValues
     // m_offset m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 30 flags: FLAGS_NONE enum: 
     // m_attributes m_class: hkCustomAttributes Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkClassMember : IHavokObject
+    public partial class hkClassMember : IHavokObject, IEquatable<hkClassMember?>
     {
         public string m_name { set; get; } = "";
-        public hkClass? m_class { set; get; } = default;
-        public hkClassEnum? m_enum { set; get; } = default;
-        public byte m_type { set; get; } = default;
-        public byte m_subtype { set; get; } = default;
-        public short m_cArraySize { set; get; } = default;
-        public ushort m_flags { set; get; } = default;
-        public ushort m_offset { set; get; } = default;
-        private hkCustomAttributes? m_attributes { set; get; } = default;
+        public hkClass? m_class { set; get; }
+        public hkClassEnum? m_enum { set; get; }
+        public byte m_type { set; get; }
+        public byte m_subtype { set; get; }
+        public short m_cArraySize { set; get; }
+        public ushort m_flags { set; get; }
+        public ushort m_offset { set; get; }
+        private hkCustomAttributes? m_attributes { set; get; }
 
         public virtual uint Signature => 0x5c7ea4c2;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_name = des.ReadStringPointer(br);
+            m_name = des.ReadCString(br);
             m_class = des.ReadClassPointer<hkClass>(br);
             m_enum = des.ReadClassPointer<hkClassEnum>(br);
             m_type = br.ReadByte();
@@ -45,7 +43,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteCStringPointer(bw, m_name);
+            s.WriteCString(bw, m_name);
             s.WriteClassPointer(bw, m_class);
             s.WriteClassPointer(bw, m_enum);
             bw.WriteByte(m_type);
@@ -79,6 +77,40 @@ namespace HKX2
             xs.WriteFlag<FlagValues, ushort>(xe, nameof(m_flags), m_flags);
             xs.WriteNumber(xe, nameof(m_offset), m_offset);
             xs.WriteSerializeIgnored(xe, nameof(m_attributes));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkClassMember);
+        }
+
+        public bool Equals(hkClassMember? other)
+        {
+            return other is not null &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   ((m_class is null && other.m_class is null) || (m_class is not null && other.m_class is not null && m_class.Equals((IHavokObject)other.m_class))) &&
+                   ((m_enum is null && other.m_enum is null) || (m_enum is not null && other.m_enum is not null && m_enum.Equals((IHavokObject)other.m_enum))) &&
+                   m_type.Equals(other.m_type) &&
+                   m_subtype.Equals(other.m_subtype) &&
+                   m_cArraySize.Equals(other.m_cArraySize) &&
+                   m_flags.Equals(other.m_flags) &&
+                   m_offset.Equals(other.m_offset) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_name);
+            hashcode.Add(m_class);
+            hashcode.Add(m_enum);
+            hashcode.Add(m_type);
+            hashcode.Add(m_subtype);
+            hashcode.Add(m_cArraySize);
+            hashcode.Add(m_flags);
+            hashcode.Add(m_offset);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,18 +9,18 @@ namespace HKX2
     // m_items m_class: hkClassEnumItem Type.TYPE_SIMPLEARRAY Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_attributes m_class: hkCustomAttributes Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 24 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_flags m_class:  Type.TYPE_FLAGS Type.TYPE_UINT32 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: FlagValues
-    public partial class hkClassEnum : IHavokObject
+    public partial class hkClassEnum : IHavokObject, IEquatable<hkClassEnum?>
     {
         public string m_name { set; get; } = "";
-        public object? m_items { set; get; } = default;
-        private hkCustomAttributes? m_attributes { set; get; } = default;
-        public uint m_flags { set; get; } = default;
+        public object? m_items { set; get; }
+        private hkCustomAttributes? m_attributes { set; get; }
+        public uint m_flags { set; get; }
 
         public virtual uint Signature => 0x8a3609cf;
 
         public virtual void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
-            m_name = des.ReadStringPointer(br);
+            m_name = des.ReadCString(br);
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
             m_attributes = des.ReadClassPointer<hkCustomAttributes>(br);
             m_flags = br.ReadUInt32();
@@ -31,7 +29,7 @@ namespace HKX2
 
         public virtual void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
-            s.WriteCStringPointer(bw, m_name);
+            s.WriteCString(bw, m_name);
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
             s.WriteClassPointer(bw, m_attributes);
             bw.WriteUInt32(m_flags);
@@ -51,6 +49,30 @@ namespace HKX2
             throw new NotImplementedException("TPYE_SIMPLEARRAY");
             xs.WriteSerializeIgnored(xe, nameof(m_attributes));
             xs.WriteFlag<FlagValues, uint>(xe, nameof(m_flags), m_flags);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkClassEnum);
+        }
+
+        public bool Equals(hkClassEnum? other)
+        {
+            return other is not null &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_items.Equals(other.m_items) &&
+                   m_flags.Equals(other.m_flags) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_name);
+            hashcode.Add(m_items);
+            hashcode.Add(m_flags);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

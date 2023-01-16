@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_pGenerator m_class: hkbGenerator Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 48 flags: ALIGN_16|FLAGS_NONE enum: 
     // m_spBoneWeight m_class: hkbBoneWeightArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
-    public partial class BSBoneSwitchGeneratorBoneData : hkbBindable
+    public partial class BSBoneSwitchGeneratorBoneData : hkbBindable, IEquatable<BSBoneSwitchGeneratorBoneData?>
     {
-        public hkbGenerator? m_pGenerator { set; get; } = default;
-        public hkbBoneWeightArray? m_spBoneWeight { set; get; } = default;
+        public hkbGenerator? m_pGenerator { set; get; }
+        public hkbBoneWeightArray? m_spBoneWeight { set; get; }
 
         public override uint Signature => 0xc1215be6;
 
@@ -42,6 +40,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteClassPointer(xe, nameof(m_pGenerator), m_pGenerator);
             xs.WriteClassPointer(xe, nameof(m_spBoneWeight), m_spBoneWeight);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSBoneSwitchGeneratorBoneData);
+        }
+
+        public bool Equals(BSBoneSwitchGeneratorBoneData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_pGenerator is null && other.m_pGenerator is null) || (m_pGenerator is not null && other.m_pGenerator is not null && m_pGenerator.Equals((IHavokObject)other.m_pGenerator))) &&
+                   ((m_spBoneWeight is null && other.m_spBoneWeight is null) || (m_spBoneWeight is not null && other.m_spBoneWeight is not null && m_spBoneWeight.Equals((IHavokObject)other.m_spBoneWeight))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_pGenerator);
+            hashcode.Add(m_spBoneWeight);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

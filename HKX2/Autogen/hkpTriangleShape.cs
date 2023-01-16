@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,15 +13,15 @@ namespace HKX2
     // m_vertexB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_vertexC m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_extrusion m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkpTriangleShape : hkpConvexShape
+    public partial class hkpTriangleShape : hkpConvexShape, IEquatable<hkpTriangleShape?>
     {
-        public ushort m_weldingInfo { set; get; } = default;
-        public byte m_weldingType { set; get; } = default;
-        public byte m_isExtruded { set; get; } = default;
-        public Vector4 m_vertexA { set; get; } = default;
-        public Vector4 m_vertexB { set; get; } = default;
-        public Vector4 m_vertexC { set; get; } = default;
-        public Vector4 m_extrusion { set; get; } = default;
+        public ushort m_weldingInfo { set; get; }
+        public byte m_weldingType { set; get; }
+        public byte m_isExtruded { set; get; }
+        public Vector4 m_vertexA { set; get; }
+        public Vector4 m_vertexB { set; get; }
+        public Vector4 m_vertexC { set; get; }
+        public Vector4 m_extrusion { set; get; }
 
         public override uint Signature => 0x95ad1a25;
 
@@ -74,6 +73,40 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_vertexB), m_vertexB);
             xs.WriteVector4(xe, nameof(m_vertexC), m_vertexC);
             xs.WriteVector4(xe, nameof(m_extrusion), m_extrusion);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTriangleShape);
+        }
+
+        public bool Equals(hkpTriangleShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_weldingInfo.Equals(other.m_weldingInfo) &&
+                   m_weldingType.Equals(other.m_weldingType) &&
+                   m_isExtruded.Equals(other.m_isExtruded) &&
+                   m_vertexA.Equals(other.m_vertexA) &&
+                   m_vertexB.Equals(other.m_vertexB) &&
+                   m_vertexC.Equals(other.m_vertexC) &&
+                   m_extrusion.Equals(other.m_extrusion) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_weldingInfo);
+            hashcode.Add(m_weldingType);
+            hashcode.Add(m_isExtruded);
+            hashcode.Add(m_vertexA);
+            hashcode.Add(m_vertexB);
+            hashcode.Add(m_vertexC);
+            hashcode.Add(m_extrusion);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkpArrayAction Signatire: 0x674bcd2d size: 64 flags: FLAGS_NONE
 
     // m_entities m_class: hkpEntity Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
-    public partial class hkpArrayAction : hkpAction
+    public partial class hkpArrayAction : hkpAction, IEquatable<hkpArrayAction?>
     {
-        public IList<hkpEntity> m_entities { set; get; } = new List<hkpEntity>();
+        public IList<hkpEntity> m_entities { set; get; } = Array.Empty<hkpEntity>();
 
         public override uint Signature => 0x674bcd2d;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkpEntity>(xe, nameof(m_entities), m_entities);
+            xs.WriteClassPointerArray(xe, nameof(m_entities), m_entities);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpArrayAction);
+        }
+
+        public bool Equals(hkpArrayAction? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_entities.SequenceEqual(other.m_entities) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_entities.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

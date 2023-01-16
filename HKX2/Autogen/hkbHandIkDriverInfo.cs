@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_hands m_class: hkbHandIkDriverInfoHand Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_fadeInOutCurve m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: BlendCurve
-    public partial class hkbHandIkDriverInfo : hkReferencedObject
+    public partial class hkbHandIkDriverInfo : hkReferencedObject, IEquatable<hkbHandIkDriverInfo?>
     {
-        public IList<hkbHandIkDriverInfoHand> m_hands { set; get; } = new List<hkbHandIkDriverInfoHand>();
-        public sbyte m_fadeInOutCurve { set; get; } = default;
+        public IList<hkbHandIkDriverInfoHand> m_hands { set; get; } = Array.Empty<hkbHandIkDriverInfoHand>();
+        public sbyte m_fadeInOutCurve { set; get; }
 
         public override uint Signature => 0xc299090a;
 
@@ -42,8 +42,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkbHandIkDriverInfoHand>(xe, nameof(m_hands), m_hands);
+            xs.WriteClassArray(xe, nameof(m_hands), m_hands);
             xs.WriteEnum<BlendCurve, sbyte>(xe, nameof(m_fadeInOutCurve), m_fadeInOutCurve);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbHandIkDriverInfo);
+        }
+
+        public bool Equals(hkbHandIkDriverInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_hands.SequenceEqual(other.m_hands) &&
+                   m_fadeInOutCurve.Equals(other.m_fadeInOutCurve) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_hands.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_fadeInOutCurve);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

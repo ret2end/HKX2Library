@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_child m_class: hkpSingleShapeContainer Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_childSize m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpMoppBvTreeShape : hkMoppBvTreeShapeBase
+    public partial class hkpMoppBvTreeShape : hkMoppBvTreeShapeBase, IEquatable<hkpMoppBvTreeShape?>
     {
         public hkpSingleShapeContainer m_child { set; get; } = new();
-        private int m_childSize { set; get; } = default;
+        private int m_childSize { set; get; }
 
         public override uint Signature => 0x90b29d39;
 
@@ -43,6 +41,28 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteClass<hkpSingleShapeContainer>(xe, nameof(m_child), m_child);
             xs.WriteSerializeIgnored(xe, nameof(m_childSize));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMoppBvTreeShape);
+        }
+
+        public bool Equals(hkpMoppBvTreeShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_child is null && other.m_child is null) || (m_child is not null && other.m_child is not null && m_child.Equals((IHavokObject)other.m_child))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_child);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

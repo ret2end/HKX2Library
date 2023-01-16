@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,17 +17,17 @@ namespace HKX2
     // m_subMaterials m_class: hkxMaterial Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     // m_extraData m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
     // m_properties m_class: hkxMaterialProperty Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 152 flags: FLAGS_NONE enum: 
-    public partial class hkxMaterial : hkxAttributeHolder
+    public partial class hkxMaterial : hkxAttributeHolder, IEquatable<hkxMaterial?>
     {
         public string m_name { set; get; } = "";
-        public IList<hkxMaterialTextureStage> m_stages { set; get; } = new List<hkxMaterialTextureStage>();
-        public Vector4 m_diffuseColor { set; get; } = default;
-        public Vector4 m_ambientColor { set; get; } = default;
-        public Vector4 m_specularColor { set; get; } = default;
-        public Vector4 m_emissiveColor { set; get; } = default;
-        public IList<hkxMaterial> m_subMaterials { set; get; } = new List<hkxMaterial>();
-        public hkReferencedObject? m_extraData { set; get; } = default;
-        public IList<hkxMaterialProperty> m_properties { set; get; } = new List<hkxMaterialProperty>();
+        public IList<hkxMaterialTextureStage> m_stages { set; get; } = Array.Empty<hkxMaterialTextureStage>();
+        public Vector4 m_diffuseColor { set; get; }
+        public Vector4 m_ambientColor { set; get; }
+        public Vector4 m_specularColor { set; get; }
+        public Vector4 m_emissiveColor { set; get; }
+        public IList<hkxMaterial> m_subMaterials { set; get; } = Array.Empty<hkxMaterial>();
+        public hkReferencedObject? m_extraData { set; get; }
+        public IList<hkxMaterialProperty> m_properties { set; get; } = Array.Empty<hkxMaterialProperty>();
 
         public override uint Signature => 0x2954537a;
 
@@ -80,14 +81,52 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteString(xe, nameof(m_name), m_name);
-            xs.WriteClassArray<hkxMaterialTextureStage>(xe, nameof(m_stages), m_stages);
+            xs.WriteClassArray(xe, nameof(m_stages), m_stages);
             xs.WriteVector4(xe, nameof(m_diffuseColor), m_diffuseColor);
             xs.WriteVector4(xe, nameof(m_ambientColor), m_ambientColor);
             xs.WriteVector4(xe, nameof(m_specularColor), m_specularColor);
             xs.WriteVector4(xe, nameof(m_emissiveColor), m_emissiveColor);
-            xs.WriteClassPointerArray<hkxMaterial>(xe, nameof(m_subMaterials), m_subMaterials);
+            xs.WriteClassPointerArray(xe, nameof(m_subMaterials), m_subMaterials);
             xs.WriteClassPointer(xe, nameof(m_extraData), m_extraData);
-            xs.WriteClassArray<hkxMaterialProperty>(xe, nameof(m_properties), m_properties);
+            xs.WriteClassArray(xe, nameof(m_properties), m_properties);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxMaterial);
+        }
+
+        public bool Equals(hkxMaterial? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_stages.SequenceEqual(other.m_stages) &&
+                   m_diffuseColor.Equals(other.m_diffuseColor) &&
+                   m_ambientColor.Equals(other.m_ambientColor) &&
+                   m_specularColor.Equals(other.m_specularColor) &&
+                   m_emissiveColor.Equals(other.m_emissiveColor) &&
+                   m_subMaterials.SequenceEqual(other.m_subMaterials) &&
+                   ((m_extraData is null && other.m_extraData is null) || (m_extraData is not null && other.m_extraData is not null && m_extraData.Equals((IHavokObject)other.m_extraData))) &&
+                   m_properties.SequenceEqual(other.m_properties) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(m_stages.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_diffuseColor);
+            hashcode.Add(m_ambientColor);
+            hashcode.Add(m_specularColor);
+            hashcode.Add(m_emissiveColor);
+            hashcode.Add(m_subMaterials.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_extraData);
+            hashcode.Add(m_properties.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -22,23 +22,23 @@ namespace HKX2
     // m_nextSampleInts m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 224 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 240 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 244 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbSequence : hkbModifier
+    public partial class hkbSequence : hkbModifier, IEquatable<hkbSequence?>
     {
-        public IList<hkbEventSequencedData> m_eventSequencedData { set; get; } = new List<hkbEventSequencedData>();
-        public IList<hkbRealVariableSequencedData> m_realVariableSequencedData { set; get; } = new List<hkbRealVariableSequencedData>();
-        public IList<hkbBoolVariableSequencedData> m_boolVariableSequencedData { set; get; } = new List<hkbBoolVariableSequencedData>();
-        public IList<hkbIntVariableSequencedData> m_intVariableSequencedData { set; get; } = new List<hkbIntVariableSequencedData>();
-        public int m_enableEventId { set; get; } = default;
-        public int m_disableEventId { set; get; } = default;
-        public hkbSequenceStringData? m_stringData { set; get; } = default;
-        private object? m_variableIdMap { set; get; } = default;
-        private object? m_eventIdMap { set; get; } = default;
-        public IList<object> m_nextSampleEvents { set; get; } = new List<object>();
-        public IList<object> m_nextSampleReals { set; get; } = new List<object>();
-        public IList<object> m_nextSampleBools { set; get; } = new List<object>();
-        public IList<object> m_nextSampleInts { set; get; } = new List<object>();
-        private float m_time { set; get; } = default;
-        private bool m_isEnabled { set; get; } = default;
+        public IList<hkbEventSequencedData> m_eventSequencedData { set; get; } = Array.Empty<hkbEventSequencedData>();
+        public IList<hkbRealVariableSequencedData> m_realVariableSequencedData { set; get; } = Array.Empty<hkbRealVariableSequencedData>();
+        public IList<hkbBoolVariableSequencedData> m_boolVariableSequencedData { set; get; } = Array.Empty<hkbBoolVariableSequencedData>();
+        public IList<hkbIntVariableSequencedData> m_intVariableSequencedData { set; get; } = Array.Empty<hkbIntVariableSequencedData>();
+        public int m_enableEventId { set; get; }
+        public int m_disableEventId { set; get; }
+        public hkbSequenceStringData? m_stringData { set; get; }
+        private object? m_variableIdMap { set; get; }
+        private object? m_eventIdMap { set; get; }
+        public IList<object> m_nextSampleEvents { set; get; } = Array.Empty<object>();
+        public IList<object> m_nextSampleReals { set; get; } = Array.Empty<object>();
+        public IList<object> m_nextSampleBools { set; get; } = Array.Empty<object>();
+        public IList<object> m_nextSampleInts { set; get; } = Array.Empty<object>();
+        private float m_time { set; get; }
+        private bool m_isEnabled { set; get; }
 
         public override uint Signature => 0x43182ca3;
 
@@ -99,10 +99,10 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkbEventSequencedData>(xe, nameof(m_eventSequencedData), m_eventSequencedData);
-            xs.WriteClassPointerArray<hkbRealVariableSequencedData>(xe, nameof(m_realVariableSequencedData), m_realVariableSequencedData);
-            xs.WriteClassPointerArray<hkbBoolVariableSequencedData>(xe, nameof(m_boolVariableSequencedData), m_boolVariableSequencedData);
-            xs.WriteClassPointerArray<hkbIntVariableSequencedData>(xe, nameof(m_intVariableSequencedData), m_intVariableSequencedData);
+            xs.WriteClassPointerArray(xe, nameof(m_eventSequencedData), m_eventSequencedData);
+            xs.WriteClassPointerArray(xe, nameof(m_realVariableSequencedData), m_realVariableSequencedData);
+            xs.WriteClassPointerArray(xe, nameof(m_boolVariableSequencedData), m_boolVariableSequencedData);
+            xs.WriteClassPointerArray(xe, nameof(m_intVariableSequencedData), m_intVariableSequencedData);
             xs.WriteNumber(xe, nameof(m_enableEventId), m_enableEventId);
             xs.WriteNumber(xe, nameof(m_disableEventId), m_disableEventId);
             xs.WriteClassPointer(xe, nameof(m_stringData), m_stringData);
@@ -114,6 +114,40 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_nextSampleInts));
             xs.WriteSerializeIgnored(xe, nameof(m_time));
             xs.WriteSerializeIgnored(xe, nameof(m_isEnabled));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSequence);
+        }
+
+        public bool Equals(hkbSequence? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_eventSequencedData.SequenceEqual(other.m_eventSequencedData) &&
+                   m_realVariableSequencedData.SequenceEqual(other.m_realVariableSequencedData) &&
+                   m_boolVariableSequencedData.SequenceEqual(other.m_boolVariableSequencedData) &&
+                   m_intVariableSequencedData.SequenceEqual(other.m_intVariableSequencedData) &&
+                   m_enableEventId.Equals(other.m_enableEventId) &&
+                   m_disableEventId.Equals(other.m_disableEventId) &&
+                   ((m_stringData is null && other.m_stringData is null) || (m_stringData is not null && other.m_stringData is not null && m_stringData.Equals((IHavokObject)other.m_stringData))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_eventSequencedData.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_realVariableSequencedData.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_boolVariableSequencedData.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_intVariableSequencedData.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_enableEventId);
+            hashcode.Add(m_disableEventId);
+            hashcode.Add(m_stringData);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

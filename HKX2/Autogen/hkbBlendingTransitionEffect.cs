@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,20 +18,20 @@ namespace HKX2
     // m_timeInTransition m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 132 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_applySelfTransition m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 136 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_initializeCharacterPose m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 137 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbBlendingTransitionEffect : hkbTransitionEffect
+    public partial class hkbBlendingTransitionEffect : hkbTransitionEffect, IEquatable<hkbBlendingTransitionEffect?>
     {
-        public float m_duration { set; get; } = default;
-        public float m_toGeneratorStartTimeFraction { set; get; } = default;
-        public ushort m_flags { set; get; } = default;
-        public sbyte m_endMode { set; get; } = default;
-        public sbyte m_blendCurve { set; get; } = default;
-        private object? m_fromGenerator { set; get; } = default;
-        private object? m_toGenerator { set; get; } = default;
-        public IList<object> m_characterPoseAtBeginningOfTransition { set; get; } = new List<object>();
-        private float m_timeRemaining { set; get; } = default;
-        private float m_timeInTransition { set; get; } = default;
-        private bool m_applySelfTransition { set; get; } = default;
-        private bool m_initializeCharacterPose { set; get; } = default;
+        public float m_duration { set; get; }
+        public float m_toGeneratorStartTimeFraction { set; get; }
+        public ushort m_flags { set; get; }
+        public sbyte m_endMode { set; get; }
+        public sbyte m_blendCurve { set; get; }
+        private object? m_fromGenerator { set; get; }
+        private object? m_toGenerator { set; get; }
+        public IList<object> m_characterPoseAtBeginningOfTransition { set; get; } = Array.Empty<object>();
+        private float m_timeRemaining { set; get; }
+        private float m_timeInTransition { set; get; }
+        private bool m_applySelfTransition { set; get; }
+        private bool m_initializeCharacterPose { set; get; }
 
         public override uint Signature => 0xfd8584fe;
 
@@ -99,6 +98,36 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_timeInTransition));
             xs.WriteSerializeIgnored(xe, nameof(m_applySelfTransition));
             xs.WriteSerializeIgnored(xe, nameof(m_initializeCharacterPose));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBlendingTransitionEffect);
+        }
+
+        public bool Equals(hkbBlendingTransitionEffect? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_duration.Equals(other.m_duration) &&
+                   m_toGeneratorStartTimeFraction.Equals(other.m_toGeneratorStartTimeFraction) &&
+                   m_flags.Equals(other.m_flags) &&
+                   m_endMode.Equals(other.m_endMode) &&
+                   m_blendCurve.Equals(other.m_blendCurve) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_duration);
+            hashcode.Add(m_toGeneratorStartTimeFraction);
+            hashcode.Add(m_flags);
+            hashcode.Add(m_endMode);
+            hashcode.Add(m_blendCurve);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

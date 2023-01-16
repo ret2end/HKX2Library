@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_bindings m_class: hkpDisplayBindingDataRigidBody Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_system m_class: hkpPhysicsSystem Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkpDisplayBindingDataPhysicsSystem : hkReferencedObject
+    public partial class hkpDisplayBindingDataPhysicsSystem : hkReferencedObject, IEquatable<hkpDisplayBindingDataPhysicsSystem?>
     {
-        public IList<hkpDisplayBindingDataRigidBody> m_bindings { set; get; } = new List<hkpDisplayBindingDataRigidBody>();
-        public hkpPhysicsSystem? m_system { set; get; } = default;
+        public IList<hkpDisplayBindingDataRigidBody> m_bindings { set; get; } = Array.Empty<hkpDisplayBindingDataRigidBody>();
+        public hkpPhysicsSystem? m_system { set; get; }
 
         public override uint Signature => 0xc8ae86a7;
 
@@ -40,8 +40,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkpDisplayBindingDataRigidBody>(xe, nameof(m_bindings), m_bindings);
+            xs.WriteClassPointerArray(xe, nameof(m_bindings), m_bindings);
             xs.WriteClassPointer(xe, nameof(m_system), m_system);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpDisplayBindingDataPhysicsSystem);
+        }
+
+        public bool Equals(hkpDisplayBindingDataPhysicsSystem? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_bindings.SequenceEqual(other.m_bindings) &&
+                   ((m_system is null && other.m_system is null) || (m_system is not null && other.m_system is not null && m_system.Equals((IHavokObject)other.m_system))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_bindings.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_system);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

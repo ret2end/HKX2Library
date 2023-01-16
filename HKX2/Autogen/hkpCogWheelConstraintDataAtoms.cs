@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +7,7 @@ namespace HKX2
 
     // m_transforms m_class: hkpSetLocalTransformsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_cogWheels m_class: hkpCogWheelConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 144 flags: FLAGS_NONE enum: 
-    public partial class hkpCogWheelConstraintDataAtoms : IHavokObject
+    public partial class hkpCogWheelConstraintDataAtoms : IHavokObject, IEquatable<hkpCogWheelConstraintDataAtoms?>
     {
         public hkpSetLocalTransformsConstraintAtom m_transforms { set; get; } = new();
         public hkpCogWheelConstraintAtom m_cogWheels { set; get; } = new();
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteClass<hkpSetLocalTransformsConstraintAtom>(xe, nameof(m_transforms), m_transforms);
             xs.WriteClass<hkpCogWheelConstraintAtom>(xe, nameof(m_cogWheels), m_cogWheels);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCogWheelConstraintDataAtoms);
+        }
+
+        public bool Equals(hkpCogWheelConstraintDataAtoms? other)
+        {
+            return other is not null &&
+                   ((m_transforms is null && other.m_transforms is null) || (m_transforms is not null && other.m_transforms is not null && m_transforms.Equals((IHavokObject)other.m_transforms))) &&
+                   ((m_cogWheels is null && other.m_cogWheels is null) || (m_cogWheels is not null && other.m_cogWheels is not null && m_cogWheels.Equals((IHavokObject)other.m_cogWheels))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_transforms);
+            hashcode.Add(m_cogWheels);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

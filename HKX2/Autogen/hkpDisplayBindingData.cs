@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_rigidBodyBindings m_class: hkpDisplayBindingDataRigidBody Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_physicsSystemBindings m_class: hkpDisplayBindingDataPhysicsSystem Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkpDisplayBindingData : hkReferencedObject
+    public partial class hkpDisplayBindingData : hkReferencedObject, IEquatable<hkpDisplayBindingData?>
     {
-        public IList<hkpDisplayBindingDataRigidBody> m_rigidBodyBindings { set; get; } = new List<hkpDisplayBindingDataRigidBody>();
-        public IList<hkpDisplayBindingDataPhysicsSystem> m_physicsSystemBindings { set; get; } = new List<hkpDisplayBindingDataPhysicsSystem>();
+        public IList<hkpDisplayBindingDataRigidBody> m_rigidBodyBindings { set; get; } = Array.Empty<hkpDisplayBindingDataRigidBody>();
+        public IList<hkpDisplayBindingDataPhysicsSystem> m_physicsSystemBindings { set; get; } = Array.Empty<hkpDisplayBindingDataPhysicsSystem>();
 
         public override uint Signature => 0xdc46c906;
 
@@ -40,8 +40,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkpDisplayBindingDataRigidBody>(xe, nameof(m_rigidBodyBindings), m_rigidBodyBindings);
-            xs.WriteClassPointerArray<hkpDisplayBindingDataPhysicsSystem>(xe, nameof(m_physicsSystemBindings), m_physicsSystemBindings);
+            xs.WriteClassPointerArray(xe, nameof(m_rigidBodyBindings), m_rigidBodyBindings);
+            xs.WriteClassPointerArray(xe, nameof(m_physicsSystemBindings), m_physicsSystemBindings);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpDisplayBindingData);
+        }
+
+        public bool Equals(hkpDisplayBindingData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rigidBodyBindings.SequenceEqual(other.m_rigidBodyBindings) &&
+                   m_physicsSystemBindings.SequenceEqual(other.m_physicsSystemBindings) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rigidBodyBindings.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_physicsSystemBindings.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

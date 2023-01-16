@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_proportionalRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_constantRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkbPoweredRagdollControlData : IHavokObject
+    public partial class hkbPoweredRagdollControlData : IHavokObject, IEquatable<hkbPoweredRagdollControlData?>
     {
-        public float m_maxForce { set; get; } = default;
-        public float m_tau { set; get; } = default;
-        public float m_damping { set; get; } = default;
-        public float m_proportionalRecoveryVelocity { set; get; } = default;
-        public float m_constantRecoveryVelocity { set; get; } = default;
+        public float m_maxForce { set; get; }
+        public float m_tau { set; get; }
+        public float m_damping { set; get; }
+        public float m_proportionalRecoveryVelocity { set; get; }
+        public float m_constantRecoveryVelocity { set; get; }
 
         public virtual uint Signature => 0xf5ba21b;
 
@@ -58,6 +56,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
             xs.WriteFloat(xe, nameof(m_proportionalRecoveryVelocity), m_proportionalRecoveryVelocity);
             xs.WriteFloat(xe, nameof(m_constantRecoveryVelocity), m_constantRecoveryVelocity);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbPoweredRagdollControlData);
+        }
+
+        public bool Equals(hkbPoweredRagdollControlData? other)
+        {
+            return other is not null &&
+                   m_maxForce.Equals(other.m_maxForce) &&
+                   m_tau.Equals(other.m_tau) &&
+                   m_damping.Equals(other.m_damping) &&
+                   m_proportionalRecoveryVelocity.Equals(other.m_proportionalRecoveryVelocity) &&
+                   m_constantRecoveryVelocity.Equals(other.m_constantRecoveryVelocity) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_maxForce);
+            hashcode.Add(m_tau);
+            hashcode.Add(m_damping);
+            hashcode.Add(m_proportionalRecoveryVelocity);
+            hashcode.Add(m_constantRecoveryVelocity);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

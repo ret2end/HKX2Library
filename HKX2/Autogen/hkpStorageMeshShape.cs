@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkpStorageMeshShape Signatire: 0xbefd8b39 size: 144 flags: FLAGS_NONE
 
     // m_storage m_class: hkpStorageMeshShapeSubpartStorage Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
-    public partial class hkpStorageMeshShape : hkpMeshShape
+    public partial class hkpStorageMeshShape : hkpMeshShape, IEquatable<hkpStorageMeshShape?>
     {
-        public IList<hkpStorageMeshShapeSubpartStorage> m_storage { set; get; } = new List<hkpStorageMeshShapeSubpartStorage>();
+        public IList<hkpStorageMeshShapeSubpartStorage> m_storage { set; get; } = Array.Empty<hkpStorageMeshShapeSubpartStorage>();
 
         public override uint Signature => 0xbefd8b39;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkpStorageMeshShapeSubpartStorage>(xe, nameof(m_storage), m_storage);
+            xs.WriteClassPointerArray(xe, nameof(m_storage), m_storage);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpStorageMeshShape);
+        }
+
+        public bool Equals(hkpStorageMeshShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_storage.SequenceEqual(other.m_storage) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_storage.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

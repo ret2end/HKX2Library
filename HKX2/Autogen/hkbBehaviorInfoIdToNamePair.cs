@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_nodeName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_toolType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: ToolNodeType
     // m_id m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 18 flags: FLAGS_NONE enum: 
-    public partial class hkbBehaviorInfoIdToNamePair : IHavokObject
+    public partial class hkbBehaviorInfoIdToNamePair : IHavokObject, IEquatable<hkbBehaviorInfoIdToNamePair?>
     {
         public string m_behaviorName { set; get; } = "";
         public string m_nodeName { set; get; } = "";
-        public byte m_toolType { set; get; } = default;
-        public short m_id { set; get; } = default;
+        public byte m_toolType { set; get; }
+        public short m_id { set; get; }
 
         public virtual uint Signature => 0x35a0439a;
 
@@ -54,6 +52,32 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_nodeName), m_nodeName);
             xs.WriteEnum<ToolNodeType, byte>(xe, nameof(m_toolType), m_toolType);
             xs.WriteNumber(xe, nameof(m_id), m_id);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBehaviorInfoIdToNamePair);
+        }
+
+        public bool Equals(hkbBehaviorInfoIdToNamePair? other)
+        {
+            return other is not null &&
+                   (m_behaviorName is null && other.m_behaviorName is null || m_behaviorName == other.m_behaviorName || m_behaviorName is null && other.m_behaviorName == "" || m_behaviorName == "" && other.m_behaviorName is null) &&
+                   (m_nodeName is null && other.m_nodeName is null || m_nodeName == other.m_nodeName || m_nodeName is null && other.m_nodeName == "" || m_nodeName == "" && other.m_nodeName is null) &&
+                   m_toolType.Equals(other.m_toolType) &&
+                   m_id.Equals(other.m_id) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_behaviorName);
+            hashcode.Add(m_nodeName);
+            hashcode.Add(m_toolType);
+            hashcode.Add(m_id);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

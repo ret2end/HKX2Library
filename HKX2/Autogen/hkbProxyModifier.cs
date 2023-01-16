@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -36,37 +35,37 @@ namespace HKX2
     // m_verticalDisplacement m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 272 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_timestep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 276 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_previousFrameFollowWorldFromModel m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 280 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbProxyModifier : hkbModifier
+    public partial class hkbProxyModifier : hkbModifier, IEquatable<hkbProxyModifier?>
     {
         public hkbProxyModifierProxyInfo m_proxyInfo { set; get; } = new();
-        public Vector4 m_linearVelocity { set; get; } = default;
-        public float m_horizontalGain { set; get; } = default;
-        public float m_verticalGain { set; get; } = default;
-        public float m_maxHorizontalSeparation { set; get; } = default;
-        public float m_maxVerticalSeparation { set; get; } = default;
-        public float m_verticalDisplacementError { set; get; } = default;
-        public float m_verticalDisplacementErrorGain { set; get; } = default;
-        public float m_maxVerticalDisplacement { set; get; } = default;
-        public float m_minVerticalDisplacement { set; get; } = default;
-        public float m_capsuleHeight { set; get; } = default;
-        public float m_capsuleRadius { set; get; } = default;
-        public float m_maxSlopeForRotation { set; get; } = default;
-        public uint m_collisionFilterInfo { set; get; } = default;
-        public sbyte m_phantomType { set; get; } = default;
-        public sbyte m_linearVelocityMode { set; get; } = default;
-        public bool m_ignoreIncomingRotation { set; get; } = default;
-        public bool m_ignoreCollisionDuringRotation { set; get; } = default;
-        public bool m_ignoreIncomingTranslation { set; get; } = default;
-        public bool m_includeDownwardMomentum { set; get; } = default;
-        public bool m_followWorldFromModel { set; get; } = default;
-        public bool m_isTouchingGround { set; get; } = default;
-        private object? m_characterProxy { set; get; } = default;
-        private object? m_phantom { set; get; } = default;
-        private object? m_phantomShape { set; get; } = default;
-        private Vector4 m_horizontalDisplacement { set; get; } = default;
-        private float m_verticalDisplacement { set; get; } = default;
-        private float m_timestep { set; get; } = default;
-        private bool m_previousFrameFollowWorldFromModel { set; get; } = default;
+        public Vector4 m_linearVelocity { set; get; }
+        public float m_horizontalGain { set; get; }
+        public float m_verticalGain { set; get; }
+        public float m_maxHorizontalSeparation { set; get; }
+        public float m_maxVerticalSeparation { set; get; }
+        public float m_verticalDisplacementError { set; get; }
+        public float m_verticalDisplacementErrorGain { set; get; }
+        public float m_maxVerticalDisplacement { set; get; }
+        public float m_minVerticalDisplacement { set; get; }
+        public float m_capsuleHeight { set; get; }
+        public float m_capsuleRadius { set; get; }
+        public float m_maxSlopeForRotation { set; get; }
+        public uint m_collisionFilterInfo { set; get; }
+        public sbyte m_phantomType { set; get; }
+        public sbyte m_linearVelocityMode { set; get; }
+        public bool m_ignoreIncomingRotation { set; get; }
+        public bool m_ignoreCollisionDuringRotation { set; get; }
+        public bool m_ignoreIncomingTranslation { set; get; }
+        public bool m_includeDownwardMomentum { set; get; }
+        public bool m_followWorldFromModel { set; get; }
+        public bool m_isTouchingGround { set; get; }
+        private object? m_characterProxy { set; get; }
+        private object? m_phantom { set; get; }
+        private object? m_phantomShape { set; get; }
+        private Vector4 m_horizontalDisplacement { set; get; }
+        private float m_verticalDisplacement { set; get; }
+        private float m_timestep { set; get; }
+        private bool m_previousFrameFollowWorldFromModel { set; get; }
 
         public override uint Signature => 0x8a41554f;
 
@@ -199,6 +198,70 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_verticalDisplacement));
             xs.WriteSerializeIgnored(xe, nameof(m_timestep));
             xs.WriteSerializeIgnored(xe, nameof(m_previousFrameFollowWorldFromModel));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbProxyModifier);
+        }
+
+        public bool Equals(hkbProxyModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_proxyInfo is null && other.m_proxyInfo is null) || (m_proxyInfo is not null && other.m_proxyInfo is not null && m_proxyInfo.Equals((IHavokObject)other.m_proxyInfo))) &&
+                   m_linearVelocity.Equals(other.m_linearVelocity) &&
+                   m_horizontalGain.Equals(other.m_horizontalGain) &&
+                   m_verticalGain.Equals(other.m_verticalGain) &&
+                   m_maxHorizontalSeparation.Equals(other.m_maxHorizontalSeparation) &&
+                   m_maxVerticalSeparation.Equals(other.m_maxVerticalSeparation) &&
+                   m_verticalDisplacementError.Equals(other.m_verticalDisplacementError) &&
+                   m_verticalDisplacementErrorGain.Equals(other.m_verticalDisplacementErrorGain) &&
+                   m_maxVerticalDisplacement.Equals(other.m_maxVerticalDisplacement) &&
+                   m_minVerticalDisplacement.Equals(other.m_minVerticalDisplacement) &&
+                   m_capsuleHeight.Equals(other.m_capsuleHeight) &&
+                   m_capsuleRadius.Equals(other.m_capsuleRadius) &&
+                   m_maxSlopeForRotation.Equals(other.m_maxSlopeForRotation) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   m_phantomType.Equals(other.m_phantomType) &&
+                   m_linearVelocityMode.Equals(other.m_linearVelocityMode) &&
+                   m_ignoreIncomingRotation.Equals(other.m_ignoreIncomingRotation) &&
+                   m_ignoreCollisionDuringRotation.Equals(other.m_ignoreCollisionDuringRotation) &&
+                   m_ignoreIncomingTranslation.Equals(other.m_ignoreIncomingTranslation) &&
+                   m_includeDownwardMomentum.Equals(other.m_includeDownwardMomentum) &&
+                   m_followWorldFromModel.Equals(other.m_followWorldFromModel) &&
+                   m_isTouchingGround.Equals(other.m_isTouchingGround) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_proxyInfo);
+            hashcode.Add(m_linearVelocity);
+            hashcode.Add(m_horizontalGain);
+            hashcode.Add(m_verticalGain);
+            hashcode.Add(m_maxHorizontalSeparation);
+            hashcode.Add(m_maxVerticalSeparation);
+            hashcode.Add(m_verticalDisplacementError);
+            hashcode.Add(m_verticalDisplacementErrorGain);
+            hashcode.Add(m_maxVerticalDisplacement);
+            hashcode.Add(m_minVerticalDisplacement);
+            hashcode.Add(m_capsuleHeight);
+            hashcode.Add(m_capsuleRadius);
+            hashcode.Add(m_maxSlopeForRotation);
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(m_phantomType);
+            hashcode.Add(m_linearVelocityMode);
+            hashcode.Add(m_ignoreIncomingRotation);
+            hashcode.Add(m_ignoreCollisionDuringRotation);
+            hashcode.Add(m_ignoreIncomingTranslation);
+            hashcode.Add(m_includeDownwardMomentum);
+            hashcode.Add(m_followWorldFromModel);
+            hashcode.Add(m_isTouchingGround);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_offsetPerSecondMS m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_timeSinceLastModify m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbMoveCharacterModifier : hkbModifier
+    public partial class hkbMoveCharacterModifier : hkbModifier, IEquatable<hkbMoveCharacterModifier?>
     {
-        public Vector4 m_offsetPerSecondMS { set; get; } = default;
-        private float m_timeSinceLastModify { set; get; } = default;
+        public Vector4 m_offsetPerSecondMS { set; get; }
+        private float m_timeSinceLastModify { set; get; }
 
         public override uint Signature => 0x8f7492a0;
 
@@ -43,6 +42,28 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_offsetPerSecondMS), m_offsetPerSecondMS);
             xs.WriteSerializeIgnored(xe, nameof(m_timeSinceLastModify));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbMoveCharacterModifier);
+        }
+
+        public bool Equals(hkbMoveCharacterModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_offsetPerSecondMS.Equals(other.m_offsetPerSecondMS) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_offsetPerSecondMS);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

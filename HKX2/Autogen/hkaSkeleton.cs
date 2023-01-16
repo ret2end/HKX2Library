@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -14,15 +15,15 @@ namespace HKX2
     // m_referenceFloats m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_floatSlots m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_localFrames m_class: hkaSkeletonLocalFrameOnBone Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
-    public partial class hkaSkeleton : hkReferencedObject
+    public partial class hkaSkeleton : hkReferencedObject, IEquatable<hkaSkeleton?>
     {
         public string m_name { set; get; } = "";
-        public IList<short> m_parentIndices { set; get; } = new List<short>();
-        public IList<hkaBone> m_bones { set; get; } = new List<hkaBone>();
-        public IList<Matrix4x4> m_referencePose { set; get; } = new List<Matrix4x4>();
-        public IList<float> m_referenceFloats { set; get; } = new List<float>();
-        public IList<string> m_floatSlots { set; get; } = new List<string>();
-        public IList<hkaSkeletonLocalFrameOnBone> m_localFrames { set; get; } = new List<hkaSkeletonLocalFrameOnBone>();
+        public IList<short> m_parentIndices { set; get; } = Array.Empty<short>();
+        public IList<hkaBone> m_bones { set; get; } = Array.Empty<hkaBone>();
+        public IList<Matrix4x4> m_referencePose { set; get; } = Array.Empty<Matrix4x4>();
+        public IList<float> m_referenceFloats { set; get; } = Array.Empty<float>();
+        public IList<string> m_floatSlots { set; get; } = Array.Empty<string>();
+        public IList<hkaSkeletonLocalFrameOnBone> m_localFrames { set; get; } = Array.Empty<hkaSkeletonLocalFrameOnBone>();
 
         public override uint Signature => 0x366e8220;
 
@@ -67,11 +68,45 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteNumberArray(xe, nameof(m_parentIndices), m_parentIndices);
-            xs.WriteClassArray<hkaBone>(xe, nameof(m_bones), m_bones);
+            xs.WriteClassArray(xe, nameof(m_bones), m_bones);
             xs.WriteQSTransformArray(xe, nameof(m_referencePose), m_referencePose);
             xs.WriteFloatArray(xe, nameof(m_referenceFloats), m_referenceFloats);
             xs.WriteStringArray(xe, nameof(m_floatSlots), m_floatSlots);
-            xs.WriteClassArray<hkaSkeletonLocalFrameOnBone>(xe, nameof(m_localFrames), m_localFrames);
+            xs.WriteClassArray(xe, nameof(m_localFrames), m_localFrames);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaSkeleton);
+        }
+
+        public bool Equals(hkaSkeleton? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_parentIndices.SequenceEqual(other.m_parentIndices) &&
+                   m_bones.SequenceEqual(other.m_bones) &&
+                   m_referencePose.SequenceEqual(other.m_referencePose) &&
+                   m_referenceFloats.SequenceEqual(other.m_referenceFloats) &&
+                   m_floatSlots.SequenceEqual(other.m_floatSlots) &&
+                   m_localFrames.SequenceEqual(other.m_localFrames) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(m_parentIndices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_bones.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_referencePose.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_referenceFloats.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_floatSlots.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_localFrames.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

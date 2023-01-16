@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkbNamedIntEventPayload Signatire: 0x3c99bda4 size: 32 flags: FLAGS_NONE
 
     // m_data m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
-    public partial class hkbNamedIntEventPayload : hkbNamedEventPayload
+    public partial class hkbNamedIntEventPayload : hkbNamedEventPayload, IEquatable<hkbNamedIntEventPayload?>
     {
-        public int m_data { set; get; } = default;
+        public int m_data { set; get; }
 
         public override uint Signature => 0x3c99bda4;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_data), m_data);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbNamedIntEventPayload);
+        }
+
+        public bool Equals(hkbNamedIntEventPayload? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_data.Equals(other.m_data) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_data);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

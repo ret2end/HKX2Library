@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_keyframeInfo m_class: hkbKeyframeBonesModifierKeyframeInfo Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_keyframedBonesList m_class: hkbBoneIndexArray Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkbKeyframeBonesModifier : hkbModifier
+    public partial class hkbKeyframeBonesModifier : hkbModifier, IEquatable<hkbKeyframeBonesModifier?>
     {
-        public IList<hkbKeyframeBonesModifierKeyframeInfo> m_keyframeInfo { set; get; } = new List<hkbKeyframeBonesModifierKeyframeInfo>();
-        public hkbBoneIndexArray? m_keyframedBonesList { set; get; } = default;
+        public IList<hkbKeyframeBonesModifierKeyframeInfo> m_keyframeInfo { set; get; } = Array.Empty<hkbKeyframeBonesModifierKeyframeInfo>();
+        public hkbBoneIndexArray? m_keyframedBonesList { set; get; }
 
         public override uint Signature => 0x95f66629;
 
@@ -40,8 +40,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkbKeyframeBonesModifierKeyframeInfo>(xe, nameof(m_keyframeInfo), m_keyframeInfo);
+            xs.WriteClassArray(xe, nameof(m_keyframeInfo), m_keyframeInfo);
             xs.WriteClassPointer(xe, nameof(m_keyframedBonesList), m_keyframedBonesList);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbKeyframeBonesModifier);
+        }
+
+        public bool Equals(hkbKeyframeBonesModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_keyframeInfo.SequenceEqual(other.m_keyframeInfo) &&
+                   ((m_keyframedBonesList is null && other.m_keyframedBonesList is null) || (m_keyframedBonesList is not null && other.m_keyframedBonesList is not null && m_keyframedBonesList.Equals((IHavokObject)other.m_keyframedBonesList))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_keyframeInfo.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_keyframedBonesList);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

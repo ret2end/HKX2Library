@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +11,13 @@ namespace HKX2
     // m_y m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
     // m_z m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_w m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
-    public partial class BSDecomposeVectorModifier : hkbModifier
+    public partial class BSDecomposeVectorModifier : hkbModifier, IEquatable<BSDecomposeVectorModifier?>
     {
-        public Vector4 m_vector { set; get; } = default;
-        public float m_x { set; get; } = default;
-        public float m_y { set; get; } = default;
-        public float m_z { set; get; } = default;
-        public float m_w { set; get; } = default;
+        public Vector4 m_vector { set; get; }
+        public float m_x { set; get; }
+        public float m_y { set; get; }
+        public float m_z { set; get; }
+        public float m_w { set; get; }
 
         public override uint Signature => 0x31f6b8b6;
 
@@ -60,6 +59,36 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_y), m_y);
             xs.WriteFloat(xe, nameof(m_z), m_z);
             xs.WriteFloat(xe, nameof(m_w), m_w);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSDecomposeVectorModifier);
+        }
+
+        public bool Equals(BSDecomposeVectorModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_vector.Equals(other.m_vector) &&
+                   m_x.Equals(other.m_x) &&
+                   m_y.Equals(other.m_y) &&
+                   m_z.Equals(other.m_z) &&
+                   m_w.Equals(other.m_w) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_vector);
+            hashcode.Add(m_x);
+            hashcode.Add(m_y);
+            hashcode.Add(m_z);
+            hashcode.Add(m_w);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

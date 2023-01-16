@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,16 +13,16 @@ namespace HKX2
     // m_minAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_maxAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_angularLimitsTauFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpConeLimitConstraintAtom : hkpConstraintAtom
+    public partial class hkpConeLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpConeLimitConstraintAtom?>
     {
-        public byte m_isEnabled { set; get; } = default;
-        public byte m_twistAxisInA { set; get; } = default;
-        public byte m_refAxisInB { set; get; } = default;
-        public byte m_angleMeasurementMode { set; get; } = default;
-        public byte m_memOffsetToAngleOffset { set; get; } = default;
-        public float m_minAngle { set; get; } = default;
-        public float m_maxAngle { set; get; } = default;
-        public float m_angularLimitsTauFactor { set; get; } = default;
+        public byte m_isEnabled { set; get; }
+        public byte m_twistAxisInA { set; get; }
+        public byte m_refAxisInB { set; get; }
+        public byte m_angleMeasurementMode { set; get; }
+        public byte m_memOffsetToAngleOffset { set; get; }
+        public float m_minAngle { set; get; }
+        public float m_maxAngle { set; get; }
+        public float m_angularLimitsTauFactor { set; get; }
 
         public override uint Signature => 0xf19443c8;
 
@@ -80,6 +78,42 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_minAngle), m_minAngle);
             xs.WriteFloat(xe, nameof(m_maxAngle), m_maxAngle);
             xs.WriteFloat(xe, nameof(m_angularLimitsTauFactor), m_angularLimitsTauFactor);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpConeLimitConstraintAtom);
+        }
+
+        public bool Equals(hkpConeLimitConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_isEnabled.Equals(other.m_isEnabled) &&
+                   m_twistAxisInA.Equals(other.m_twistAxisInA) &&
+                   m_refAxisInB.Equals(other.m_refAxisInB) &&
+                   m_angleMeasurementMode.Equals(other.m_angleMeasurementMode) &&
+                   m_memOffsetToAngleOffset.Equals(other.m_memOffsetToAngleOffset) &&
+                   m_minAngle.Equals(other.m_minAngle) &&
+                   m_maxAngle.Equals(other.m_maxAngle) &&
+                   m_angularLimitsTauFactor.Equals(other.m_angularLimitsTauFactor) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_isEnabled);
+            hashcode.Add(m_twistAxisInA);
+            hashcode.Add(m_refAxisInB);
+            hashcode.Add(m_angleMeasurementMode);
+            hashcode.Add(m_memOffsetToAngleOffset);
+            hashcode.Add(m_minAngle);
+            hashcode.Add(m_maxAngle);
+            hashcode.Add(m_angularLimitsTauFactor);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_start m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_size m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_traceId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkTrackerSerializableScanSnapshotAllocation : IHavokObject
+    public partial class hkTrackerSerializableScanSnapshotAllocation : IHavokObject, IEquatable<hkTrackerSerializableScanSnapshotAllocation?>
     {
-        public ulong m_start { set; get; } = default;
-        public ulong m_size { set; get; } = default;
-        public int m_traceId { set; get; } = default;
+        public ulong m_start { set; get; }
+        public ulong m_size { set; get; }
+        public int m_traceId { set; get; }
 
         public virtual uint Signature => 0x9ab3a6ac;
 
@@ -46,6 +44,30 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_start), m_start);
             xs.WriteNumber(xe, nameof(m_size), m_size);
             xs.WriteNumber(xe, nameof(m_traceId), m_traceId);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkTrackerSerializableScanSnapshotAllocation);
+        }
+
+        public bool Equals(hkTrackerSerializableScanSnapshotAllocation? other)
+        {
+            return other is not null &&
+                   m_start.Equals(other.m_start) &&
+                   m_size.Equals(other.m_size) &&
+                   m_traceId.Equals(other.m_traceId) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_start);
+            hashcode.Add(m_size);
+            hashcode.Add(m_traceId);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

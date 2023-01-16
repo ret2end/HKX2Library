@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -21,22 +20,22 @@ namespace HKX2
     // m_penetrationRecoverySpeed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 60 flags: FLAGS_NONE enum: 
     // m_maxCastIterations m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_refreshManifoldInCheckSupport m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
-    public partial class hkbProxyModifierProxyInfo : IHavokObject
+    public partial class hkbProxyModifierProxyInfo : IHavokObject, IEquatable<hkbProxyModifierProxyInfo?>
     {
-        public float m_dynamicFriction { set; get; } = default;
-        public float m_staticFriction { set; get; } = default;
-        public float m_keepContactTolerance { set; get; } = default;
-        public Vector4 m_up { set; get; } = default;
-        public float m_keepDistance { set; get; } = default;
-        public float m_contactAngleSensitivity { set; get; } = default;
-        public uint m_userPlanes { set; get; } = default;
-        public float m_maxCharacterSpeedForSolver { set; get; } = default;
-        public float m_characterStrength { set; get; } = default;
-        public float m_characterMass { set; get; } = default;
-        public float m_maxSlope { set; get; } = default;
-        public float m_penetrationRecoverySpeed { set; get; } = default;
-        public int m_maxCastIterations { set; get; } = default;
-        public bool m_refreshManifoldInCheckSupport { set; get; } = default;
+        public float m_dynamicFriction { set; get; }
+        public float m_staticFriction { set; get; }
+        public float m_keepContactTolerance { set; get; }
+        public Vector4 m_up { set; get; }
+        public float m_keepDistance { set; get; }
+        public float m_contactAngleSensitivity { set; get; }
+        public uint m_userPlanes { set; get; }
+        public float m_maxCharacterSpeedForSolver { set; get; }
+        public float m_characterStrength { set; get; }
+        public float m_characterMass { set; get; }
+        public float m_maxSlope { set; get; }
+        public float m_penetrationRecoverySpeed { set; get; }
+        public int m_maxCastIterations { set; get; }
+        public bool m_refreshManifoldInCheckSupport { set; get; }
 
         public virtual uint Signature => 0x39de637e;
 
@@ -114,6 +113,52 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_penetrationRecoverySpeed), m_penetrationRecoverySpeed);
             xs.WriteNumber(xe, nameof(m_maxCastIterations), m_maxCastIterations);
             xs.WriteBoolean(xe, nameof(m_refreshManifoldInCheckSupport), m_refreshManifoldInCheckSupport);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbProxyModifierProxyInfo);
+        }
+
+        public bool Equals(hkbProxyModifierProxyInfo? other)
+        {
+            return other is not null &&
+                   m_dynamicFriction.Equals(other.m_dynamicFriction) &&
+                   m_staticFriction.Equals(other.m_staticFriction) &&
+                   m_keepContactTolerance.Equals(other.m_keepContactTolerance) &&
+                   m_up.Equals(other.m_up) &&
+                   m_keepDistance.Equals(other.m_keepDistance) &&
+                   m_contactAngleSensitivity.Equals(other.m_contactAngleSensitivity) &&
+                   m_userPlanes.Equals(other.m_userPlanes) &&
+                   m_maxCharacterSpeedForSolver.Equals(other.m_maxCharacterSpeedForSolver) &&
+                   m_characterStrength.Equals(other.m_characterStrength) &&
+                   m_characterMass.Equals(other.m_characterMass) &&
+                   m_maxSlope.Equals(other.m_maxSlope) &&
+                   m_penetrationRecoverySpeed.Equals(other.m_penetrationRecoverySpeed) &&
+                   m_maxCastIterations.Equals(other.m_maxCastIterations) &&
+                   m_refreshManifoldInCheckSupport.Equals(other.m_refreshManifoldInCheckSupport) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_dynamicFriction);
+            hashcode.Add(m_staticFriction);
+            hashcode.Add(m_keepContactTolerance);
+            hashcode.Add(m_up);
+            hashcode.Add(m_keepDistance);
+            hashcode.Add(m_contactAngleSensitivity);
+            hashcode.Add(m_userPlanes);
+            hashcode.Add(m_maxCharacterSpeedForSolver);
+            hashcode.Add(m_characterStrength);
+            hashcode.Add(m_characterMass);
+            hashcode.Add(m_maxSlope);
+            hashcode.Add(m_penetrationRecoverySpeed);
+            hashcode.Add(m_maxCastIterations);
+            hashcode.Add(m_refreshManifoldInCheckSupport);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_timeDelayed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_isDelayedTransitionReturnToPreviousState m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
     // m_wasInAbutRangeLastFrame m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 21 flags: FLAGS_NONE enum: 
-    public partial class hkbStateMachineDelayedTransitionInfo : IHavokObject
+    public partial class hkbStateMachineDelayedTransitionInfo : IHavokObject, IEquatable<hkbStateMachineDelayedTransitionInfo?>
     {
         public hkbStateMachineProspectiveTransitionInfo m_delayedTransition { set; get; } = new();
-        public float m_timeDelayed { set; get; } = default;
-        public bool m_isDelayedTransitionReturnToPreviousState { set; get; } = default;
-        public bool m_wasInAbutRangeLastFrame { set; get; } = default;
+        public float m_timeDelayed { set; get; }
+        public bool m_isDelayedTransitionReturnToPreviousState { set; get; }
+        public bool m_wasInAbutRangeLastFrame { set; get; }
 
         public virtual uint Signature => 0x26d5499;
 
@@ -52,6 +50,32 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_timeDelayed), m_timeDelayed);
             xs.WriteBoolean(xe, nameof(m_isDelayedTransitionReturnToPreviousState), m_isDelayedTransitionReturnToPreviousState);
             xs.WriteBoolean(xe, nameof(m_wasInAbutRangeLastFrame), m_wasInAbutRangeLastFrame);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineDelayedTransitionInfo);
+        }
+
+        public bool Equals(hkbStateMachineDelayedTransitionInfo? other)
+        {
+            return other is not null &&
+                   ((m_delayedTransition is null && other.m_delayedTransition is null) || (m_delayedTransition is not null && other.m_delayedTransition is not null && m_delayedTransition.Equals((IHavokObject)other.m_delayedTransition))) &&
+                   m_timeDelayed.Equals(other.m_timeDelayed) &&
+                   m_isDelayedTransitionReturnToPreviousState.Equals(other.m_isDelayedTransitionReturnToPreviousState) &&
+                   m_wasInAbutRangeLastFrame.Equals(other.m_wasInAbutRangeLastFrame) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_delayedTransition);
+            hashcode.Add(m_timeDelayed);
+            hashcode.Add(m_isDelayedTransitionReturnToPreviousState);
+            hashcode.Add(m_wasInAbutRangeLastFrame);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

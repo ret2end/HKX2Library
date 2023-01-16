@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +10,10 @@ namespace HKX2
 
     // m_vectors m_class:  Type.TYPE_ARRAY Type.TYPE_VECTOR4 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_hint m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: Hint
-    public partial class hkxAnimatedVector : hkReferencedObject
+    public partial class hkxAnimatedVector : hkReferencedObject, IEquatable<hkxAnimatedVector?>
     {
-        public IList<Vector4> m_vectors { set; get; } = new List<Vector4>();
-        public byte m_hint { set; get; } = default;
+        public IList<Vector4> m_vectors { set; get; } = Array.Empty<Vector4>();
+        public byte m_hint { set; get; }
 
         public override uint Signature => 0x34b1a197;
 
@@ -44,6 +45,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4Array(xe, nameof(m_vectors), m_vectors);
             xs.WriteEnum<Hint, byte>(xe, nameof(m_hint), m_hint);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxAnimatedVector);
+        }
+
+        public bool Equals(hkxAnimatedVector? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_vectors.SequenceEqual(other.m_vectors) &&
+                   m_hint.Equals(other.m_hint) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_vectors.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_hint);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

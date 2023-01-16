@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +13,14 @@ namespace HKX2
     // m_geomEntryName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_pixelEntryName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_data m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
-    public partial class hkxMaterialShader : hkReferencedObject
+    public partial class hkxMaterialShader : hkReferencedObject, IEquatable<hkxMaterialShader?>
     {
         public string m_name { set; get; } = "";
-        public byte m_type { set; get; } = default;
+        public byte m_type { set; get; }
         public string m_vertexEntryName { set; get; } = "";
         public string m_geomEntryName { set; get; } = "";
         public string m_pixelEntryName { set; get; } = "";
-        public IList<byte> m_data { set; get; } = new List<byte>();
+        public IList<byte> m_data { set; get; } = Array.Empty<byte>();
 
         public override uint Signature => 0x28515eff;
 
@@ -68,6 +68,38 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_geomEntryName), m_geomEntryName);
             xs.WriteString(xe, nameof(m_pixelEntryName), m_pixelEntryName);
             xs.WriteNumberArray(xe, nameof(m_data), m_data);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxMaterialShader);
+        }
+
+        public bool Equals(hkxMaterialShader? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_type.Equals(other.m_type) &&
+                   (m_vertexEntryName is null && other.m_vertexEntryName is null || m_vertexEntryName == other.m_vertexEntryName || m_vertexEntryName is null && other.m_vertexEntryName == "" || m_vertexEntryName == "" && other.m_vertexEntryName is null) &&
+                   (m_geomEntryName is null && other.m_geomEntryName is null || m_geomEntryName == other.m_geomEntryName || m_geomEntryName is null && other.m_geomEntryName == "" || m_geomEntryName == "" && other.m_geomEntryName is null) &&
+                   (m_pixelEntryName is null && other.m_pixelEntryName is null || m_pixelEntryName == other.m_pixelEntryName || m_pixelEntryName is null && other.m_pixelEntryName == "" || m_pixelEntryName == "" && other.m_pixelEntryName is null) &&
+                   m_data.SequenceEqual(other.m_data) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_name);
+            hashcode.Add(m_type);
+            hashcode.Add(m_vertexEntryName);
+            hashcode.Add(m_geomEntryName);
+            hashcode.Add(m_pixelEntryName);
+            hashcode.Add(m_data.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

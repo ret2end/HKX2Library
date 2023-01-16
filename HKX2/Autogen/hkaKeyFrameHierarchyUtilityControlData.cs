@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,20 +17,20 @@ namespace HKX2
     // m_snapMaxAngularVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_snapMaxLinearDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_snapMaxAngularDistance m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
-    public partial class hkaKeyFrameHierarchyUtilityControlData : IHavokObject
+    public partial class hkaKeyFrameHierarchyUtilityControlData : IHavokObject, IEquatable<hkaKeyFrameHierarchyUtilityControlData?>
     {
-        public float m_hierarchyGain { set; get; } = default;
-        public float m_velocityDamping { set; get; } = default;
-        public float m_accelerationGain { set; get; } = default;
-        public float m_velocityGain { set; get; } = default;
-        public float m_positionGain { set; get; } = default;
-        public float m_positionMaxLinearVelocity { set; get; } = default;
-        public float m_positionMaxAngularVelocity { set; get; } = default;
-        public float m_snapGain { set; get; } = default;
-        public float m_snapMaxLinearVelocity { set; get; } = default;
-        public float m_snapMaxAngularVelocity { set; get; } = default;
-        public float m_snapMaxLinearDistance { set; get; } = default;
-        public float m_snapMaxAngularDistance { set; get; } = default;
+        public float m_hierarchyGain { set; get; }
+        public float m_velocityDamping { set; get; }
+        public float m_accelerationGain { set; get; }
+        public float m_velocityGain { set; get; }
+        public float m_positionGain { set; get; }
+        public float m_positionMaxLinearVelocity { set; get; }
+        public float m_positionMaxAngularVelocity { set; get; }
+        public float m_snapGain { set; get; }
+        public float m_snapMaxLinearVelocity { set; get; }
+        public float m_snapMaxAngularVelocity { set; get; }
+        public float m_snapMaxLinearDistance { set; get; }
+        public float m_snapMaxAngularDistance { set; get; }
 
         public virtual uint Signature => 0xa3d0ac71;
 
@@ -98,6 +96,48 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_snapMaxAngularVelocity), m_snapMaxAngularVelocity);
             xs.WriteFloat(xe, nameof(m_snapMaxLinearDistance), m_snapMaxLinearDistance);
             xs.WriteFloat(xe, nameof(m_snapMaxAngularDistance), m_snapMaxAngularDistance);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaKeyFrameHierarchyUtilityControlData);
+        }
+
+        public bool Equals(hkaKeyFrameHierarchyUtilityControlData? other)
+        {
+            return other is not null &&
+                   m_hierarchyGain.Equals(other.m_hierarchyGain) &&
+                   m_velocityDamping.Equals(other.m_velocityDamping) &&
+                   m_accelerationGain.Equals(other.m_accelerationGain) &&
+                   m_velocityGain.Equals(other.m_velocityGain) &&
+                   m_positionGain.Equals(other.m_positionGain) &&
+                   m_positionMaxLinearVelocity.Equals(other.m_positionMaxLinearVelocity) &&
+                   m_positionMaxAngularVelocity.Equals(other.m_positionMaxAngularVelocity) &&
+                   m_snapGain.Equals(other.m_snapGain) &&
+                   m_snapMaxLinearVelocity.Equals(other.m_snapMaxLinearVelocity) &&
+                   m_snapMaxAngularVelocity.Equals(other.m_snapMaxAngularVelocity) &&
+                   m_snapMaxLinearDistance.Equals(other.m_snapMaxLinearDistance) &&
+                   m_snapMaxAngularDistance.Equals(other.m_snapMaxAngularDistance) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_hierarchyGain);
+            hashcode.Add(m_velocityDamping);
+            hashcode.Add(m_accelerationGain);
+            hashcode.Add(m_velocityGain);
+            hashcode.Add(m_positionGain);
+            hashcode.Add(m_positionMaxLinearVelocity);
+            hashcode.Add(m_positionMaxAngularVelocity);
+            hashcode.Add(m_snapGain);
+            hashcode.Add(m_snapMaxLinearVelocity);
+            hashcode.Add(m_snapMaxAngularVelocity);
+            hashcode.Add(m_snapMaxLinearDistance);
+            hashcode.Add(m_snapMaxAngularDistance);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

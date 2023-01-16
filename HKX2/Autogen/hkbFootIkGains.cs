@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,20 +17,20 @@ namespace HKX2
     // m_hipOrientationGain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_maxKneeAngleDifference m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_ankleOrientationGain m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
-    public partial class hkbFootIkGains : IHavokObject
+    public partial class hkbFootIkGains : IHavokObject, IEquatable<hkbFootIkGains?>
     {
-        public float m_onOffGain { set; get; } = default;
-        public float m_groundAscendingGain { set; get; } = default;
-        public float m_groundDescendingGain { set; get; } = default;
-        public float m_footPlantedGain { set; get; } = default;
-        public float m_footRaisedGain { set; get; } = default;
-        public float m_footUnlockGain { set; get; } = default;
-        public float m_worldFromModelFeedbackGain { set; get; } = default;
-        public float m_errorUpDownBias { set; get; } = default;
-        public float m_alignWorldFromModelGain { set; get; } = default;
-        public float m_hipOrientationGain { set; get; } = default;
-        public float m_maxKneeAngleDifference { set; get; } = default;
-        public float m_ankleOrientationGain { set; get; } = default;
+        public float m_onOffGain { set; get; }
+        public float m_groundAscendingGain { set; get; }
+        public float m_groundDescendingGain { set; get; }
+        public float m_footPlantedGain { set; get; }
+        public float m_footRaisedGain { set; get; }
+        public float m_footUnlockGain { set; get; }
+        public float m_worldFromModelFeedbackGain { set; get; }
+        public float m_errorUpDownBias { set; get; }
+        public float m_alignWorldFromModelGain { set; get; }
+        public float m_hipOrientationGain { set; get; }
+        public float m_maxKneeAngleDifference { set; get; }
+        public float m_ankleOrientationGain { set; get; }
 
         public virtual uint Signature => 0xa681b7f0;
 
@@ -98,6 +96,48 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_hipOrientationGain), m_hipOrientationGain);
             xs.WriteFloat(xe, nameof(m_maxKneeAngleDifference), m_maxKneeAngleDifference);
             xs.WriteFloat(xe, nameof(m_ankleOrientationGain), m_ankleOrientationGain);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbFootIkGains);
+        }
+
+        public bool Equals(hkbFootIkGains? other)
+        {
+            return other is not null &&
+                   m_onOffGain.Equals(other.m_onOffGain) &&
+                   m_groundAscendingGain.Equals(other.m_groundAscendingGain) &&
+                   m_groundDescendingGain.Equals(other.m_groundDescendingGain) &&
+                   m_footPlantedGain.Equals(other.m_footPlantedGain) &&
+                   m_footRaisedGain.Equals(other.m_footRaisedGain) &&
+                   m_footUnlockGain.Equals(other.m_footUnlockGain) &&
+                   m_worldFromModelFeedbackGain.Equals(other.m_worldFromModelFeedbackGain) &&
+                   m_errorUpDownBias.Equals(other.m_errorUpDownBias) &&
+                   m_alignWorldFromModelGain.Equals(other.m_alignWorldFromModelGain) &&
+                   m_hipOrientationGain.Equals(other.m_hipOrientationGain) &&
+                   m_maxKneeAngleDifference.Equals(other.m_maxKneeAngleDifference) &&
+                   m_ankleOrientationGain.Equals(other.m_ankleOrientationGain) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_onOffGain);
+            hashcode.Add(m_groundAscendingGain);
+            hashcode.Add(m_groundDescendingGain);
+            hashcode.Add(m_footPlantedGain);
+            hashcode.Add(m_footRaisedGain);
+            hashcode.Add(m_footUnlockGain);
+            hashcode.Add(m_worldFromModelFeedbackGain);
+            hashcode.Add(m_errorUpDownBias);
+            hashcode.Add(m_alignWorldFromModelGain);
+            hashcode.Add(m_hipOrientationGain);
+            hashcode.Add(m_maxKneeAngleDifference);
+            hashcode.Add(m_ankleOrientationGain);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

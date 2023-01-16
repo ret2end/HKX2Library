@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -19,20 +18,20 @@ namespace HKX2
     // m_oldHandleRotation m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 208 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_timeSinceLastModify m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 224 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_smoothlyChangingHandles m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 228 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbEvaluateHandleModifier : hkbModifier
+    public partial class hkbEvaluateHandleModifier : hkbModifier, IEquatable<hkbEvaluateHandleModifier?>
     {
-        public hkbHandle? m_handle { set; get; } = default;
-        public Vector4 m_handlePositionOut { set; get; } = default;
-        public Quaternion m_handleRotationOut { set; get; } = default;
-        public bool m_isValidOut { set; get; } = default;
-        public float m_extrapolationTimeStep { set; get; } = default;
-        public float m_handleChangeSpeed { set; get; } = default;
-        public sbyte m_handleChangeMode { set; get; } = default;
+        public hkbHandle? m_handle { set; get; }
+        public Vector4 m_handlePositionOut { set; get; }
+        public Quaternion m_handleRotationOut { set; get; }
+        public bool m_isValidOut { set; get; }
+        public float m_extrapolationTimeStep { set; get; }
+        public float m_handleChangeSpeed { set; get; }
+        public sbyte m_handleChangeMode { set; get; }
         public hkbHandle m_oldHandle { set; get; } = new();
-        private Vector4 m_oldHandlePosition { set; get; } = default;
-        private Quaternion m_oldHandleRotation { set; get; } = default;
-        private float m_timeSinceLastModify { set; get; } = default;
-        private bool m_smoothlyChangingHandles { set; get; } = default;
+        private Vector4 m_oldHandlePosition { set; get; }
+        private Quaternion m_oldHandleRotation { set; get; }
+        private float m_timeSinceLastModify { set; get; }
+        private bool m_smoothlyChangingHandles { set; get; }
 
         public override uint Signature => 0x79757102;
 
@@ -105,6 +104,40 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_oldHandleRotation));
             xs.WriteSerializeIgnored(xe, nameof(m_timeSinceLastModify));
             xs.WriteSerializeIgnored(xe, nameof(m_smoothlyChangingHandles));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbEvaluateHandleModifier);
+        }
+
+        public bool Equals(hkbEvaluateHandleModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_handle is null && other.m_handle is null) || (m_handle is not null && other.m_handle is not null && m_handle.Equals((IHavokObject)other.m_handle))) &&
+                   m_handlePositionOut.Equals(other.m_handlePositionOut) &&
+                   m_handleRotationOut.Equals(other.m_handleRotationOut) &&
+                   m_isValidOut.Equals(other.m_isValidOut) &&
+                   m_extrapolationTimeStep.Equals(other.m_extrapolationTimeStep) &&
+                   m_handleChangeSpeed.Equals(other.m_handleChangeSpeed) &&
+                   m_handleChangeMode.Equals(other.m_handleChangeMode) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_handle);
+            hashcode.Add(m_handlePositionOut);
+            hashcode.Add(m_handleRotationOut);
+            hashcode.Add(m_isValidOut);
+            hashcode.Add(m_extrapolationTimeStep);
+            hashcode.Add(m_handleChangeSpeed);
+            hashcode.Add(m_handleChangeMode);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

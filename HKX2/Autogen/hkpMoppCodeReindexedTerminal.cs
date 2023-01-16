@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_origShapeKey m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_reindexedShapeKey m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
-    public partial class hkpMoppCodeReindexedTerminal : IHavokObject
+    public partial class hkpMoppCodeReindexedTerminal : IHavokObject, IEquatable<hkpMoppCodeReindexedTerminal?>
     {
-        public uint m_origShapeKey { set; get; } = default;
-        public uint m_reindexedShapeKey { set; get; } = default;
+        public uint m_origShapeKey { set; get; }
+        public uint m_reindexedShapeKey { set; get; }
 
         public virtual uint Signature => 0x6ed8ac06;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteNumber(xe, nameof(m_origShapeKey), m_origShapeKey);
             xs.WriteNumber(xe, nameof(m_reindexedShapeKey), m_reindexedShapeKey);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMoppCodeReindexedTerminal);
+        }
+
+        public bool Equals(hkpMoppCodeReindexedTerminal? other)
+        {
+            return other is not null &&
+                   m_origShapeKey.Equals(other.m_origShapeKey) &&
+                   m_reindexedShapeKey.Equals(other.m_reindexedShapeKey) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_origShapeKey);
+            hashcode.Add(m_reindexedShapeKey);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

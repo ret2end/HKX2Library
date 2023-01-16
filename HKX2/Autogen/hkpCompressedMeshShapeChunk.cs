@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -15,16 +16,16 @@ namespace HKX2
     // m_materialInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_reference m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
     // m_transformIndex m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 86 flags: FLAGS_NONE enum: 
-    public partial class hkpCompressedMeshShapeChunk : IHavokObject
+    public partial class hkpCompressedMeshShapeChunk : IHavokObject, IEquatable<hkpCompressedMeshShapeChunk?>
     {
-        public Vector4 m_offset { set; get; } = default;
-        public IList<ushort> m_vertices { set; get; } = new List<ushort>();
-        public IList<ushort> m_indices { set; get; } = new List<ushort>();
-        public IList<ushort> m_stripLengths { set; get; } = new List<ushort>();
-        public IList<ushort> m_weldingInfo { set; get; } = new List<ushort>();
-        public uint m_materialInfo { set; get; } = default;
-        public ushort m_reference { set; get; } = default;
-        public ushort m_transformIndex { set; get; } = default;
+        public Vector4 m_offset { set; get; }
+        public IList<ushort> m_vertices { set; get; } = Array.Empty<ushort>();
+        public IList<ushort> m_indices { set; get; } = Array.Empty<ushort>();
+        public IList<ushort> m_stripLengths { set; get; } = Array.Empty<ushort>();
+        public IList<ushort> m_weldingInfo { set; get; } = Array.Empty<ushort>();
+        public uint m_materialInfo { set; get; }
+        public ushort m_reference { set; get; }
+        public ushort m_transformIndex { set; get; }
 
         public virtual uint Signature => 0x5d0d67bd;
 
@@ -76,6 +77,40 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_materialInfo), m_materialInfo);
             xs.WriteNumber(xe, nameof(m_reference), m_reference);
             xs.WriteNumber(xe, nameof(m_transformIndex), m_transformIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCompressedMeshShapeChunk);
+        }
+
+        public bool Equals(hkpCompressedMeshShapeChunk? other)
+        {
+            return other is not null &&
+                   m_offset.Equals(other.m_offset) &&
+                   m_vertices.SequenceEqual(other.m_vertices) &&
+                   m_indices.SequenceEqual(other.m_indices) &&
+                   m_stripLengths.SequenceEqual(other.m_stripLengths) &&
+                   m_weldingInfo.SequenceEqual(other.m_weldingInfo) &&
+                   m_materialInfo.Equals(other.m_materialInfo) &&
+                   m_reference.Equals(other.m_reference) &&
+                   m_transformIndex.Equals(other.m_transformIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_offset);
+            hashcode.Add(m_vertices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_indices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_stripLengths.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_weldingInfo.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_materialInfo);
+            hashcode.Add(m_reference);
+            hashcode.Add(m_transformIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

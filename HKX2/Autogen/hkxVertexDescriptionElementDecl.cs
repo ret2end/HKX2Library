@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_usage m_class:  Type.TYPE_ENUM Type.TYPE_UINT16 arrSize: 0 offset: 6 flags: FLAGS_NONE enum: DataUsage
     // m_byteStride m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_numElements m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
-    public partial class hkxVertexDescriptionElementDecl : IHavokObject
+    public partial class hkxVertexDescriptionElementDecl : IHavokObject, IEquatable<hkxVertexDescriptionElementDecl?>
     {
-        public uint m_byteOffset { set; get; } = default;
-        public ushort m_type { set; get; } = default;
-        public ushort m_usage { set; get; } = default;
-        public uint m_byteStride { set; get; } = default;
-        public byte m_numElements { set; get; } = default;
+        public uint m_byteOffset { set; get; }
+        public ushort m_type { set; get; }
+        public ushort m_usage { set; get; }
+        public uint m_byteStride { set; get; }
+        public byte m_numElements { set; get; }
 
         public virtual uint Signature => 0x483a429b;
 
@@ -58,6 +56,34 @@ namespace HKX2
             xs.WriteEnum<DataUsage, ushort>(xe, nameof(m_usage), m_usage);
             xs.WriteNumber(xe, nameof(m_byteStride), m_byteStride);
             xs.WriteNumber(xe, nameof(m_numElements), m_numElements);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxVertexDescriptionElementDecl);
+        }
+
+        public bool Equals(hkxVertexDescriptionElementDecl? other)
+        {
+            return other is not null &&
+                   m_byteOffset.Equals(other.m_byteOffset) &&
+                   m_type.Equals(other.m_type) &&
+                   m_usage.Equals(other.m_usage) &&
+                   m_byteStride.Equals(other.m_byteStride) &&
+                   m_numElements.Equals(other.m_numElements) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_byteOffset);
+            hashcode.Add(m_type);
+            hashcode.Add(m_usage);
+            hashcode.Add(m_byteStride);
+            hashcode.Add(m_numElements);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

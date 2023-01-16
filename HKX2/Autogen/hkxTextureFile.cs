@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,7 +8,7 @@ namespace HKX2
     // m_filename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
     // m_originalFilename m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkxTextureFile : hkReferencedObject
+    public partial class hkxTextureFile : hkReferencedObject, IEquatable<hkxTextureFile?>
     {
         public string m_filename { set; get; } = "";
         public string m_name { set; get; } = "";
@@ -48,6 +46,32 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_filename), m_filename);
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteString(xe, nameof(m_originalFilename), m_originalFilename);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxTextureFile);
+        }
+
+        public bool Equals(hkxTextureFile? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_filename is null && other.m_filename is null || m_filename == other.m_filename || m_filename is null && other.m_filename == "" || m_filename == "" && other.m_filename is null) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   (m_originalFilename is null && other.m_originalFilename is null || m_originalFilename == other.m_originalFilename || m_originalFilename is null && other.m_originalFilename == "" || m_originalFilename == "" && other.m_originalFilename is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_filename);
+            hashcode.Add(m_name);
+            hashcode.Add(m_originalFilename);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

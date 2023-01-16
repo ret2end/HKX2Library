@@ -9,18 +9,18 @@ namespace HKX2
 {
     public class XmlSerializer
     {
-        private int index = 0050;
+        private int _index = 0050;
         private HKXHeader _header;
         private Dictionary<IHavokObject, string> _serializedObjectsLookup;
         private XDocument _document;
         private XContainer _dataSection;
 
-        public string GetIndex()
+        private string GetIndex()
         {
-            return "#" + index++.ToString("D4");
+            return "#" + _index++.ToString("D4");
         }
 
-        public string FormatSignature(uint signature)
+        private static string FormatSignature(uint signature)
         {
             return "0x" + signature.ToString("x8");
         }
@@ -29,7 +29,7 @@ namespace HKX2
         {
 
             _header = header;
-            _serializedObjectsLookup = new Dictionary<IHavokObject, string>();
+            _serializedObjectsLookup = new Dictionary<IHavokObject, string>(ReferenceEqualityComparer.Instance);
 
             var index = GetIndex();
 
@@ -50,7 +50,7 @@ namespace HKX2
             _document.Save(stream);
         }
 
-        public XElement WriteNode<T>(T hkobject, string nodeName) where T : IHavokObject
+        private XElement WriteNode<T>(T hkobject, string nodeName) where T : IHavokObject
         {
             XElement ele = new("hkobject",
                 new XAttribute("name", nodeName),
@@ -60,7 +60,7 @@ namespace HKX2
             return ele;
         }
 
-        public void WriteClassPointer<T>(XElement xe, string paramName, T value) where T : IHavokObject
+        public void WriteClassPointer<T>(XElement xe, string paramName, T? value) where T : IHavokObject
         {
             if (value is null)
             {
@@ -82,7 +82,7 @@ namespace HKX2
             }
         }
 
-        public void WriteClassPointerArray<T>(XElement xe, string paramName, IList<T> values) where T : IHavokObject
+        public void WriteClassPointerArray<T>(XElement xe, string paramName, IList<T?> values) where T : IHavokObject
         {
             var indexs = new List<string>();
             var hkparam = WriteParam(xe, paramName);
@@ -137,12 +137,12 @@ namespace HKX2
             WriteComment(xe, prop + " SERIALIZE_IGNORED");
         }
 
-        public void WriteComment(XElement xe, string value)
+        private static void WriteComment(XElement xe, string value)
         {
             xe.Add(new XComment(value));
         }
 
-        public XElement WriteParam(XElement xe, string paramName, params object[] value)
+        private XElement WriteParam(XElement xe, string paramName, params object[] value)
         {
             if (paramName.StartsWith("m_"))
             {
@@ -153,7 +153,7 @@ namespace HKX2
             return hkparam;
         }
 
-        public XElement WriteParam(XElement xe, string paramName)
+        private XElement WriteParam(XElement xe, string paramName)
         {
             return WriteParam(xe, paramName, "");
         }
@@ -290,9 +290,9 @@ namespace HKX2
             return WriteParam(xe, paramName, formated, new XAttribute("numelements", value.Count));
         }
 
-        public XElement WriteString(XElement xe, string paramName, string value)
+        public XElement WriteString(XElement xe, string paramName, string? value)
         {
-            return WriteParam(xe, paramName, value ?? "");
+            return WriteParam(xe, paramName, value is null ? '\u2400' : value);
         }
 
         public XElement WriteStringArray(XElement xe, string paramName, IList<string> values)

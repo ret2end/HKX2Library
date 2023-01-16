@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +13,14 @@ namespace HKX2
     // m_numberOfFloatTracks m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     // m_extractedMotion m_class: hkaAnimatedReferenceFrame Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_annotationTracks m_class: hkaAnnotationTrack Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
-    public partial class hkaAnimation : hkReferencedObject
+    public partial class hkaAnimation : hkReferencedObject, IEquatable<hkaAnimation?>
     {
-        public int m_type { set; get; } = default;
-        public float m_duration { set; get; } = default;
-        public int m_numberOfTransformTracks { set; get; } = default;
-        public int m_numberOfFloatTracks { set; get; } = default;
-        public hkaAnimatedReferenceFrame? m_extractedMotion { set; get; } = default;
-        public IList<hkaAnnotationTrack> m_annotationTracks { set; get; } = new List<hkaAnnotationTrack>();
+        public int m_type { set; get; }
+        public float m_duration { set; get; }
+        public int m_numberOfTransformTracks { set; get; }
+        public int m_numberOfFloatTracks { set; get; }
+        public hkaAnimatedReferenceFrame? m_extractedMotion { set; get; }
+        public IList<hkaAnnotationTrack> m_annotationTracks { set; get; } = Array.Empty<hkaAnnotationTrack>();
 
         public override uint Signature => 0xa6fa7e88;
 
@@ -65,7 +65,39 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_numberOfTransformTracks), m_numberOfTransformTracks);
             xs.WriteNumber(xe, nameof(m_numberOfFloatTracks), m_numberOfFloatTracks);
             xs.WriteClassPointer(xe, nameof(m_extractedMotion), m_extractedMotion);
-            xs.WriteClassArray<hkaAnnotationTrack>(xe, nameof(m_annotationTracks), m_annotationTracks);
+            xs.WriteClassArray(xe, nameof(m_annotationTracks), m_annotationTracks);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaAnimation);
+        }
+
+        public bool Equals(hkaAnimation? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   m_duration.Equals(other.m_duration) &&
+                   m_numberOfTransformTracks.Equals(other.m_numberOfTransformTracks) &&
+                   m_numberOfFloatTracks.Equals(other.m_numberOfFloatTracks) &&
+                   ((m_extractedMotion is null && other.m_extractedMotion is null) || (m_extractedMotion is not null && other.m_extractedMotion is not null && m_extractedMotion.Equals((IHavokObject)other.m_extractedMotion))) &&
+                   m_annotationTracks.SequenceEqual(other.m_annotationTracks) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(m_duration);
+            hashcode.Add(m_numberOfTransformTracks);
+            hashcode.Add(m_numberOfFloatTracks);
+            hashcode.Add(m_extractedMotion);
+            hashcode.Add(m_annotationTracks.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

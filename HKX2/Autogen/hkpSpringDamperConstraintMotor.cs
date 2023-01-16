@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_springConstant m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_springDamping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
-    public partial class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor
+    public partial class hkpSpringDamperConstraintMotor : hkpLimitedForceConstraintMotor, IEquatable<hkpSpringDamperConstraintMotor?>
     {
-        public float m_springConstant { set; get; } = default;
-        public float m_springDamping { set; get; } = default;
+        public float m_springConstant { set; get; }
+        public float m_springDamping { set; get; }
 
         public override uint Signature => 0x7ead26f6;
 
@@ -42,6 +40,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteFloat(xe, nameof(m_springConstant), m_springConstant);
             xs.WriteFloat(xe, nameof(m_springDamping), m_springDamping);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSpringDamperConstraintMotor);
+        }
+
+        public bool Equals(hkpSpringDamperConstraintMotor? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_springConstant.Equals(other.m_springConstant) &&
+                   m_springDamping.Equals(other.m_springDamping) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_springConstant);
+            hashcode.Add(m_springDamping);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

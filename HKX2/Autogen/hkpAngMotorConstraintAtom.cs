@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +12,15 @@ namespace HKX2
     // m_correspondingAngLimitSolverResultOffset m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_targetAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_motor m_class: hkpConstraintMotor Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpAngMotorConstraintAtom : hkpConstraintAtom
+    public partial class hkpAngMotorConstraintAtom : hkpConstraintAtom, IEquatable<hkpAngMotorConstraintAtom?>
     {
-        public bool m_isEnabled { set; get; } = default;
-        public byte m_motorAxis { set; get; } = default;
-        public short m_initializedOffset { set; get; } = default;
-        public short m_previousTargetAngleOffset { set; get; } = default;
-        public short m_correspondingAngLimitSolverResultOffset { set; get; } = default;
-        public float m_targetAngle { set; get; } = default;
-        public hkpConstraintMotor? m_motor { set; get; } = default;
+        public bool m_isEnabled { set; get; }
+        public byte m_motorAxis { set; get; }
+        public short m_initializedOffset { set; get; }
+        public short m_previousTargetAngleOffset { set; get; }
+        public short m_correspondingAngLimitSolverResultOffset { set; get; }
+        public float m_targetAngle { set; get; }
+        public hkpConstraintMotor? m_motor { set; get; }
 
         public override uint Signature => 0x81f087ff;
 
@@ -74,6 +72,40 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_correspondingAngLimitSolverResultOffset), m_correspondingAngLimitSolverResultOffset);
             xs.WriteFloat(xe, nameof(m_targetAngle), m_targetAngle);
             xs.WriteClassPointer(xe, nameof(m_motor), m_motor);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpAngMotorConstraintAtom);
+        }
+
+        public bool Equals(hkpAngMotorConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_isEnabled.Equals(other.m_isEnabled) &&
+                   m_motorAxis.Equals(other.m_motorAxis) &&
+                   m_initializedOffset.Equals(other.m_initializedOffset) &&
+                   m_previousTargetAngleOffset.Equals(other.m_previousTargetAngleOffset) &&
+                   m_correspondingAngLimitSolverResultOffset.Equals(other.m_correspondingAngLimitSolverResultOffset) &&
+                   m_targetAngle.Equals(other.m_targetAngle) &&
+                   ((m_motor is null && other.m_motor is null) || (m_motor is not null && other.m_motor is not null && m_motor.Equals((IHavokObject)other.m_motor))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_isEnabled);
+            hashcode.Add(m_motorAxis);
+            hashcode.Add(m_initializedOffset);
+            hashcode.Add(m_previousTargetAngleOffset);
+            hashcode.Add(m_correspondingAngLimitSolverResultOffset);
+            hashcode.Add(m_targetAngle);
+            hashcode.Add(m_motor);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

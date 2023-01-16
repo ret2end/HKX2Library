@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +13,14 @@ namespace HKX2
     // m_nextSampleInts m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_isEnabled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 84 flags: FLAGS_NONE enum: 
-    public partial class hkbSequenceInternalState : hkReferencedObject
+    public partial class hkbSequenceInternalState : hkReferencedObject, IEquatable<hkbSequenceInternalState?>
     {
-        public IList<int> m_nextSampleEvents { set; get; } = new List<int>();
-        public IList<int> m_nextSampleReals { set; get; } = new List<int>();
-        public IList<int> m_nextSampleBools { set; get; } = new List<int>();
-        public IList<int> m_nextSampleInts { set; get; } = new List<int>();
-        public float m_time { set; get; } = default;
-        public bool m_isEnabled { set; get; } = default;
+        public IList<int> m_nextSampleEvents { set; get; } = Array.Empty<int>();
+        public IList<int> m_nextSampleReals { set; get; } = Array.Empty<int>();
+        public IList<int> m_nextSampleBools { set; get; } = Array.Empty<int>();
+        public IList<int> m_nextSampleInts { set; get; } = Array.Empty<int>();
+        public float m_time { set; get; }
+        public bool m_isEnabled { set; get; }
 
         public override uint Signature => 0x419b9a05;
 
@@ -68,6 +68,38 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_nextSampleInts), m_nextSampleInts);
             xs.WriteFloat(xe, nameof(m_time), m_time);
             xs.WriteBoolean(xe, nameof(m_isEnabled), m_isEnabled);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSequenceInternalState);
+        }
+
+        public bool Equals(hkbSequenceInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_nextSampleEvents.SequenceEqual(other.m_nextSampleEvents) &&
+                   m_nextSampleReals.SequenceEqual(other.m_nextSampleReals) &&
+                   m_nextSampleBools.SequenceEqual(other.m_nextSampleBools) &&
+                   m_nextSampleInts.SequenceEqual(other.m_nextSampleInts) &&
+                   m_time.Equals(other.m_time) &&
+                   m_isEnabled.Equals(other.m_isEnabled) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_nextSampleEvents.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nextSampleReals.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nextSampleBools.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_nextSampleInts.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_time);
+            hashcode.Add(m_isEnabled);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

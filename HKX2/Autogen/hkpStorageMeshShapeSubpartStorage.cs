@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +13,14 @@ namespace HKX2
     // m_materialIndices m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_materials m_class:  Type.TYPE_ARRAY Type.TYPE_UINT32 arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_materialIndices16 m_class:  Type.TYPE_ARRAY Type.TYPE_UINT16 arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkpStorageMeshShapeSubpartStorage : hkReferencedObject
+    public partial class hkpStorageMeshShapeSubpartStorage : hkReferencedObject, IEquatable<hkpStorageMeshShapeSubpartStorage?>
     {
-        public IList<float> m_vertices { set; get; } = new List<float>();
-        public IList<ushort> m_indices16 { set; get; } = new List<ushort>();
-        public IList<uint> m_indices32 { set; get; } = new List<uint>();
-        public IList<byte> m_materialIndices { set; get; } = new List<byte>();
-        public IList<uint> m_materials { set; get; } = new List<uint>();
-        public IList<ushort> m_materialIndices16 { set; get; } = new List<ushort>();
+        public IList<float> m_vertices { set; get; } = Array.Empty<float>();
+        public IList<ushort> m_indices16 { set; get; } = Array.Empty<ushort>();
+        public IList<uint> m_indices32 { set; get; } = Array.Empty<uint>();
+        public IList<byte> m_materialIndices { set; get; } = Array.Empty<byte>();
+        public IList<uint> m_materials { set; get; } = Array.Empty<uint>();
+        public IList<ushort> m_materialIndices16 { set; get; } = Array.Empty<ushort>();
 
         public override uint Signature => 0xbf27438;
 
@@ -66,6 +66,38 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_materialIndices), m_materialIndices);
             xs.WriteNumberArray(xe, nameof(m_materials), m_materials);
             xs.WriteNumberArray(xe, nameof(m_materialIndices16), m_materialIndices16);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpStorageMeshShapeSubpartStorage);
+        }
+
+        public bool Equals(hkpStorageMeshShapeSubpartStorage? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_vertices.SequenceEqual(other.m_vertices) &&
+                   m_indices16.SequenceEqual(other.m_indices16) &&
+                   m_indices32.SequenceEqual(other.m_indices32) &&
+                   m_materialIndices.SequenceEqual(other.m_materialIndices) &&
+                   m_materials.SequenceEqual(other.m_materials) &&
+                   m_materialIndices16.SequenceEqual(other.m_materialIndices16) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_vertices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_indices16.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_indices32.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_materialIndices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_materials.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_materialIndices16.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

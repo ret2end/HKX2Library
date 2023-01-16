@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_secondsElapsed m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_isActive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
-    public partial class hkbDelayedModifierInternalState : hkReferencedObject
+    public partial class hkbDelayedModifierInternalState : hkReferencedObject, IEquatable<hkbDelayedModifierInternalState?>
     {
-        public float m_secondsElapsed { set; get; } = default;
-        public bool m_isActive { set; get; } = default;
+        public float m_secondsElapsed { set; get; }
+        public bool m_isActive { set; get; }
 
         public override uint Signature => 0x85fb0b80;
 
@@ -44,6 +42,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteFloat(xe, nameof(m_secondsElapsed), m_secondsElapsed);
             xs.WriteBoolean(xe, nameof(m_isActive), m_isActive);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbDelayedModifierInternalState);
+        }
+
+        public bool Equals(hkbDelayedModifierInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_secondsElapsed.Equals(other.m_secondsElapsed) &&
+                   m_isActive.Equals(other.m_isActive) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_secondsElapsed);
+            hashcode.Add(m_isActive);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

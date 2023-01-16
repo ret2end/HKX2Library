@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -22,23 +20,23 @@ namespace HKX2
     // m_materialStriding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_numMaterials m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 68 flags: FLAGS_NONE enum: 
     // m_triangleOffset m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
-    public partial class hkpMeshShapeSubpart : IHavokObject
+    public partial class hkpMeshShapeSubpart : IHavokObject, IEquatable<hkpMeshShapeSubpart?>
     {
-        private object? m_vertexBase { set; get; } = default;
-        public int m_vertexStriding { set; get; } = default;
-        public int m_numVertices { set; get; } = default;
-        private object? m_indexBase { set; get; } = default;
-        public sbyte m_stridingType { set; get; } = default;
-        public sbyte m_materialIndexStridingType { set; get; } = default;
-        public int m_indexStriding { set; get; } = default;
-        public int m_flipAlternateTriangles { set; get; } = default;
-        public int m_numTriangles { set; get; } = default;
-        private object? m_materialIndexBase { set; get; } = default;
-        public int m_materialIndexStriding { set; get; } = default;
-        private object? m_materialBase { set; get; } = default;
-        public int m_materialStriding { set; get; } = default;
-        public int m_numMaterials { set; get; } = default;
-        public int m_triangleOffset { set; get; } = default;
+        private object? m_vertexBase { set; get; }
+        public int m_vertexStriding { set; get; }
+        public int m_numVertices { set; get; }
+        private object? m_indexBase { set; get; }
+        public sbyte m_stridingType { set; get; }
+        public sbyte m_materialIndexStridingType { set; get; }
+        public int m_indexStriding { set; get; }
+        public int m_flipAlternateTriangles { set; get; }
+        public int m_numTriangles { set; get; }
+        private object? m_materialIndexBase { set; get; }
+        public int m_materialIndexStriding { set; get; }
+        private object? m_materialBase { set; get; }
+        public int m_materialStriding { set; get; }
+        public int m_numMaterials { set; get; }
+        public int m_triangleOffset { set; get; }
 
         public virtual uint Signature => 0x27336e5d;
 
@@ -118,6 +116,46 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_materialStriding), m_materialStriding);
             xs.WriteNumber(xe, nameof(m_numMaterials), m_numMaterials);
             xs.WriteNumber(xe, nameof(m_triangleOffset), m_triangleOffset);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMeshShapeSubpart);
+        }
+
+        public bool Equals(hkpMeshShapeSubpart? other)
+        {
+            return other is not null &&
+                   m_vertexStriding.Equals(other.m_vertexStriding) &&
+                   m_numVertices.Equals(other.m_numVertices) &&
+                   m_stridingType.Equals(other.m_stridingType) &&
+                   m_materialIndexStridingType.Equals(other.m_materialIndexStridingType) &&
+                   m_indexStriding.Equals(other.m_indexStriding) &&
+                   m_flipAlternateTriangles.Equals(other.m_flipAlternateTriangles) &&
+                   m_numTriangles.Equals(other.m_numTriangles) &&
+                   m_materialIndexStriding.Equals(other.m_materialIndexStriding) &&
+                   m_materialStriding.Equals(other.m_materialStriding) &&
+                   m_numMaterials.Equals(other.m_numMaterials) &&
+                   m_triangleOffset.Equals(other.m_triangleOffset) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_vertexStriding);
+            hashcode.Add(m_numVertices);
+            hashcode.Add(m_stridingType);
+            hashcode.Add(m_materialIndexStridingType);
+            hashcode.Add(m_indexStriding);
+            hashcode.Add(m_flipAlternateTriangles);
+            hashcode.Add(m_numTriangles);
+            hashcode.Add(m_materialIndexStriding);
+            hashcode.Add(m_materialStriding);
+            hashcode.Add(m_numMaterials);
+            hashcode.Add(m_triangleOffset);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

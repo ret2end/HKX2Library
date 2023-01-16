@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_vertexA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_vertexB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpCapsuleShape : hkpConvexShape
+    public partial class hkpCapsuleShape : hkpConvexShape, IEquatable<hkpCapsuleShape?>
     {
-        public Vector4 m_vertexA { set; get; } = default;
-        public Vector4 m_vertexB { set; get; } = default;
+        public Vector4 m_vertexA { set; get; }
+        public Vector4 m_vertexB { set; get; }
 
         public override uint Signature => 0xdd0b1fd3;
 
@@ -44,6 +43,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_vertexA), m_vertexA);
             xs.WriteVector4(xe, nameof(m_vertexB), m_vertexB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCapsuleShape);
+        }
+
+        public bool Equals(hkpCapsuleShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_vertexA.Equals(other.m_vertexA) &&
+                   m_vertexB.Equals(other.m_vertexB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_vertexA);
+            hashcode.Add(m_vertexB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

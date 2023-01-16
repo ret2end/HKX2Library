@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_modifier m_class: hkbModifier Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_generator m_class: hkbGenerator Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class hkbModifierGenerator : hkbGenerator
+    public partial class hkbModifierGenerator : hkbGenerator, IEquatable<hkbModifierGenerator?>
     {
-        public hkbModifier? m_modifier { set; get; } = default;
-        public hkbGenerator? m_generator { set; get; } = default;
+        public hkbModifier? m_modifier { set; get; }
+        public hkbGenerator? m_generator { set; get; }
 
         public override uint Signature => 0x1f81fae6;
 
@@ -42,6 +40,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteClassPointer(xe, nameof(m_modifier), m_modifier);
             xs.WriteClassPointer(xe, nameof(m_generator), m_generator);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbModifierGenerator);
+        }
+
+        public bool Equals(hkbModifierGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_modifier is null && other.m_modifier is null) || (m_modifier is not null && other.m_modifier is not null && m_modifier.Equals((IHavokObject)other.m_modifier))) &&
+                   ((m_generator is null && other.m_generator is null) || (m_generator is not null && other.m_generator is not null && m_generator.Equals((IHavokObject)other.m_generator))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_modifier);
+            hashcode.Add(m_generator);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

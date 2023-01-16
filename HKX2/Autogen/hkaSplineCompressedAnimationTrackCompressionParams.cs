@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,20 +17,20 @@ namespace HKX2
     // m_translationQuantizationType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 25 flags: FLAGS_NONE enum: ScalarQuantization
     // m_scaleQuantizationType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 26 flags: FLAGS_NONE enum: ScalarQuantization
     // m_floatQuantizationType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 27 flags: FLAGS_NONE enum: ScalarQuantization
-    public partial class hkaSplineCompressedAnimationTrackCompressionParams : IHavokObject
+    public partial class hkaSplineCompressedAnimationTrackCompressionParams : IHavokObject, IEquatable<hkaSplineCompressedAnimationTrackCompressionParams?>
     {
-        public float m_rotationTolerance { set; get; } = default;
-        public float m_translationTolerance { set; get; } = default;
-        public float m_scaleTolerance { set; get; } = default;
-        public float m_floatingTolerance { set; get; } = default;
-        public ushort m_rotationDegree { set; get; } = default;
-        public ushort m_translationDegree { set; get; } = default;
-        public ushort m_scaleDegree { set; get; } = default;
-        public ushort m_floatingDegree { set; get; } = default;
-        public byte m_rotationQuantizationType { set; get; } = default;
-        public byte m_translationQuantizationType { set; get; } = default;
-        public byte m_scaleQuantizationType { set; get; } = default;
-        public byte m_floatQuantizationType { set; get; } = default;
+        public float m_rotationTolerance { set; get; }
+        public float m_translationTolerance { set; get; }
+        public float m_scaleTolerance { set; get; }
+        public float m_floatingTolerance { set; get; }
+        public ushort m_rotationDegree { set; get; }
+        public ushort m_translationDegree { set; get; }
+        public ushort m_scaleDegree { set; get; }
+        public ushort m_floatingDegree { set; get; }
+        public byte m_rotationQuantizationType { set; get; }
+        public byte m_translationQuantizationType { set; get; }
+        public byte m_scaleQuantizationType { set; get; }
+        public byte m_floatQuantizationType { set; get; }
 
         public virtual uint Signature => 0x42e878d3;
 
@@ -98,6 +96,48 @@ namespace HKX2
             xs.WriteEnum<ScalarQuantization, byte>(xe, nameof(m_translationQuantizationType), m_translationQuantizationType);
             xs.WriteEnum<ScalarQuantization, byte>(xe, nameof(m_scaleQuantizationType), m_scaleQuantizationType);
             xs.WriteEnum<ScalarQuantization, byte>(xe, nameof(m_floatQuantizationType), m_floatQuantizationType);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaSplineCompressedAnimationTrackCompressionParams);
+        }
+
+        public bool Equals(hkaSplineCompressedAnimationTrackCompressionParams? other)
+        {
+            return other is not null &&
+                   m_rotationTolerance.Equals(other.m_rotationTolerance) &&
+                   m_translationTolerance.Equals(other.m_translationTolerance) &&
+                   m_scaleTolerance.Equals(other.m_scaleTolerance) &&
+                   m_floatingTolerance.Equals(other.m_floatingTolerance) &&
+                   m_rotationDegree.Equals(other.m_rotationDegree) &&
+                   m_translationDegree.Equals(other.m_translationDegree) &&
+                   m_scaleDegree.Equals(other.m_scaleDegree) &&
+                   m_floatingDegree.Equals(other.m_floatingDegree) &&
+                   m_rotationQuantizationType.Equals(other.m_rotationQuantizationType) &&
+                   m_translationQuantizationType.Equals(other.m_translationQuantizationType) &&
+                   m_scaleQuantizationType.Equals(other.m_scaleQuantizationType) &&
+                   m_floatQuantizationType.Equals(other.m_floatQuantizationType) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_rotationTolerance);
+            hashcode.Add(m_translationTolerance);
+            hashcode.Add(m_scaleTolerance);
+            hashcode.Add(m_floatingTolerance);
+            hashcode.Add(m_rotationDegree);
+            hashcode.Add(m_translationDegree);
+            hashcode.Add(m_scaleDegree);
+            hashcode.Add(m_floatingDegree);
+            hashcode.Add(m_rotationQuantizationType);
+            hashcode.Add(m_translationQuantizationType);
+            hashcode.Add(m_scaleQuantizationType);
+            hashcode.Add(m_floatQuantizationType);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

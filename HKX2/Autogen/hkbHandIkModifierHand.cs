@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -21,21 +20,21 @@ namespace HKX2
     // m_enforceEndPosition m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 82 flags: FLAGS_NONE enum: 
     // m_enforceEndRotation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 83 flags: FLAGS_NONE enum: 
     // m_localFrameName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
-    public partial class hkbHandIkModifierHand : IHavokObject
+    public partial class hkbHandIkModifierHand : IHavokObject, IEquatable<hkbHandIkModifierHand?>
     {
-        public Vector4 m_elbowAxisLS { set; get; } = default;
-        public Vector4 m_backHandNormalLS { set; get; } = default;
-        public Vector4 m_handOffsetLS { set; get; } = default;
-        public Quaternion m_handOrienationOffsetLS { set; get; } = default;
-        public float m_maxElbowAngleDegrees { set; get; } = default;
-        public float m_minElbowAngleDegrees { set; get; } = default;
-        public short m_shoulderIndex { set; get; } = default;
-        public short m_shoulderSiblingIndex { set; get; } = default;
-        public short m_elbowIndex { set; get; } = default;
-        public short m_elbowSiblingIndex { set; get; } = default;
-        public short m_wristIndex { set; get; } = default;
-        public bool m_enforceEndPosition { set; get; } = default;
-        public bool m_enforceEndRotation { set; get; } = default;
+        public Vector4 m_elbowAxisLS { set; get; }
+        public Vector4 m_backHandNormalLS { set; get; }
+        public Vector4 m_handOffsetLS { set; get; }
+        public Quaternion m_handOrienationOffsetLS { set; get; }
+        public float m_maxElbowAngleDegrees { set; get; }
+        public float m_minElbowAngleDegrees { set; get; }
+        public short m_shoulderIndex { set; get; }
+        public short m_shoulderSiblingIndex { set; get; }
+        public short m_elbowIndex { set; get; }
+        public short m_elbowSiblingIndex { set; get; }
+        public short m_wristIndex { set; get; }
+        public bool m_enforceEndPosition { set; get; }
+        public bool m_enforceEndRotation { set; get; }
         public string m_localFrameName { set; get; } = "";
 
         public virtual uint Signature => 0x14dfe1dd;
@@ -112,6 +111,52 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_enforceEndPosition), m_enforceEndPosition);
             xs.WriteBoolean(xe, nameof(m_enforceEndRotation), m_enforceEndRotation);
             xs.WriteString(xe, nameof(m_localFrameName), m_localFrameName);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbHandIkModifierHand);
+        }
+
+        public bool Equals(hkbHandIkModifierHand? other)
+        {
+            return other is not null &&
+                   m_elbowAxisLS.Equals(other.m_elbowAxisLS) &&
+                   m_backHandNormalLS.Equals(other.m_backHandNormalLS) &&
+                   m_handOffsetLS.Equals(other.m_handOffsetLS) &&
+                   m_handOrienationOffsetLS.Equals(other.m_handOrienationOffsetLS) &&
+                   m_maxElbowAngleDegrees.Equals(other.m_maxElbowAngleDegrees) &&
+                   m_minElbowAngleDegrees.Equals(other.m_minElbowAngleDegrees) &&
+                   m_shoulderIndex.Equals(other.m_shoulderIndex) &&
+                   m_shoulderSiblingIndex.Equals(other.m_shoulderSiblingIndex) &&
+                   m_elbowIndex.Equals(other.m_elbowIndex) &&
+                   m_elbowSiblingIndex.Equals(other.m_elbowSiblingIndex) &&
+                   m_wristIndex.Equals(other.m_wristIndex) &&
+                   m_enforceEndPosition.Equals(other.m_enforceEndPosition) &&
+                   m_enforceEndRotation.Equals(other.m_enforceEndRotation) &&
+                   (m_localFrameName is null && other.m_localFrameName is null || m_localFrameName == other.m_localFrameName || m_localFrameName is null && other.m_localFrameName == "" || m_localFrameName == "" && other.m_localFrameName is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_elbowAxisLS);
+            hashcode.Add(m_backHandNormalLS);
+            hashcode.Add(m_handOffsetLS);
+            hashcode.Add(m_handOrienationOffsetLS);
+            hashcode.Add(m_maxElbowAngleDegrees);
+            hashcode.Add(m_minElbowAngleDegrees);
+            hashcode.Add(m_shoulderIndex);
+            hashcode.Add(m_shoulderSiblingIndex);
+            hashcode.Add(m_elbowIndex);
+            hashcode.Add(m_elbowSiblingIndex);
+            hashcode.Add(m_wristIndex);
+            hashcode.Add(m_enforceEndPosition);
+            hashcode.Add(m_enforceEndRotation);
+            hashcode.Add(m_localFrameName);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

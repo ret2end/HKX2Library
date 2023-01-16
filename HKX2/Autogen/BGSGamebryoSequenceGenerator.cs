@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,22 +13,22 @@ namespace HKX2
     // m_fTime m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bDelayedActivate m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 108 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_bLooping m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 109 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BGSGamebryoSequenceGenerator : hkbGenerator
+    public partial class BGSGamebryoSequenceGenerator : hkbGenerator, IEquatable<BGSGamebryoSequenceGenerator?>
     {
         public string m_pSequence { set; get; } = "";
-        public sbyte m_eBlendModeFunction { set; get; } = default;
-        public float m_fPercent { set; get; } = default;
-        public IList<object> m_events { set; get; } = new List<object>();
-        private float m_fTime { set; get; } = default;
-        private bool m_bDelayedActivate { set; get; } = default;
-        private bool m_bLooping { set; get; } = default;
+        public sbyte m_eBlendModeFunction { set; get; }
+        public float m_fPercent { set; get; }
+        public IList<object> m_events { set; get; } = Array.Empty<object>();
+        private float m_fTime { set; get; }
+        private bool m_bDelayedActivate { set; get; }
+        private bool m_bLooping { set; get; }
 
         public override uint Signature => 0xc8df2d77;
 
         public override void Read(PackFileDeserializer des, BinaryReaderEx br)
         {
             base.Read(des, br);
-            m_pSequence = des.ReadStringPointer(br);
+            m_pSequence = des.ReadCString(br);
             m_eBlendModeFunction = br.ReadSByte();
             br.Position += 3;
             m_fPercent = br.ReadSingle();
@@ -43,7 +42,7 @@ namespace HKX2
         public override void Write(PackFileSerializer s, BinaryWriterEx bw)
         {
             base.Write(s, bw);
-            s.WriteCStringPointer(bw, m_pSequence);
+            s.WriteCString(bw, m_pSequence);
             bw.WriteSByte(m_eBlendModeFunction);
             bw.Position += 3;
             bw.WriteSingle(m_fPercent);
@@ -72,6 +71,32 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_fTime));
             xs.WriteSerializeIgnored(xe, nameof(m_bDelayedActivate));
             xs.WriteSerializeIgnored(xe, nameof(m_bLooping));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BGSGamebryoSequenceGenerator);
+        }
+
+        public bool Equals(BGSGamebryoSequenceGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_pSequence is null && other.m_pSequence is null || m_pSequence == other.m_pSequence || m_pSequence is null && other.m_pSequence == "" || m_pSequence == "" && other.m_pSequence is null) &&
+                   m_eBlendModeFunction.Equals(other.m_eBlendModeFunction) &&
+                   m_fPercent.Equals(other.m_fPercent) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_pSequence);
+            hashcode.Add(m_eBlendModeFunction);
+            hashcode.Add(m_fPercent);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -19,20 +17,20 @@ namespace HKX2
     // m_oldMotionType m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 184 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_oldFilterInfo m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 188 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_attachment m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 192 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbAttachmentModifier : hkbModifier
+    public partial class hkbAttachmentModifier : hkbModifier, IEquatable<hkbAttachmentModifier?>
     {
         public hkbEventProperty m_sendToAttacherOnAttach { set; get; } = new();
         public hkbEventProperty m_sendToAttacheeOnAttach { set; get; } = new();
         public hkbEventProperty m_sendToAttacherOnDetach { set; get; } = new();
         public hkbEventProperty m_sendToAttacheeOnDetach { set; get; } = new();
-        public hkbAttachmentSetup? m_attachmentSetup { set; get; } = default;
-        public hkbHandle? m_attacherHandle { set; get; } = default;
-        public hkbHandle? m_attacheeHandle { set; get; } = default;
-        public int m_attacheeLayer { set; get; } = default;
-        private object? m_attacheeRB { set; get; } = default;
-        private byte m_oldMotionType { set; get; } = default;
-        private int m_oldFilterInfo { set; get; } = default;
-        private object? m_attachment { set; get; } = default;
+        public hkbAttachmentSetup? m_attachmentSetup { set; get; }
+        public hkbHandle? m_attacherHandle { set; get; }
+        public hkbHandle? m_attacheeHandle { set; get; }
+        public int m_attacheeLayer { set; get; }
+        private object? m_attacheeRB { set; get; }
+        private byte m_oldMotionType { set; get; }
+        private int m_oldFilterInfo { set; get; }
+        private object? m_attachment { set; get; }
 
         public override uint Signature => 0xcc0aab32;
 
@@ -102,6 +100,42 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_oldMotionType));
             xs.WriteSerializeIgnored(xe, nameof(m_oldFilterInfo));
             xs.WriteSerializeIgnored(xe, nameof(m_attachment));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbAttachmentModifier);
+        }
+
+        public bool Equals(hkbAttachmentModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_sendToAttacherOnAttach is null && other.m_sendToAttacherOnAttach is null) || (m_sendToAttacherOnAttach is not null && other.m_sendToAttacherOnAttach is not null && m_sendToAttacherOnAttach.Equals((IHavokObject)other.m_sendToAttacherOnAttach))) &&
+                   ((m_sendToAttacheeOnAttach is null && other.m_sendToAttacheeOnAttach is null) || (m_sendToAttacheeOnAttach is not null && other.m_sendToAttacheeOnAttach is not null && m_sendToAttacheeOnAttach.Equals((IHavokObject)other.m_sendToAttacheeOnAttach))) &&
+                   ((m_sendToAttacherOnDetach is null && other.m_sendToAttacherOnDetach is null) || (m_sendToAttacherOnDetach is not null && other.m_sendToAttacherOnDetach is not null && m_sendToAttacherOnDetach.Equals((IHavokObject)other.m_sendToAttacherOnDetach))) &&
+                   ((m_sendToAttacheeOnDetach is null && other.m_sendToAttacheeOnDetach is null) || (m_sendToAttacheeOnDetach is not null && other.m_sendToAttacheeOnDetach is not null && m_sendToAttacheeOnDetach.Equals((IHavokObject)other.m_sendToAttacheeOnDetach))) &&
+                   ((m_attachmentSetup is null && other.m_attachmentSetup is null) || (m_attachmentSetup is not null && other.m_attachmentSetup is not null && m_attachmentSetup.Equals((IHavokObject)other.m_attachmentSetup))) &&
+                   ((m_attacherHandle is null && other.m_attacherHandle is null) || (m_attacherHandle is not null && other.m_attacherHandle is not null && m_attacherHandle.Equals((IHavokObject)other.m_attacherHandle))) &&
+                   ((m_attacheeHandle is null && other.m_attacheeHandle is null) || (m_attacheeHandle is not null && other.m_attacheeHandle is not null && m_attacheeHandle.Equals((IHavokObject)other.m_attacheeHandle))) &&
+                   m_attacheeLayer.Equals(other.m_attacheeLayer) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_sendToAttacherOnAttach);
+            hashcode.Add(m_sendToAttacheeOnAttach);
+            hashcode.Add(m_sendToAttacherOnDetach);
+            hashcode.Add(m_sendToAttacheeOnDetach);
+            hashcode.Add(m_attachmentSetup);
+            hashcode.Add(m_attacherHandle);
+            hashcode.Add(m_attacheeHandle);
+            hashcode.Add(m_attacheeLayer);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

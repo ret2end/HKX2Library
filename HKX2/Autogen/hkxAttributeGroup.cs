@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_attributes m_class: hkxAttribute Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkxAttributeGroup : IHavokObject
+    public partial class hkxAttributeGroup : IHavokObject, IEquatable<hkxAttributeGroup?>
     {
         public string m_name { set; get; } = "";
-        public IList<hkxAttribute> m_attributes { set; get; } = new List<hkxAttribute>();
+        public IList<hkxAttribute> m_attributes { set; get; } = Array.Empty<hkxAttribute>();
 
         public virtual uint Signature => 0x345ca95d;
 
@@ -37,7 +37,29 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
             xs.WriteString(xe, nameof(m_name), m_name);
-            xs.WriteClassArray<hkxAttribute>(xe, nameof(m_attributes), m_attributes);
+            xs.WriteClassArray(xe, nameof(m_attributes), m_attributes);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxAttributeGroup);
+        }
+
+        public bool Equals(hkxAttributeGroup? other)
+        {
+            return other is not null &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_attributes.SequenceEqual(other.m_attributes) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_name);
+            hashcode.Add(m_attributes.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

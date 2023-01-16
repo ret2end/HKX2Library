@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +10,10 @@ namespace HKX2
 
     // m_matrices m_class:  Type.TYPE_ARRAY Type.TYPE_MATRIX4 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_hint m_class:  Type.TYPE_ENUM Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: Hint
-    public partial class hkxAnimatedMatrix : hkReferencedObject
+    public partial class hkxAnimatedMatrix : hkReferencedObject, IEquatable<hkxAnimatedMatrix?>
     {
-        public IList<Matrix4x4> m_matrices { set; get; } = new List<Matrix4x4>();
-        public byte m_hint { set; get; } = default;
+        public IList<Matrix4x4> m_matrices { set; get; } = Array.Empty<Matrix4x4>();
+        public byte m_hint { set; get; }
 
         public override uint Signature => 0x5838e337;
 
@@ -44,6 +45,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteMatrix4Array(xe, nameof(m_matrices), m_matrices);
             xs.WriteEnum<Hint, byte>(xe, nameof(m_hint), m_hint);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxAnimatedMatrix);
+        }
+
+        public bool Equals(hkxAnimatedMatrix? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_matrices.SequenceEqual(other.m_matrices) &&
+                   m_hint.Equals(other.m_hint) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_matrices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_hint);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

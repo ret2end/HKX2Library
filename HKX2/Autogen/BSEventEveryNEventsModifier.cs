@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +12,15 @@ namespace HKX2
     // m_randomizeNumberOfEvents m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 114 flags: FLAGS_NONE enum: 
     // m_numberOfEventsSeen m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 116 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_calculatedNumberOfEventsBeforeSend m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSEventEveryNEventsModifier : hkbModifier
+    public partial class BSEventEveryNEventsModifier : hkbModifier, IEquatable<BSEventEveryNEventsModifier?>
     {
         public hkbEventProperty m_eventToCheckFor { set; get; } = new();
         public hkbEventProperty m_eventToSend { set; get; } = new();
-        public sbyte m_numberOfEventsBeforeSend { set; get; } = default;
-        public sbyte m_minimumNumberOfEventsBeforeSend { set; get; } = default;
-        public bool m_randomizeNumberOfEvents { set; get; } = default;
-        private int m_numberOfEventsSeen { set; get; } = default;
-        private sbyte m_calculatedNumberOfEventsBeforeSend { set; get; } = default;
+        public sbyte m_numberOfEventsBeforeSend { set; get; }
+        public sbyte m_minimumNumberOfEventsBeforeSend { set; get; }
+        public bool m_randomizeNumberOfEvents { set; get; }
+        private int m_numberOfEventsSeen { set; get; }
+        private sbyte m_calculatedNumberOfEventsBeforeSend { set; get; }
 
         public override uint Signature => 0x6030970c;
 
@@ -74,6 +72,36 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_randomizeNumberOfEvents), m_randomizeNumberOfEvents);
             xs.WriteSerializeIgnored(xe, nameof(m_numberOfEventsSeen));
             xs.WriteSerializeIgnored(xe, nameof(m_calculatedNumberOfEventsBeforeSend));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSEventEveryNEventsModifier);
+        }
+
+        public bool Equals(BSEventEveryNEventsModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_eventToCheckFor is null && other.m_eventToCheckFor is null) || (m_eventToCheckFor is not null && other.m_eventToCheckFor is not null && m_eventToCheckFor.Equals((IHavokObject)other.m_eventToCheckFor))) &&
+                   ((m_eventToSend is null && other.m_eventToSend is null) || (m_eventToSend is not null && other.m_eventToSend is not null && m_eventToSend.Equals((IHavokObject)other.m_eventToSend))) &&
+                   m_numberOfEventsBeforeSend.Equals(other.m_numberOfEventsBeforeSend) &&
+                   m_minimumNumberOfEventsBeforeSend.Equals(other.m_minimumNumberOfEventsBeforeSend) &&
+                   m_randomizeNumberOfEvents.Equals(other.m_randomizeNumberOfEvents) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_eventToCheckFor);
+            hashcode.Add(m_eventToSend);
+            hashcode.Add(m_numberOfEventsBeforeSend);
+            hashcode.Add(m_minimumNumberOfEventsBeforeSend);
+            hashcode.Add(m_randomizeNumberOfEvents);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

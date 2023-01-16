@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkbStringCondition Signatire: 0x5ab50487 size: 24 flags: FLAGS_NONE
 
     // m_conditionString m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkbStringCondition : hkbCondition
+    public partial class hkbStringCondition : hkbCondition, IEquatable<hkbStringCondition?>
     {
         public string m_conditionString { set; get; } = "";
 
@@ -36,6 +34,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteString(xe, nameof(m_conditionString), m_conditionString);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStringCondition);
+        }
+
+        public bool Equals(hkbStringCondition? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   (m_conditionString is null && other.m_conditionString is null || m_conditionString == other.m_conditionString || m_conditionString is null && other.m_conditionString == "" || m_conditionString == "" && other.m_conditionString is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_conditionString);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

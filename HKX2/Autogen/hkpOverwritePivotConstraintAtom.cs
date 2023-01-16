@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpOverwritePivotConstraintAtom Signatire: 0x1f11b467 size: 4 flags: FLAGS_NONE
 
     // m_copyToPivotBFromPivotA m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
-    public partial class hkpOverwritePivotConstraintAtom : hkpConstraintAtom
+    public partial class hkpOverwritePivotConstraintAtom : hkpConstraintAtom, IEquatable<hkpOverwritePivotConstraintAtom?>
     {
-        public byte m_copyToPivotBFromPivotA { set; get; } = default;
+        public byte m_copyToPivotBFromPivotA { set; get; }
 
         public override uint Signature => 0x1f11b467;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_copyToPivotBFromPivotA), m_copyToPivotBFromPivotA);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpOverwritePivotConstraintAtom);
+        }
+
+        public bool Equals(hkpOverwritePivotConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_copyToPivotBFromPivotA.Equals(other.m_copyToPivotBFromPivotA) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_copyToPivotBFromPivotA);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +8,11 @@ namespace HKX2
     // m_timeSinceBegin m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
     // m_initNextModify m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 24 flags: FLAGS_NONE enum: 
-    public partial class hkbGetUpModifierInternalState : hkReferencedObject
+    public partial class hkbGetUpModifierInternalState : hkReferencedObject, IEquatable<hkbGetUpModifierInternalState?>
     {
-        public float m_timeSinceBegin { set; get; } = default;
-        public float m_timeStep { set; get; } = default;
-        public bool m_initNextModify { set; get; } = default;
+        public float m_timeSinceBegin { set; get; }
+        public float m_timeStep { set; get; }
+        public bool m_initNextModify { set; get; }
 
         public override uint Signature => 0xd84cad4a;
 
@@ -50,6 +48,32 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_timeSinceBegin), m_timeSinceBegin);
             xs.WriteFloat(xe, nameof(m_timeStep), m_timeStep);
             xs.WriteBoolean(xe, nameof(m_initNextModify), m_initNextModify);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbGetUpModifierInternalState);
+        }
+
+        public bool Equals(hkbGetUpModifierInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_timeSinceBegin.Equals(other.m_timeSinceBegin) &&
+                   m_timeStep.Equals(other.m_timeStep) &&
+                   m_initNextModify.Equals(other.m_initNextModify) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_timeSinceBegin);
+            hashcode.Add(m_timeStep);
+            hashcode.Add(m_initNextModify);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

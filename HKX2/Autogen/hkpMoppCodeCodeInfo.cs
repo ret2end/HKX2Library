@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -8,9 +7,9 @@ namespace HKX2
     // hkpMoppCodeCodeInfo Signatire: 0xd8fdbb08 size: 16 flags: FLAGS_NONE
 
     // m_offset m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
-    public partial class hkpMoppCodeCodeInfo : IHavokObject
+    public partial class hkpMoppCodeCodeInfo : IHavokObject, IEquatable<hkpMoppCodeCodeInfo?>
     {
-        public Vector4 m_offset { set; get; } = default;
+        public Vector4 m_offset { set; get; }
 
         public virtual uint Signature => 0xd8fdbb08;
 
@@ -32,6 +31,26 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
             xs.WriteVector4(xe, nameof(m_offset), m_offset);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMoppCodeCodeInfo);
+        }
+
+        public bool Equals(hkpMoppCodeCodeInfo? other)
+        {
+            return other is not null &&
+                   m_offset.Equals(other.m_offset) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_offset);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

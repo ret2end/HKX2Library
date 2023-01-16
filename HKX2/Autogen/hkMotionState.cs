@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -17,18 +16,18 @@ namespace HKX2
     // m_maxLinearVelocity m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 170 flags: FLAGS_NONE enum: 
     // m_maxAngularVelocity m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 171 flags: FLAGS_NONE enum: 
     // m_deactivationClass m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 172 flags: FLAGS_NONE enum: 
-    public partial class hkMotionState : IHavokObject
+    public partial class hkMotionState : IHavokObject, IEquatable<hkMotionState?>
     {
-        public Matrix4x4 m_transform { set; get; } = default;
+        public Matrix4x4 m_transform { set; get; }
         public hkSweptTransform m_sweptTransform { set; get; } = new();
-        public Vector4 m_deltaAngle { set; get; } = default;
-        public float m_objectRadius { set; get; } = default;
-        public Half m_linearDamping { set; get; } = default;
-        public Half m_angularDamping { set; get; } = default;
-        public Half m_timeFactor { set; get; } = default;
-        public byte m_maxLinearVelocity { set; get; } = default;
-        public byte m_maxAngularVelocity { set; get; } = default;
-        public byte m_deactivationClass { set; get; } = default;
+        public Vector4 m_deltaAngle { set; get; }
+        public float m_objectRadius { set; get; }
+        public Half m_linearDamping { set; get; }
+        public Half m_angularDamping { set; get; }
+        public Half m_timeFactor { set; get; }
+        public byte m_maxLinearVelocity { set; get; }
+        public byte m_maxAngularVelocity { set; get; }
+        public byte m_deactivationClass { set; get; }
 
         public virtual uint Signature => 0x5797386e;
 
@@ -88,6 +87,44 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_maxLinearVelocity), m_maxLinearVelocity);
             xs.WriteNumber(xe, nameof(m_maxAngularVelocity), m_maxAngularVelocity);
             xs.WriteNumber(xe, nameof(m_deactivationClass), m_deactivationClass);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkMotionState);
+        }
+
+        public bool Equals(hkMotionState? other)
+        {
+            return other is not null &&
+                   m_transform.Equals(other.m_transform) &&
+                   ((m_sweptTransform is null && other.m_sweptTransform is null) || (m_sweptTransform is not null && other.m_sweptTransform is not null && m_sweptTransform.Equals((IHavokObject)other.m_sweptTransform))) &&
+                   m_deltaAngle.Equals(other.m_deltaAngle) &&
+                   m_objectRadius.Equals(other.m_objectRadius) &&
+                   m_linearDamping.Equals(other.m_linearDamping) &&
+                   m_angularDamping.Equals(other.m_angularDamping) &&
+                   m_timeFactor.Equals(other.m_timeFactor) &&
+                   m_maxLinearVelocity.Equals(other.m_maxLinearVelocity) &&
+                   m_maxAngularVelocity.Equals(other.m_maxAngularVelocity) &&
+                   m_deactivationClass.Equals(other.m_deactivationClass) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_transform);
+            hashcode.Add(m_sweptTransform);
+            hashcode.Add(m_deltaAngle);
+            hashcode.Add(m_objectRadius);
+            hashcode.Add(m_linearDamping);
+            hashcode.Add(m_angularDamping);
+            hashcode.Add(m_timeFactor);
+            hashcode.Add(m_maxLinearVelocity);
+            hashcode.Add(m_maxAngularVelocity);
+            hashcode.Add(m_deactivationClass);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

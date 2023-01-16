@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_buildJacobianFunc m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 8 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_constraintData m_class: hkpConstraintData Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: NOT_OWNED|FLAGS_NONE enum: 
-    public partial class hkpBridgeConstraintAtom : hkpConstraintAtom
+    public partial class hkpBridgeConstraintAtom : hkpConstraintAtom, IEquatable<hkpBridgeConstraintAtom?>
     {
-        private object? m_buildJacobianFunc { set; get; } = default;
-        public hkpConstraintData? m_constraintData { set; get; } = default;
+        private object? m_buildJacobianFunc { set; get; }
+        public hkpConstraintData? m_constraintData { set; get; }
 
         public override uint Signature => 0x87a4f31b;
 
@@ -43,6 +41,28 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteSerializeIgnored(xe, nameof(m_buildJacobianFunc));
             xs.WriteClassPointer(xe, nameof(m_constraintData), m_constraintData);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpBridgeConstraintAtom);
+        }
+
+        public bool Equals(hkpBridgeConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_constraintData is null && other.m_constraintData is null) || (m_constraintData is not null && other.m_constraintData is not null && m_constraintData.Equals((IHavokObject)other.m_constraintData))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_constraintData);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

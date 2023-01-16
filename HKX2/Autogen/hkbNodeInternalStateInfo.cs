@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_internalState m_class: hkReferencedObject Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_nodeId m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_hasActivateBeenCalled m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 114 flags: FLAGS_NONE enum: 
-    public partial class hkbNodeInternalStateInfo : hkReferencedObject
+    public partial class hkbNodeInternalStateInfo : hkReferencedObject, IEquatable<hkbNodeInternalStateInfo?>
     {
         public hkbGeneratorSyncInfo m_syncInfo { set; get; } = new();
         public string m_name { set; get; } = "";
-        public hkReferencedObject? m_internalState { set; get; } = default;
-        public short m_nodeId { set; get; } = default;
-        public bool m_hasActivateBeenCalled { set; get; } = default;
+        public hkReferencedObject? m_internalState { set; get; }
+        public short m_nodeId { set; get; }
+        public bool m_hasActivateBeenCalled { set; get; }
 
         public override uint Signature => 0x7db9971d;
 
@@ -62,6 +60,36 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_internalState), m_internalState);
             xs.WriteNumber(xe, nameof(m_nodeId), m_nodeId);
             xs.WriteBoolean(xe, nameof(m_hasActivateBeenCalled), m_hasActivateBeenCalled);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbNodeInternalStateInfo);
+        }
+
+        public bool Equals(hkbNodeInternalStateInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_syncInfo is null && other.m_syncInfo is null) || (m_syncInfo is not null && other.m_syncInfo is not null && m_syncInfo.Equals((IHavokObject)other.m_syncInfo))) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   ((m_internalState is null && other.m_internalState is null) || (m_internalState is not null && other.m_internalState is not null && m_internalState.Equals((IHavokObject)other.m_internalState))) &&
+                   m_nodeId.Equals(other.m_nodeId) &&
+                   m_hasActivateBeenCalled.Equals(other.m_hasActivateBeenCalled) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_syncInfo);
+            hashcode.Add(m_name);
+            hashcode.Add(m_internalState);
+            hashcode.Add(m_nodeId);
+            hashcode.Add(m_hasActivateBeenCalled);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

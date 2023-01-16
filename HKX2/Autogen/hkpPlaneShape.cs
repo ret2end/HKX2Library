@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,11 +9,11 @@ namespace HKX2
     // m_plane m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_aabbCenter m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_aabbHalfExtents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpPlaneShape : hkpHeightFieldShape
+    public partial class hkpPlaneShape : hkpHeightFieldShape, IEquatable<hkpPlaneShape?>
     {
-        public Vector4 m_plane { set; get; } = default;
-        public Vector4 m_aabbCenter { set; get; } = default;
-        public Vector4 m_aabbHalfExtents { set; get; } = default;
+        public Vector4 m_plane { set; get; }
+        public Vector4 m_aabbCenter { set; get; }
+        public Vector4 m_aabbHalfExtents { set; get; }
 
         public override uint Signature => 0xc36bbd30;
 
@@ -48,6 +47,32 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_plane), m_plane);
             xs.WriteVector4(xe, nameof(m_aabbCenter), m_aabbCenter);
             xs.WriteVector4(xe, nameof(m_aabbHalfExtents), m_aabbHalfExtents);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPlaneShape);
+        }
+
+        public bool Equals(hkpPlaneShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_plane.Equals(other.m_plane) &&
+                   m_aabbCenter.Equals(other.m_aabbCenter) &&
+                   m_aabbHalfExtents.Equals(other.m_aabbHalfExtents) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_plane);
+            hashcode.Add(m_aabbCenter);
+            hashcode.Add(m_aabbHalfExtents);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

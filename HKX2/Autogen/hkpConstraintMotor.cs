@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpConstraintMotor Signatire: 0x6a44c317 size: 24 flags: FLAGS_NONE
 
     // m_type m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: MotorType
-    public partial class hkpConstraintMotor : hkReferencedObject
+    public partial class hkpConstraintMotor : hkReferencedObject, IEquatable<hkpConstraintMotor?>
     {
-        public sbyte m_type { set; get; } = default;
+        public sbyte m_type { set; get; }
 
         public override uint Signature => 0x6a44c317;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteEnum<MotorType, sbyte>(xe, nameof(m_type), m_type);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpConstraintMotor);
+        }
+
+        public bool Equals(hkpConstraintMotor? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

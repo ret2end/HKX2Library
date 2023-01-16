@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_sections m_class: hkxMeshSection Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_userChannelInfos m_class: hkxMeshUserChannelInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkxMesh : hkReferencedObject
+    public partial class hkxMesh : hkReferencedObject, IEquatable<hkxMesh?>
     {
-        public IList<hkxMeshSection> m_sections { set; get; } = new List<hkxMeshSection>();
-        public IList<hkxMeshUserChannelInfo> m_userChannelInfos { set; get; } = new List<hkxMeshUserChannelInfo>();
+        public IList<hkxMeshSection> m_sections { set; get; } = Array.Empty<hkxMeshSection>();
+        public IList<hkxMeshUserChannelInfo> m_userChannelInfos { set; get; } = Array.Empty<hkxMeshUserChannelInfo>();
 
         public override uint Signature => 0xf2edcc5f;
 
@@ -40,8 +40,32 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkxMeshSection>(xe, nameof(m_sections), m_sections);
-            xs.WriteClassPointerArray<hkxMeshUserChannelInfo>(xe, nameof(m_userChannelInfos), m_userChannelInfos);
+            xs.WriteClassPointerArray(xe, nameof(m_sections), m_sections);
+            xs.WriteClassPointerArray(xe, nameof(m_userChannelInfos), m_userChannelInfos);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxMesh);
+        }
+
+        public bool Equals(hkxMesh? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_sections.SequenceEqual(other.m_sections) &&
+                   m_userChannelInfos.SequenceEqual(other.m_userChannelInfos) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_sections.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_userChannelInfos.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

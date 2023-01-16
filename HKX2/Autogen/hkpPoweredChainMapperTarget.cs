@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_chain m_class: hkpPoweredChainData Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_infoIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpPoweredChainMapperTarget : IHavokObject
+    public partial class hkpPoweredChainMapperTarget : IHavokObject, IEquatable<hkpPoweredChainMapperTarget?>
     {
-        public hkpPoweredChainData? m_chain { set; get; } = default;
-        public int m_infoIndex { set; get; } = default;
+        public hkpPoweredChainData? m_chain { set; get; }
+        public int m_infoIndex { set; get; }
 
         public virtual uint Signature => 0xf651c74d;
 
@@ -40,6 +38,28 @@ namespace HKX2
         {
             xs.WriteClassPointer(xe, nameof(m_chain), m_chain);
             xs.WriteNumber(xe, nameof(m_infoIndex), m_infoIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPoweredChainMapperTarget);
+        }
+
+        public bool Equals(hkpPoweredChainMapperTarget? other)
+        {
+            return other is not null &&
+                   ((m_chain is null && other.m_chain is null) || (m_chain is not null && other.m_chain is not null && m_chain.Equals((IHavokObject)other.m_chain))) &&
+                   m_infoIndex.Equals(other.m_infoIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_chain);
+            hashcode.Add(m_infoIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

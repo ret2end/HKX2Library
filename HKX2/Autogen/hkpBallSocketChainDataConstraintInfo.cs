@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_pivotInA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_pivotInB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpBallSocketChainDataConstraintInfo : IHavokObject
+    public partial class hkpBallSocketChainDataConstraintInfo : IHavokObject, IEquatable<hkpBallSocketChainDataConstraintInfo?>
     {
-        public Vector4 m_pivotInA { set; get; } = default;
-        public Vector4 m_pivotInB { set; get; } = default;
+        public Vector4 m_pivotInA { set; get; }
+        public Vector4 m_pivotInB { set; get; }
 
         public virtual uint Signature => 0xc9cbedf2;
 
@@ -38,6 +37,28 @@ namespace HKX2
         {
             xs.WriteVector4(xe, nameof(m_pivotInA), m_pivotInA);
             xs.WriteVector4(xe, nameof(m_pivotInB), m_pivotInB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpBallSocketChainDataConstraintInfo);
+        }
+
+        public bool Equals(hkpBallSocketChainDataConstraintInfo? other)
+        {
+            return other is not null &&
+                   m_pivotInA.Equals(other.m_pivotInA) &&
+                   m_pivotInB.Equals(other.m_pivotInB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_pivotInA);
+            hashcode.Add(m_pivotInB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -15,16 +16,16 @@ namespace HKX2
     // m_extractedMotionMapping m_class:  Type.TYPE_QSTRANSFORM Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_keepUnmappedLocal m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_mappingType m_class:  Type.TYPE_ENUM Type.TYPE_INT32 arrSize: 0 offset: 116 flags: FLAGS_NONE enum: MappingType
-    public partial class hkaSkeletonMapperData : IHavokObject
+    public partial class hkaSkeletonMapperData : IHavokObject, IEquatable<hkaSkeletonMapperData?>
     {
-        public hkaSkeleton? m_skeletonA { set; get; } = default;
-        public hkaSkeleton? m_skeletonB { set; get; } = default;
-        public IList<hkaSkeletonMapperDataSimpleMapping> m_simpleMappings { set; get; } = new List<hkaSkeletonMapperDataSimpleMapping>();
-        public IList<hkaSkeletonMapperDataChainMapping> m_chainMappings { set; get; } = new List<hkaSkeletonMapperDataChainMapping>();
-        public IList<short> m_unmappedBones { set; get; } = new List<short>();
-        public Matrix4x4 m_extractedMotionMapping { set; get; } = default;
-        public bool m_keepUnmappedLocal { set; get; } = default;
-        public int m_mappingType { set; get; } = default;
+        public hkaSkeleton? m_skeletonA { set; get; }
+        public hkaSkeleton? m_skeletonB { set; get; }
+        public IList<hkaSkeletonMapperDataSimpleMapping> m_simpleMappings { set; get; } = Array.Empty<hkaSkeletonMapperDataSimpleMapping>();
+        public IList<hkaSkeletonMapperDataChainMapping> m_chainMappings { set; get; } = Array.Empty<hkaSkeletonMapperDataChainMapping>();
+        public IList<short> m_unmappedBones { set; get; } = Array.Empty<short>();
+        public Matrix4x4 m_extractedMotionMapping { set; get; }
+        public bool m_keepUnmappedLocal { set; get; }
+        public int m_mappingType { set; get; }
 
         public virtual uint Signature => 0x95687ea0;
 
@@ -72,12 +73,46 @@ namespace HKX2
         {
             xs.WriteClassPointer(xe, nameof(m_skeletonA), m_skeletonA);
             xs.WriteClassPointer(xe, nameof(m_skeletonB), m_skeletonB);
-            xs.WriteClassArray<hkaSkeletonMapperDataSimpleMapping>(xe, nameof(m_simpleMappings), m_simpleMappings);
-            xs.WriteClassArray<hkaSkeletonMapperDataChainMapping>(xe, nameof(m_chainMappings), m_chainMappings);
+            xs.WriteClassArray(xe, nameof(m_simpleMappings), m_simpleMappings);
+            xs.WriteClassArray(xe, nameof(m_chainMappings), m_chainMappings);
             xs.WriteNumberArray(xe, nameof(m_unmappedBones), m_unmappedBones);
             xs.WriteQSTransform(xe, nameof(m_extractedMotionMapping), m_extractedMotionMapping);
             xs.WriteBoolean(xe, nameof(m_keepUnmappedLocal), m_keepUnmappedLocal);
             xs.WriteEnum<MappingType, int>(xe, nameof(m_mappingType), m_mappingType);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaSkeletonMapperData);
+        }
+
+        public bool Equals(hkaSkeletonMapperData? other)
+        {
+            return other is not null &&
+                   ((m_skeletonA is null && other.m_skeletonA is null) || (m_skeletonA is not null && other.m_skeletonA is not null && m_skeletonA.Equals((IHavokObject)other.m_skeletonA))) &&
+                   ((m_skeletonB is null && other.m_skeletonB is null) || (m_skeletonB is not null && other.m_skeletonB is not null && m_skeletonB.Equals((IHavokObject)other.m_skeletonB))) &&
+                   m_simpleMappings.SequenceEqual(other.m_simpleMappings) &&
+                   m_chainMappings.SequenceEqual(other.m_chainMappings) &&
+                   m_unmappedBones.SequenceEqual(other.m_unmappedBones) &&
+                   m_extractedMotionMapping.Equals(other.m_extractedMotionMapping) &&
+                   m_keepUnmappedLocal.Equals(other.m_keepUnmappedLocal) &&
+                   m_mappingType.Equals(other.m_mappingType) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_skeletonA);
+            hashcode.Add(m_skeletonB);
+            hashcode.Add(m_simpleMappings.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_chainMappings.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_unmappedBones.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_extractedMotionMapping);
+            hashcode.Add(m_keepUnmappedLocal);
+            hashcode.Add(m_mappingType);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

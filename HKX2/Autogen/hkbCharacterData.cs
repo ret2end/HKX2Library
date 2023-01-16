@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -21,22 +22,22 @@ namespace HKX2
     // m_scale m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 168 flags: FLAGS_NONE enum: 
     // m_numHands m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 172 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_numFloatSlots m_class:  Type.TYPE_INT16 Type.TYPE_VOID arrSize: 0 offset: 174 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbCharacterData : hkReferencedObject
+    public partial class hkbCharacterData : hkReferencedObject, IEquatable<hkbCharacterData?>
     {
         public hkbCharacterDataCharacterControllerInfo m_characterControllerInfo { set; get; } = new();
-        public Vector4 m_modelUpMS { set; get; } = default;
-        public Vector4 m_modelForwardMS { set; get; } = default;
-        public Vector4 m_modelRightMS { set; get; } = default;
-        public IList<hkbVariableInfo> m_characterPropertyInfos { set; get; } = new List<hkbVariableInfo>();
-        public IList<int> m_numBonesPerLod { set; get; } = new List<int>();
-        public hkbVariableValueSet? m_characterPropertyValues { set; get; } = default;
-        public hkbFootIkDriverInfo? m_footIkDriverInfo { set; get; } = default;
-        public hkbHandIkDriverInfo? m_handIkDriverInfo { set; get; } = default;
-        public hkbCharacterStringData? m_stringData { set; get; } = default;
-        public hkbMirroredSkeletonInfo? m_mirroredSkeletonInfo { set; get; } = default;
-        public float m_scale { set; get; } = default;
-        private short m_numHands { set; get; } = default;
-        private short m_numFloatSlots { set; get; } = default;
+        public Vector4 m_modelUpMS { set; get; }
+        public Vector4 m_modelForwardMS { set; get; }
+        public Vector4 m_modelRightMS { set; get; }
+        public IList<hkbVariableInfo> m_characterPropertyInfos { set; get; } = Array.Empty<hkbVariableInfo>();
+        public IList<int> m_numBonesPerLod { set; get; } = Array.Empty<int>();
+        public hkbVariableValueSet? m_characterPropertyValues { set; get; }
+        public hkbFootIkDriverInfo? m_footIkDriverInfo { set; get; }
+        public hkbHandIkDriverInfo? m_handIkDriverInfo { set; get; }
+        public hkbCharacterStringData? m_stringData { set; get; }
+        public hkbMirroredSkeletonInfo? m_mirroredSkeletonInfo { set; get; }
+        public float m_scale { set; get; }
+        private short m_numHands { set; get; }
+        private short m_numFloatSlots { set; get; }
 
         public override uint Signature => 0x300d6808;
 
@@ -104,7 +105,7 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_modelUpMS), m_modelUpMS);
             xs.WriteVector4(xe, nameof(m_modelForwardMS), m_modelForwardMS);
             xs.WriteVector4(xe, nameof(m_modelRightMS), m_modelRightMS);
-            xs.WriteClassArray<hkbVariableInfo>(xe, nameof(m_characterPropertyInfos), m_characterPropertyInfos);
+            xs.WriteClassArray(xe, nameof(m_characterPropertyInfos), m_characterPropertyInfos);
             xs.WriteNumberArray(xe, nameof(m_numBonesPerLod), m_numBonesPerLod);
             xs.WriteClassPointer(xe, nameof(m_characterPropertyValues), m_characterPropertyValues);
             xs.WriteClassPointer(xe, nameof(m_footIkDriverInfo), m_footIkDriverInfo);
@@ -114,6 +115,50 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_scale), m_scale);
             xs.WriteSerializeIgnored(xe, nameof(m_numHands));
             xs.WriteSerializeIgnored(xe, nameof(m_numFloatSlots));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterData);
+        }
+
+        public bool Equals(hkbCharacterData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_characterControllerInfo is null && other.m_characterControllerInfo is null) || (m_characterControllerInfo is not null && other.m_characterControllerInfo is not null && m_characterControllerInfo.Equals((IHavokObject)other.m_characterControllerInfo))) &&
+                   m_modelUpMS.Equals(other.m_modelUpMS) &&
+                   m_modelForwardMS.Equals(other.m_modelForwardMS) &&
+                   m_modelRightMS.Equals(other.m_modelRightMS) &&
+                   m_characterPropertyInfos.SequenceEqual(other.m_characterPropertyInfos) &&
+                   m_numBonesPerLod.SequenceEqual(other.m_numBonesPerLod) &&
+                   ((m_characterPropertyValues is null && other.m_characterPropertyValues is null) || (m_characterPropertyValues is not null && other.m_characterPropertyValues is not null && m_characterPropertyValues.Equals((IHavokObject)other.m_characterPropertyValues))) &&
+                   ((m_footIkDriverInfo is null && other.m_footIkDriverInfo is null) || (m_footIkDriverInfo is not null && other.m_footIkDriverInfo is not null && m_footIkDriverInfo.Equals((IHavokObject)other.m_footIkDriverInfo))) &&
+                   ((m_handIkDriverInfo is null && other.m_handIkDriverInfo is null) || (m_handIkDriverInfo is not null && other.m_handIkDriverInfo is not null && m_handIkDriverInfo.Equals((IHavokObject)other.m_handIkDriverInfo))) &&
+                   ((m_stringData is null && other.m_stringData is null) || (m_stringData is not null && other.m_stringData is not null && m_stringData.Equals((IHavokObject)other.m_stringData))) &&
+                   ((m_mirroredSkeletonInfo is null && other.m_mirroredSkeletonInfo is null) || (m_mirroredSkeletonInfo is not null && other.m_mirroredSkeletonInfo is not null && m_mirroredSkeletonInfo.Equals((IHavokObject)other.m_mirroredSkeletonInfo))) &&
+                   m_scale.Equals(other.m_scale) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterControllerInfo);
+            hashcode.Add(m_modelUpMS);
+            hashcode.Add(m_modelForwardMS);
+            hashcode.Add(m_modelRightMS);
+            hashcode.Add(m_characterPropertyInfos.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_numBonesPerLod.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_characterPropertyValues);
+            hashcode.Add(m_footIkDriverInfo);
+            hashcode.Add(m_handIkDriverInfo);
+            hashcode.Add(m_stringData);
+            hashcode.Add(m_mirroredSkeletonInfo);
+            hashcode.Add(m_scale);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

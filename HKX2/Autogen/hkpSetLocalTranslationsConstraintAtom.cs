@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_translationA m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_translationB m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkpSetLocalTranslationsConstraintAtom : hkpConstraintAtom
+    public partial class hkpSetLocalTranslationsConstraintAtom : hkpConstraintAtom, IEquatable<hkpSetLocalTranslationsConstraintAtom?>
     {
-        public Vector4 m_translationA { set; get; } = default;
-        public Vector4 m_translationB { set; get; } = default;
+        public Vector4 m_translationA { set; get; }
+        public Vector4 m_translationB { set; get; }
 
         public override uint Signature => 0x5cbfcf4a;
 
@@ -44,6 +43,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteVector4(xe, nameof(m_translationA), m_translationA);
             xs.WriteVector4(xe, nameof(m_translationB), m_translationB);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSetLocalTranslationsConstraintAtom);
+        }
+
+        public bool Equals(hkpSetLocalTranslationsConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_translationA.Equals(other.m_translationA) &&
+                   m_translationB.Equals(other.m_translationB) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_translationA);
+            hashcode.Add(m_translationB);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

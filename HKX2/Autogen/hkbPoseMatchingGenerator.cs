@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -25,26 +24,26 @@ namespace HKX2
     // m_error m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 224 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_resetCurrentMatchLocalTime m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 228 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_poseMatchingUtility m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 232 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbPoseMatchingGenerator : hkbBlenderGenerator
+    public partial class hkbPoseMatchingGenerator : hkbBlenderGenerator, IEquatable<hkbPoseMatchingGenerator?>
     {
-        public Quaternion m_worldFromModelRotation { set; get; } = default;
-        public float m_blendSpeed { set; get; } = default;
-        public float m_minSpeedToSwitch { set; get; } = default;
-        public float m_minSwitchTimeNoError { set; get; } = default;
-        public float m_minSwitchTimeFullError { set; get; } = default;
-        public int m_startPlayingEventId { set; get; } = default;
-        public int m_startMatchingEventId { set; get; } = default;
-        public short m_rootBoneIndex { set; get; } = default;
-        public short m_otherBoneIndex { set; get; } = default;
-        public short m_anotherBoneIndex { set; get; } = default;
-        public short m_pelvisIndex { set; get; } = default;
-        public sbyte m_mode { set; get; } = default;
-        private int m_currentMatch { set; get; } = default;
-        private int m_bestMatch { set; get; } = default;
-        private float m_timeSinceBetterMatch { set; get; } = default;
-        private float m_error { set; get; } = default;
-        private bool m_resetCurrentMatchLocalTime { set; get; } = default;
-        private object? m_poseMatchingUtility { set; get; } = default;
+        public Quaternion m_worldFromModelRotation { set; get; }
+        public float m_blendSpeed { set; get; }
+        public float m_minSpeedToSwitch { set; get; }
+        public float m_minSwitchTimeNoError { set; get; }
+        public float m_minSwitchTimeFullError { set; get; }
+        public int m_startPlayingEventId { set; get; }
+        public int m_startMatchingEventId { set; get; }
+        public short m_rootBoneIndex { set; get; }
+        public short m_otherBoneIndex { set; get; }
+        public short m_anotherBoneIndex { set; get; }
+        public short m_pelvisIndex { set; get; }
+        public sbyte m_mode { set; get; }
+        private int m_currentMatch { set; get; }
+        private int m_bestMatch { set; get; }
+        private float m_timeSinceBetterMatch { set; get; }
+        private float m_error { set; get; }
+        private bool m_resetCurrentMatchLocalTime { set; get; }
+        private object? m_poseMatchingUtility { set; get; }
 
         public override uint Signature => 0x29e271b4;
 
@@ -136,6 +135,50 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_error));
             xs.WriteSerializeIgnored(xe, nameof(m_resetCurrentMatchLocalTime));
             xs.WriteSerializeIgnored(xe, nameof(m_poseMatchingUtility));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbPoseMatchingGenerator);
+        }
+
+        public bool Equals(hkbPoseMatchingGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_worldFromModelRotation.Equals(other.m_worldFromModelRotation) &&
+                   m_blendSpeed.Equals(other.m_blendSpeed) &&
+                   m_minSpeedToSwitch.Equals(other.m_minSpeedToSwitch) &&
+                   m_minSwitchTimeNoError.Equals(other.m_minSwitchTimeNoError) &&
+                   m_minSwitchTimeFullError.Equals(other.m_minSwitchTimeFullError) &&
+                   m_startPlayingEventId.Equals(other.m_startPlayingEventId) &&
+                   m_startMatchingEventId.Equals(other.m_startMatchingEventId) &&
+                   m_rootBoneIndex.Equals(other.m_rootBoneIndex) &&
+                   m_otherBoneIndex.Equals(other.m_otherBoneIndex) &&
+                   m_anotherBoneIndex.Equals(other.m_anotherBoneIndex) &&
+                   m_pelvisIndex.Equals(other.m_pelvisIndex) &&
+                   m_mode.Equals(other.m_mode) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_worldFromModelRotation);
+            hashcode.Add(m_blendSpeed);
+            hashcode.Add(m_minSpeedToSwitch);
+            hashcode.Add(m_minSwitchTimeNoError);
+            hashcode.Add(m_minSwitchTimeFullError);
+            hashcode.Add(m_startPlayingEventId);
+            hashcode.Add(m_startMatchingEventId);
+            hashcode.Add(m_rootBoneIndex);
+            hashcode.Add(m_otherBoneIndex);
+            hashcode.Add(m_anotherBoneIndex);
+            hashcode.Add(m_pelvisIndex);
+            hashcode.Add(m_mode);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

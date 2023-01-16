@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_ownerOffset m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 5 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_objectQualityType m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 6 flags: FLAGS_NONE enum: 
     // m_collisionFilterInfo m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkpTypedBroadPhaseHandle : hkpBroadPhaseHandle
+    public partial class hkpTypedBroadPhaseHandle : hkpBroadPhaseHandle, IEquatable<hkpTypedBroadPhaseHandle?>
     {
-        public sbyte m_type { set; get; } = default;
-        private sbyte m_ownerOffset { set; get; } = default;
-        public sbyte m_objectQualityType { set; get; } = default;
-        public uint m_collisionFilterInfo { set; get; } = default;
+        public sbyte m_type { set; get; }
+        private sbyte m_ownerOffset { set; get; }
+        public sbyte m_objectQualityType { set; get; }
+        public uint m_collisionFilterInfo { set; get; }
 
         public override uint Signature => 0xf4b0f799;
 
@@ -55,6 +53,32 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_ownerOffset));
             xs.WriteNumber(xe, nameof(m_objectQualityType), m_objectQualityType);
             xs.WriteNumber(xe, nameof(m_collisionFilterInfo), m_collisionFilterInfo);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTypedBroadPhaseHandle);
+        }
+
+        public bool Equals(hkpTypedBroadPhaseHandle? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_type.Equals(other.m_type) &&
+                   m_objectQualityType.Equals(other.m_objectQualityType) &&
+                   m_collisionFilterInfo.Equals(other.m_collisionFilterInfo) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_type);
+            hashcode.Add(m_objectQualityType);
+            hashcode.Add(m_collisionFilterInfo);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

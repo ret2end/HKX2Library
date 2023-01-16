@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,10 +10,10 @@ namespace HKX2
     // m_iStateVar m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_stateData m_class: BSIStateManagerModifierBSiStateData Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_myStateListener m_class: BSIStateManagerModifierBSIStateManagerStateListener Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 104 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSIStateManagerModifier : hkbModifier
+    public partial class BSIStateManagerModifier : hkbModifier, IEquatable<BSIStateManagerModifier?>
     {
-        public int m_iStateVar { set; get; } = default;
-        public IList<BSIStateManagerModifierBSiStateData> m_stateData { set; get; } = new List<BSIStateManagerModifierBSiStateData>();
+        public int m_iStateVar { set; get; }
+        public IList<BSIStateManagerModifierBSiStateData> m_stateData { set; get; } = Array.Empty<BSIStateManagerModifierBSiStateData>();
         public BSIStateManagerModifierBSIStateManagerStateListener m_myStateListener { set; get; } = new();
 
         public override uint Signature => 0x6cb24f2e;
@@ -47,8 +47,32 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_iStateVar), m_iStateVar);
-            xs.WriteClassArray<BSIStateManagerModifierBSiStateData>(xe, nameof(m_stateData), m_stateData);
+            xs.WriteClassArray(xe, nameof(m_stateData), m_stateData);
             xs.WriteSerializeIgnored(xe, nameof(m_myStateListener));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSIStateManagerModifier);
+        }
+
+        public bool Equals(BSIStateManagerModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_iStateVar.Equals(other.m_iStateVar) &&
+                   m_stateData.SequenceEqual(other.m_stateData) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_iStateVar);
+            hashcode.Add(m_stateData.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

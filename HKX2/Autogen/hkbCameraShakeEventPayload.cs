@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_amplitude m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_halfLife m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 20 flags: FLAGS_NONE enum: 
-    public partial class hkbCameraShakeEventPayload : hkbEventPayload
+    public partial class hkbCameraShakeEventPayload : hkbEventPayload, IEquatable<hkbCameraShakeEventPayload?>
     {
-        public float m_amplitude { set; get; } = default;
-        public float m_halfLife { set; get; } = default;
+        public float m_amplitude { set; get; }
+        public float m_halfLife { set; get; }
 
         public override uint Signature => 0x64136982;
 
@@ -42,6 +40,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteFloat(xe, nameof(m_amplitude), m_amplitude);
             xs.WriteFloat(xe, nameof(m_halfLife), m_halfLife);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCameraShakeEventPayload);
+        }
+
+        public bool Equals(hkbCameraShakeEventPayload? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_amplitude.Equals(other.m_amplitude) &&
+                   m_halfLife.Equals(other.m_halfLife) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_amplitude);
+            hashcode.Add(m_halfLife);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

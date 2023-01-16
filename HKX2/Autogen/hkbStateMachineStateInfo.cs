@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,17 +16,17 @@ namespace HKX2
     // m_stateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_probability m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
     // m_enable m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkbStateMachineStateInfo : hkbBindable
+    public partial class hkbStateMachineStateInfo : hkbBindable, IEquatable<hkbStateMachineStateInfo?>
     {
-        public IList<hkbStateListener> m_listeners { set; get; } = new List<hkbStateListener>();
-        public hkbStateMachineEventPropertyArray? m_enterNotifyEvents { set; get; } = default;
-        public hkbStateMachineEventPropertyArray? m_exitNotifyEvents { set; get; } = default;
-        public hkbStateMachineTransitionInfoArray? m_transitions { set; get; } = default;
-        public hkbGenerator? m_generator { set; get; } = default;
+        public IList<hkbStateListener> m_listeners { set; get; } = Array.Empty<hkbStateListener>();
+        public hkbStateMachineEventPropertyArray? m_enterNotifyEvents { set; get; }
+        public hkbStateMachineEventPropertyArray? m_exitNotifyEvents { set; get; }
+        public hkbStateMachineTransitionInfoArray? m_transitions { set; get; }
+        public hkbGenerator? m_generator { set; get; }
         public string m_name { set; get; } = "";
-        public int m_stateId { set; get; } = default;
-        public float m_probability { set; get; } = default;
-        public bool m_enable { set; get; } = default;
+        public int m_stateId { set; get; }
+        public float m_probability { set; get; }
+        public bool m_enable { set; get; }
 
         public override uint Signature => 0xed7f9d0;
 
@@ -77,7 +77,7 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkbStateListener>(xe, nameof(m_listeners), m_listeners);
+            xs.WriteClassPointerArray(xe, nameof(m_listeners), m_listeners);
             xs.WriteClassPointer(xe, nameof(m_enterNotifyEvents), m_enterNotifyEvents);
             xs.WriteClassPointer(xe, nameof(m_exitNotifyEvents), m_exitNotifyEvents);
             xs.WriteClassPointer(xe, nameof(m_transitions), m_transitions);
@@ -86,6 +86,44 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_stateId), m_stateId);
             xs.WriteFloat(xe, nameof(m_probability), m_probability);
             xs.WriteBoolean(xe, nameof(m_enable), m_enable);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineStateInfo);
+        }
+
+        public bool Equals(hkbStateMachineStateInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_listeners.SequenceEqual(other.m_listeners) &&
+                   ((m_enterNotifyEvents is null && other.m_enterNotifyEvents is null) || (m_enterNotifyEvents is not null && other.m_enterNotifyEvents is not null && m_enterNotifyEvents.Equals((IHavokObject)other.m_enterNotifyEvents))) &&
+                   ((m_exitNotifyEvents is null && other.m_exitNotifyEvents is null) || (m_exitNotifyEvents is not null && other.m_exitNotifyEvents is not null && m_exitNotifyEvents.Equals((IHavokObject)other.m_exitNotifyEvents))) &&
+                   ((m_transitions is null && other.m_transitions is null) || (m_transitions is not null && other.m_transitions is not null && m_transitions.Equals((IHavokObject)other.m_transitions))) &&
+                   ((m_generator is null && other.m_generator is null) || (m_generator is not null && other.m_generator is not null && m_generator.Equals((IHavokObject)other.m_generator))) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_stateId.Equals(other.m_stateId) &&
+                   m_probability.Equals(other.m_probability) &&
+                   m_enable.Equals(other.m_enable) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_listeners.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_enterNotifyEvents);
+            hashcode.Add(m_exitNotifyEvents);
+            hashcode.Add(m_transitions);
+            hashcode.Add(m_generator);
+            hashcode.Add(m_name);
+            hashcode.Add(m_stateId);
+            hashcode.Add(m_probability);
+            hashcode.Add(m_enable);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

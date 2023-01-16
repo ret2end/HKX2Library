@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_collisionDetails m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 416 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_orderDirty m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 432 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpCachingShapePhantom : hkpShapePhantom
+    public partial class hkpCachingShapePhantom : hkpShapePhantom, IEquatable<hkpCachingShapePhantom?>
     {
-        public IList<object> m_collisionDetails { set; get; } = new List<object>();
-        private bool m_orderDirty { set; get; } = default;
+        public IList<object> m_collisionDetails { set; get; } = Array.Empty<object>();
+        private bool m_orderDirty { set; get; }
 
         public override uint Signature => 0xcf227f58;
 
@@ -42,6 +41,26 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteSerializeIgnored(xe, nameof(m_collisionDetails));
             xs.WriteSerializeIgnored(xe, nameof(m_orderDirty));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCachingShapePhantom);
+        }
+
+        public bool Equals(hkpCachingShapePhantom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

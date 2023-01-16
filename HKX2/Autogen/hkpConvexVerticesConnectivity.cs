@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_vertexIndices m_class:  Type.TYPE_ARRAY Type.TYPE_UINT16 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_numVerticesPerFace m_class:  Type.TYPE_ARRAY Type.TYPE_UINT8 arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkpConvexVerticesConnectivity : hkReferencedObject
+    public partial class hkpConvexVerticesConnectivity : hkReferencedObject, IEquatable<hkpConvexVerticesConnectivity?>
     {
-        public IList<ushort> m_vertexIndices { set; get; } = new List<ushort>();
-        public IList<byte> m_numVerticesPerFace { set; get; } = new List<byte>();
+        public IList<ushort> m_vertexIndices { set; get; } = Array.Empty<ushort>();
+        public IList<byte> m_numVerticesPerFace { set; get; } = Array.Empty<byte>();
 
         public override uint Signature => 0x63d38e9c;
 
@@ -42,6 +42,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteNumberArray(xe, nameof(m_vertexIndices), m_vertexIndices);
             xs.WriteNumberArray(xe, nameof(m_numVerticesPerFace), m_numVerticesPerFace);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpConvexVerticesConnectivity);
+        }
+
+        public bool Equals(hkpConvexVerticesConnectivity? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_vertexIndices.SequenceEqual(other.m_vertexIndices) &&
+                   m_numVerticesPerFace.SequenceEqual(other.m_numVerticesPerFace) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_vertexIndices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_numVerticesPerFace.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

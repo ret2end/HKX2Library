@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_sectors m_class: hkpAgent1nSector Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_subTracks m_class: hkpSerializedSubTrack1nInfo Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpSerializedTrack1nInfo : IHavokObject
+    public partial class hkpSerializedTrack1nInfo : IHavokObject, IEquatable<hkpSerializedTrack1nInfo?>
     {
-        public IList<hkpAgent1nSector> m_sectors { set; get; } = new List<hkpAgent1nSector>();
-        public IList<hkpSerializedSubTrack1nInfo> m_subTracks { set; get; } = new List<hkpSerializedSubTrack1nInfo>();
+        public IList<hkpAgent1nSector> m_sectors { set; get; } = Array.Empty<hkpAgent1nSector>();
+        public IList<hkpSerializedSubTrack1nInfo> m_subTracks { set; get; } = Array.Empty<hkpSerializedSubTrack1nInfo>();
 
         public virtual uint Signature => 0xf12d48d9;
 
@@ -36,8 +36,30 @@ namespace HKX2
 
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
-            xs.WriteClassPointerArray<hkpAgent1nSector>(xe, nameof(m_sectors), m_sectors);
-            xs.WriteClassPointerArray<hkpSerializedSubTrack1nInfo>(xe, nameof(m_subTracks), m_subTracks);
+            xs.WriteClassPointerArray(xe, nameof(m_sectors), m_sectors);
+            xs.WriteClassPointerArray(xe, nameof(m_subTracks), m_subTracks);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSerializedTrack1nInfo);
+        }
+
+        public bool Equals(hkpSerializedTrack1nInfo? other)
+        {
+            return other is not null &&
+                   m_sectors.SequenceEqual(other.m_sectors) &&
+                   m_subTracks.SequenceEqual(other.m_subTracks) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_sectors.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_subTracks.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

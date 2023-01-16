@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpMaxSizeMotion Signatire: 0x64abf85c size: 320 flags: FLAGS_NONE
 
 
-    public partial class hkpMaxSizeMotion : hkpKeyframedRigidMotion
+    public partial class hkpMaxSizeMotion : hkpKeyframedRigidMotion, IEquatable<hkpMaxSizeMotion?>
     {
 
 
@@ -32,6 +30,26 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMaxSizeMotion);
+        }
+
+        public bool Equals(hkpMaxSizeMotion? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

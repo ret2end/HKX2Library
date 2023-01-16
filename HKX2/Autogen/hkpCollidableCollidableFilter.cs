@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,7 +6,7 @@ namespace HKX2
     // hkpCollidableCollidableFilter Signatire: 0xe0708a00 size: 8 flags: FLAGS_NONE
 
 
-    public partial class hkpCollidableCollidableFilter : IHavokObject
+    public partial class hkpCollidableCollidableFilter : IHavokObject, IEquatable<hkpCollidableCollidableFilter?>
     {
         private byte[] unk0 = new byte[8];
 
@@ -32,6 +30,25 @@ namespace HKX2
         public virtual void WriteXml(XmlSerializer xs, XElement xe)
         {
 
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCollidableCollidableFilter);
+        }
+
+        public bool Equals(hkpCollidableCollidableFilter? other)
+        {
+            return other is not null &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

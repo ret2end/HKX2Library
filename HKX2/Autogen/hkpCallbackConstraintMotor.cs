@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_userData0 m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_userData1 m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_userData2 m_class:  Type.TYPE_ULONG Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor
+    public partial class hkpCallbackConstraintMotor : hkpLimitedForceConstraintMotor, IEquatable<hkpCallbackConstraintMotor?>
     {
-        private object? m_callbackFunc { set; get; } = default;
-        public uint m_callbackType { set; get; } = default;
-        public ulong m_userData0 { set; get; } = default;
-        public ulong m_userData1 { set; get; } = default;
-        public ulong m_userData2 { set; get; } = default;
+        private object? m_callbackFunc { set; get; }
+        public uint m_callbackType { set; get; }
+        public ulong m_userData0 { set; get; }
+        public ulong m_userData1 { set; get; }
+        public ulong m_userData2 { set; get; }
 
         public override uint Signature => 0xafcd79ad;
 
@@ -61,6 +59,34 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_userData0), m_userData0);
             xs.WriteNumber(xe, nameof(m_userData1), m_userData1);
             xs.WriteNumber(xe, nameof(m_userData2), m_userData2);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCallbackConstraintMotor);
+        }
+
+        public bool Equals(hkpCallbackConstraintMotor? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_callbackType.Equals(other.m_callbackType) &&
+                   m_userData0.Equals(other.m_userData0) &&
+                   m_userData1.Equals(other.m_userData1) &&
+                   m_userData2.Equals(other.m_userData2) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_callbackType);
+            hashcode.Add(m_userData0);
+            hashcode.Add(m_userData1);
+            hashcode.Add(m_userData2);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

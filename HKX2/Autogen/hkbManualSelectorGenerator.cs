@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,11 +10,11 @@ namespace HKX2
     // m_generators m_class: hkbGenerator Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 72 flags: FLAGS_NONE enum: 
     // m_selectedGeneratorIndex m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 88 flags: FLAGS_NONE enum: 
     // m_currentGeneratorIndex m_class:  Type.TYPE_INT8 Type.TYPE_VOID arrSize: 0 offset: 89 flags: FLAGS_NONE enum: 
-    public partial class hkbManualSelectorGenerator : hkbGenerator
+    public partial class hkbManualSelectorGenerator : hkbGenerator, IEquatable<hkbManualSelectorGenerator?>
     {
-        public IList<hkbGenerator> m_generators { set; get; } = new List<hkbGenerator>();
-        public sbyte m_selectedGeneratorIndex { set; get; } = default;
-        public sbyte m_currentGeneratorIndex { set; get; } = default;
+        public IList<hkbGenerator> m_generators { set; get; } = Array.Empty<hkbGenerator>();
+        public sbyte m_selectedGeneratorIndex { set; get; }
+        public sbyte m_currentGeneratorIndex { set; get; }
 
         public override uint Signature => 0xd932fab8;
 
@@ -47,9 +47,35 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassPointerArray<hkbGenerator>(xe, nameof(m_generators), m_generators);
+            xs.WriteClassPointerArray(xe, nameof(m_generators), m_generators);
             xs.WriteNumber(xe, nameof(m_selectedGeneratorIndex), m_selectedGeneratorIndex);
             xs.WriteNumber(xe, nameof(m_currentGeneratorIndex), m_currentGeneratorIndex);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbManualSelectorGenerator);
+        }
+
+        public bool Equals(hkbManualSelectorGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_generators.SequenceEqual(other.m_generators) &&
+                   m_selectedGeneratorIndex.Equals(other.m_selectedGeneratorIndex) &&
+                   m_currentGeneratorIndex.Equals(other.m_currentGeneratorIndex) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_generators.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_selectedGeneratorIndex);
+            hashcode.Add(m_currentGeneratorIndex);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // BSGetTimeStepModifier Signatire: 0xbda33bfe size: 88 flags: FLAGS_NONE
 
     // m_timeStep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
-    public partial class BSGetTimeStepModifier : hkbModifier
+    public partial class BSGetTimeStepModifier : hkbModifier, IEquatable<BSGetTimeStepModifier?>
     {
-        public float m_timeStep { set; get; } = default;
+        public float m_timeStep { set; get; }
 
         public override uint Signature => 0xbda33bfe;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteFloat(xe, nameof(m_timeStep), m_timeStep);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSGetTimeStepModifier);
+        }
+
+        public bool Equals(BSGetTimeStepModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_timeStep.Equals(other.m_timeStep) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_timeStep);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

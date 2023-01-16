@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkp2dAngConstraintAtom Signatire: 0xdcdb8b8b size: 4 flags: FLAGS_NONE
 
     // m_freeRotationAxis m_class:  Type.TYPE_UINT8 Type.TYPE_VOID arrSize: 0 offset: 2 flags: FLAGS_NONE enum: 
-    public partial class hkp2dAngConstraintAtom : hkpConstraintAtom
+    public partial class hkp2dAngConstraintAtom : hkpConstraintAtom, IEquatable<hkp2dAngConstraintAtom?>
     {
-        public byte m_freeRotationAxis { set; get; } = default;
+        public byte m_freeRotationAxis { set; get; }
 
         public override uint Signature => 0xdcdb8b8b;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_freeRotationAxis), m_freeRotationAxis);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkp2dAngConstraintAtom);
+        }
+
+        public bool Equals(hkp2dAngConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_freeRotationAxis.Equals(other.m_freeRotationAxis) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_freeRotationAxis);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

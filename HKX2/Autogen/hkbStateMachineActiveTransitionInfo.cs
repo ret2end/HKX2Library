@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -14,15 +12,15 @@ namespace HKX2
     // m_fromStateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 28 flags: FLAGS_NONE enum: 
     // m_toStateId m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_isReturnToPreviousState m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
-    public partial class hkbStateMachineActiveTransitionInfo : IHavokObject
+    public partial class hkbStateMachineActiveTransitionInfo : IHavokObject, IEquatable<hkbStateMachineActiveTransitionInfo?>
     {
-        private object? m_transitionEffect { set; get; } = default;
-        public hkbNodeInternalStateInfo? m_transitionEffectInternalStateInfo { set; get; } = default;
+        private object? m_transitionEffect { set; get; }
+        public hkbNodeInternalStateInfo? m_transitionEffectInternalStateInfo { set; get; }
         public hkbStateMachineTransitionInfoReference m_transitionInfoReference { set; get; } = new();
         public hkbStateMachineTransitionInfoReference m_transitionInfoReferenceForTE { set; get; } = new();
-        public int m_fromStateId { set; get; } = default;
-        public int m_toStateId { set; get; } = default;
-        public bool m_isReturnToPreviousState { set; get; } = default;
+        public int m_fromStateId { set; get; }
+        public int m_toStateId { set; get; }
+        public bool m_isReturnToPreviousState { set; get; }
 
         public virtual uint Signature => 0xbb90d54f;
 
@@ -69,6 +67,36 @@ namespace HKX2
             xs.WriteNumber(xe, nameof(m_fromStateId), m_fromStateId);
             xs.WriteNumber(xe, nameof(m_toStateId), m_toStateId);
             xs.WriteBoolean(xe, nameof(m_isReturnToPreviousState), m_isReturnToPreviousState);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbStateMachineActiveTransitionInfo);
+        }
+
+        public bool Equals(hkbStateMachineActiveTransitionInfo? other)
+        {
+            return other is not null &&
+                   ((m_transitionEffectInternalStateInfo is null && other.m_transitionEffectInternalStateInfo is null) || (m_transitionEffectInternalStateInfo is not null && other.m_transitionEffectInternalStateInfo is not null && m_transitionEffectInternalStateInfo.Equals((IHavokObject)other.m_transitionEffectInternalStateInfo))) &&
+                   ((m_transitionInfoReference is null && other.m_transitionInfoReference is null) || (m_transitionInfoReference is not null && other.m_transitionInfoReference is not null && m_transitionInfoReference.Equals((IHavokObject)other.m_transitionInfoReference))) &&
+                   ((m_transitionInfoReferenceForTE is null && other.m_transitionInfoReferenceForTE is null) || (m_transitionInfoReferenceForTE is not null && other.m_transitionInfoReferenceForTE is not null && m_transitionInfoReferenceForTE.Equals((IHavokObject)other.m_transitionInfoReferenceForTE))) &&
+                   m_fromStateId.Equals(other.m_fromStateId) &&
+                   m_toStateId.Equals(other.m_toStateId) &&
+                   m_isReturnToPreviousState.Equals(other.m_isReturnToPreviousState) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_transitionEffectInternalStateInfo);
+            hashcode.Add(m_transitionInfoReference);
+            hashcode.Add(m_transitionInfoReferenceForTE);
+            hashcode.Add(m_fromStateId);
+            hashcode.Add(m_toStateId);
+            hashcode.Add(m_isReturnToPreviousState);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

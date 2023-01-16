@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +12,14 @@ namespace HKX2
     // m_projectiles m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 72 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_world m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 88 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_destructionWorld m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 96 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpProjectileGun : hkpFirstPersonGun
+    public partial class hkpProjectileGun : hkpFirstPersonGun, IEquatable<hkpProjectileGun?>
     {
-        public int m_maxProjectiles { set; get; } = default;
-        public float m_reloadTime { set; get; } = default;
-        private float m_reload { set; get; } = default;
-        public IList<object> m_projectiles { set; get; } = new List<object>();
-        private object? m_world { set; get; } = default;
-        private object? m_destructionWorld { set; get; } = default;
+        public int m_maxProjectiles { set; get; }
+        public float m_reloadTime { set; get; }
+        private float m_reload { set; get; }
+        public IList<object> m_projectiles { set; get; } = Array.Empty<object>();
+        private object? m_world { set; get; }
+        private object? m_destructionWorld { set; get; }
 
         public override uint Signature => 0xb4f30148;
 
@@ -64,6 +63,30 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_projectiles));
             xs.WriteSerializeIgnored(xe, nameof(m_world));
             xs.WriteSerializeIgnored(xe, nameof(m_destructionWorld));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpProjectileGun);
+        }
+
+        public bool Equals(hkpProjectileGun? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_maxProjectiles.Equals(other.m_maxProjectiles) &&
+                   m_reloadTime.Equals(other.m_reloadTime) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_maxProjectiles);
+            hashcode.Add(m_reloadTime);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

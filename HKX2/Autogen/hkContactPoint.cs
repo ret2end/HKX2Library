@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -9,10 +8,10 @@ namespace HKX2
 
     // m_position m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_separatingNormal m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkContactPoint : IHavokObject
+    public partial class hkContactPoint : IHavokObject, IEquatable<hkContactPoint?>
     {
-        public Vector4 m_position { set; get; } = default;
-        public Vector4 m_separatingNormal { set; get; } = default;
+        public Vector4 m_position { set; get; }
+        public Vector4 m_separatingNormal { set; get; }
 
         public virtual uint Signature => 0x91d7dd8e;
 
@@ -38,6 +37,28 @@ namespace HKX2
         {
             xs.WriteVector4(xe, nameof(m_position), m_position);
             xs.WriteVector4(xe, nameof(m_separatingNormal), m_separatingNormal);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkContactPoint);
+        }
+
+        public bool Equals(hkContactPoint? other)
+        {
+            return other is not null &&
+                   m_position.Equals(other.m_position) &&
+                   m_separatingNormal.Equals(other.m_separatingNormal) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_position);
+            hashcode.Add(m_separatingNormal);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

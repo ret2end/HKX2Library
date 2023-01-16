@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_ints m_class:  Type.TYPE_ARRAY Type.TYPE_INT32 arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_times m_class:  Type.TYPE_ARRAY Type.TYPE_REAL arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkxSparselyAnimatedInt : hkReferencedObject
+    public partial class hkxSparselyAnimatedInt : hkReferencedObject, IEquatable<hkxSparselyAnimatedInt?>
     {
-        public IList<int> m_ints { set; get; } = new List<int>();
-        public IList<float> m_times { set; get; } = new List<float>();
+        public IList<int> m_ints { set; get; } = Array.Empty<int>();
+        public IList<float> m_times { set; get; } = Array.Empty<float>();
 
         public override uint Signature => 0xca961951;
 
@@ -42,6 +42,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteNumberArray(xe, nameof(m_ints), m_ints);
             xs.WriteFloatArray(xe, nameof(m_times), m_times);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxSparselyAnimatedInt);
+        }
+
+        public bool Equals(hkxSparselyAnimatedInt? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_ints.SequenceEqual(other.m_ints) &&
+                   m_times.SequenceEqual(other.m_times) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_ints.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_times.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

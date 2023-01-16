@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,7 +13,7 @@ namespace HKX2
     // m_coneLimit m_class: hkpConeLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 288 flags: FLAGS_NONE enum: 
     // m_planesLimit m_class: hkpConeLimitConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 308 flags: FLAGS_NONE enum: 
     // m_ballSocket m_class: hkpBallSocketConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 328 flags: FLAGS_NONE enum: 
-    public partial class hkpRagdollConstraintDataAtoms : IHavokObject
+    public partial class hkpRagdollConstraintDataAtoms : IHavokObject, IEquatable<hkpRagdollConstraintDataAtoms?>
     {
         public hkpSetLocalTransformsConstraintAtom m_transforms { set; get; } = new();
         public hkpSetupStabilizationAtom m_setupStabilization { set; get; } = new();
@@ -76,6 +74,40 @@ namespace HKX2
             xs.WriteClass<hkpConeLimitConstraintAtom>(xe, nameof(m_coneLimit), m_coneLimit);
             xs.WriteClass<hkpConeLimitConstraintAtom>(xe, nameof(m_planesLimit), m_planesLimit);
             xs.WriteClass<hkpBallSocketConstraintAtom>(xe, nameof(m_ballSocket), m_ballSocket);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpRagdollConstraintDataAtoms);
+        }
+
+        public bool Equals(hkpRagdollConstraintDataAtoms? other)
+        {
+            return other is not null &&
+                   ((m_transforms is null && other.m_transforms is null) || (m_transforms is not null && other.m_transforms is not null && m_transforms.Equals((IHavokObject)other.m_transforms))) &&
+                   ((m_setupStabilization is null && other.m_setupStabilization is null) || (m_setupStabilization is not null && other.m_setupStabilization is not null && m_setupStabilization.Equals((IHavokObject)other.m_setupStabilization))) &&
+                   ((m_ragdollMotors is null && other.m_ragdollMotors is null) || (m_ragdollMotors is not null && other.m_ragdollMotors is not null && m_ragdollMotors.Equals((IHavokObject)other.m_ragdollMotors))) &&
+                   ((m_angFriction is null && other.m_angFriction is null) || (m_angFriction is not null && other.m_angFriction is not null && m_angFriction.Equals((IHavokObject)other.m_angFriction))) &&
+                   ((m_twistLimit is null && other.m_twistLimit is null) || (m_twistLimit is not null && other.m_twistLimit is not null && m_twistLimit.Equals((IHavokObject)other.m_twistLimit))) &&
+                   ((m_coneLimit is null && other.m_coneLimit is null) || (m_coneLimit is not null && other.m_coneLimit is not null && m_coneLimit.Equals((IHavokObject)other.m_coneLimit))) &&
+                   ((m_planesLimit is null && other.m_planesLimit is null) || (m_planesLimit is not null && other.m_planesLimit is not null && m_planesLimit.Equals((IHavokObject)other.m_planesLimit))) &&
+                   ((m_ballSocket is null && other.m_ballSocket is null) || (m_ballSocket is not null && other.m_ballSocket is not null && m_ballSocket.Equals((IHavokObject)other.m_ballSocket))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_transforms);
+            hashcode.Add(m_setupStabilization);
+            hashcode.Add(m_ragdollMotors);
+            hashcode.Add(m_angFriction);
+            hashcode.Add(m_twistLimit);
+            hashcode.Add(m_coneLimit);
+            hashcode.Add(m_planesLimit);
+            hashcode.Add(m_ballSocket);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

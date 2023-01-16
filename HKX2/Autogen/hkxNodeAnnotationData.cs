@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,9 +7,9 @@ namespace HKX2
 
     // m_time m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_description m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkxNodeAnnotationData : IHavokObject
+    public partial class hkxNodeAnnotationData : IHavokObject, IEquatable<hkxNodeAnnotationData?>
     {
-        public float m_time { set; get; } = default;
+        public float m_time { set; get; }
         public string m_description { set; get; } = "";
 
         public virtual uint Signature => 0x433dee92;
@@ -40,6 +38,28 @@ namespace HKX2
         {
             xs.WriteFloat(xe, nameof(m_time), m_time);
             xs.WriteString(xe, nameof(m_description), m_description);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxNodeAnnotationData);
+        }
+
+        public bool Equals(hkxNodeAnnotationData? other)
+        {
+            return other is not null &&
+                   m_time.Equals(other.m_time) &&
+                   (m_description is null && other.m_description is null || m_description == other.m_description || m_description is null && other.m_description == "" || m_description == "" && other.m_description is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_time);
+            hashcode.Add(m_description);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

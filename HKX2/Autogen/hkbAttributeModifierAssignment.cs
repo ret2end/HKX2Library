@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_attributeIndex m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_attributeValue m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
-    public partial class hkbAttributeModifierAssignment : IHavokObject
+    public partial class hkbAttributeModifierAssignment : IHavokObject, IEquatable<hkbAttributeModifierAssignment?>
     {
-        public int m_attributeIndex { set; get; } = default;
-        public float m_attributeValue { set; get; } = default;
+        public int m_attributeIndex { set; get; }
+        public float m_attributeValue { set; get; }
 
         public virtual uint Signature => 0x48b8ad52;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             xs.WriteNumber(xe, nameof(m_attributeIndex), m_attributeIndex);
             xs.WriteFloat(xe, nameof(m_attributeValue), m_attributeValue);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbAttributeModifierAssignment);
+        }
+
+        public bool Equals(hkbAttributeModifierAssignment? other)
+        {
+            return other is not null &&
+                   m_attributeIndex.Equals(other.m_attributeIndex) &&
+                   m_attributeValue.Equals(other.m_attributeValue) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_attributeIndex);
+            hashcode.Add(m_attributeValue);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

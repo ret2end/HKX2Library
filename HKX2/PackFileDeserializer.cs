@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Security.AccessControl;
 
 namespace HKX2
 {
@@ -9,7 +8,7 @@ namespace HKX2
     {
         private HKXClassNames _classnames;
         private HKXSection _classSection;
-        public HKXSection _dataSection;
+        private HKXSection _dataSection;
 
         private Dictionary<uint, IHavokObject> _deserializedObjects;
         public HKXHeader _header;
@@ -171,7 +170,7 @@ namespace HKX2
             var klass = ConstructVirtualClass(br, f.Dst);
 
             // TODO: this assume klass was read on correct block, will
-            if(!klass.GetType().IsAssignableTo(typeof(T)))
+            if (!klass.GetType().IsAssignableTo(typeof(T)))
             {
                 if (_ignoreNonFatalError)
                     return default;
@@ -196,18 +195,44 @@ namespace HKX2
             br.AssertUSize(0);
 
             // Do a local fixup lookup
-            if (!_dataSection._localMap.ContainsKey(key)) return default;
+            if (!_dataSection._localMap.ContainsKey(key)) return string.Empty;
 
             var f = _dataSection._localMap[key];
             br.StepIn(f.Dst);
             var ret = br.ReadASCII();
             br.StepOut();
-            return ret;
+            return ret.Trim();
         }
 
         public List<string> ReadStringPointerArray(BinaryReaderEx br)
         {
             return ReadArrayBase(ReadStringPointer, br);
+        }
+
+        public string ReadCString(BinaryReaderEx br)
+        {
+            PadToPointerSizeIfPaddingOption(br);
+
+            var key = (uint)br.Position;
+
+            // Consume pointer
+            br.AssertUSize(0);
+
+            // Do a local fixup lookup
+            if (!_dataSection._localMap.ContainsKey(key)) return null;
+
+            var f = _dataSection._localMap[key];
+            br.StepIn(f.Dst);
+            var ret = br.ReadASCII();
+            br.StepOut();
+            if (ret == "")
+                return null;
+            return ret;
+        }
+
+        public List<string> ReadCStringArray(BinaryReaderEx br)
+        {
+            return ReadArrayBase(ReadCString, br);
         }
 
         public byte ReadByte(BinaryReaderEx br)
@@ -333,11 +358,17 @@ namespace HKX2
 
         public Matrix4x4 ReadMatrix3(BinaryReaderEx br)
         {
-            return new Matrix4x4(
+            var mat3 = new Matrix4x4(
                 br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
                 br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
                 br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-                0, 0, 0, 1);
+                0, 0, 0, 0)
+            {
+                M14 = 0,
+                M24 = 0,
+                M34 = 0
+            };
+            return mat3;
         }
 
         public List<Matrix4x4> ReadMatrix3Array(BinaryReaderEx br)
@@ -361,12 +392,19 @@ namespace HKX2
 
         public Matrix4x4 ReadTransform(BinaryReaderEx br)
         {
-            // TODO: do a proper implementation
-            return new Matrix4x4(
+            var transform = new Matrix4x4(
                 br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
                 br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
                 br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
-                br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+                br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle())
+            {
+                M14 = 0,
+                M24 = 0,
+                M34 = 0,
+                M44 = 1
+            };
+
+            return transform;
         }
 
         public List<Matrix4x4> ReadTransformArray(BinaryReaderEx br)
@@ -376,12 +414,22 @@ namespace HKX2
 
         public Matrix4x4 ReadQSTransform(BinaryReaderEx br)
         {
-            return ReadMatrix3(br);
+            var qsTransform = new Matrix4x4(
+                br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
+                br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
+                br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle(),
+                0, 0, 0, 0)
+            {
+                M14 = 0,
+                M34 = 0,
+            };
+
+            return qsTransform;
         }
 
         public List<Matrix4x4> ReadQSTransformArray(BinaryReaderEx br)
         {
-            return ReadMatrix3Array(br);
+            return ReadArrayBase(ReadQSTransform, br);
         }
 
         public Quaternion ReadQuaternion(BinaryReaderEx br)

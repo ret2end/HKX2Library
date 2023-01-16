@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpStiffSpringConstraintAtom Signatire: 0x6c128096 size: 8 flags: FLAGS_NONE
 
     // m_length m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 4 flags: FLAGS_NONE enum: 
-    public partial class hkpStiffSpringConstraintAtom : hkpConstraintAtom
+    public partial class hkpStiffSpringConstraintAtom : hkpConstraintAtom, IEquatable<hkpStiffSpringConstraintAtom?>
     {
-        public float m_length { set; get; } = default;
+        public float m_length { set; get; }
 
         public override uint Signature => 0x6c128096;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteFloat(xe, nameof(m_length), m_length);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpStiffSpringConstraintAtom);
+        }
+
+        public bool Equals(hkpStiffSpringConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_length.Equals(other.m_length) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_length);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

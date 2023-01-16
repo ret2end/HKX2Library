@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -16,17 +15,17 @@ namespace HKX2
     // m_floatToIntScale m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
     // m_floatToIntOffsetFloorCorrected m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_extents m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
-    public partial class hkpSampledHeightFieldShape : hkpHeightFieldShape
+    public partial class hkpSampledHeightFieldShape : hkpHeightFieldShape, IEquatable<hkpSampledHeightFieldShape?>
     {
-        public int m_xRes { set; get; } = default;
-        public int m_zRes { set; get; } = default;
-        public float m_heightCenter { set; get; } = default;
-        public bool m_useProjectionBasedHeight { set; get; } = default;
-        public byte m_heightfieldType { set; get; } = default;
-        public Vector4 m_intToFloatScale { set; get; } = default;
-        public Vector4 m_floatToIntScale { set; get; } = default;
-        public Vector4 m_floatToIntOffsetFloorCorrected { set; get; } = default;
-        public Vector4 m_extents { set; get; } = default;
+        public int m_xRes { set; get; }
+        public int m_zRes { set; get; }
+        public float m_heightCenter { set; get; }
+        public bool m_useProjectionBasedHeight { set; get; }
+        public byte m_heightfieldType { set; get; }
+        public Vector4 m_intToFloatScale { set; get; }
+        public Vector4 m_floatToIntScale { set; get; }
+        public Vector4 m_floatToIntOffsetFloorCorrected { set; get; }
+        public Vector4 m_extents { set; get; }
 
         public override uint Signature => 0x11213421;
 
@@ -86,6 +85,44 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_floatToIntScale), m_floatToIntScale);
             xs.WriteVector4(xe, nameof(m_floatToIntOffsetFloorCorrected), m_floatToIntOffsetFloorCorrected);
             xs.WriteVector4(xe, nameof(m_extents), m_extents);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSampledHeightFieldShape);
+        }
+
+        public bool Equals(hkpSampledHeightFieldShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_xRes.Equals(other.m_xRes) &&
+                   m_zRes.Equals(other.m_zRes) &&
+                   m_heightCenter.Equals(other.m_heightCenter) &&
+                   m_useProjectionBasedHeight.Equals(other.m_useProjectionBasedHeight) &&
+                   m_heightfieldType.Equals(other.m_heightfieldType) &&
+                   m_intToFloatScale.Equals(other.m_intToFloatScale) &&
+                   m_floatToIntScale.Equals(other.m_floatToIntScale) &&
+                   m_floatToIntOffsetFloorCorrected.Equals(other.m_floatToIntOffsetFloorCorrected) &&
+                   m_extents.Equals(other.m_extents) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_xRes);
+            hashcode.Add(m_zRes);
+            hashcode.Add(m_heightCenter);
+            hashcode.Add(m_useProjectionBasedHeight);
+            hashcode.Add(m_heightfieldType);
+            hashcode.Add(m_intToFloatScale);
+            hashcode.Add(m_floatToIntScale);
+            hashcode.Add(m_floatToIntOffsetFloorCorrected);
+            hashcode.Add(m_extents);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

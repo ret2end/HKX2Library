@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -10,7 +8,7 @@ namespace HKX2
     // m_pivots m_class: hkpSetLocalTranslationsConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_setupStabilization m_class: hkpSetupStabilizationAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 48 flags: FLAGS_NONE enum: 
     // m_ballSocket m_class: hkpBallSocketConstraintAtom Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpBallAndSocketConstraintDataAtoms : IHavokObject
+    public partial class hkpBallAndSocketConstraintDataAtoms : IHavokObject, IEquatable<hkpBallAndSocketConstraintDataAtoms?>
     {
         public hkpSetLocalTranslationsConstraintAtom m_pivots { set; get; } = new();
         public hkpSetupStabilizationAtom m_setupStabilization { set; get; } = new();
@@ -44,6 +42,30 @@ namespace HKX2
             xs.WriteClass<hkpSetLocalTranslationsConstraintAtom>(xe, nameof(m_pivots), m_pivots);
             xs.WriteClass<hkpSetupStabilizationAtom>(xe, nameof(m_setupStabilization), m_setupStabilization);
             xs.WriteClass<hkpBallSocketConstraintAtom>(xe, nameof(m_ballSocket), m_ballSocket);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpBallAndSocketConstraintDataAtoms);
+        }
+
+        public bool Equals(hkpBallAndSocketConstraintDataAtoms? other)
+        {
+            return other is not null &&
+                   ((m_pivots is null && other.m_pivots is null) || (m_pivots is not null && other.m_pivots is not null && m_pivots.Equals((IHavokObject)other.m_pivots))) &&
+                   ((m_setupStabilization is null && other.m_setupStabilization is null) || (m_setupStabilization is not null && other.m_setupStabilization is not null && m_setupStabilization.Equals((IHavokObject)other.m_setupStabilization))) &&
+                   ((m_ballSocket is null && other.m_ballSocket is null) || (m_ballSocket is not null && other.m_ballSocket is not null && m_ballSocket.Equals((IHavokObject)other.m_ballSocket))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_pivots);
+            hashcode.Add(m_setupStabilization);
+            hashcode.Add(m_ballSocket);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

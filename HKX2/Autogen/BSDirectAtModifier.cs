@@ -31,32 +31,32 @@ namespace HKX2
     // m_hasTarget m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 176 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_directAtTargetLocation m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 192 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_boneChainIndices m_class:  Type.TYPE_ARRAY Type.TYPE_VOID arrSize: 0 offset: 208 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSDirectAtModifier : hkbModifier
+    public partial class BSDirectAtModifier : hkbModifier, IEquatable<BSDirectAtModifier?>
     {
-        public bool m_directAtTarget { set; get; } = default;
-        public short m_sourceBoneIndex { set; get; } = default;
-        public short m_startBoneIndex { set; get; } = default;
-        public short m_endBoneIndex { set; get; } = default;
-        public float m_limitHeadingDegrees { set; get; } = default;
-        public float m_limitPitchDegrees { set; get; } = default;
-        public float m_offsetHeadingDegrees { set; get; } = default;
-        public float m_offsetPitchDegrees { set; get; } = default;
-        public float m_onGain { set; get; } = default;
-        public float m_offGain { set; get; } = default;
-        public Vector4 m_targetLocation { set; get; } = default;
-        public uint m_userInfo { set; get; } = default;
-        public bool m_directAtCamera { set; get; } = default;
-        public float m_directAtCameraX { set; get; } = default;
-        public float m_directAtCameraY { set; get; } = default;
-        public float m_directAtCameraZ { set; get; } = default;
-        public bool m_active { set; get; } = default;
-        public float m_currentHeadingOffset { set; get; } = default;
-        public float m_currentPitchOffset { set; get; } = default;
-        private float m_timeStep { set; get; } = default;
-        private object? m_pSkeletonMemory { set; get; } = default;
-        private bool m_hasTarget { set; get; } = default;
-        private Vector4 m_directAtTargetLocation { set; get; } = default;
-        public IList<object> m_boneChainIndices { set; get; } = new List<object>();
+        public bool m_directAtTarget { set; get; }
+        public short m_sourceBoneIndex { set; get; }
+        public short m_startBoneIndex { set; get; }
+        public short m_endBoneIndex { set; get; }
+        public float m_limitHeadingDegrees { set; get; }
+        public float m_limitPitchDegrees { set; get; }
+        public float m_offsetHeadingDegrees { set; get; }
+        public float m_offsetPitchDegrees { set; get; }
+        public float m_onGain { set; get; }
+        public float m_offGain { set; get; }
+        public Vector4 m_targetLocation { set; get; }
+        public uint m_userInfo { set; get; }
+        public bool m_directAtCamera { set; get; }
+        public float m_directAtCameraX { set; get; }
+        public float m_directAtCameraY { set; get; }
+        public float m_directAtCameraZ { set; get; }
+        public bool m_active { set; get; }
+        public float m_currentHeadingOffset { set; get; }
+        public float m_currentPitchOffset { set; get; }
+        private float m_timeStep { set; get; }
+        private object? m_pSkeletonMemory { set; get; }
+        private bool m_hasTarget { set; get; }
+        private Vector4 m_directAtTargetLocation { set; get; }
+        public IList<object> m_boneChainIndices { set; get; } = Array.Empty<object>();
 
         public override uint Signature => 0x19a005c0;
 
@@ -179,6 +179,64 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_hasTarget));
             xs.WriteSerializeIgnored(xe, nameof(m_directAtTargetLocation));
             xs.WriteSerializeIgnored(xe, nameof(m_boneChainIndices));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSDirectAtModifier);
+        }
+
+        public bool Equals(BSDirectAtModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_directAtTarget.Equals(other.m_directAtTarget) &&
+                   m_sourceBoneIndex.Equals(other.m_sourceBoneIndex) &&
+                   m_startBoneIndex.Equals(other.m_startBoneIndex) &&
+                   m_endBoneIndex.Equals(other.m_endBoneIndex) &&
+                   m_limitHeadingDegrees.Equals(other.m_limitHeadingDegrees) &&
+                   m_limitPitchDegrees.Equals(other.m_limitPitchDegrees) &&
+                   m_offsetHeadingDegrees.Equals(other.m_offsetHeadingDegrees) &&
+                   m_offsetPitchDegrees.Equals(other.m_offsetPitchDegrees) &&
+                   m_onGain.Equals(other.m_onGain) &&
+                   m_offGain.Equals(other.m_offGain) &&
+                   m_targetLocation.Equals(other.m_targetLocation) &&
+                   m_userInfo.Equals(other.m_userInfo) &&
+                   m_directAtCamera.Equals(other.m_directAtCamera) &&
+                   m_directAtCameraX.Equals(other.m_directAtCameraX) &&
+                   m_directAtCameraY.Equals(other.m_directAtCameraY) &&
+                   m_directAtCameraZ.Equals(other.m_directAtCameraZ) &&
+                   m_active.Equals(other.m_active) &&
+                   m_currentHeadingOffset.Equals(other.m_currentHeadingOffset) &&
+                   m_currentPitchOffset.Equals(other.m_currentPitchOffset) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_directAtTarget);
+            hashcode.Add(m_sourceBoneIndex);
+            hashcode.Add(m_startBoneIndex);
+            hashcode.Add(m_endBoneIndex);
+            hashcode.Add(m_limitHeadingDegrees);
+            hashcode.Add(m_limitPitchDegrees);
+            hashcode.Add(m_offsetHeadingDegrees);
+            hashcode.Add(m_offsetPitchDegrees);
+            hashcode.Add(m_onGain);
+            hashcode.Add(m_offGain);
+            hashcode.Add(m_targetLocation);
+            hashcode.Add(m_userInfo);
+            hashcode.Add(m_directAtCamera);
+            hashcode.Add(m_directAtCameraX);
+            hashcode.Add(m_directAtCameraY);
+            hashcode.Add(m_directAtCameraZ);
+            hashcode.Add(m_active);
+            hashcode.Add(m_currentHeadingOffset);
+            hashcode.Add(m_currentPitchOffset);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

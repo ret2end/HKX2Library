@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -37,38 +36,38 @@ namespace HKX2
     // m_isLinked m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 301 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_updateActiveNodes m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 302 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_stateOrTransitionChanged m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 303 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbBehaviorGraph : hkbGenerator
+    public partial class hkbBehaviorGraph : hkbGenerator, IEquatable<hkbBehaviorGraph?>
     {
-        public sbyte m_variableMode { set; get; } = default;
-        public IList<object> m_uniqueIdPool { set; get; } = new List<object>();
-        private object? m_idToStateMachineTemplateMap { set; get; } = default;
-        public IList<object> m_mirroredExternalIdMap { set; get; } = new List<object>();
-        private object? m_pseudoRandomGenerator { set; get; } = default;
-        public hkbGenerator? m_rootGenerator { set; get; } = default;
-        public hkbBehaviorGraphData? m_data { set; get; } = default;
-        private object? m_rootGeneratorClone { set; get; } = default;
-        private object? m_activeNodes { set; get; } = default;
-        private object? m_activeNodeTemplateToIndexMap { set; get; } = default;
-        private object? m_activeNodesChildrenIndices { set; get; } = default;
-        private object? m_globalTransitionData { set; get; } = default;
-        private object? m_eventIdMap { set; get; } = default;
-        private object? m_attributeIdMap { set; get; } = default;
-        private object? m_variableIdMap { set; get; } = default;
-        private object? m_characterPropertyIdMap { set; get; } = default;
-        private object? m_variableValueSet { set; get; } = default;
-        private object? m_nodeTemplateToCloneMap { set; get; } = default;
-        private object? m_nodeCloneToTemplateMap { set; get; } = default;
-        private object? m_stateListenerTemplateToCloneMap { set; get; } = default;
-        private object? m_nodePartitionInfo { set; get; } = default;
-        private int m_numIntermediateOutputs { set; get; } = default;
-        public IList<object> m_jobs { set; get; } = new List<object>();
-        public IList<object> m_allPartitionMemory { set; get; } = new List<object>();
-        private short m_numStaticNodes { set; get; } = default;
-        private short m_nextUniqueId { set; get; } = default;
-        private bool m_isActive { set; get; } = default;
-        private bool m_isLinked { set; get; } = default;
-        private bool m_updateActiveNodes { set; get; } = default;
-        private bool m_stateOrTransitionChanged { set; get; } = default;
+        public sbyte m_variableMode { set; get; }
+        public IList<object> m_uniqueIdPool { set; get; } = Array.Empty<object>();
+        private object? m_idToStateMachineTemplateMap { set; get; }
+        public IList<object> m_mirroredExternalIdMap { set; get; } = Array.Empty<object>();
+        private object? m_pseudoRandomGenerator { set; get; }
+        public hkbGenerator? m_rootGenerator { set; get; }
+        public hkbBehaviorGraphData? m_data { set; get; }
+        private object? m_rootGeneratorClone { set; get; }
+        private object? m_activeNodes { set; get; }
+        private object? m_activeNodeTemplateToIndexMap { set; get; }
+        private object? m_activeNodesChildrenIndices { set; get; }
+        private object? m_globalTransitionData { set; get; }
+        private object? m_eventIdMap { set; get; }
+        private object? m_attributeIdMap { set; get; }
+        private object? m_variableIdMap { set; get; }
+        private object? m_characterPropertyIdMap { set; get; }
+        private object? m_variableValueSet { set; get; }
+        private object? m_nodeTemplateToCloneMap { set; get; }
+        private object? m_nodeCloneToTemplateMap { set; get; }
+        private object? m_stateListenerTemplateToCloneMap { set; get; }
+        private object? m_nodePartitionInfo { set; get; }
+        private int m_numIntermediateOutputs { set; get; }
+        public IList<object> m_jobs { set; get; } = Array.Empty<object>();
+        public IList<object> m_allPartitionMemory { set; get; } = Array.Empty<object>();
+        private short m_numStaticNodes { set; get; }
+        private short m_nextUniqueId { set; get; }
+        private bool m_isActive { set; get; }
+        private bool m_isLinked { set; get; }
+        private bool m_updateActiveNodes { set; get; }
+        private bool m_stateOrTransitionChanged { set; get; }
 
         public override uint Signature => 0xb1218f86;
 
@@ -187,6 +186,32 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_isLinked));
             xs.WriteSerializeIgnored(xe, nameof(m_updateActiveNodes));
             xs.WriteSerializeIgnored(xe, nameof(m_stateOrTransitionChanged));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbBehaviorGraph);
+        }
+
+        public bool Equals(hkbBehaviorGraph? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_variableMode.Equals(other.m_variableMode) &&
+                   ((m_rootGenerator is null && other.m_rootGenerator is null) || (m_rootGenerator is not null && other.m_rootGenerator is not null && m_rootGenerator.Equals((IHavokObject)other.m_rootGenerator))) &&
+                   ((m_data is null && other.m_data is null) || (m_data is not null && other.m_data is not null && m_data.Equals((IHavokObject)other.m_data))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_variableMode);
+            hashcode.Add(m_rootGenerator);
+            hashcode.Add(m_data);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,7 +7,7 @@ namespace HKX2
 
     // m_data m_class: hkxVertexBufferVertexData Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_desc m_class: hkxVertexDescription Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 120 flags: FLAGS_NONE enum: 
-    public partial class hkxVertexBuffer : hkReferencedObject
+    public partial class hkxVertexBuffer : hkReferencedObject, IEquatable<hkxVertexBuffer?>
     {
         public hkxVertexBufferVertexData m_data { set; get; } = new();
         public hkxVertexDescription m_desc { set; get; } = new();
@@ -42,6 +40,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteClass<hkxVertexBufferVertexData>(xe, nameof(m_data), m_data);
             xs.WriteClass<hkxVertexDescription>(xe, nameof(m_desc), m_desc);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkxVertexBuffer);
+        }
+
+        public bool Equals(hkxVertexBuffer? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_data is null && other.m_data is null) || (m_data is not null && other.m_data is not null && m_data.Equals((IHavokObject)other.m_data))) &&
+                   ((m_desc is null && other.m_desc is null) || (m_desc is not null && other.m_desc is not null && m_desc.Equals((IHavokObject)other.m_desc))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_data);
+            hashcode.Add(m_desc);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

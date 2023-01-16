@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -29,30 +28,30 @@ namespace HKX2
     // m_localFrame m_class: hkLocalFrame Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 688 flags: FLAGS_NONE enum: 
     // m_extendedListeners m_class: hkpEntityExtendedListeners Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 696 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_npData m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 704 flags: FLAGS_NONE enum: 
-    public partial class hkpEntity : hkpWorldObject
+    public partial class hkpEntity : hkpWorldObject, IEquatable<hkpEntity?>
     {
         public hkpMaterial m_material { set; get; } = new();
-        private object? m_limitContactImpulseUtilAndFlag { set; get; } = default;
-        public float m_damageMultiplier { set; get; } = default;
-        private object? m_breakableBody { set; get; } = default;
-        private uint m_solverData { set; get; } = default;
-        public ushort m_storageIndex { set; get; } = default;
-        public ushort m_contactPointCallbackDelay { set; get; } = default;
+        private object? m_limitContactImpulseUtilAndFlag { set; get; }
+        public float m_damageMultiplier { set; get; }
+        private object? m_breakableBody { set; get; }
+        private uint m_solverData { set; get; }
+        public ushort m_storageIndex { set; get; }
+        public ushort m_contactPointCallbackDelay { set; get; }
         public hkpEntitySmallArraySerializeOverrideType m_constraintsMaster { set; get; } = new();
         public IList<hkpConstraintInstance> m_constraintsSlave { set; get; } = new List<hkpConstraintInstance>();
-        public IList<byte> m_constraintRuntime { set; get; } = new List<byte>();
-        private object? m_simulationIsland { set; get; } = default;
-        public sbyte m_autoRemoveLevel { set; get; } = default;
-        public byte m_numShapeKeysInContactPointProperties { set; get; } = default;
-        public byte m_responseModifierFlags { set; get; } = default;
-        public uint m_uid { set; get; } = default;
+        public IList<byte> m_constraintRuntime { set; get; } = Array.Empty<byte>();
+        private object? m_simulationIsland { set; get; }
+        public sbyte m_autoRemoveLevel { set; get; }
+        public byte m_numShapeKeysInContactPointProperties { set; get; }
+        public byte m_responseModifierFlags { set; get; }
+        public uint m_uid { set; get; }
         public hkpEntitySpuCollisionCallback m_spuCollisionCallback { set; get; } = new();
         public hkpMaxSizeMotion m_motion { set; get; } = new();
         public hkpEntitySmallArraySerializeOverrideType m_contactListeners { set; get; } = new();
         public hkpEntitySmallArraySerializeOverrideType m_actions { set; get; } = new();
-        public hkLocalFrame? m_localFrame { set; get; } = default;
-        private hkpEntityExtendedListeners? m_extendedListeners { set; get; } = default;
-        public uint m_npData { set; get; } = default;
+        public hkLocalFrame? m_localFrame { set; get; }
+        private hkpEntityExtendedListeners? m_extendedListeners { set; get; }
+        public uint m_npData { set; get; }
 
         public override uint Signature => 0xa03c774b;
 
@@ -160,6 +159,50 @@ namespace HKX2
             xs.WriteClassPointer(xe, nameof(m_localFrame), m_localFrame);
             xs.WriteSerializeIgnored(xe, nameof(m_extendedListeners));
             xs.WriteNumber(xe, nameof(m_npData), m_npData);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpEntity);
+        }
+
+        public bool Equals(hkpEntity? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_material is null && other.m_material is null) || (m_material is not null && other.m_material is not null && m_material.Equals((IHavokObject)other.m_material))) &&
+                   m_damageMultiplier.Equals(other.m_damageMultiplier) &&
+                   m_storageIndex.Equals(other.m_storageIndex) &&
+                   m_contactPointCallbackDelay.Equals(other.m_contactPointCallbackDelay) &&
+                   m_autoRemoveLevel.Equals(other.m_autoRemoveLevel) &&
+                   m_numShapeKeysInContactPointProperties.Equals(other.m_numShapeKeysInContactPointProperties) &&
+                   m_responseModifierFlags.Equals(other.m_responseModifierFlags) &&
+                   m_uid.Equals(other.m_uid) &&
+                   ((m_spuCollisionCallback is null && other.m_spuCollisionCallback is null) || (m_spuCollisionCallback is not null && other.m_spuCollisionCallback is not null && m_spuCollisionCallback.Equals((IHavokObject)other.m_spuCollisionCallback))) &&
+                   ((m_motion is null && other.m_motion is null) || (m_motion is not null && other.m_motion is not null && m_motion.Equals((IHavokObject)other.m_motion))) &&
+                   ((m_localFrame is null && other.m_localFrame is null) || (m_localFrame is not null && other.m_localFrame is not null && m_localFrame.Equals((IHavokObject)other.m_localFrame))) &&
+                   m_npData.Equals(other.m_npData) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_material);
+            hashcode.Add(m_damageMultiplier);
+            hashcode.Add(m_storageIndex);
+            hashcode.Add(m_contactPointCallbackDelay);
+            hashcode.Add(m_autoRemoveLevel);
+            hashcode.Add(m_numShapeKeysInContactPointProperties);
+            hashcode.Add(m_responseModifierFlags);
+            hashcode.Add(m_uid);
+            hashcode.Add(m_spuCollisionCallback);
+            hashcode.Add(m_motion);
+            hashcode.Add(m_localFrame);
+            hashcode.Add(m_npData);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

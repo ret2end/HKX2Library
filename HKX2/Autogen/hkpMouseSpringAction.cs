@@ -15,16 +15,16 @@ namespace HKX2
     // m_objectDamping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 108 flags: FLAGS_NONE enum: 
     // m_shapeKey m_class:  Type.TYPE_UINT32 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_applyCallbacks m_class:  Type.TYPE_ARRAY Type.TYPE_POINTER arrSize: 0 offset: 120 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpMouseSpringAction : hkpUnaryAction
+    public partial class hkpMouseSpringAction : hkpUnaryAction, IEquatable<hkpMouseSpringAction?>
     {
-        public Vector4 m_positionInRbLocal { set; get; } = default;
-        public Vector4 m_mousePositionInWorld { set; get; } = default;
-        public float m_springDamping { set; get; } = default;
-        public float m_springElasticity { set; get; } = default;
-        public float m_maxRelativeForce { set; get; } = default;
-        public float m_objectDamping { set; get; } = default;
-        public uint m_shapeKey { set; get; } = default;
-        public IList<object> m_applyCallbacks { set; get; } = new List<object>();
+        public Vector4 m_positionInRbLocal { set; get; }
+        public Vector4 m_mousePositionInWorld { set; get; }
+        public float m_springDamping { set; get; }
+        public float m_springElasticity { set; get; }
+        public float m_maxRelativeForce { set; get; }
+        public float m_objectDamping { set; get; }
+        public uint m_shapeKey { set; get; }
+        public IList<object> m_applyCallbacks { set; get; } = Array.Empty<object>();
 
         public override uint Signature => 0x6e087fd6;
 
@@ -83,6 +83,40 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_objectDamping), m_objectDamping);
             xs.WriteNumber(xe, nameof(m_shapeKey), m_shapeKey);
             xs.WriteSerializeIgnored(xe, nameof(m_applyCallbacks));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpMouseSpringAction);
+        }
+
+        public bool Equals(hkpMouseSpringAction? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_positionInRbLocal.Equals(other.m_positionInRbLocal) &&
+                   m_mousePositionInWorld.Equals(other.m_mousePositionInWorld) &&
+                   m_springDamping.Equals(other.m_springDamping) &&
+                   m_springElasticity.Equals(other.m_springElasticity) &&
+                   m_maxRelativeForce.Equals(other.m_maxRelativeForce) &&
+                   m_objectDamping.Equals(other.m_objectDamping) &&
+                   m_shapeKey.Equals(other.m_shapeKey) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_positionInRbLocal);
+            hashcode.Add(m_mousePositionInWorld);
+            hashcode.Add(m_springDamping);
+            hashcode.Add(m_springElasticity);
+            hashcode.Add(m_maxRelativeForce);
+            hashcode.Add(m_objectDamping);
+            hashcode.Add(m_shapeKey);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

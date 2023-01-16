@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +9,10 @@ namespace HKX2
 
     // m_eventNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
     // m_variableNames m_class:  Type.TYPE_ARRAY Type.TYPE_STRINGPTR arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
-    public partial class hkbLinkedSymbolInfo : hkReferencedObject
+    public partial class hkbLinkedSymbolInfo : hkReferencedObject, IEquatable<hkbLinkedSymbolInfo?>
     {
-        public IList<string> m_eventNames { set; get; } = new List<string>();
-        public IList<string> m_variableNames { set; get; } = new List<string>();
+        public IList<string> m_eventNames { set; get; } = Array.Empty<string>();
+        public IList<string> m_variableNames { set; get; } = Array.Empty<string>();
 
         public override uint Signature => 0x6a5094e3;
 
@@ -42,6 +42,30 @@ namespace HKX2
             base.WriteXml(xs, xe);
             xs.WriteStringArray(xe, nameof(m_eventNames), m_eventNames);
             xs.WriteStringArray(xe, nameof(m_variableNames), m_variableNames);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbLinkedSymbolInfo);
+        }
+
+        public bool Equals(hkbLinkedSymbolInfo? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_eventNames.SequenceEqual(other.m_eventNames) &&
+                   m_variableNames.SequenceEqual(other.m_variableNames) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_eventNames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_variableNames.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

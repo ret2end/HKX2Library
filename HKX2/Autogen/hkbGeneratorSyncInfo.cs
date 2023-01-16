@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -15,16 +14,16 @@ namespace HKX2
     // m_isCyclic m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 77 flags: FLAGS_NONE enum: 
     // m_isMirrored m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 78 flags: FLAGS_NONE enum: 
     // m_isAdditive m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 79 flags: FLAGS_NONE enum: 
-    public partial class hkbGeneratorSyncInfo : IHavokObject
+    public partial class hkbGeneratorSyncInfo : IHavokObject, IEquatable<hkbGeneratorSyncInfo?>
     {
         public hkbGeneratorSyncInfoSyncPoint[] m_syncPoints = new hkbGeneratorSyncInfoSyncPoint[8];
-        public float m_baseFrequency { set; get; } = default;
-        public float m_localTime { set; get; } = default;
-        public float m_playbackSpeed { set; get; } = default;
-        public sbyte m_numSyncPoints { set; get; } = default;
-        public bool m_isCyclic { set; get; } = default;
-        public bool m_isMirrored { set; get; } = default;
-        public bool m_isAdditive { set; get; } = default;
+        public float m_baseFrequency { set; get; }
+        public float m_localTime { set; get; }
+        public float m_playbackSpeed { set; get; }
+        public sbyte m_numSyncPoints { set; get; }
+        public bool m_isCyclic { set; get; }
+        public bool m_isMirrored { set; get; }
+        public bool m_isAdditive { set; get; }
 
         public virtual uint Signature => 0xa3c341f8;
 
@@ -76,6 +75,40 @@ namespace HKX2
             xs.WriteBoolean(xe, nameof(m_isCyclic), m_isCyclic);
             xs.WriteBoolean(xe, nameof(m_isMirrored), m_isMirrored);
             xs.WriteBoolean(xe, nameof(m_isAdditive), m_isAdditive);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbGeneratorSyncInfo);
+        }
+
+        public bool Equals(hkbGeneratorSyncInfo? other)
+        {
+            return other is not null &&
+                   m_syncPoints.SequenceEqual(other.m_syncPoints) &&
+                   m_baseFrequency.Equals(other.m_baseFrequency) &&
+                   m_localTime.Equals(other.m_localTime) &&
+                   m_playbackSpeed.Equals(other.m_playbackSpeed) &&
+                   m_numSyncPoints.Equals(other.m_numSyncPoints) &&
+                   m_isCyclic.Equals(other.m_isCyclic) &&
+                   m_isMirrored.Equals(other.m_isMirrored) &&
+                   m_isAdditive.Equals(other.m_isAdditive) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_syncPoints.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_baseFrequency);
+            hashcode.Add(m_localTime);
+            hashcode.Add(m_playbackSpeed);
+            hashcode.Add(m_numSyncPoints);
+            hashcode.Add(m_isCyclic);
+            hashcode.Add(m_isMirrored);
+            hashcode.Add(m_isAdditive);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

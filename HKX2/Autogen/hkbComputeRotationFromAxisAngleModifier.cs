@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -10,11 +9,11 @@ namespace HKX2
     // m_rotationOut m_class:  Type.TYPE_QUATERNION Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_axis m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_angleDegrees m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkbComputeRotationFromAxisAngleModifier : hkbModifier
+    public partial class hkbComputeRotationFromAxisAngleModifier : hkbModifier, IEquatable<hkbComputeRotationFromAxisAngleModifier?>
     {
-        public Quaternion m_rotationOut { set; get; } = default;
-        public Vector4 m_axis { set; get; } = default;
-        public float m_angleDegrees { set; get; } = default;
+        public Quaternion m_rotationOut { set; get; }
+        public Vector4 m_axis { set; get; }
+        public float m_angleDegrees { set; get; }
 
         public override uint Signature => 0x9b3f6936;
 
@@ -50,6 +49,32 @@ namespace HKX2
             xs.WriteQuaternion(xe, nameof(m_rotationOut), m_rotationOut);
             xs.WriteVector4(xe, nameof(m_axis), m_axis);
             xs.WriteFloat(xe, nameof(m_angleDegrees), m_angleDegrees);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbComputeRotationFromAxisAngleModifier);
+        }
+
+        public bool Equals(hkbComputeRotationFromAxisAngleModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rotationOut.Equals(other.m_rotationOut) &&
+                   m_axis.Equals(other.m_axis) &&
+                   m_angleDegrees.Equals(other.m_angleDegrees) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rotationOut);
+            hashcode.Add(m_axis);
+            hashcode.Add(m_angleDegrees);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

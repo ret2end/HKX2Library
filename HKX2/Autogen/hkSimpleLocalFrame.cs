@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,12 +13,12 @@ namespace HKX2
     // m_parentFrame m_class: hkLocalFrame Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 96 flags: NOT_OWNED|FLAGS_NONE enum: 
     // m_group m_class: hkLocalFrameGroup Type.TYPE_POINTER Type.TYPE_STRUCT arrSize: 0 offset: 104 flags: FLAGS_NONE enum: 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
-    public partial class hkSimpleLocalFrame : hkLocalFrame
+    public partial class hkSimpleLocalFrame : hkLocalFrame, IEquatable<hkSimpleLocalFrame?>
     {
-        public Matrix4x4 m_transform { set; get; } = default;
-        public IList<hkLocalFrame> m_children { set; get; } = new List<hkLocalFrame>();
-        public hkLocalFrame? m_parentFrame { set; get; } = default;
-        public hkLocalFrameGroup? m_group { set; get; } = default;
+        public Matrix4x4 m_transform { set; get; }
+        public IList<hkLocalFrame> m_children { set; get; } = Array.Empty<hkLocalFrame>();
+        public hkLocalFrame? m_parentFrame { set; get; }
+        public hkLocalFrameGroup? m_group { set; get; }
         public string m_name { set; get; } = "";
 
         public override uint Signature => 0xe758f63c;
@@ -58,10 +59,40 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteTransform(xe, nameof(m_transform), m_transform);
-            xs.WriteClassPointerArray<hkLocalFrame>(xe, nameof(m_children), m_children);
+            xs.WriteClassPointerArray(xe, nameof(m_children), m_children);
             xs.WriteClassPointer(xe, nameof(m_parentFrame), m_parentFrame);
             xs.WriteClassPointer(xe, nameof(m_group), m_group);
             xs.WriteString(xe, nameof(m_name), m_name);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkSimpleLocalFrame);
+        }
+
+        public bool Equals(hkSimpleLocalFrame? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_transform.Equals(other.m_transform) &&
+                   m_children.SequenceEqual(other.m_children) &&
+                   ((m_parentFrame is null && other.m_parentFrame is null) || (m_parentFrame is not null && other.m_parentFrame is not null && m_parentFrame.Equals((IHavokObject)other.m_parentFrame))) &&
+                   ((m_group is null && other.m_group is null) || (m_group is not null && other.m_group is not null && m_group.Equals((IHavokObject)other.m_group))) &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_transform);
+            hashcode.Add(m_children.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_parentFrame);
+            hashcode.Add(m_group);
+            hashcode.Add(m_name);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

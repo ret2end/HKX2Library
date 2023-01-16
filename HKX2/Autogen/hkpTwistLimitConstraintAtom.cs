@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -13,14 +11,14 @@ namespace HKX2
     // m_minAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
     // m_maxAngle m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 12 flags: FLAGS_NONE enum: 
     // m_angularLimitsTauFactor m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpTwistLimitConstraintAtom : hkpConstraintAtom
+    public partial class hkpTwistLimitConstraintAtom : hkpConstraintAtom, IEquatable<hkpTwistLimitConstraintAtom?>
     {
-        public byte m_isEnabled { set; get; } = default;
-        public byte m_twistAxis { set; get; } = default;
-        public byte m_refAxis { set; get; } = default;
-        public float m_minAngle { set; get; } = default;
-        public float m_maxAngle { set; get; } = default;
-        public float m_angularLimitsTauFactor { set; get; } = default;
+        public byte m_isEnabled { set; get; }
+        public byte m_twistAxis { set; get; }
+        public byte m_refAxis { set; get; }
+        public float m_minAngle { set; get; }
+        public float m_maxAngle { set; get; }
+        public float m_angularLimitsTauFactor { set; get; }
 
         public override uint Signature => 0x7c9b1052;
 
@@ -68,6 +66,38 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_minAngle), m_minAngle);
             xs.WriteFloat(xe, nameof(m_maxAngle), m_maxAngle);
             xs.WriteFloat(xe, nameof(m_angularLimitsTauFactor), m_angularLimitsTauFactor);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpTwistLimitConstraintAtom);
+        }
+
+        public bool Equals(hkpTwistLimitConstraintAtom? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_isEnabled.Equals(other.m_isEnabled) &&
+                   m_twistAxis.Equals(other.m_twistAxis) &&
+                   m_refAxis.Equals(other.m_refAxis) &&
+                   m_minAngle.Equals(other.m_minAngle) &&
+                   m_maxAngle.Equals(other.m_maxAngle) &&
+                   m_angularLimitsTauFactor.Equals(other.m_angularLimitsTauFactor) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_isEnabled);
+            hashcode.Add(m_twistAxis);
+            hashcode.Add(m_refAxis);
+            hashcode.Add(m_minAngle);
+            hashcode.Add(m_maxAngle);
+            hashcode.Add(m_angularLimitsTauFactor);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

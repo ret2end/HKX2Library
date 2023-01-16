@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,18 +16,18 @@ namespace HKX2
     // m_capacityChildShapeAabbs m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 34 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_childShapeAabbs m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 40 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_childShapeKeys m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 48 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkpCollidableBoundingVolumeData : IHavokObject
+    public partial class hkpCollidableBoundingVolumeData : IHavokObject, IEquatable<hkpCollidableBoundingVolumeData?>
     {
         public uint[] m_min = new uint[3];
         public byte[] m_expansionMin = new byte[3];
-        public byte m_expansionShift { set; get; } = default;
+        public byte m_expansionShift { set; get; }
         public uint[] m_max = new uint[3];
         public byte[] m_expansionMax = new byte[3];
-        public byte m_padding { set; get; } = default;
-        private ushort m_numChildShapeAabbs { set; get; } = default;
-        private ushort m_capacityChildShapeAabbs { set; get; } = default;
-        private object? m_childShapeAabbs { set; get; } = default;
-        private object? m_childShapeKeys { set; get; } = default;
+        public byte m_padding { set; get; }
+        private ushort m_numChildShapeAabbs { set; get; }
+        private ushort m_capacityChildShapeAabbs { set; get; }
+        private object? m_childShapeAabbs { set; get; }
+        private object? m_childShapeKeys { set; get; }
 
         public virtual uint Signature => 0xb5f0e6b1;
 
@@ -84,6 +83,36 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_capacityChildShapeAabbs));
             xs.WriteSerializeIgnored(xe, nameof(m_childShapeAabbs));
             xs.WriteSerializeIgnored(xe, nameof(m_childShapeKeys));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCollidableBoundingVolumeData);
+        }
+
+        public bool Equals(hkpCollidableBoundingVolumeData? other)
+        {
+            return other is not null &&
+                   m_min.SequenceEqual(other.m_min) &&
+                   m_expansionMin.SequenceEqual(other.m_expansionMin) &&
+                   m_expansionShift.Equals(other.m_expansionShift) &&
+                   m_max.SequenceEqual(other.m_max) &&
+                   m_expansionMax.SequenceEqual(other.m_expansionMax) &&
+                   m_padding.Equals(other.m_padding) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_min.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_expansionMin.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_expansionShift);
+            hashcode.Add(m_max.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_expansionMax.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_padding);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -11,12 +9,12 @@ namespace HKX2
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_proportionalRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_constantRecoveryVelocity m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
-    public partial class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor
+    public partial class hkpPositionConstraintMotor : hkpLimitedForceConstraintMotor, IEquatable<hkpPositionConstraintMotor?>
     {
-        public float m_tau { set; get; } = default;
-        public float m_damping { set; get; } = default;
-        public float m_proportionalRecoveryVelocity { set; get; } = default;
-        public float m_constantRecoveryVelocity { set; get; } = default;
+        public float m_tau { set; get; }
+        public float m_damping { set; get; }
+        public float m_proportionalRecoveryVelocity { set; get; }
+        public float m_constantRecoveryVelocity { set; get; }
 
         public override uint Signature => 0x748fb303;
 
@@ -54,6 +52,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
             xs.WriteFloat(xe, nameof(m_proportionalRecoveryVelocity), m_proportionalRecoveryVelocity);
             xs.WriteFloat(xe, nameof(m_constantRecoveryVelocity), m_constantRecoveryVelocity);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPositionConstraintMotor);
+        }
+
+        public bool Equals(hkpPositionConstraintMotor? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_tau.Equals(other.m_tau) &&
+                   m_damping.Equals(other.m_damping) &&
+                   m_proportionalRecoveryVelocity.Equals(other.m_proportionalRecoveryVelocity) &&
+                   m_constantRecoveryVelocity.Equals(other.m_constantRecoveryVelocity) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_tau);
+            hashcode.Add(m_damping);
+            hashcode.Add(m_proportionalRecoveryVelocity);
+            hashcode.Add(m_constantRecoveryVelocity);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

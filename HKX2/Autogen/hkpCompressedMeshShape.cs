@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -30,31 +31,31 @@ namespace HKX2
     // m_numMaterials m_class:  Type.TYPE_UINT16 Type.TYPE_VOID arrSize: 0 offset: 258 flags: FLAGS_NONE enum: 
     // m_namedMaterials m_class: hkpNamedMeshMaterial Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 264 flags: FLAGS_NONE enum: 
     // m_scaling m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 288 flags: FLAGS_NONE enum: 
-    public partial class hkpCompressedMeshShape : hkpShapeCollection
+    public partial class hkpCompressedMeshShape : hkpShapeCollection, IEquatable<hkpCompressedMeshShape?>
     {
-        public int m_bitsPerIndex { set; get; } = default;
-        public int m_bitsPerWIndex { set; get; } = default;
-        public int m_wIndexMask { set; get; } = default;
-        public int m_indexMask { set; get; } = default;
-        public float m_radius { set; get; } = default;
-        public byte m_weldingType { set; get; } = default;
-        public byte m_materialType { set; get; } = default;
-        public IList<uint> m_materials { set; get; } = new List<uint>();
-        public IList<ushort> m_materials16 { set; get; } = new List<ushort>();
-        public IList<byte> m_materials8 { set; get; } = new List<byte>();
-        public IList<Matrix4x4> m_transforms { set; get; } = new List<Matrix4x4>();
-        public IList<Vector4> m_bigVertices { set; get; } = new List<Vector4>();
-        public IList<hkpCompressedMeshShapeBigTriangle> m_bigTriangles { set; get; } = new List<hkpCompressedMeshShapeBigTriangle>();
-        public IList<hkpCompressedMeshShapeChunk> m_chunks { set; get; } = new List<hkpCompressedMeshShapeChunk>();
-        public IList<hkpCompressedMeshShapeConvexPiece> m_convexPieces { set; get; } = new List<hkpCompressedMeshShapeConvexPiece>();
-        public float m_error { set; get; } = default;
+        public int m_bitsPerIndex { set; get; }
+        public int m_bitsPerWIndex { set; get; }
+        public int m_wIndexMask { set; get; }
+        public int m_indexMask { set; get; }
+        public float m_radius { set; get; }
+        public byte m_weldingType { set; get; }
+        public byte m_materialType { set; get; }
+        public IList<uint> m_materials { set; get; } = Array.Empty<uint>();
+        public IList<ushort> m_materials16 { set; get; } = Array.Empty<ushort>();
+        public IList<byte> m_materials8 { set; get; } = Array.Empty<byte>();
+        public IList<Matrix4x4> m_transforms { set; get; } = Array.Empty<Matrix4x4>();
+        public IList<Vector4> m_bigVertices { set; get; } = Array.Empty<Vector4>();
+        public IList<hkpCompressedMeshShapeBigTriangle> m_bigTriangles { set; get; } = Array.Empty<hkpCompressedMeshShapeBigTriangle>();
+        public IList<hkpCompressedMeshShapeChunk> m_chunks { set; get; } = Array.Empty<hkpCompressedMeshShapeChunk>();
+        public IList<hkpCompressedMeshShapeConvexPiece> m_convexPieces { set; get; } = Array.Empty<hkpCompressedMeshShapeConvexPiece>();
+        public float m_error { set; get; }
         public hkAabb m_bounds { set; get; } = new();
-        public uint m_defaultCollisionFilterInfo { set; get; } = default;
-        private object? m_meshMaterials { set; get; } = default;
-        public ushort m_materialStriding { set; get; } = default;
-        public ushort m_numMaterials { set; get; } = default;
-        public IList<hkpNamedMeshMaterial> m_namedMaterials { set; get; } = new List<hkpNamedMeshMaterial>();
-        public Vector4 m_scaling { set; get; } = default;
+        public uint m_defaultCollisionFilterInfo { set; get; }
+        private object? m_meshMaterials { set; get; }
+        public ushort m_materialStriding { set; get; }
+        public ushort m_numMaterials { set; get; }
+        public IList<hkpNamedMeshMaterial> m_namedMaterials { set; get; } = Array.Empty<hkpNamedMeshMaterial>();
+        public Vector4 m_scaling { set; get; }
 
         public override uint Signature => 0xe3d1dba;
 
@@ -166,17 +167,81 @@ namespace HKX2
             xs.WriteNumberArray(xe, nameof(m_materials8), m_materials8);
             xs.WriteQSTransformArray(xe, nameof(m_transforms), m_transforms);
             xs.WriteVector4Array(xe, nameof(m_bigVertices), m_bigVertices);
-            xs.WriteClassArray<hkpCompressedMeshShapeBigTriangle>(xe, nameof(m_bigTriangles), m_bigTriangles);
-            xs.WriteClassArray<hkpCompressedMeshShapeChunk>(xe, nameof(m_chunks), m_chunks);
-            xs.WriteClassArray<hkpCompressedMeshShapeConvexPiece>(xe, nameof(m_convexPieces), m_convexPieces);
+            xs.WriteClassArray(xe, nameof(m_bigTriangles), m_bigTriangles);
+            xs.WriteClassArray(xe, nameof(m_chunks), m_chunks);
+            xs.WriteClassArray(xe, nameof(m_convexPieces), m_convexPieces);
             xs.WriteFloat(xe, nameof(m_error), m_error);
             xs.WriteClass<hkAabb>(xe, nameof(m_bounds), m_bounds);
             xs.WriteNumber(xe, nameof(m_defaultCollisionFilterInfo), m_defaultCollisionFilterInfo);
             xs.WriteSerializeIgnored(xe, nameof(m_meshMaterials));
             xs.WriteNumber(xe, nameof(m_materialStriding), m_materialStriding);
             xs.WriteNumber(xe, nameof(m_numMaterials), m_numMaterials);
-            xs.WriteClassArray<hkpNamedMeshMaterial>(xe, nameof(m_namedMaterials), m_namedMaterials);
+            xs.WriteClassArray(xe, nameof(m_namedMaterials), m_namedMaterials);
             xs.WriteVector4(xe, nameof(m_scaling), m_scaling);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpCompressedMeshShape);
+        }
+
+        public bool Equals(hkpCompressedMeshShape? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_bitsPerIndex.Equals(other.m_bitsPerIndex) &&
+                   m_bitsPerWIndex.Equals(other.m_bitsPerWIndex) &&
+                   m_wIndexMask.Equals(other.m_wIndexMask) &&
+                   m_indexMask.Equals(other.m_indexMask) &&
+                   m_radius.Equals(other.m_radius) &&
+                   m_weldingType.Equals(other.m_weldingType) &&
+                   m_materialType.Equals(other.m_materialType) &&
+                   m_materials.SequenceEqual(other.m_materials) &&
+                   m_materials16.SequenceEqual(other.m_materials16) &&
+                   m_materials8.SequenceEqual(other.m_materials8) &&
+                   m_transforms.SequenceEqual(other.m_transforms) &&
+                   m_bigVertices.SequenceEqual(other.m_bigVertices) &&
+                   m_bigTriangles.SequenceEqual(other.m_bigTriangles) &&
+                   m_chunks.SequenceEqual(other.m_chunks) &&
+                   m_convexPieces.SequenceEqual(other.m_convexPieces) &&
+                   m_error.Equals(other.m_error) &&
+                   ((m_bounds is null && other.m_bounds is null) || (m_bounds is not null && other.m_bounds is not null && m_bounds.Equals((IHavokObject)other.m_bounds))) &&
+                   m_defaultCollisionFilterInfo.Equals(other.m_defaultCollisionFilterInfo) &&
+                   m_materialStriding.Equals(other.m_materialStriding) &&
+                   m_numMaterials.Equals(other.m_numMaterials) &&
+                   m_namedMaterials.SequenceEqual(other.m_namedMaterials) &&
+                   m_scaling.Equals(other.m_scaling) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_bitsPerIndex);
+            hashcode.Add(m_bitsPerWIndex);
+            hashcode.Add(m_wIndexMask);
+            hashcode.Add(m_indexMask);
+            hashcode.Add(m_radius);
+            hashcode.Add(m_weldingType);
+            hashcode.Add(m_materialType);
+            hashcode.Add(m_materials.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_materials16.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_materials8.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_transforms.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_bigVertices.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(m_bigTriangles.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_chunks.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_convexPieces.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_error);
+            hashcode.Add(m_bounds);
+            hashcode.Add(m_defaultCollisionFilterInfo);
+            hashcode.Add(m_materialStriding);
+            hashcode.Add(m_numMaterials);
+            hashcode.Add(m_namedMaterials.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(m_scaling);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

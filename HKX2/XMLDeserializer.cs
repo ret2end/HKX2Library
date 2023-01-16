@@ -24,7 +24,9 @@ namespace HKX2
 
             _nameXEleMap = new Dictionary<string, XElement>();
 
-            var hksection = _xdoc.Element("hkpackfile").Element("hksection");
+            var hksection = _xdoc.Element("hkpackfile")?.Element("hksection");
+            if (hksection is null)
+                throw new Exception("Xml missing hkpackfile and hksection tag");
 
             // collect nodes
             foreach (var item in hksection.Elements())
@@ -33,14 +35,14 @@ namespace HKX2
                 _nameXEleMap.Add(name, item);
             }
 
-            var testnode = _nameXEleMap.Where(item => item.Value.Attribute("class").Value == "hkRootLevelContainer").First().Value;
+            var testnode = _nameXEleMap.First(item => item.Value.Attribute("class").Value == "hkRootLevelContainer").Value;
             var rootrefName = testnode.Attribute("name").Value;
             var testobj = ConstructVirtualClass(testnode);
             _objectsNameMap.Add(rootrefName, testobj);
 
             testobj.ReadXml(this, testnode);
 
-            var hkRootLevelContainer = _objectsNameMap.Where(item => item.Value.Signature == 0x2772c11e).First().Value;
+            var hkRootLevelContainer = _objectsNameMap.First(item => item.Value.Signature == 0x2772c11e).Value;
 
             return hkRootLevelContainer;
         }
@@ -63,7 +65,7 @@ namespace HKX2
 
             return ret;
         }
-        private XElement GetPropertyElement(XElement element, string name)
+        private static XElement? GetPropertyElement(XContainer element, string name)
         {
             if (name.StartsWith("m_"))
             {
@@ -89,12 +91,13 @@ namespace HKX2
             return ret;
         }
 
-        public List<T> ReadClassArray<T>(XElement element, string name) where T : IHavokObject, new()
+        public IList<T> ReadClassArray<T>(XElement element, string name) where T : IHavokObject, new()
         {
-            var result = new List<T>();
             var eles = GetPropertyElement(element, name);
             if (eles is null)
-                return result;
+                return Array.Empty<T>();
+
+            var result = new List<T>();
 
             if (!int.TryParse(eles.Attribute("numelements")?.Value, out int _))
             {
@@ -112,10 +115,11 @@ namespace HKX2
 
         public T[] ReadClassCStyleArray<T>(XElement element, string name, short length) where T : IHavokObject, new()
         {
-            var arr = new T[length];
             var eles = GetPropertyElement(element, name);
             if (eles is null)
-                return arr;
+                return Array.Empty<T>();
+
+            var arr = new T[length];
 
             if (length != eles.Elements("hkobject").Count())
                 throw new Exception($"Content's elements mismatch property requierd. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}, require: {length} got: {arr.Length}");
@@ -152,12 +156,13 @@ namespace HKX2
             return ret;
         }
 
-        public List<T> ReadClassPointerArray<T>(XElement element, string name) where T : IHavokObject, new()
+        public IList<T> ReadClassPointerArray<T>(XElement element, string name) where T : IHavokObject, new()
         {
-            var result = new List<T>();
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return result;
+                return Array.Empty<T>();
+
+            var result = new List<T>();
 
             if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
@@ -177,7 +182,7 @@ namespace HKX2
                 if (!_nameXEleMap.TryGetValue(refName, out XElement? refEle))
                     throw new Exception($"Reference symbol '{refName}' not found. Make sure it defined somewhere. at Line {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
-                T ret = (T)ConstructVirtualClass(refEle);
+                var ret = (T)ConstructVirtualClass(refEle);
                 ret.ReadXml(this, refEle);
                 _objectsNameMap.Add(refName, ret);
 
@@ -188,10 +193,11 @@ namespace HKX2
 
         public T?[] ReadClassPointerCStyleArray<T>(XElement element, string name, short length) where T : IHavokObject, new()
         {
-            var arr = new T?[length];
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return arr;
+                return Array.Empty<T>();
+
+            var arr = new T?[length];
 
             var refNames = ele.Value.Split(" ", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             if (refNames.Length != length)
@@ -205,16 +211,16 @@ namespace HKX2
                     continue;
                 }
 
-                if (_objectsNameMap.TryGetValue(refName, out IHavokObject? value))
+                if (_objectsNameMap.TryGetValue(refName, out var value))
                 {
                     arr[i] = (T)value;
                     continue;
                 }
 
-                if (!_nameXEleMap.TryGetValue(refName, out XElement? refEle))
+                if (!_nameXEleMap.TryGetValue(refName, out var refEle))
                     throw new Exception($"Reference symbol '{refName}' not found. Make sure it defined somewhere. at Line {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
-                T ret = (T)ConstructVirtualClass(refEle);
+                var ret = (T)ConstructVirtualClass(refEle);
                 ret.ReadXml(this, refEle);
                 _objectsNameMap.Add(refName, ret);
 
@@ -225,12 +231,12 @@ namespace HKX2
 
         public string ReadString(XElement element, string name)
         {
-            // if ele exist it is empty string.
+            // if ele exist it is and empty return empty string (stringptr)
+            // if ele exist it is and '\u2400' return null (cstring)
             // if not exist it is SERIALIZE_IGNORED flag (null)
             var ele = GetPropertyElement(element, name);
-            if (ele is null) return null;
-            else if (ele.Value == "") return null;
-            return ele.Value;
+            if (ele is null || ele.Value == "\u2400") return null;
+            return ele.Value.Trim();
         }
 
         public bool ReadBoolean(XElement element, string name)
@@ -314,7 +320,7 @@ namespace HKX2
         }
 
         private static readonly char[] SplitCharList = { '(', ')', ',', ' ', '\n', '\r', '\t' };
-        private string[] normalize(string str)
+        private static IEnumerable<string> Normalize(string str)
         {
             return str.Split(SplitCharList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Select(x => x == "-1.#IND00" ? "0.0" : x).ToArray();
         }
@@ -325,7 +331,7 @@ namespace HKX2
             if (ele is null)
                 return new Vector4();
 
-            var vec = normalize(ele.Value).Select(float.Parse).ToArray();
+            var vec = Normalize(ele.Value).Select(float.Parse).ToArray();
             return new Vector4(vec[0], vec[1], vec[2], vec[3]);
         }
 
@@ -335,11 +341,11 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4();
 
-            var mat3 = normalize(ele.Value).Select(float.Parse).ToArray();
+            var mat3 = Normalize(ele.Value).Select(float.Parse).ToArray();
             return new Matrix4x4(mat3[0], mat3[1], mat3[2], 0,
                                  mat3[3], mat3[4], mat3[5], 0,
                                  mat3[6], mat3[7], mat3[8], 0,
-                                 0, 0, 0, 1);
+                                 0, 0, 0, 0);
         }
 
         public Matrix4x4 ReadMatrix4(XElement element, string name)
@@ -348,7 +354,7 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4();
 
-            var mat4 = normalize(ele.Value).Select(float.Parse).ToArray();
+            var mat4 = Normalize(ele.Value).Select(float.Parse).ToArray();
             return new Matrix4x4(mat4[0], mat4[1], mat4[2], mat4[3],
                                  mat4[4], mat4[5], mat4[6], mat4[7],
                                  mat4[8], mat4[9], mat4[10], mat4[11],
@@ -361,7 +367,7 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4();
 
-            var trans = normalize(ele.Value).Select(float.Parse).ToArray();
+            var trans = Normalize(ele.Value).Select(float.Parse).ToArray();
             return new Matrix4x4(trans[0], trans[1], trans[2], 0,
                                  trans[3], trans[4], trans[5], 0,
                                  trans[6], trans[7], trans[8], 0,
@@ -379,8 +385,8 @@ namespace HKX2
             if (ele == null)
                 return new Matrix4x4();
 
-            var qs = normalize(ele.Value).Select(float.Parse).ToArray();
-            return new Matrix4x4(qs[0], qs[1], qs[2], 1,
+            var qs = Normalize(ele.Value).Select(float.Parse).ToArray();
+            return new Matrix4x4(qs[0], qs[1], qs[2], 0,
                                  qs[3], qs[4], qs[5], qs[6],
                                  qs[7], qs[8], qs[9], 0,
                                  0, 0, 0, 0);
@@ -390,17 +396,17 @@ namespace HKX2
         {
             var ele = GetPropertyElement(element, name);
             if (ele == null) return new Quaternion();
-            var quant = normalize(ele.Value).Select(float.Parse).ToArray();
+            var quant = Normalize(ele.Value).Select(float.Parse).ToArray();
             return new Quaternion(quant[0], quant[1], quant[2], quant[3]);
         }
 
-        public XElement? ReadBaseArray(XElement element, string name)
+        private XElement? ReadBaseArray(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele is null)
                 return null;
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
@@ -409,22 +415,22 @@ namespace HKX2
             return ele;
         }
 
-        public List<string> ReadStringArray(XElement element, string name)
+        public IList<string> ReadStringArray(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<string>();
+                return Array.Empty<string>();
 
             return ele.Elements("hkcstring")
-                      .Select(ele => ele.Value)
+                      .Select(ele => ele.Value.Trim())
                       .ToList();
         }
         private static readonly char[] SplitSpaceList = { ' ', '\n', '\r', '\t' };
-        public List<bool> ReadBooleanArray(XElement element, string name)
+        public IList<bool> ReadBooleanArray(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<bool>();
+                return Array.Empty<bool>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(bool.Parse)
@@ -433,170 +439,170 @@ namespace HKX2
 
 
 
-        public List<byte> ReadByteArray(XElement element, string name)
+        public IList<byte> ReadByteArray(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<byte>();
+                return Array.Empty<byte>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(byte.Parse)
                             .ToList();
         }
 
-        public List<sbyte> ReadSByteArray(XElement element, string name)
+        public IList<sbyte> ReadSByteArray(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<sbyte>();
+                return Array.Empty<sbyte>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(sbyte.Parse)
                             .ToList();
         }
 
-        public List<ushort> ReadUInt16Array(XElement element, string name)
+        public IList<ushort> ReadUInt16Array(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<ushort>();
+                return Array.Empty<ushort>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(ushort.Parse)
                             .ToList();
         }
 
-        public List<short> ReadInt16Array(XElement element, string name)
+        public IList<short> ReadInt16Array(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<short>();
+                return Array.Empty<short>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(short.Parse)
                             .ToList();
         }
 
-        public List<uint> ReadUInt32Array(XElement element, string name)
+        public IList<uint> ReadUInt32Array(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<uint>();
+                return Array.Empty<uint>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(uint.Parse)
                             .ToList();
         }
 
-        public List<int> ReadInt32Array(XElement element, string name)
+        public IList<int> ReadInt32Array(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<int>();
+                return Array.Empty<int>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(int.Parse)
                             .ToList();
         }
 
-        public List<ulong> ReadUInt64Array(XElement element, string name)
+        public IList<ulong> ReadUInt64Array(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<ulong>();
+                return Array.Empty<ulong>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(ulong.Parse)
                             .ToList();
         }
 
-        public List<long> ReadInt64Array(XElement element, string name)
+        public IList<long> ReadInt64Array(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<long>();
+                return Array.Empty<long>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(long.Parse)
                             .ToList();
         }
-        public List<Half> ReadHalfArray(XElement element, string name)
+        public IList<Half> ReadHalfArray(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<Half>();
+                return Array.Empty<Half>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(Half.Parse)
                             .ToList();
         }
 
-        public List<float> ReadSingleArray(XElement element, string name)
+        public IList<float> ReadSingleArray(XElement element, string name)
         {
             var ele = ReadBaseArray(element, name);
             if (ele is null)
-                return new List<float>();
+                return Array.Empty<float>();
 
             return ele.Value.Split(SplitSpaceList, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                             .Select(float.Parse)
                             .ToList();
         }
 
-        public List<Vector4> ReadVector4Array(XElement element, string name)
+        public IList<Vector4> ReadVector4Array(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return new List<Vector4>();
+                return Array.Empty<Vector4>();
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
-                return new List<Vector4>();
+                return Array.Empty<Vector4>();
 
-            var vec4arr = normalize(ele.Value).Select(float.Parse).Chunk(4);
-            if (vec4arr.Count() != count)
+            var vec4Arr = Normalize(ele.Value).Select(float.Parse).Chunk(4);
+            if (vec4Arr.Count() != count)
                 throw new Exception($"Vector4 element mismatch. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
-            return vec4arr.Select(vec => new Vector4(vec[0], vec[1], vec[2], vec[3]))
+            return vec4Arr.Select(vec => new Vector4(vec[0], vec[1], vec[2], vec[3]))
                           .ToList();
         }
 
-        public List<Matrix4x4> ReadMatrix3Array(XElement element, string name)
+        public IList<Matrix4x4> ReadMatrix3Array(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            var mat3Arr = normalize(ele.Value).Select(float.Parse).Chunk(9);
+            var mat3Arr = Normalize(ele.Value).Select(float.Parse).Chunk(9);
             if (mat3Arr.Count() != count)
                 throw new Exception($"Matrix3 element mismatch. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             return mat3Arr.Select(vec => new Matrix4x4(vec[0], vec[1], vec[2], 0,
                                                        vec[3], vec[4], vec[5], 0,
                                                        vec[6], vec[7], vec[8], 0,
-                                                       0, 0, 0, 1)).ToList();
+                                                       0, 0, 0, 0)).ToList();
         }
 
-        public List<Matrix4x4> ReadMatrix4Array(XElement element, string name)
+        public IList<Matrix4x4> ReadMatrix4Array(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            var mat4Arr = normalize(ele.Value).Select(float.Parse).Chunk(16);
+            var mat4Arr = Normalize(ele.Value).Select(float.Parse).Chunk(16);
             if (mat4Arr.Count() != count)
                 throw new Exception($"Matrix4 element mismatch. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
@@ -606,19 +612,19 @@ namespace HKX2
                                                        vec[12], vec[13], vec[14], vec[15])).ToList();
         }
 
-        public List<Matrix4x4> ReadTransformArray(XElement element, string name)
+        public IList<Matrix4x4> ReadTransformArray(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            var transArr = normalize(ele.Value).Select(float.Parse).Chunk(12);
+            var transArr = Normalize(ele.Value).Select(float.Parse).Chunk(12);
             if (transArr.Count() != count)
                 throw new Exception($"Transform element mismatch. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
@@ -628,24 +634,24 @@ namespace HKX2
                                                           trans[9], trans[10], trans[11], 1)).ToList();
         }
 
-        public List<Matrix4x4> ReadRotationArray(XElement element, string name)
+        public IList<Matrix4x4> ReadRotationArray(XElement element, string name)
         {
             return ReadMatrix3Array(element, name);
         }
 
-        public List<Matrix4x4> ReadQSTransformArray(XElement element, string name)
+        public IList<Matrix4x4> ReadQSTransformArray(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele == null)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
-                return new List<Matrix4x4>();
+                return Array.Empty<Matrix4x4>();
 
-            var qsArr = normalize(ele.Value).Select(float.Parse).Chunk(10);
+            var qsArr = Normalize(ele.Value).Select(float.Parse).Chunk(10);
             if (qsArr.Count() != count)
                 throw new Exception($"QSTransform element mismatch. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
@@ -655,31 +661,31 @@ namespace HKX2
                                                     0, 0, 0, 0)).ToList();
         }
 
-        public List<Quaternion> ReadQuaternionArray(XElement element, string name)
+        public IList<Quaternion> ReadQuaternionArray(XElement element, string name)
         {
             var ele = GetPropertyElement(element, name);
             if (ele == null)
-                return new List<Quaternion>();
+                return Array.Empty<Quaternion>();
 
-            if (!int.TryParse(ele.Attribute("numelements")?.Value, out int count))
+            if (!int.TryParse(ele.Attribute("numelements")?.Value, out var count))
                 throw new Exception($"numelemnets is not vaild number at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             if (count == 0)
-                return new List<Quaternion>();
+                return Array.Empty<Quaternion>();
 
-            var quantArr = normalize(ele.Value).Select(float.Parse).Chunk(4);
+            var quantArr = Normalize(ele.Value).Select(float.Parse).Chunk(4);
             if (quantArr.Count() != count)
                 throw new Exception($"Quaternion element missmatch. at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
             return quantArr.Select(quant => new Quaternion(quant[0], quant[1], quant[2], quant[3])).ToList();
         }
 
-        public V ReadFlag<TEnum, V>(XElement element, string name) where TEnum : Enum where V : IBinaryInteger<V>
+        public TValue ReadFlag<TEnum, TValue>(XElement element, string name) where TEnum : Enum where TValue : IBinaryInteger<TValue>
         {
             var ele = GetPropertyElement(element, name);
             if (ele is null)
-                return (V)(IConvertible)0;
-            return ele.Value.Split("|").ToFlagValue<TEnum, V>();
+                return TValue.Zero;
+            return ele.Value.Split("|", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToFlagValue<TEnum, TValue>();
         }
 
         public TValue ReadEnum<TEnum, TValue>(XElement element, string name) where TEnum : Enum where TValue : IBinaryInteger<TValue>
@@ -692,11 +698,9 @@ namespace HKX2
 
         #region C Style Array
 
-        public XElement? ReadBaseCStyleArray(XElement element, string name, short length)
+        private XElement? ReadBaseCStyleArray(XElement element, string name, short length)
         {
             var ele = GetPropertyElement(element, name);
-            if (ele is null)
-                return null;
             return ele;
         }
 
@@ -852,7 +856,7 @@ namespace HKX2
             if (ele is null)
                 return new Vector4[length];
 
-            var vec4arr = normalize(ele.Value).Select(float.Parse).Chunk(4);
+            var vec4arr = Normalize(ele.Value).Select(float.Parse).Chunk(4);
             if (vec4arr.Count() != length)
                 throw new Exception($"Content's elements mismatch property require {length} at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}");
 
@@ -866,14 +870,14 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4[length];
 
-            var arr = normalize(ele.Value).Select(float.Parse).Chunk(9);
+            var arr = Normalize(ele.Value).Select(float.Parse).Chunk(9);
             if (arr.Count() != length)
                 throw new Exception($"Content's elements mismatch property require {length} at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}, require: {length} got: {arr.Count()}");
 
             return arr.Select(vec => new Matrix4x4(vec[0], vec[1], vec[2], 0,
                                                        vec[3], vec[4], vec[5], 0,
                                                        vec[6], vec[7], vec[8], 0,
-                                                       0, 0, 0, 1)).ToArray();
+                                                       0, 0, 0, 0)).ToArray();
         }
 
         public Matrix4x4[] ReadMatrix4CStyleArray(XElement element, string name, short length)
@@ -882,14 +886,14 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4[length];
 
-            var arr = normalize(ele.Value).Select(float.Parse).Chunk(16);
+            var arr = Normalize(ele.Value).Select(float.Parse).Chunk(16);
             if (arr.Count() != length)
                 throw new Exception($"Content's elements mismatch property require {length} at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}, require: {length} got: {arr.Count()}");
 
             return arr.Select(vec => new Matrix4x4(vec[0], vec[1], vec[2], vec[3],
                                                    vec[4], vec[5], vec[6], vec[7],
                                                    vec[8], vec[9], vec[10], vec[11],
-                                                   vec[12], vec[13], vec[14], vec[15])).ToArray(); ;
+                                                   vec[12], vec[13], vec[14], vec[15])).ToArray();
         }
 
         public Matrix4x4[] ReadTransformCStyleArray(XElement element, string name, short length)
@@ -898,7 +902,7 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4[length];
 
-            var arr = normalize(ele.Value).Select(float.Parse).Chunk(12);
+            var arr = Normalize(ele.Value).Select(float.Parse).Chunk(12);
             if (arr.Count() != length)
                 throw new Exception($"Content's elements mismatch property require {length} at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}, require: {length} got: {arr.Count()}");
 
@@ -919,7 +923,7 @@ namespace HKX2
             if (ele is null)
                 return new Matrix4x4[length];
 
-            var arr = normalize(ele.Value).Select(float.Parse).Chunk(10);
+            var arr = Normalize(ele.Value).Select(float.Parse).Chunk(10);
             if (arr.Count() != length)
                 throw new Exception($"Content's elements mismatch property require {length} at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}, require: {length} got: {arr.Count()}");
 
@@ -935,7 +939,7 @@ namespace HKX2
             if (ele is null)
                 return new Quaternion[length];
 
-            var arr = normalize(ele.Value).Select(float.Parse).Chunk(4);
+            var arr = Normalize(ele.Value).Select(float.Parse).Chunk(4);
             if (arr.Count() != length)
                 throw new Exception($"Content's elements mismatch property require {length} at Line: {((IXmlLineInfo)element)?.LineNumber ?? -1}, Property: {name}, require: {length} got: {arr.Count()}");
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +10,12 @@ namespace HKX2
     // m_upAxis m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 80 flags: FLAGS_NONE enum: 
     // m_strength m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 96 flags: FLAGS_NONE enum: 
     // m_damping m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 100 flags: FLAGS_NONE enum: 
-    public partial class hkpReorientAction : hkpUnaryAction
+    public partial class hkpReorientAction : hkpUnaryAction, IEquatable<hkpReorientAction?>
     {
-        public Vector4 m_rotationAxis { set; get; } = default;
-        public Vector4 m_upAxis { set; get; } = default;
-        public float m_strength { set; get; } = default;
-        public float m_damping { set; get; } = default;
+        public Vector4 m_rotationAxis { set; get; }
+        public Vector4 m_upAxis { set; get; }
+        public float m_strength { set; get; }
+        public float m_damping { set; get; }
 
         public override uint Signature => 0x2dc0ec6a;
 
@@ -58,6 +57,34 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_upAxis), m_upAxis);
             xs.WriteFloat(xe, nameof(m_strength), m_strength);
             xs.WriteFloat(xe, nameof(m_damping), m_damping);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpReorientAction);
+        }
+
+        public bool Equals(hkpReorientAction? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_rotationAxis.Equals(other.m_rotationAxis) &&
+                   m_upAxis.Equals(other.m_upAxis) &&
+                   m_strength.Equals(other.m_strength) &&
+                   m_damping.Equals(other.m_damping) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_rotationAxis);
+            hashcode.Add(m_upAxis);
+            hashcode.Add(m_strength);
+            hashcode.Add(m_damping);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

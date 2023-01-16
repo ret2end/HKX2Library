@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -17,18 +15,18 @@ namespace HKX2
     // m_world m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 56 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_attachmentManager m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 64 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
     // m_animationCache m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 72 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class hkbContext : IHavokObject
+    public partial class hkbContext : IHavokObject, IEquatable<hkbContext?>
     {
-        private object? m_character { set; get; } = default;
-        private object? m_behavior { set; get; } = default;
-        private object? m_nodeToIndexMap { set; get; } = default;
-        private object? m_eventQueue { set; get; } = default;
-        private object? m_sharedEventQueue { set; get; } = default;
-        public hkbGeneratorOutputListener? m_generatorOutputListener { set; get; } = default;
-        private bool m_eventTriggeredTransition { set; get; } = default;
-        private object? m_world { set; get; } = default;
-        private object? m_attachmentManager { set; get; } = default;
-        private object? m_animationCache { set; get; } = default;
+        private object? m_character { set; get; }
+        private object? m_behavior { set; get; }
+        private object? m_nodeToIndexMap { set; get; }
+        private object? m_eventQueue { set; get; }
+        private object? m_sharedEventQueue { set; get; }
+        public hkbGeneratorOutputListener? m_generatorOutputListener { set; get; }
+        private bool m_eventTriggeredTransition { set; get; }
+        private object? m_world { set; get; }
+        private object? m_attachmentManager { set; get; }
+        private object? m_animationCache { set; get; }
 
         public virtual uint Signature => 0xe0c4d4a7;
 
@@ -79,6 +77,26 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_world));
             xs.WriteSerializeIgnored(xe, nameof(m_attachmentManager));
             xs.WriteSerializeIgnored(xe, nameof(m_animationCache));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbContext);
+        }
+
+        public bool Equals(hkbContext? other)
+        {
+            return other is not null &&
+                   ((m_generatorOutputListener is null && other.m_generatorOutputListener is null) || (m_generatorOutputListener is not null && other.m_generatorOutputListener is not null && m_generatorOutputListener.Equals((IHavokObject)other.m_generatorOutputListener))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_generatorOutputListener);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

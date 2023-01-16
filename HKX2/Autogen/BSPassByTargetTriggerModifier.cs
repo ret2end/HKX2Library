@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,13 +11,13 @@ namespace HKX2
     // m_movementDirection m_class:  Type.TYPE_VECTOR4 Type.TYPE_VOID arrSize: 0 offset: 112 flags: FLAGS_NONE enum: 
     // m_triggerEvent m_class: hkbEventProperty Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 128 flags: FLAGS_NONE enum: 
     // m_targetPassed m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSPassByTargetTriggerModifier : hkbModifier
+    public partial class BSPassByTargetTriggerModifier : hkbModifier, IEquatable<BSPassByTargetTriggerModifier?>
     {
-        public Vector4 m_targetPosition { set; get; } = default;
-        public float m_radius { set; get; } = default;
-        public Vector4 m_movementDirection { set; get; } = default;
+        public Vector4 m_targetPosition { set; get; }
+        public float m_radius { set; get; }
+        public Vector4 m_movementDirection { set; get; }
         public hkbEventProperty m_triggerEvent { set; get; } = new();
-        private bool m_targetPassed { set; get; } = default;
+        private bool m_targetPassed { set; get; }
 
         public override uint Signature => 0x703d7b66;
 
@@ -63,6 +62,34 @@ namespace HKX2
             xs.WriteVector4(xe, nameof(m_movementDirection), m_movementDirection);
             xs.WriteClass<hkbEventProperty>(xe, nameof(m_triggerEvent), m_triggerEvent);
             xs.WriteSerializeIgnored(xe, nameof(m_targetPassed));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSPassByTargetTriggerModifier);
+        }
+
+        public bool Equals(BSPassByTargetTriggerModifier? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_targetPosition.Equals(other.m_targetPosition) &&
+                   m_radius.Equals(other.m_radius) &&
+                   m_movementDirection.Equals(other.m_movementDirection) &&
+                   ((m_triggerEvent is null && other.m_triggerEvent is null) || (m_triggerEvent is not null && other.m_triggerEvent is not null && m_triggerEvent.Equals((IHavokObject)other.m_triggerEvent))) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_targetPosition);
+            hashcode.Add(m_radius);
+            hashcode.Add(m_movementDirection);
+            hashcode.Add(m_triggerEvent);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

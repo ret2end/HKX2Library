@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -16,17 +14,17 @@ namespace HKX2
     // m_pTransitionBlenderGenerator m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 144 flags: SERIALIZE_IGNORED|ALIGN_16|FLAGS_NONE enum: 
     // m_pTransitionEffect m_class:  Type.TYPE_POINTER Type.TYPE_VOID arrSize: 0 offset: 160 flags: SERIALIZE_IGNORED|ALIGN_16|FLAGS_NONE enum: 
     // m_currentMode m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 168 flags: SERIALIZE_IGNORED|FLAGS_NONE enum: 
-    public partial class BSCyclicBlendTransitionGenerator : hkbGenerator
+    public partial class BSCyclicBlendTransitionGenerator : hkbGenerator, IEquatable<BSCyclicBlendTransitionGenerator?>
     {
-        public hkbGenerator? m_pBlenderGenerator { set; get; } = default;
+        public hkbGenerator? m_pBlenderGenerator { set; get; }
         public hkbEventProperty m_EventToFreezeBlendValue { set; get; } = new();
         public hkbEventProperty m_EventToCrossBlend { set; get; } = new();
-        public float m_fBlendParameter { set; get; } = default;
-        public float m_fTransitionDuration { set; get; } = default;
-        public sbyte m_eBlendCurve { set; get; } = default;
-        private object? m_pTransitionBlenderGenerator { set; get; } = default;
-        private object? m_pTransitionEffect { set; get; } = default;
-        private sbyte m_currentMode { set; get; } = default;
+        public float m_fBlendParameter { set; get; }
+        public float m_fTransitionDuration { set; get; }
+        public sbyte m_eBlendCurve { set; get; }
+        private object? m_pTransitionBlenderGenerator { set; get; }
+        private object? m_pTransitionEffect { set; get; }
+        private sbyte m_currentMode { set; get; }
 
         public override uint Signature => 0x5119eb06;
 
@@ -89,6 +87,38 @@ namespace HKX2
             xs.WriteSerializeIgnored(xe, nameof(m_pTransitionBlenderGenerator));
             xs.WriteSerializeIgnored(xe, nameof(m_pTransitionEffect));
             xs.WriteSerializeIgnored(xe, nameof(m_currentMode));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as BSCyclicBlendTransitionGenerator);
+        }
+
+        public bool Equals(BSCyclicBlendTransitionGenerator? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_pBlenderGenerator is null && other.m_pBlenderGenerator is null) || (m_pBlenderGenerator is not null && other.m_pBlenderGenerator is not null && m_pBlenderGenerator.Equals((IHavokObject)other.m_pBlenderGenerator))) &&
+                   ((m_EventToFreezeBlendValue is null && other.m_EventToFreezeBlendValue is null) || (m_EventToFreezeBlendValue is not null && other.m_EventToFreezeBlendValue is not null && m_EventToFreezeBlendValue.Equals((IHavokObject)other.m_EventToFreezeBlendValue))) &&
+                   ((m_EventToCrossBlend is null && other.m_EventToCrossBlend is null) || (m_EventToCrossBlend is not null && other.m_EventToCrossBlend is not null && m_EventToCrossBlend.Equals((IHavokObject)other.m_EventToCrossBlend))) &&
+                   m_fBlendParameter.Equals(other.m_fBlendParameter) &&
+                   m_fTransitionDuration.Equals(other.m_fTransitionDuration) &&
+                   m_eBlendCurve.Equals(other.m_eBlendCurve) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_pBlenderGenerator);
+            hashcode.Add(m_EventToFreezeBlendValue);
+            hashcode.Add(m_EventToCrossBlend);
+            hashcode.Add(m_fBlendParameter);
+            hashcode.Add(m_fTransitionDuration);
+            hashcode.Add(m_eBlendCurve);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

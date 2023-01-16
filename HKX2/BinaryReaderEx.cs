@@ -284,16 +284,25 @@ namespace HKX2
 
         #region Single
 
+        private float RoundSignle(float d)
+        {
+            var s = Math.Round(d - Math.Truncate(d), 6).ToString("F6");
+            s = s[(s.IndexOf(".") + 1)..];
+            s = $"{Math.Truncate(d):F0}.{s}";
+            return float.Parse(s);
+        }
+
         public float ReadSingle()
         {
             // XXX: NaN(0xFFC0000) to 0.
+            // XXX: round? to 6 deciaml
             if (BigEndian)
             {
                 var revVal = BitConverter.ToSingle(ReadReversedBytes(4), 0);
-                return float.IsNaN(revVal) ? 0 : revVal;
+                return float.IsNaN(revVal) ? 0 : (float)Math.Round(revVal, 6);
             }
             var val = br.ReadSingle();
-            return float.IsNaN(val) ? 0 : val;
+            return float.IsNaN(val) ? 0 : (float)Math.Round(val, 6);
         }
 
         public float AssertSingle(params float[] options)

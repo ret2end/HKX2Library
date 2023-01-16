@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -9,10 +7,10 @@ namespace HKX2
 
     // m_name m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 0 flags: FLAGS_NONE enum: 
     // m_lockTranslation m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 8 flags: FLAGS_NONE enum: 
-    public partial class hkaBone : IHavokObject
+    public partial class hkaBone : IHavokObject, IEquatable<hkaBone?>
     {
         public string m_name { set; get; } = "";
-        public bool m_lockTranslation { set; get; } = default;
+        public bool m_lockTranslation { set; get; }
 
         public virtual uint Signature => 0x35912f8a;
 
@@ -40,6 +38,28 @@ namespace HKX2
         {
             xs.WriteString(xe, nameof(m_name), m_name);
             xs.WriteBoolean(xe, nameof(m_lockTranslation), m_lockTranslation);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkaBone);
+        }
+
+        public bool Equals(hkaBone? other)
+        {
+            return other is not null &&
+                   (m_name is null && other.m_name is null || m_name == other.m_name || m_name is null && other.m_name == "" || m_name == "" && other.m_name is null) &&
+                   m_lockTranslation.Equals(other.m_lockTranslation) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(m_name);
+            hashcode.Add(m_lockTranslation);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

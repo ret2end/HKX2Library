@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -11,12 +10,12 @@ namespace HKX2
     // m_timestep m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_isInitialVelocityAdded m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 36 flags: FLAGS_NONE enum: 
     // m_isTouchingGround m_class:  Type.TYPE_BOOL Type.TYPE_VOID arrSize: 0 offset: 37 flags: FLAGS_NONE enum: 
-    public partial class hkbCharacterControllerModifierInternalState : hkReferencedObject
+    public partial class hkbCharacterControllerModifierInternalState : hkReferencedObject, IEquatable<hkbCharacterControllerModifierInternalState?>
     {
-        public Vector4 m_gravity { set; get; } = default;
-        public float m_timestep { set; get; } = default;
-        public bool m_isInitialVelocityAdded { set; get; } = default;
-        public bool m_isTouchingGround { set; get; } = default;
+        public Vector4 m_gravity { set; get; }
+        public float m_timestep { set; get; }
+        public bool m_isInitialVelocityAdded { set; get; }
+        public bool m_isTouchingGround { set; get; }
 
         public override uint Signature => 0xf8dfec0d;
 
@@ -56,6 +55,34 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_timestep), m_timestep);
             xs.WriteBoolean(xe, nameof(m_isInitialVelocityAdded), m_isInitialVelocityAdded);
             xs.WriteBoolean(xe, nameof(m_isTouchingGround), m_isTouchingGround);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbCharacterControllerModifierInternalState);
+        }
+
+        public bool Equals(hkbCharacterControllerModifierInternalState? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_gravity.Equals(other.m_gravity) &&
+                   m_timestep.Equals(other.m_timestep) &&
+                   m_isInitialVelocityAdded.Equals(other.m_isInitialVelocityAdded) &&
+                   m_isTouchingGround.Equals(other.m_isTouchingGround) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_gravity);
+            hashcode.Add(m_timestep);
+            hashcode.Add(m_isInitialVelocityAdded);
+            hashcode.Add(m_isTouchingGround);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

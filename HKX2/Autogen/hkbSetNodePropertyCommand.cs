@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -12,13 +10,13 @@ namespace HKX2
     // m_propertyName m_class:  Type.TYPE_STRINGPTR Type.TYPE_VOID arrSize: 0 offset: 32 flags: FLAGS_NONE enum: 
     // m_propertyValue m_class: hkbVariableValue Type.TYPE_STRUCT Type.TYPE_VOID arrSize: 0 offset: 40 flags: FLAGS_NONE enum: 
     // m_padding m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 44 flags: FLAGS_NONE enum: 
-    public partial class hkbSetNodePropertyCommand : hkReferencedObject
+    public partial class hkbSetNodePropertyCommand : hkReferencedObject, IEquatable<hkbSetNodePropertyCommand?>
     {
-        public ulong m_characterId { set; get; } = default;
+        public ulong m_characterId { set; get; }
         public string m_nodeName { set; get; } = "";
         public string m_propertyName { set; get; } = "";
         public hkbVariableValue m_propertyValue { set; get; } = new();
-        public int m_padding { set; get; } = default;
+        public int m_padding { set; get; }
 
         public override uint Signature => 0xc5160b64;
 
@@ -60,6 +58,36 @@ namespace HKX2
             xs.WriteString(xe, nameof(m_propertyName), m_propertyName);
             xs.WriteClass<hkbVariableValue>(xe, nameof(m_propertyValue), m_propertyValue);
             xs.WriteNumber(xe, nameof(m_padding), m_padding);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkbSetNodePropertyCommand);
+        }
+
+        public bool Equals(hkbSetNodePropertyCommand? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_characterId.Equals(other.m_characterId) &&
+                   (m_nodeName is null && other.m_nodeName is null || m_nodeName == other.m_nodeName || m_nodeName is null && other.m_nodeName == "" || m_nodeName == "" && other.m_nodeName is null) &&
+                   (m_propertyName is null && other.m_propertyName is null || m_propertyName == other.m_propertyName || m_propertyName is null && other.m_propertyName == "" || m_propertyName == "" && other.m_propertyName is null) &&
+                   ((m_propertyValue is null && other.m_propertyValue is null) || (m_propertyValue is not null && other.m_propertyValue is not null && m_propertyValue.Equals((IHavokObject)other.m_propertyValue))) &&
+                   m_padding.Equals(other.m_padding) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_characterId);
+            hashcode.Add(m_nodeName);
+            hashcode.Add(m_propertyName);
+            hashcode.Add(m_propertyValue);
+            hashcode.Add(m_padding);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

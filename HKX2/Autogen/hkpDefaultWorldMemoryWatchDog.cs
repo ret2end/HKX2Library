@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +6,9 @@ namespace HKX2
     // hkpDefaultWorldMemoryWatchDog Signatire: 0x77d6b19f size: 24 flags: FLAGS_NONE
 
     // m_freeHeapMemoryRequested m_class:  Type.TYPE_INT32 Type.TYPE_VOID arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpDefaultWorldMemoryWatchDog : hkWorldMemoryAvailableWatchDog
+    public partial class hkpDefaultWorldMemoryWatchDog : hkWorldMemoryAvailableWatchDog, IEquatable<hkpDefaultWorldMemoryWatchDog?>
     {
-        public int m_freeHeapMemoryRequested { set; get; } = default;
+        public int m_freeHeapMemoryRequested { set; get; }
 
         public override uint Signature => 0x77d6b19f;
 
@@ -38,6 +36,28 @@ namespace HKX2
         {
             base.WriteXml(xs, xe);
             xs.WriteNumber(xe, nameof(m_freeHeapMemoryRequested), m_freeHeapMemoryRequested);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpDefaultWorldMemoryWatchDog);
+        }
+
+        public bool Equals(hkpDefaultWorldMemoryWatchDog? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_freeHeapMemoryRequested.Equals(other.m_freeHeapMemoryRequested) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_freeHeapMemoryRequested);
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace HKX2
@@ -8,9 +8,9 @@ namespace HKX2
     // hkpSerializedDisplayRbTransforms Signatire: 0xc18650ac size: 32 flags: FLAGS_NONE
 
     // m_transforms m_class: hkpSerializedDisplayRbTransformsDisplayTransformPair Type.TYPE_ARRAY Type.TYPE_STRUCT arrSize: 0 offset: 16 flags: FLAGS_NONE enum: 
-    public partial class hkpSerializedDisplayRbTransforms : hkReferencedObject
+    public partial class hkpSerializedDisplayRbTransforms : hkReferencedObject, IEquatable<hkpSerializedDisplayRbTransforms?>
     {
-        public IList<hkpSerializedDisplayRbTransformsDisplayTransformPair> m_transforms { set; get; } = new List<hkpSerializedDisplayRbTransformsDisplayTransformPair>();
+        public IList<hkpSerializedDisplayRbTransformsDisplayTransformPair> m_transforms { set; get; } = Array.Empty<hkpSerializedDisplayRbTransformsDisplayTransformPair>();
 
         public override uint Signature => 0xc18650ac;
 
@@ -35,7 +35,29 @@ namespace HKX2
         public override void WriteXml(XmlSerializer xs, XElement xe)
         {
             base.WriteXml(xs, xe);
-            xs.WriteClassArray<hkpSerializedDisplayRbTransformsDisplayTransformPair>(xe, nameof(m_transforms), m_transforms);
+            xs.WriteClassArray(xe, nameof(m_transforms), m_transforms);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpSerializedDisplayRbTransforms);
+        }
+
+        public bool Equals(hkpSerializedDisplayRbTransforms? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   m_transforms.SequenceEqual(other.m_transforms) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_transforms.Aggregate(0, (x, y) => x ^ y?.GetHashCode() ?? 0));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }

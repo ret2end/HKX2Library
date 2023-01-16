@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 
@@ -12,12 +12,12 @@ namespace HKX2
     // m_maxFrictionForce m_class:  Type.TYPE_REAL Type.TYPE_VOID arrSize: 0 offset: 56 flags: FLAGS_NONE enum: 
     // m_angularConstrainedDOF m_class:  Type.TYPE_ENUM Type.TYPE_INT8 arrSize: 0 offset: 60 flags: FLAGS_NONE enum: OrientationConstraintType
     // m_transform_OS_KS m_class:  Type.TYPE_TRANSFORM Type.TYPE_VOID arrSize: 2 offset: 64 flags: FLAGS_NONE enum: 
-    public partial class hkpPointToPathConstraintData : hkpConstraintData
+    public partial class hkpPointToPathConstraintData : hkpConstraintData, IEquatable<hkpPointToPathConstraintData?>
     {
         public hkpBridgeAtoms m_atoms { set; get; } = new();
-        public hkpParametricCurve? m_path { set; get; } = default;
-        public float m_maxFrictionForce { set; get; } = default;
-        public sbyte m_angularConstrainedDOF { set; get; } = default;
+        public hkpParametricCurve? m_path { set; get; }
+        public float m_maxFrictionForce { set; get; }
+        public sbyte m_angularConstrainedDOF { set; get; }
         public Matrix4x4[] m_transform_OS_KS = new Matrix4x4[2];
 
         public override uint Signature => 0x8e7cb5da;
@@ -62,6 +62,36 @@ namespace HKX2
             xs.WriteFloat(xe, nameof(m_maxFrictionForce), m_maxFrictionForce);
             xs.WriteEnum<OrientationConstraintType, sbyte>(xe, nameof(m_angularConstrainedDOF), m_angularConstrainedDOF);
             xs.WriteTransformArray(xe, nameof(m_transform_OS_KS), m_transform_OS_KS);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as hkpPointToPathConstraintData);
+        }
+
+        public bool Equals(hkpPointToPathConstraintData? other)
+        {
+            return other is not null &&
+                   base.Equals(other) &&
+                   ((m_atoms is null && other.m_atoms is null) || (m_atoms is not null && other.m_atoms is not null && m_atoms.Equals((IHavokObject)other.m_atoms))) &&
+                   ((m_path is null && other.m_path is null) || (m_path is not null && other.m_path is not null && m_path.Equals((IHavokObject)other.m_path))) &&
+                   m_maxFrictionForce.Equals(other.m_maxFrictionForce) &&
+                   m_angularConstrainedDOF.Equals(other.m_angularConstrainedDOF) &&
+                   m_transform_OS_KS.SequenceEqual(other.m_transform_OS_KS) &&
+                   Signature == other.Signature; ;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashcode = new HashCode();
+            hashcode.Add(base.GetHashCode());
+            hashcode.Add(m_atoms);
+            hashcode.Add(m_path);
+            hashcode.Add(m_maxFrictionForce);
+            hashcode.Add(m_angularConstrainedDOF);
+            hashcode.Add(m_transform_OS_KS.Aggregate(0, (x, y) => x ^ y.GetHashCode()));
+            hashcode.Add(Signature);
+            return hashcode.ToHashCode();
         }
     }
 }
